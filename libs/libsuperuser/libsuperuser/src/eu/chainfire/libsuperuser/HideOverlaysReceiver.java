@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2014 Jorrit "Chainfire" Jongma
+ * Copyright (C) 2012-2015 Jorrit "Chainfire" Jongma
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,15 +45,17 @@ public abstract class HideOverlaysReceiver extends BroadcastReceiver {
     @Override
     public final void onReceive(Context context, Intent intent) {
         if (intent.hasExtra(EXTRA_HIDE_OVERLAYS)) {
-            onHideOverlays(intent.getBooleanExtra(EXTRA_HIDE_OVERLAYS, false));
+            onHideOverlays(context, intent, intent.getBooleanExtra(EXTRA_HIDE_OVERLAYS, false));
         }
     }
 
     /**
      * Called when overlays <em>should</em> be hidden or <em>may</em> be shown
      * again.
-     * 
+     *
+     * @param context App context
+     * @param intent Received intent
      * @param hide Should overlays be hidden?
      */
-    public abstract void onHideOverlays(boolean hide);
+    public abstract void onHideOverlays(Context context, Intent intent, boolean hide);
 }
