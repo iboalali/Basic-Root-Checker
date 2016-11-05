@@ -1,0 +1,225 @@
+{
+  "manufacturer": "Tecno",
+  "devices": [
+    {
+      "market_name": "DP10APro-SLA1",
+      "codename": "DP10APro",
+      "model": "DP10APro"
+    },
+    {
+      "market_name": "DP7CPro-SGA1",
+      "codename": "DP7CPro-SGA1",
+      "model": "DP7CPro-SGA1"
+    },
+    {
+      "market_name": "DroiPad 10 Pro\\xe2\\x85\\xa1",
+      "codename": "DP10APro",
+      "model": "DP10APro"
+    },
+    {
+      "market_name": "DroiPad 7C Pro",
+      "codename": "DP7CPRO",
+      "model": "DP7CPRO"
+    },
+    {
+      "market_name": "DroiPad 8\\xe2\\x85\\xa1",
+      "codename": "DP8D",
+      "model": "DP8D"
+    },
+    {
+      "market_name": "Droipad10",
+      "codename": "DP10A",
+      "model": "DP10A"
+    },
+    {
+      "market_name": "Droipad10",
+      "codename": "DP10A",
+      "model": "TECNO DP10A"
+    },
+    {
+      "market_name": "H5S",
+      "codename": "up09_tecno_h5s",
+      "model": "TECNO H5S"
+    },
+    {
+      "market_name": "M3",
+      "codename": "up11_tecno_m3s",
+      "model": "TECNO M3S"
+    },
+    {
+      "market_name": "PHANTOM-Z-mini",
+      "codename": "PTM-Z-mini",
+      "model": "PTM-Z-mini"
+    },
+    {
+      "market_name": "PhonePad 7 II",
+      "codename": "PP7E-DLA1",
+      "model": "TECNO PP7E-DLA1"
+    },
+    {
+      "market_name": "PhonePad 7 II",
+      "codename": "PP7E-DLA1",
+      "model": "TECNO PP7E-SLA1"
+    },
+    {
+      "market_name": "TECNO N5S",
+      "codename": "N5S",
+      "model": "TECNO N5S"
+    },
+    {
+      "market_name": "TECNO W5",
+      "codename": "TECNO-W5",
+      "model": "TECNO-W5"
+    },
+    {
+      "market_name": "TECNO-A7S",
+      "codename": "TECNO-A7S",
+      "model": "TECNO-A7S"
+    },
+    {
+      "market_name": "TECNO-C5",
+      "codename": "TECNO-C5",
+      "model": "TECNO-C5"
+    },
+    {
+      "market_name": "TECNO-C7",
+      "codename": "TECNO-C7",
+      "model": "TECNO-C7"
+    },
+    {
+      "market_name": "TECNO-C8",
+      "codename": "TECNO-C8",
+      "model": "TECNO-C8"
+    },
+    {
+      "market_name": "TECNO-C9",
+      "codename": "TECNO-C9",
+      "model": "TECNO-C9"
+    },
+    {
+      "market_name": "TECNO-C9S",
+      "codename": "TECNO-C9",
+      "model": "TECNO-C9S"
+    },
+    {
+      "market_name": "TECNO-J5",
+      "codename": "TECNO-J5",
+      "model": "TECNO-J5"
+    },
+    {
+      "market_name": "TECNO-J7",
+      "codename": "TECNO-J7",
+      "model": "TECNO-J7"
+    },
+    {
+      "market_name": "TECNO-J8",
+      "codename": "TECNO-J8",
+      "model": "TECNO-J8"
+    },
+    {
+      "market_name": "TECNO-L5",
+      "codename": "TECNO-L5",
+      "model": "TECNO-L5"
+    },
+    {
+      "market_name": "TECNO-L8",
+      "codename": "TECNO-L8",
+      "model": "TECNO-L8"
+    },
+    {
+      "market_name": "TECNO-L8Plus",
+      "codename": "TECNO-L8",
+      "model": "TECNO-L8Plus"
+    },
+    {
+      "market_name": "TECNO-M6S",
+      "codename": "g335_b1",
+      "model": "TECNO-M6S"
+    },
+    {
+      "market_name": "TECNO-N2",
+      "codename": "TECNO_N2S",
+      "model": "TECNO-N2"
+    },
+    {
+      "market_name": "TECNO-N2S",
+      "codename": "TECNO_N2S",
+      "model": "TECNO-N2S"
+    },
+    {
+      "market_name": "TECNO-N6",
+      "codename": "TECNO-N6",
+      "model": "TECNO-N6"
+    },
+    {
+      "market_name": "TECNO-N6S",
+      "codename": "TECNO-N6S",
+      "model": "TECNO-N6S"
+    },
+    {
+      "market_name": "TECNO-N8",
+      "codename": "TECNO-N8",
+      "model": "TECNO-N8"
+    },
+    {
+      "market_name": "TECNO-N8S",
+      "codename": "TECNO-N8S",
+      "model": "TECNO-N8S"
+    },
+    {
+      "market_name": "TECNO-PHANTOM5",
+      "codename": "TECNO-PHANTOM5",
+      "model": "TECNO-PHANTOM5"
+    },
+    {
+      "market_name": "TECNO-W2",
+      "codename": "TECNO_W2",
+      "model": "TECNO W2"
+    },
+    {
+      "market_name": "TECNO-W3",
+      "codename": "TECNO-W3",
+      "model": "TECNO-W3"
+    },
+    {
+      "market_name": "TECNO-W3LTE",
+      "codename": "TECNO-W3LTE",
+      "model": "TECNO-W3LTE"
+    },
+    {
+      "market_name": "TECNO-W4",
+      "codename": "TECNO_W4",
+      "model": "TECNO_W4"
+    },
+    {
+      "market_name": "TECNO-Y3",
+      "codename": "TECNO-Y3",
+      "model": "TECNO-Y3"
+    },
+    {
+      "market_name": "TECNO-Y3S",
+      "codename": "TECNO-Y3S",
+      "model": "TECNO-Y3S"
+    },
+    {
+      "market_name": "TECNO-Y4",
+      "codename": "TECNO-Y4",
+      "model": "TECNO-Y4"
+    },
+    {
+      "market_name": "TECNO-Y5",
+      "codename": "TECNO-Y5",
+      "model": "TECNO-Y5"
+    },
+    {
+      "market_name": "TECNO-Y6",
+      "codename": "TECNO-Y6",
+      "model": "TECNO-Y6"
+    },
+    {
+      "market_name": "Techno L6",
+      "codename": "TECNO-L6",
+      "model": "TECNO-L6"
+    }
+  ]
+}

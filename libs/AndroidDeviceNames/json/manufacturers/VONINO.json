@@ -1,0 +1,65 @@
+{
+  "manufacturer": "Vonino",
+  "devices": [
+    {
+      "market_name": "Druid_L10",
+      "codename": "Druid_L10",
+      "model": "Druid_L10"
+    },
+    {
+      "market_name": "Epic P7",
+      "codename": "Epic_P7",
+      "model": "Epic_P7"
+    },
+    {
+      "market_name": "Jax X",
+      "codename": "Jax_X",
+      "model": "Jax X"
+    },
+    {
+      "market_name": "MusicPAD",
+      "codename": "MusicPAD",
+      "model": "MusicPAD"
+    },
+    {
+      "market_name": "Navo QS",
+      "codename": "Navo_QS",
+      "model": "Navo_QS"
+    },
+    {
+      "market_name": "Pluri M7",
+      "codename": "Pluri_M7",
+      "model": "Pluri_M7"
+    },
+    {
+      "market_name": "Pluri Q8",
+      "codename": "Pluri_Q8",
+      "model": "Pluri_Q8"
+    },
+    {
+      "market_name": "Xavy_L8",
+      "codename": "Xavy_L8",
+      "model": "Xavy_L8"
+    },
+    {
+      "market_name": "Xavy_T7",
+      "codename": "Xavy_T7",
+      "model": "Xavy_T7"
+    },
+    {
+      "market_name": "Xylo X",
+      "codename": "Xylo",
+      "model": "Xylo X"
+    },
+    {
+      "market_name": "ZUN XO",
+      "codename": "ZUN_XO",
+      "model": "ZUN XO"
+    },
+    {
+      "market_name": "Zun X",
+      "codename": "Zun_X",
+      "model": "Zun X"
+    }
+  ]
+}

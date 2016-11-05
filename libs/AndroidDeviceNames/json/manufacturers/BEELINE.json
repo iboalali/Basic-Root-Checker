@@ -1,0 +1,70 @@
+{
+  "manufacturer": "Beeline",
+  "devices": [
+    {
+      "market_name": "Beeline Pro 2",
+      "codename": "Beeline_Pro_2",
+      "model": "Beeline Pro 2"
+    },
+    {
+      "market_name": "Beeline Pro5",
+      "codename": "Beeline_Pro_5",
+      "model": "A451"
+    },
+    {
+      "market_name": "Beeline Smart 6",
+      "codename": "Beeline_Smart_6",
+      "model": "Beeline Smart 6"
+    },
+    {
+      "market_name": "Beeline Tab",
+      "codename": "Beeline_Tab",
+      "model": "Beeline Tab"
+    },
+    {
+      "market_name": "Beeline Tab 2",
+      "codename": "Tab_2",
+      "model": "Tab_2"
+    },
+    {
+      "market_name": "Beeline_Tab IS",
+      "codename": "Beeline_Tab_IS",
+      "model": "Beeline_Tab_IS"
+    },
+    {
+      "market_name": "Beeline_Tab_Fast",
+      "codename": "Beeline_Tab_Fast",
+      "model": "Beeline_Tab_Fast"
+    },
+    {
+      "market_name": "Beeline\\xc2\\xa0Pro 4",
+      "codename": "Beeline_Pro_4",
+      "model": "Beeline Pro 4"
+    },
+    {
+      "market_name": "Beeline\\xc2\\xa0Tab Fast 2",
+      "codename": "z701",
+      "model": "Beeline Tab Fast 2"
+    },
+    {
+      "market_name": "Beeline\\xc2\\xa0Tab\\xc2\\xa0Pro",
+      "codename": "BeelineTabPro",
+      "model": "Beeline Tab Pro"
+    },
+    {
+      "market_name": "Fast",
+      "codename": "Fast",
+      "model": "Beeline Fast"
+    },
+    {
+      "market_name": "Pro 3",
+      "codename": "Pro_3",
+      "model": "Beeline_Pro_3"
+    },
+    {
+      "market_name": "Smart Dual",
+      "codename": "Beeline",
+      "model": "Beeline Smart Dual"
+    }
+  ]
+}

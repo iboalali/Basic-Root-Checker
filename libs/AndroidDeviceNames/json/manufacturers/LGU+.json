@@ -1,0 +1,25 @@
+{
+  "manufacturer": "LGU+",
+  "devices": [
+    {
+      "market_name": "U+ tv UHD",
+      "codename": "tvg2",
+      "model": "ST940I-UP"
+    },
+    {
+      "market_name": "U+ tv woofer",
+      "codename": "hg2",
+      "model": "LAP250U"
+    },
+    {
+      "market_name": "U+ tv woofer",
+      "codename": "hg2_iot",
+      "model": "LAP255U"
+    },
+    {
+      "market_name": "WA-U420D",
+      "codename": "WA-U420D",
+      "model": "WA-U420D"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "manufacturer": "M4tel",
+  "devices": [
+    {
+      "market_name": "M4 SS4451",
+      "codename": "NOVA02A_S11A",
+      "model": "M4 SS4451"
+    },
+    {
+      "market_name": "M4 SS4452",
+      "codename": "UDON02A_S10A",
+      "model": "M4 SS4452"
+    },
+    {
+      "market_name": "M4 SS4455",
+      "codename": "NOVA03A_S22A",
+      "model": "M4 SS4455"
+    },
+    {
+      "market_name": "M4 SS4456",
+      "codename": "UDON04A_S19A",
+      "model": "M4 SS4456"
+    }
+  ]
+}

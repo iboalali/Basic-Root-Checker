@@ -1,0 +1,60 @@
+{
+  "manufacturer": "Zebra",
+  "devices": [
+    {
+      "market_name": "ET5X",
+      "codename": "ET50E",
+      "model": "ET5X"
+    },
+    {
+      "market_name": "ET5X",
+      "codename": "ET50T",
+      "model": "ET5X"
+    },
+    {
+      "market_name": "ET5X",
+      "codename": "ET55E",
+      "model": "ET5X"
+    },
+    {
+      "market_name": "ET5X",
+      "codename": "ET55T",
+      "model": "ET5X"
+    },
+    {
+      "market_name": "MC36",
+      "codename": "cardhu",
+      "model": "MC36"
+    },
+    {
+      "market_name": "MC40",
+      "codename": "MC40",
+      "model": "MC40N0"
+    },
+    {
+      "market_name": "Pollux",
+      "codename": "TC70",
+      "model": "TC700H"
+    },
+    {
+      "market_name": "Pollux",
+      "codename": "TC75",
+      "model": "TC75"
+    },
+    {
+      "market_name": "TC55",
+      "codename": "TC55",
+      "model": "TC55"
+    },
+    {
+      "market_name": "TC8000",
+      "codename": "TC8000",
+      "model": "TC8000"
+    },
+    {
+      "market_name": "WT6000",
+      "codename": "WT6000",
+      "model": "WT6000"
+    }
+  ]
+}

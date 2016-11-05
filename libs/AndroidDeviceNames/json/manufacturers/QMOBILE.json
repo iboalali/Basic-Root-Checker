@@ -1,0 +1,170 @@
+{
+  "manufacturer": "QMobile",
+  "devices": [
+    {
+      "market_name": "E8",
+      "codename": "GBL5805QM",
+      "model": "E8"
+    },
+    {
+      "market_name": "J5",
+      "codename": "J5",
+      "model": "J5"
+    },
+    {
+      "market_name": "J7",
+      "codename": "J7",
+      "model": "J7"
+    },
+    {
+      "market_name": "JS10",
+      "codename": "JAZZX_JS10",
+      "model": "JAZZX JS10"
+    },
+    {
+      "market_name": "JazzX JS7 PRO",
+      "codename": "JS7_PRO",
+      "model": "JazzX JS7 PRO"
+    },
+    {
+      "market_name": "LT650",
+      "codename": "LT650",
+      "model": "LT650"
+    },
+    {
+      "market_name": "LT680",
+      "codename": "QMobile_LT680",
+      "model": "LT680"
+    },
+    {
+      "market_name": "LT700",
+      "codename": "GBL7325QM",
+      "model": "LT700"
+    },
+    {
+      "market_name": "LT700 PRO",
+      "codename": "LT700_PRO",
+      "model": "LT700 PRO"
+    },
+    {
+      "market_name": "NOIR A3",
+      "codename": "A3",
+      "model": "QMobile A3"
+    },
+    {
+      "market_name": "NOIR A6",
+      "codename": "A6",
+      "model": "QMobile A6"
+    },
+    {
+      "market_name": "Pakistan",
+      "codename": "A1_sprout",
+      "model": "QMobile A1"
+    },
+    {
+      "market_name": "Qmobile L20",
+      "codename": "L20",
+      "model": "QMobile L20"
+    },
+    {
+      "market_name": "Qmobile i6 Metal HD",
+      "codename": "i6_Metal_HD",
+      "model": "i6 Metal HD"
+    },
+    {
+      "market_name": "Qmobile i6 Metal ONE",
+      "codename": "i6_Metal_ONE",
+      "model": "QMobile i6 Metal ONE"
+    },
+    {
+      "market_name": "S1 Lite",
+      "codename": "S1_Lite",
+      "model": "QMobile S1 Lite"
+    },
+    {
+      "market_name": "S1 PRO",
+      "codename": "S1_PRO",
+      "model": "QMobile S1 PRO"
+    },
+    {
+      "market_name": "S2 Plus",
+      "codename": "S2_Plus",
+      "model": "QMobile S2 Plus"
+    },
+    {
+      "market_name": "S2 Pro",
+      "codename": "S2_Pro",
+      "model": "S2 Pro"
+    },
+    {
+      "market_name": "S4",
+      "codename": "QMobile_S4",
+      "model": "S4"
+    },
+    {
+      "market_name": "S6",
+      "codename": "QMobileS6",
+      "model": "QMobile S6"
+    },
+    {
+      "market_name": "S6 PLUS",
+      "codename": "QMobile_S6_PLUS",
+      "model": "QMobile S6 PLUS"
+    },
+    {
+      "market_name": "S6S",
+      "codename": "QMobile_S6S",
+      "model": "QMobile S6S"
+    },
+    {
+      "market_name": "W70",
+      "codename": "W70",
+      "model": "W70"
+    },
+    {
+      "market_name": "W80",
+      "codename": "WBW5615QM",
+      "model": "W80"
+    },
+    {
+      "market_name": "X32",
+      "codename": "X32",
+      "model": "QMobile X32"
+    },
+    {
+      "market_name": "X700 PRO",
+      "codename": "X700_PRO",
+      "model": "QMobile X700 PRO"
+    },
+    {
+      "market_name": "X75",
+      "codename": "WBW5613QM",
+      "model": "X75"
+    },
+    {
+      "market_name": "Z10",
+      "codename": "Z10",
+      "model": "QMobile Z10"
+    },
+    {
+      "market_name": "Z12",
+      "codename": "CBL7521QM",
+      "model": "Z12"
+    },
+    {
+      "market_name": "Z12 PRO",
+      "codename": "Z12_PRO",
+      "model": "Z12 PRO"
+    },
+    {
+      "market_name": "Z14",
+      "codename": "Z14",
+      "model": "Z14"
+    },
+    {
+      "market_name": "Z9 Plus",
+      "codename": "WBL7511QM",
+      "model": "Z9 Plus"
+    }
+  ]
+}

@@ -1,0 +1,350 @@
+{
+  "manufacturer": "Wiko",
+  "devices": [
+    {
+      "market_name": "B-KOOL",
+      "codename": "V2502AN01D",
+      "model": "B-KOOL"
+    },
+    {
+      "market_name": "BIRDY",
+      "codename": "BIRDY",
+      "model": "BIRDY"
+    },
+    {
+      "market_name": "BLOOM",
+      "codename": "s4700",
+      "model": "BLOOM"
+    },
+    {
+      "market_name": "FEVER",
+      "codename": "L5460AP25E",
+      "model": "FEVER"
+    },
+    {
+      "market_name": "FEVER",
+      "codename": "l5460",
+      "model": "FEVER"
+    },
+    {
+      "market_name": "FEVER",
+      "codename": "l5460",
+      "model": "Ridge 4G-Fever"
+    },
+    {
+      "market_name": "FREDDY",
+      "codename": "T3903BN",
+      "model": "FREDDY"
+    },
+    {
+      "market_name": "FREDDY",
+      "codename": "V3903BN",
+      "model": "FREDDY"
+    },
+    {
+      "market_name": "GETAWAY",
+      "codename": "s8812",
+      "model": "GETAWAY"
+    },
+    {
+      "market_name": "GOA",
+      "codename": "s3511",
+      "model": "GOA"
+    },
+    {
+      "market_name": "HIGHWAY 4G",
+      "codename": "s9321",
+      "model": "HIGHWAY 4G"
+    },
+    {
+      "market_name": "HIGHWAY PURE",
+      "codename": "l9010",
+      "model": "HIGHWAY PURE"
+    },
+    {
+      "market_name": "HIGHWAY SIGNS",
+      "codename": "s4750",
+      "model": "HIGHWAY SIGNS"
+    },
+    {
+      "market_name": "HIGHWAY STAR",
+      "codename": "l5560ae",
+      "model": "HIGHWAY STAR"
+    },
+    {
+      "market_name": "JERRY",
+      "codename": "V2802AN",
+      "model": "JERRY"
+    },
+    {
+      "market_name": "JIMMY",
+      "codename": "s4300ae",
+      "model": "JIMMY"
+    },
+    {
+      "market_name": "K-KOOL",
+      "codename": "T2800AN",
+      "model": "K-KOOL"
+    },
+    {
+      "market_name": "K-KOOL",
+      "codename": "V2800AN",
+      "model": "K-KOOL"
+    },
+    {
+      "market_name": "KITE",
+      "codename": "l4020",
+      "model": "KITE"
+    },
+    {
+      "market_name": "LENNY",
+      "codename": "s5201ap",
+      "model": "LENNY"
+    },
+    {
+      "market_name": "LENNY2",
+      "codename": "S5030AP12H",
+      "model": "LENNY2"
+    },
+    {
+      "market_name": "LENNY2",
+      "codename": "s5030",
+      "model": "LENNY2"
+    },
+    {
+      "market_name": "LENNY3",
+      "codename": "V3702AN",
+      "model": "LENNY3"
+    },
+    {
+      "market_name": "LENNY3 MAX",
+      "codename": "V3802AN",
+      "model": "LENNY3 MAX"
+    },
+    {
+      "market_name": "MACARON",
+      "codename": "l8401_international",
+      "model": "MACARON"
+    },
+    {
+      "market_name": "P4903JP",
+      "codename": "P4903JP",
+      "model": "P4903JP"
+    },
+    {
+      "market_name": "PULP",
+      "codename": "S5420",
+      "model": "PULP"
+    },
+    {
+      "market_name": "PULP 4G",
+      "codename": "l5421",
+      "model": "PULP 4G"
+    },
+    {
+      "market_name": "PULP FAB",
+      "codename": "S5260",
+      "model": "PULP FAB"
+    },
+    {
+      "market_name": "PULP FAB",
+      "codename": "S5260",
+      "model": "SLIDE2"
+    },
+    {
+      "market_name": "PULP FAB 4G",
+      "codename": "l5261",
+      "model": "PULP FAB 4G"
+    },
+    {
+      "market_name": "RAINBOW",
+      "codename": "s5501",
+      "model": "RAINBOW"
+    },
+    {
+      "market_name": "RAINBOW 4G",
+      "codename": "l5503",
+      "model": "RAINBOW 4G"
+    },
+    {
+      "market_name": "RAINBOW JAM",
+      "codename": "S5254AP24K",
+      "model": "RAINBOW JAM"
+    },
+    {
+      "market_name": "RAINBOW JAM",
+      "codename": "s5250",
+      "model": "RAINBOW JAM"
+    },
+    {
+      "market_name": "RAINBOW JAM",
+      "codename": "s5254",
+      "model": "RAINBOW JAM"
+    },
+    {
+      "market_name": "RAINBOW LITE",
+      "codename": "s5222",
+      "model": "RAINBOW LITE"
+    },
+    {
+      "market_name": "RAINBOW LITE 4G",
+      "codename": "L5221",
+      "model": "RAINBOW LITE 4G"
+    },
+    {
+      "market_name": "RAINBOW LITE 4G",
+      "codename": "L5221AE23G",
+      "model": "RAINBOW LITE 4G"
+    },
+    {
+      "market_name": "RAINBOW LITE 4G",
+      "codename": "L5225AC",
+      "model": "RAINBOW LITE 4G"
+    },
+    {
+      "market_name": "RAINBOW LITE 4G",
+      "codename": "L5227AC",
+      "model": "RAINBOW LITE 4G"
+    },
+    {
+      "market_name": "RAINBOW LITE 4G",
+      "codename": "L5251",
+      "model": "RAINBOW JAM 4G"
+    },
+    {
+      "market_name": "RAINBOW UP",
+      "codename": "s5400",
+      "model": "RAINBOW UP"
+    },
+    {
+      "market_name": "RAINBOW UP 4G",
+      "codename": "l5401",
+      "model": "RAINBOW UP 4G"
+    },
+    {
+      "market_name": "RIDGE\\t\\t",
+      "codename": "s5513ap",
+      "model": "RIDGE"
+    },
+    {
+      "market_name": "RIDGE 4G",
+      "codename": "l5510",
+      "model": "RIDGE 4G"
+    },
+    {
+      "market_name": "RIDGE FAB 4G",
+      "codename": "l5320",
+      "model": "RIDGE FAB 4G"
+    },
+    {
+      "market_name": "ROBBY",
+      "codename": "V3750AN",
+      "model": "ROBBY"
+    },
+    {
+      "market_name": "ROBBY",
+      "codename": "V3750AN24K",
+      "model": "ROBBY"
+    },
+    {
+      "market_name": "SELFY",
+      "codename": "SELFY",
+      "model": "SELFY"
+    },
+    {
+      "market_name": "SELFY 4G",
+      "codename": "l4801",
+      "model": "SELFY 4G"
+    },
+    {
+      "market_name": "SLIDE",
+      "codename": "s8321",
+      "model": "SLIDE"
+    },
+    {
+      "market_name": "SUGAR F7 mini",
+      "codename": "p7203",
+      "model": "SUGAR F7 mini"
+    },
+    {
+      "market_name": "SUNNY",
+      "codename": "T2504AN",
+      "model": "SUNNY"
+    },
+    {
+      "market_name": "SUNNY",
+      "codename": "V2502AN",
+      "model": "SUNNY"
+    },
+    {
+      "market_name": "SUNNY",
+      "codename": "V2504AN",
+      "model": "SUNNY"
+    },
+    {
+      "market_name": "SUNNY",
+      "codename": "v2508",
+      "model": "SUNNY"
+    },
+    {
+      "market_name": "SUNSET",
+      "codename": "s4011",
+      "model": "SUNSET"
+    },
+    {
+      "market_name": "SUNSET2",
+      "codename": "s4050ap",
+      "model": "SUNSET2"
+    },
+    {
+      "market_name": "TOMMY",
+      "codename": "P4901AC",
+      "model": "TOMMY"
+    },
+    {
+      "market_name": "U FEEL",
+      "codename": "P6601AE",
+      "model": "U FEEL"
+    },
+    {
+      "market_name": "U FEEL",
+      "codename": "P6609BC",
+      "model": "U FEEL"
+    },
+    {
+      "market_name": "U FEEL",
+      "codename": "P6609BCD",
+      "model": "U FEEL"
+    },
+    {
+      "market_name": "U FEEL FAB",
+      "codename": "V3991AN",
+      "model": "SUGAR Y8"
+    },
+    {
+      "market_name": "U FEEL FAB",
+      "codename": "V3991AN",
+      "model": "U FEEL FAB"
+    },
+    {
+      "market_name": "U FEEL GO",
+      "codename": "P4661AN",
+      "model": "U FEEL GO"
+    },
+    {
+      "market_name": "U FEEL LITE",
+      "codename": "P4601AN",
+      "model": "U FEEL LITE"
+    },
+    {
+      "market_name": "U FEEL PRIME",
+      "codename": "p7201",
+      "model": "U FEEL PRIME"
+    },
+    {
+      "market_name": "WAX",
+      "codename": "s8515",
+      "model": "WAX"
+    }
+  ]
+}

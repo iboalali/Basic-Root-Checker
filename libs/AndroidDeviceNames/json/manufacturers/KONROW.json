@@ -1,0 +1,15 @@
+{
+  "manufacturer": "Konrow",
+  "devices": [
+    {
+      "market_name": "Primo",
+      "codename": "PRIMO",
+      "model": "PRIMO"
+    },
+    {
+      "market_name": "Smartfive",
+      "codename": "KONROW_Smartfive",
+      "model": "Smartfive"
+    }
+  ]
+}

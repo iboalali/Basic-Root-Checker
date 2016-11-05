@@ -1,0 +1,35 @@
+{
+  "manufacturer": "Intex",
+  "devices": [
+    {
+      "market_name": "Aqua Aura 2GB",
+      "codename": "Aqua_Aura_2GB",
+      "model": "Aqua Aura 2GB"
+    },
+    {
+      "market_name": "Aqua Ring",
+      "codename": "Aqua_Ring",
+      "model": "Aqua_Ring"
+    },
+    {
+      "market_name": "Aqua_Q8",
+      "codename": "Aqua_Q8",
+      "model": "Aqua Q8"
+    },
+    {
+      "market_name": "Intex Aqua Power 4G",
+      "codename": "Intex_Aqua_Power_4G",
+      "model": "Aqua Power 4G"
+    },
+    {
+      "market_name": "Intex Aqua Pride",
+      "codename": "AquaPride",
+      "model": "Aqua Pride"
+    },
+    {
+      "market_name": "Intex Aqua View",
+      "codename": "AquaView",
+      "model": "Aqua View"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "manufacturer": "YU",
+  "devices": [
+    {
+      "market_name": "YUNICORN",
+      "codename": "YUNICORN",
+      "model": "YU5530"
+    },
+    {
+      "market_name": "YUNIQUE",
+      "codename": "YU4711",
+      "model": "YU4711"
+    },
+    {
+      "market_name": "YUPHORIA",
+      "codename": "YUPHORIA",
+      "model": "YU5010"
+    },
+    {
+      "market_name": "YUPHORIA",
+      "codename": "YUPHORIA",
+      "model": "YU5010A"
+    },
+    {
+      "market_name": "YUREKA",
+      "codename": "YUREKA",
+      "model": "YU5510"
+    },
+    {
+      "market_name": "YUREKAS",
+      "codename": "YUREKAS",
+      "model": "YU5200"
+    },
+    {
+      "market_name": "Yureka",
+      "codename": "YUREKA",
+      "model": "AO5510"
+    },
+    {
+      "market_name": "Yureka",
+      "codename": "YUREKA",
+      "model": "YU5510"
+    },
+    {
+      "market_name": "Yureka",
+      "codename": "YUREKA",
+      "model": "YU5510A"
+    },
+    {
+      "market_name": "Yureka",
+      "codename": "YUREKA",
+      "model": "YUREKA"
+    }
+  ]
+}

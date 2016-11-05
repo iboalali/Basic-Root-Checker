@@ -1,0 +1,35 @@
+{
+  "manufacturer": "iRulu",
+  "devices": [
+    {
+      "market_name": "Irulu",
+      "codename": "octopus-masu",
+      "model": "X10"
+    },
+    {
+      "market_name": "L20",
+      "codename": "L20",
+      "model": "L20"
+    },
+    {
+      "market_name": "L21",
+      "codename": "L21",
+      "model": "L21"
+    },
+    {
+      "market_name": "X18",
+      "codename": "X18",
+      "model": "X18"
+    },
+    {
+      "market_name": "X47",
+      "codename": "X47",
+      "model": "X47"
+    },
+    {
+      "market_name": "iRULU X27",
+      "codename": "X27",
+      "model": "X27"
+    }
+  ]
+}

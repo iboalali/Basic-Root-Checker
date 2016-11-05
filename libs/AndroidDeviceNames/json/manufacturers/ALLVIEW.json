@@ -1,0 +1,480 @@
+{
+  "manufacturer": "AllView",
+  "devices": [
+    {
+      "market_name": "A5 Easy",
+      "codename": "A5_Easy",
+      "model": "A5_Easy"
+    },
+    {
+      "market_name": "A5 Easy",
+      "codename": "A5_Easy",
+      "model": "A5_Easy_TM"
+    },
+    {
+      "market_name": "A5 Lite",
+      "codename": "A5_Lite",
+      "model": "A5_Lite"
+    },
+    {
+      "market_name": "A5 Quad Plus",
+      "codename": "A5_Quad_Plus",
+      "model": "A5_Quad_Plus"
+    },
+    {
+      "market_name": "A5 Quad Plus",
+      "codename": "A5_Quad_Plus",
+      "model": "A5_Quad_Plus_TM"
+    },
+    {
+      "market_name": "A5 Ready",
+      "codename": "A5_Ready",
+      "model": "A5_Ready"
+    },
+    {
+      "market_name": "A5 Ready",
+      "codename": "A5_Ready",
+      "model": "A5_Ready_TM"
+    },
+    {
+      "market_name": "A6 Duo",
+      "codename": "A6_Duo",
+      "model": "A6_Duo"
+    },
+    {
+      "market_name": "A6 Lite",
+      "codename": "A6_Lite",
+      "model": "A6_Lite"
+    },
+    {
+      "market_name": "A7 Lite",
+      "codename": "A7_Lite",
+      "model": "A7_Lite"
+    },
+    {
+      "market_name": "AX4 Nano Plus",
+      "codename": "AX4Nano_plus",
+      "model": "AX4Nano_plus"
+    },
+    {
+      "market_name": "AX501Q",
+      "codename": "AX501Q",
+      "model": "AX501Q"
+    },
+    {
+      "market_name": "C6 Duo",
+      "codename": "C6_Duo",
+      "model": "C6_Duo"
+    },
+    {
+      "market_name": "C6 Quad 4G",
+      "codename": "C6_Quad_4G",
+      "model": "C6Quad_4G"
+    },
+    {
+      "market_name": "E2 Jump",
+      "codename": "ALLVIEW_E2_Jump",
+      "model": "E2_Jump"
+    },
+    {
+      "market_name": "E3 Jump",
+      "codename": "E3_Jump",
+      "model": "E3_Jump"
+    },
+    {
+      "market_name": "E3 Living",
+      "codename": "E3_Living",
+      "model": "E3_Living"
+    },
+    {
+      "market_name": "E3 Sign",
+      "codename": "E3_Sign",
+      "model": "E3_Sign"
+    },
+    {
+      "market_name": "E4",
+      "codename": "E4",
+      "model": "E4"
+    },
+    {
+      "market_name": "E4 Lite",
+      "codename": "E4_Lite",
+      "model": "E4_Lite"
+    },
+    {
+      "market_name": "P4 eMagic",
+      "codename": "P4_eMagic",
+      "model": "P4_eMagic"
+    },
+    {
+      "market_name": "P4 eMagic",
+      "codename": "P4_eMagic",
+      "model": "P4_eMagic_TM"
+    },
+    {
+      "market_name": "P41 eMagic",
+      "codename": "P41_eMagic",
+      "model": "P41_eMagic"
+    },
+    {
+      "market_name": "P41 eMagic",
+      "codename": "P41_eMagic",
+      "model": "P41_eMagic_TM"
+    },
+    {
+      "market_name": "P5 Energy",
+      "codename": "P5_Energy",
+      "model": "P5_Energy"
+    },
+    {
+      "market_name": "P5 Life",
+      "codename": "P5Life",
+      "model": "P5Life_TM"
+    },
+    {
+      "market_name": "P5 Lite",
+      "codename": "P5_Lite",
+      "model": "P5_Lite"
+    },
+    {
+      "market_name": "P5 Pro",
+      "codename": "P5_Pro",
+      "model": "P5_Pro"
+    },
+    {
+      "market_name": "P5 eMagic",
+      "codename": "P5_eMagic",
+      "model": "P5_eMagic"
+    },
+    {
+      "market_name": "P5 eMagic",
+      "codename": "P5_eMagic",
+      "model": "P5_eMagic_TM"
+    },
+    {
+      "market_name": "P5Life",
+      "codename": "P5Life",
+      "model": "P5Life"
+    },
+    {
+      "market_name": "P5_Pro",
+      "codename": "P5_Pro",
+      "model": "P5_Pro_TM"
+    },
+    {
+      "market_name": "P6  Plus",
+      "codename": "P6_plus",
+      "model": "P6_plus"
+    },
+    {
+      "market_name": "P6 Energy",
+      "codename": "P6_Energy",
+      "model": "P6_Energy_TM"
+    },
+    {
+      "market_name": "P6 Energy Lite",
+      "codename": "P6_Energy_Lite",
+      "model": "P6_Energy_Lite"
+    },
+    {
+      "market_name": "P6 Lite",
+      "codename": "P6_lite",
+      "model": "P6_lite"
+    },
+    {
+      "market_name": "P6 Lite",
+      "codename": "P6_lite",
+      "model": "P6_lite_TM"
+    },
+    {
+      "market_name": "P6 Lite",
+      "codename": "P6_lite",
+      "model": "P6_lite_mTEL"
+    },
+    {
+      "market_name": "P6 Pro",
+      "codename": "P6_Pro",
+      "model": "P6_Pro"
+    },
+    {
+      "market_name": "P6 Qmax",
+      "codename": "P6_Qmax",
+      "model": "P6_Qmax"
+    },
+    {
+      "market_name": "P6 eMagic",
+      "codename": "P6_eMagic",
+      "model": "P6_eMagic"
+    },
+    {
+      "market_name": "P6_Energy",
+      "codename": "P6_Energy",
+      "model": "P6_Energy"
+    },
+    {
+      "market_name": "P7 PRO",
+      "codename": "P7_PRO",
+      "model": "P7_PRO"
+    },
+    {
+      "market_name": "P8 Energy",
+      "codename": "P8_Energy",
+      "model": "P8_Energy"
+    },
+    {
+      "market_name": "P8 Energy Pro",
+      "codename": "P8_Energy_PRO",
+      "model": "P8_Energy_PRO"
+    },
+    {
+      "market_name": "P8 Energy mini",
+      "codename": "P8_Energy_mini",
+      "model": "P8_Energy_mini"
+    },
+    {
+      "market_name": "P8 Energy mini",
+      "codename": "P8_Energy_mini",
+      "model": "P8_Energy_mini_TM"
+    },
+    {
+      "market_name": "P8 eMagic",
+      "codename": "P8_eMagic",
+      "model": "P8_eMagic"
+    },
+    {
+      "market_name": "P8 eMagic",
+      "codename": "P8_eMagic",
+      "model": "P8_eMagic_TM"
+    },
+    {
+      "market_name": "P9 Energy mini",
+      "codename": "P9_Energy_mini",
+      "model": "P9_Energy_mini"
+    },
+    {
+      "market_name": "V1 Viper E",
+      "codename": "V1_Viper_E",
+      "model": "V1_Viper_E"
+    },
+    {
+      "market_name": "V1 Viper I4G",
+      "codename": "V1_Viper_I4G",
+      "model": "V1_Viper_I4G"
+    },
+    {
+      "market_name": "V1 Viper I4G",
+      "codename": "V1_Viper_I4G",
+      "model": "V1_Viper_I4G_PL"
+    },
+    {
+      "market_name": "V1 Viper I4G",
+      "codename": "V1_Viper_I4G",
+      "model": "V1_Viper_I4G_TM"
+    },
+    {
+      "market_name": "V1 Viper I4G",
+      "codename": "V1_Viper_I4G_PL",
+      "model": "V1_Viper_I4G_PL"
+    },
+    {
+      "market_name": "V1 Viper L",
+      "codename": "V1_Viper_L",
+      "model": "V1_Viper_L"
+    },
+    {
+      "market_name": "V1 Viper S4G",
+      "codename": "V1_Viper_S4G",
+      "model": "V1_Viper_S4G"
+    },
+    {
+      "market_name": "V2 Viper",
+      "codename": "V2_Viper",
+      "model": "V2_Viper"
+    },
+    {
+      "market_name": "V2 Viper E",
+      "codename": "V2_Viper_E",
+      "model": "V2_Viper_E"
+    },
+    {
+      "market_name": "V2 Viper I",
+      "codename": "V2_Viper_I",
+      "model": "V2_Viper_I"
+    },
+    {
+      "market_name": "V2 Viper I",
+      "codename": "V2_Viper_I",
+      "model": "V2_Viper_I_TM"
+    },
+    {
+      "market_name": "V2 Viper I4G",
+      "codename": "V2_Viper_I4G",
+      "model": "V2_Viper_I4G"
+    },
+    {
+      "market_name": "V2 Viper X",
+      "codename": "V2_Viper_X",
+      "model": "V2_Viper_X"
+    },
+    {
+      "market_name": "V2 Viper X plus",
+      "codename": "V2_Viper_X_plus",
+      "model": "V2_Viper_X_plus"
+    },
+    {
+      "market_name": "V2 Viper Xe",
+      "codename": "V2_Viper_Xe",
+      "model": "V2_Viper_Xe"
+    },
+    {
+      "market_name": "Viva 1001G",
+      "codename": "Viva_1001G",
+      "model": "Viva_1001G"
+    },
+    {
+      "market_name": "Viva C701",
+      "codename": "Viva_C701",
+      "model": "Viva_C701"
+    },
+    {
+      "market_name": "Viva H10 LTE",
+      "codename": "Allview_VivaH10LTE_KK",
+      "model": "VivaH10LTE"
+    },
+    {
+      "market_name": "Viva H1001 LTE",
+      "codename": "Viva_H1001_LTE",
+      "model": "Viva_H1001_LTE"
+    },
+    {
+      "market_name": "Viva H7 LTE",
+      "codename": "Allview_VivaH7LTE_KK",
+      "model": "VivaH7LTE"
+    },
+    {
+      "market_name": "Viva H8 LTE",
+      "codename": "Allview_VivaH8LTE_KK",
+      "model": "VivaH8LTE"
+    },
+    {
+      "market_name": "Viva H8 Life",
+      "codename": "H8_Life",
+      "model": "H8_Life"
+    },
+    {
+      "market_name": "Viva H801",
+      "codename": "Viva_H801",
+      "model": "Viva_H801"
+    },
+    {
+      "market_name": "Viva H801 LTE",
+      "codename": "Viva_H801_LTE",
+      "model": "Viva_H801_LTE"
+    },
+    {
+      "market_name": "Viva i10HD",
+      "codename": "Viva_i10HD",
+      "model": "Viva_i10HD"
+    },
+    {
+      "market_name": "Viva i701G",
+      "codename": "Viva_H701_LTE",
+      "model": "Viva_H701_LTE_CZ"
+    },
+    {
+      "market_name": "Viva i701G",
+      "codename": "Viva_i701G",
+      "model": "Viva_i701G"
+    },
+    {
+      "market_name": "Viva i701G",
+      "codename": "Viva_i701G",
+      "model": "Viva_i701G_TM"
+    },
+    {
+      "market_name": "Viva i7G",
+      "codename": "Viva_i7G",
+      "model": "Viva_i7G"
+    },
+    {
+      "market_name": "Viva_H701_LTE",
+      "codename": "Viva_H701_LTE",
+      "model": "Viva_H701_LTE"
+    },
+    {
+      "market_name": "X2 Soul Lite",
+      "codename": "X2_Soul_Lite",
+      "model": "X2_Soul_Lite"
+    },
+    {
+      "market_name": "X2 Soul Lite",
+      "codename": "X2_Soul_Lite",
+      "model": "X2_Soul_Lite_TM"
+    },
+    {
+      "market_name": "X2 Soul Mini",
+      "codename": "X2_Soul_Mini",
+      "model": "X2_Soul_Mini"
+    },
+    {
+      "market_name": "X2 Soul PRO",
+      "codename": "X2_Soul_PRO",
+      "model": "X2_Soul_PRO"
+    },
+    {
+      "market_name": "X2 Soul Style",
+      "codename": "X2_Soul_Style",
+      "model": "X2_Soul_Style"
+    },
+    {
+      "market_name": "X2 Soul Style",
+      "codename": "X2_Soul_Style",
+      "model": "X2_Soul_Style_TM"
+    },
+    {
+      "market_name": "X2 Soul Style+",
+      "codename": "X2_Soul_Style_Plus",
+      "model": "X2_Soul_Style_Plus"
+    },
+    {
+      "market_name": "X2 Soul Xtreme",
+      "codename": "X2_Soul_Xtreme",
+      "model": "X2_Soul_Xtreme"
+    },
+    {
+      "market_name": "X3 Soul Lite",
+      "codename": "X3_Soul_Lite",
+      "model": "X3_Soul_Lite"
+    },
+    {
+      "market_name": "X3 Soul Lite",
+      "codename": "X3_Soul_Lite",
+      "model": "X3_Soul_Lite_TM"
+    },
+    {
+      "market_name": "X3 Soul Plus",
+      "codename": "X3_Soul_PLUS",
+      "model": "X3_Soul_PLUS"
+    },
+    {
+      "market_name": "X3 Soul Pro",
+      "codename": "X3_Soul_PRO",
+      "model": "X3_Soul_PRO"
+    },
+    {
+      "market_name": "X3 Soul Style",
+      "codename": "X3_Soul_Style",
+      "model": "X3_Soul_Style"
+    },
+    {
+      "market_name": "X3 Soul mini",
+      "codename": "X3_Soul_mini",
+      "model": "X3_Soul_mini"
+    },
+    {
+      "market_name": "X3Soul",
+      "codename": "X3_Soul",
+      "model": "X3_Soul"
+    }
+  ]
+}

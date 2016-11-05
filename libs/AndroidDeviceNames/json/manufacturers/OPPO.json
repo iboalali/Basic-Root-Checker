@@ -1,0 +1,750 @@
+{
+  "manufacturer": "Oppo",
+  "devices": [
+    {
+      "market_name": "1100",
+      "codename": "1100",
+      "model": "1100"
+    },
+    {
+      "market_name": "1105",
+      "codename": "1105",
+      "model": "1105"
+    },
+    {
+      "market_name": "1107",
+      "codename": "1107",
+      "model": "1107"
+    },
+    {
+      "market_name": "1206",
+      "codename": "1206",
+      "model": "1206"
+    },
+    {
+      "market_name": "3000",
+      "codename": "3000",
+      "model": "3000"
+    },
+    {
+      "market_name": "3001",
+      "codename": "Mirror3",
+      "model": "3001"
+    },
+    {
+      "market_name": "3005",
+      "codename": "3005",
+      "model": "3005"
+    },
+    {
+      "market_name": "3006",
+      "codename": "Mirror3",
+      "model": "3006"
+    },
+    {
+      "market_name": "3007",
+      "codename": "3007",
+      "model": "3007"
+    },
+    {
+      "market_name": "3008",
+      "codename": "3008",
+      "model": "3008"
+    },
+    {
+      "market_name": "A11",
+      "codename": "A11",
+      "model": "A11"
+    },
+    {
+      "market_name": "A11f",
+      "codename": "A11",
+      "model": "A11f"
+    },
+    {
+      "market_name": "A11t",
+      "codename": "A11",
+      "model": "A11t"
+    },
+    {
+      "market_name": "A13t",
+      "codename": "A31t",
+      "model": "A31t"
+    },
+    {
+      "market_name": "A1601",
+      "codename": "A1601",
+      "model": "A1601"
+    },
+    {
+      "market_name": "A1601fw",
+      "codename": "A1601",
+      "model": "A1601fw"
+    },
+    {
+      "market_name": "A1603",
+      "codename": "A1603",
+      "model": "A1603"
+    },
+    {
+      "market_name": "A31",
+      "codename": "A31t",
+      "model": "A31"
+    },
+    {
+      "market_name": "A31c",
+      "codename": "A31c",
+      "model": "A31c"
+    },
+    {
+      "market_name": "A31u",
+      "codename": "A31u",
+      "model": "A31u"
+    },
+    {
+      "market_name": "A33",
+      "codename": "A33",
+      "model": "A33"
+    },
+    {
+      "market_name": "A33f",
+      "codename": "A33",
+      "model": "A33f"
+    },
+    {
+      "market_name": "A33fw",
+      "codename": "A33",
+      "model": "A33fw"
+    },
+    {
+      "market_name": "A33m",
+      "codename": "A33",
+      "model": "OPPO A33m"
+    },
+    {
+      "market_name": "A33t",
+      "codename": "A33t",
+      "model": "A33t"
+    },
+    {
+      "market_name": "A33w",
+      "codename": "A33w",
+      "model": "A33w"
+    },
+    {
+      "market_name": "A35",
+      "codename": "A35",
+      "model": "OPPO A35"
+    },
+    {
+      "market_name": "A37f",
+      "codename": "A37f",
+      "model": "A37f"
+    },
+    {
+      "market_name": "A37fw",
+      "codename": "A37f",
+      "model": "A37fw"
+    },
+    {
+      "market_name": "A37fw-International",
+      "codename": "A37fs",
+      "model": "A37f"
+    },
+    {
+      "market_name": "A37t",
+      "codename": "A37",
+      "model": "OPPO A37t"
+    },
+    {
+      "market_name": "A51",
+      "codename": "A51",
+      "model": "A51"
+    },
+    {
+      "market_name": "A51f",
+      "codename": "A51",
+      "model": "A51f"
+    },
+    {
+      "market_name": "A51fa",
+      "codename": "A51",
+      "model": "A51f"
+    },
+    {
+      "market_name": "A51kc",
+      "codename": "A51kc",
+      "model": "A51kc"
+    },
+    {
+      "market_name": "A51w",
+      "codename": "A51",
+      "model": "A51w"
+    },
+    {
+      "market_name": "A53",
+      "codename": "A53",
+      "model": "OPPO A53"
+    },
+    {
+      "market_name": "A53f",
+      "codename": "A53",
+      "model": "A53f"
+    },
+    {
+      "market_name": "A53fw",
+      "codename": "A53",
+      "model": "A53fw"
+    },
+    {
+      "market_name": "A53m",
+      "codename": "A53",
+      "model": "OPPO A53m"
+    },
+    {
+      "market_name": "A53w",
+      "codename": "A53",
+      "model": "A53w"
+    },
+    {
+      "market_name": "CPH1605",
+      "codename": "CPH1605",
+      "model": "OPPO CPH1605"
+    },
+    {
+      "market_name": "CPH1605fw",
+      "codename": "CPH1605",
+      "model": "CPH1605fw"
+    },
+    {
+      "market_name": "F1f",
+      "codename": "F1f",
+      "model": "F1f"
+    },
+    {
+      "market_name": "F1fw",
+      "codename": "F1f",
+      "model": "F1f"
+    },
+    {
+      "market_name": "F1fw",
+      "codename": "F1f",
+      "model": "F1fw"
+    },
+    {
+      "market_name": "F1w",
+      "codename": "F1f",
+      "model": "F1f"
+    },
+    {
+      "market_name": "F1w",
+      "codename": "F1f",
+      "model": "F1w"
+    },
+    {
+      "market_name": "Find 5",
+      "codename": "FIND5",
+      "model": "X909"
+    },
+    {
+      "market_name": "N1",
+      "codename": "N1",
+      "model": "N1"
+    },
+    {
+      "market_name": "N1 mimi",
+      "codename": "N1mini",
+      "model": "N5111"
+    },
+    {
+      "market_name": "N1 mimi",
+      "codename": "N1mini",
+      "model": "N5116"
+    },
+    {
+      "market_name": "N1T",
+      "codename": "N1T",
+      "model": "N1T"
+    },
+    {
+      "market_name": "N3",
+      "codename": "N3",
+      "model": "N5206"
+    },
+    {
+      "market_name": "N3",
+      "codename": "N3",
+      "model": "N5207"
+    },
+    {
+      "market_name": "N3",
+      "codename": "N3",
+      "model": "N5209"
+    },
+    {
+      "market_name": "N5110",
+      "codename": "N5110",
+      "model": "N5110"
+    },
+    {
+      "market_name": "N5117",
+      "codename": "N5117",
+      "model": "N5117"
+    },
+    {
+      "market_name": "OPPO 1201",
+      "codename": "1201",
+      "model": "1201"
+    },
+    {
+      "market_name": "OPPO A11w",
+      "codename": "A11w",
+      "model": "A11w"
+    },
+    {
+      "market_name": "OPPO A37",
+      "codename": "A37",
+      "model": "OPPO A37"
+    },
+    {
+      "market_name": "OPPO A37fw",
+      "codename": "A37fs",
+      "model": "A37fw"
+    },
+    {
+      "market_name": "OPPO A37m",
+      "codename": "A37",
+      "model": "OPPO A37m"
+    },
+    {
+      "market_name": "OPPO A37tm",
+      "codename": "A37",
+      "model": "OPPO A37tm"
+    },
+    {
+      "market_name": "OPPO A39",
+      "codename": "A39",
+      "model": "OPPO A39"
+    },
+    {
+      "market_name": "OPPO A39m",
+      "codename": "A39",
+      "model": "OPPO A39m"
+    },
+    {
+      "market_name": "OPPO A39t",
+      "codename": "A39",
+      "model": "OPPO A39t"
+    },
+    {
+      "market_name": "OPPO A39tm",
+      "codename": "A39",
+      "model": "OPPO A39tm"
+    },
+    {
+      "market_name": "OPPO A59",
+      "codename": "A59",
+      "model": "OPPO A59"
+    },
+    {
+      "market_name": "OPPO A59m",
+      "codename": "A59",
+      "model": "OPPO A59m"
+    },
+    {
+      "market_name": "OPPO A59t",
+      "codename": "A59",
+      "model": "OPPO A59t"
+    },
+    {
+      "market_name": "OPPO A59tm",
+      "codename": "A59",
+      "model": "OPPO A59tm"
+    },
+    {
+      "market_name": "OPPO Find5",
+      "codename": "FIND5",
+      "model": "X909"
+    },
+    {
+      "market_name": "OPPO Find5",
+      "codename": "FIND5",
+      "model": "X909T"
+    },
+    {
+      "market_name": "OPPO R9",
+      "codename": "R9",
+      "model": "OPPO R9"
+    },
+    {
+      "market_name": "OPPO R9 Plus A",
+      "codename": "R9PlusA",
+      "model": "OPPO R9 Plus A"
+    },
+    {
+      "market_name": "OPPO R9k",
+      "codename": "R9",
+      "model": "OPPO R9k"
+    },
+    {
+      "market_name": "OPPO R9k",
+      "codename": "R9",
+      "model": "OPPO R9km"
+    },
+    {
+      "market_name": "OPPO Ulike2",
+      "codename": "Ulike2",
+      "model": "U705T"
+    },
+    {
+      "market_name": "R1001",
+      "codename": "OPPO72_13076",
+      "model": "R1001"
+    },
+    {
+      "market_name": "R1001",
+      "codename": "R1001",
+      "model": "R1001"
+    },
+    {
+      "market_name": "R1011",
+      "codename": "R1011",
+      "model": "R1011"
+    },
+    {
+      "market_name": "R1011w",
+      "codename": "R1011",
+      "model": "R1011"
+    },
+    {
+      "market_name": "R5",
+      "codename": "R5",
+      "model": "R8106"
+    },
+    {
+      "market_name": "R5",
+      "codename": "R5",
+      "model": "R8107"
+    },
+    {
+      "market_name": "R5",
+      "codename": "R5",
+      "model": "R8109"
+    },
+    {
+      "market_name": "R6006",
+      "codename": "R3",
+      "model": "R6006"
+    },
+    {
+      "market_name": "R7",
+      "codename": "R7",
+      "model": "OPPO R7"
+    },
+    {
+      "market_name": "R7",
+      "codename": "R7",
+      "model": "R7"
+    },
+    {
+      "market_name": "R7 Lite",
+      "codename": "R7f",
+      "model": "R7kf"
+    },
+    {
+      "market_name": "R7 Plus",
+      "codename": "R7Plus",
+      "model": "R7Plus"
+    },
+    {
+      "market_name": "R7 Plusf",
+      "codename": "R7Plusm",
+      "model": "R7plusf"
+    },
+    {
+      "market_name": "R7 Plusm",
+      "codename": "R7Plusm",
+      "model": "R7Plusm"
+    },
+    {
+      "market_name": "R7005",
+      "codename": "R3",
+      "model": "R7005"
+    },
+    {
+      "market_name": "R7Plust",
+      "codename": "R7Plus",
+      "model": "R7Plust"
+    },
+    {
+      "market_name": "R7c",
+      "codename": "R7c",
+      "model": "R7c"
+    },
+    {
+      "market_name": "R7f",
+      "codename": "R7f",
+      "model": "R7f"
+    },
+    {
+      "market_name": "R7g",
+      "codename": "R7f",
+      "model": "R7g"
+    },
+    {
+      "market_name": "R7kc",
+      "codename": "R7kc",
+      "model": "R7kc"
+    },
+    {
+      "market_name": "R7kf",
+      "codename": "R7f",
+      "model": "R7kf"
+    },
+    {
+      "market_name": "R7kt",
+      "codename": "R7",
+      "model": "R7kt"
+    },
+    {
+      "market_name": "R7s",
+      "codename": "R7s",
+      "model": "OPPO R7s"
+    },
+    {
+      "market_name": "R7s",
+      "codename": "R7s",
+      "model": "R7s"
+    },
+    {
+      "market_name": "R7s Plus",
+      "codename": "R7sPlus",
+      "model": "OPPO R7sPlus"
+    },
+    {
+      "market_name": "R7sf",
+      "codename": "R7sm",
+      "model": "R7sf"
+    },
+    {
+      "market_name": "R7sfg",
+      "codename": "R7sf",
+      "model": "R7sf"
+    },
+    {
+      "market_name": "R7sm",
+      "codename": "R7sm",
+      "model": "R7sm"
+    },
+    {
+      "market_name": "R7st",
+      "codename": "R7s",
+      "model": "R7st"
+    },
+    {
+      "market_name": "R7t",
+      "codename": "R7",
+      "model": "R7t"
+    },
+    {
+      "market_name": "R8000",
+      "codename": "R1S",
+      "model": "R8000"
+    },
+    {
+      "market_name": "R809T",
+      "codename": "R809T",
+      "model": "R809T"
+    },
+    {
+      "market_name": "R8106",
+      "codename": "R5",
+      "model": "R8106"
+    },
+    {
+      "market_name": "R815",
+      "codename": "R815",
+      "model": "R815"
+    },
+    {
+      "market_name": "R815T",
+      "codename": "R815T",
+      "model": "R815T"
+    },
+    {
+      "market_name": "R815W",
+      "codename": "R815W",
+      "model": "R815W"
+    },
+    {
+      "market_name": "R819",
+      "codename": "R819",
+      "model": "R819"
+    },
+    {
+      "market_name": "R819T",
+      "codename": "R819T",
+      "model": "R819T"
+    },
+    {
+      "market_name": "R820",
+      "codename": "R820",
+      "model": "R820"
+    },
+    {
+      "market_name": "R8200",
+      "codename": "R1C",
+      "model": "R8200"
+    },
+    {
+      "market_name": "R8201",
+      "codename": "R1x",
+      "model": "R8201"
+    },
+    {
+      "market_name": "R8205",
+      "codename": "R1C",
+      "model": "R8205"
+    },
+    {
+      "market_name": "R8206",
+      "codename": "R1x",
+      "model": "R8206"
+    },
+    {
+      "market_name": "R8207",
+      "codename": "R1C",
+      "model": "R8207"
+    },
+    {
+      "market_name": "R821",
+      "codename": "R821",
+      "model": "R821"
+    },
+    {
+      "market_name": "R821T",
+      "codename": "R821T",
+      "model": "R821T"
+    },
+    {
+      "market_name": "R823T",
+      "codename": "R823T",
+      "model": "R823T"
+    },
+    {
+      "market_name": "R827",
+      "codename": "R827",
+      "model": "R827"
+    },
+    {
+      "market_name": "R831",
+      "codename": "R831",
+      "model": "R831"
+    },
+    {
+      "market_name": "R831",
+      "codename": "R831T",
+      "model": "R831T"
+    },
+    {
+      "market_name": "R831K",
+      "codename": "R831K",
+      "model": "R831K"
+    },
+    {
+      "market_name": "R833T",
+      "codename": "OPPO82_13067",
+      "model": "R833T"
+    },
+    {
+      "market_name": "R9PlusmA",
+      "codename": "R9PlusA",
+      "model": "OPPO R9 Plusm A"
+    },
+    {
+      "market_name": "R9PlustA",
+      "codename": "R9PlusA",
+      "model": "OPPO R9 Plust A"
+    },
+    {
+      "market_name": "R9PlustmA",
+      "codename": "R9PlusA",
+      "model": "OPPO R9 Plustm A"
+    },
+    {
+      "market_name": "R9m",
+      "codename": "R9",
+      "model": "OPPO R9m"
+    },
+    {
+      "market_name": "R9t",
+      "codename": "R9",
+      "model": "OPPO R9t"
+    },
+    {
+      "market_name": "R9tm",
+      "codename": "R9",
+      "model": "OPPO R9tm"
+    },
+    {
+      "market_name": "U3",
+      "codename": "U3",
+      "model": "U3"
+    },
+    {
+      "market_name": "U707",
+      "codename": "U707",
+      "model": "U707"
+    },
+    {
+      "market_name": "U707T",
+      "codename": "U707T",
+      "model": "U707T"
+    },
+    {
+      "market_name": "Ulike2",
+      "codename": "U705W",
+      "model": "U705W"
+    },
+    {
+      "market_name": "X9000",
+      "codename": "X9000",
+      "model": "X9000"
+    },
+    {
+      "market_name": "X9009",
+      "codename": "X9009",
+      "model": "X9009"
+    },
+    {
+      "market_name": "X9009fw",
+      "codename": "X9009",
+      "model": "X9009fw"
+    },
+    {
+      "market_name": "X9077",
+      "codename": "FIND7",
+      "model": "X9077"
+    },
+    {
+      "market_name": "X9079",
+      "codename": "X9079",
+      "model": "X9079"
+    },
+    {
+      "market_name": "X909",
+      "codename": "FIND5",
+      "model": "X909"
+    },
+    {
+      "market_name": "X909",
+      "codename": "X909",
+      "model": "X909"
+    },
+    {
+      "market_name": "X909",
+      "codename": "X909T",
+      "model": "X909T"
+    }
+  ]
+}

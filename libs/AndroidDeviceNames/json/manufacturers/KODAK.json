@@ -1,0 +1,20 @@
+{
+  "manufacturer": "Kodak",
+  "devices": [
+    {
+      "market_name": "Ektra",
+      "codename": "KodakEktra",
+      "model": "Ektra"
+    },
+    {
+      "market_name": "IM5",
+      "codename": "IM5",
+      "model": "IM5"
+    },
+    {
+      "market_name": "SP4",
+      "codename": "SP4",
+      "model": "SP4"
+    }
+  ]
+}

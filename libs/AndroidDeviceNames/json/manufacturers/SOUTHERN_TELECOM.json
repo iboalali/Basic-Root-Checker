@@ -1,0 +1,115 @@
+{
+  "manufacturer": "Southern Telecom",
+  "devices": [
+    {
+      "market_name": "A1000/P1003/P1010",
+      "codename": "A1000",
+      "model": "A1000/P1003/P1010"
+    },
+    {
+      "market_name": "A5",
+      "codename": "A5",
+      "model": "A5"
+    },
+    {
+      "market_name": "Emerson EM756",
+      "codename": "EM756",
+      "model": "EM756"
+    },
+    {
+      "market_name": "M10",
+      "codename": "ST1009",
+      "model": "M10"
+    },
+    {
+      "market_name": "M10",
+      "codename": "ST1009",
+      "model": "M10/Q1010"
+    },
+    {
+      "market_name": "P709/P716",
+      "codename": "P709",
+      "model": "P709/P716"
+    },
+    {
+      "market_name": "P909",
+      "codename": "P909",
+      "model": "P909"
+    },
+    {
+      "market_name": "Polaroid L10/P1000",
+      "codename": "L10",
+      "model": "L10"
+    },
+    {
+      "market_name": "Polaroid M11",
+      "codename": "M11",
+      "model": "M11"
+    },
+    {
+      "market_name": "Polaroid P700/A700",
+      "codename": "P700",
+      "model": "P700/A700"
+    },
+    {
+      "market_name": "Polaroid P902/A900",
+      "codename": "P902",
+      "model": "P902/A900"
+    },
+    {
+      "market_name": "Polaroid Power P600",
+      "codename": "P600",
+      "model": "P600"
+    },
+    {
+      "market_name": "Polaroid Snap S50",
+      "codename": "S50",
+      "model": "S50"
+    },
+    {
+      "market_name": "Polaroid Snap S55",
+      "codename": "S55",
+      "model": "S55"
+    },
+    {
+      "market_name": "Polaroid Snap S60",
+      "codename": "S60",
+      "model": "S60"
+    },
+    {
+      "market_name": "ST1009",
+      "codename": "ST1009",
+      "model": "ST1009"
+    },
+    {
+      "market_name": "ST13",
+      "codename": "ST13",
+      "model": "ST13"
+    },
+    {
+      "market_name": "ST706",
+      "codename": "P709",
+      "model": "ST706"
+    },
+    {
+      "market_name": "Smartab ST10",
+      "codename": "ST10",
+      "model": "ST10/ST10x"
+    },
+    {
+      "market_name": "Smartab ST7",
+      "codename": "ST7",
+      "model": "ST7/ST7x"
+    },
+    {
+      "market_name": "Streamachine",
+      "codename": "X13",
+      "model": "X13"
+    },
+    {
+      "market_name": "a4",
+      "codename": "a4",
+      "model": "a4"
+    }
+  ]
+}

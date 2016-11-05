@@ -1,0 +1,45 @@
+{
+  "manufacturer": "Neffos",
+  "devices": [
+    {
+      "market_name": "C5",
+      "codename": "C5",
+      "model": "Neffos C5"
+    },
+    {
+      "market_name": "C5 Max",
+      "codename": "C5_Max",
+      "model": "Neffos C5 Max"
+    },
+    {
+      "market_name": "C5L",
+      "codename": "QC601",
+      "model": "TP601A"
+    },
+    {
+      "market_name": "C5L",
+      "codename": "QC601",
+      "model": "TP601B"
+    },
+    {
+      "market_name": "C5L",
+      "codename": "QC601",
+      "model": "TP601C"
+    },
+    {
+      "market_name": "C5L",
+      "codename": "QC601",
+      "model": "TP601E"
+    },
+    {
+      "market_name": "Y5",
+      "codename": "Y5",
+      "model": "Neffos Y5"
+    },
+    {
+      "market_name": "Y5L",
+      "codename": "Y5L",
+      "model": "Neffos Y5L"
+    }
+  ]
+}

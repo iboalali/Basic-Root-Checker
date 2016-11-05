@@ -1,0 +1,45 @@
+{
+  "manufacturer": "Zuk",
+  "devices": [
+    {
+      "market_name": "Lenovo Z2 Plus",
+      "codename": "z2_plus_hw",
+      "model": "ZUK Z2132"
+    },
+    {
+      "market_name": "Z2",
+      "codename": "z2_plus",
+      "model": "ZUK Z2131"
+    },
+    {
+      "market_name": "Z2 Pro",
+      "codename": "z2_row",
+      "model": "ZUK Z2121"
+    },
+    {
+      "market_name": "ZTE B2015",
+      "codename": "msm8916_64",
+      "model": "ZTE B2015"
+    },
+    {
+      "market_name": "ZTE BLADE A5 PRO",
+      "codename": "P731A20",
+      "model": "ZTE BLADE A5 PRO"
+    },
+    {
+      "market_name": "ZUK Z1",
+      "codename": "Z1",
+      "model": "Z1"
+    },
+    {
+      "market_name": "ZUK Z1",
+      "codename": "Z1",
+      "model": "ZUK Z1"
+    },
+    {
+      "market_name": "ZUK Z1",
+      "codename": "k9",
+      "model": "ZUK Z1"
+    }
+  ]
+}

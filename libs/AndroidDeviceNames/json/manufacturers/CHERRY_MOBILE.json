@@ -1,0 +1,55 @@
+{
+  "manufacturer": "Cherry Mobile",
+  "devices": [
+    {
+      "market_name": "Cherry W900 LTE",
+      "codename": "al7",
+      "model": "W900 LTE"
+    },
+    {
+      "market_name": "Flare J3",
+      "codename": "H680",
+      "model": "Flare_J3"
+    },
+    {
+      "market_name": "Flare J3 Plus",
+      "codename": "H620",
+      "model": "Flare_J3_Plus"
+    },
+    {
+      "market_name": "Flare X",
+      "codename": "Flare_X",
+      "model": "Flare_X_V2"
+    },
+    {
+      "market_name": "H220",
+      "codename": "ctih220_sprout",
+      "model": "H220"
+    },
+    {
+      "market_name": "Omega HD 3S",
+      "codename": "H115",
+      "model": "OMEGA HD 3S"
+    },
+    {
+      "market_name": "Omega HD3",
+      "codename": "H110",
+      "model": "Omega HD 3"
+    },
+    {
+      "market_name": "One",
+      "codename": "H940_sprout",
+      "model": "H940"
+    },
+    {
+      "market_name": "Spin Max",
+      "codename": "H650",
+      "model": "Spin Max"
+    },
+    {
+      "market_name": "Touch HD",
+      "codename": "Touch_HD",
+      "model": "Cherry_Mobile_Touch_HD"
+    }
+  ]
+}

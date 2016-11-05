@@ -1,0 +1,20 @@
+{
+  "manufacturer": "Telenor",
+  "devices": [
+    {
+      "market_name": "Infinity_i",
+      "codename": "TELENOR_Infinity_i",
+      "model": "Infinity i"
+    },
+    {
+      "market_name": "Telenor Smart",
+      "codename": "Telenor_Smart",
+      "model": "Telenor_Smart"
+    },
+    {
+      "market_name": "Telenor Smart4G",
+      "codename": "Telenor_Smart_4G",
+      "model": "Telenor_Smart_4G"
+    }
+  ]
+}

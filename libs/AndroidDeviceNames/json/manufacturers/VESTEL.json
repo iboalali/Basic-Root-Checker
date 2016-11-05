@@ -1,0 +1,235 @@
+{
+  "manufacturer": "Vestel",
+  "devices": [
+    {
+      "market_name": "55UA8990",
+      "codename": "MB300",
+      "model": "SmartTV"
+    },
+    {
+      "market_name": "Farabi",
+      "codename": "frb3g",
+      "model": "Farabi"
+    },
+    {
+      "market_name": "S7252",
+      "codename": "BCM7252S",
+      "model": "S7252"
+    },
+    {
+      "market_name": "\"V TAB 7\"\" LITE II\"",
+      "codename": "V_TAB_7_LITE_II",
+      "model": "VTAB7LITEII"
+    },
+    {
+      "market_name": "V TAB 7\\\u0027\\\u0027 LITE II",
+      "codename": "V_TAB_7_LITE_II",
+      "model": "V_TAB_7_LITE_II"
+    },
+    {
+      "market_name": "V TAB 7025",
+      "codename": "V_TAB_7025",
+      "model": "V_TAB_7025"
+    },
+    {
+      "market_name": "V TAB 8010",
+      "codename": "V_TAB_8010",
+      "model": "V_TAB_8010"
+    },
+    {
+      "market_name": "V TAB 8029",
+      "codename": "V_TAB_8029",
+      "model": "V TAB 8029"
+    },
+    {
+      "market_name": "V TAB 9.7\\\u0027\\\u0027 PRO",
+      "codename": "VT97PRO",
+      "model": "VT97PRO"
+    },
+    {
+      "market_name": "V Tab 7010",
+      "codename": "VTab7010",
+      "model": "V Tab 7010"
+    },
+    {
+      "market_name": "VP100+",
+      "codename": "ephesus",
+      "model": "10.1Myros"
+    },
+    {
+      "market_name": "VP100+",
+      "codename": "ephesus",
+      "model": "VP100+"
+    },
+    {
+      "market_name": "VP73",
+      "codename": "wing-ibt",
+      "model": "VP73"
+    },
+    {
+      "market_name": "VP73",
+      "codename": "wing-ibt",
+      "model": "VP73_Hyundai"
+    },
+    {
+      "market_name": "VP73",
+      "codename": "wing-ibt",
+      "model": "VP73_Myros"
+    },
+    {
+      "market_name": "VP73",
+      "codename": "wing-ibt",
+      "model": "VP73_Vox"
+    },
+    {
+      "market_name": "VP73",
+      "codename": "wing-ibt",
+      "model": "VP73_le"
+    },
+    {
+      "market_name": "VP74",
+      "codename": "wifionly-gms",
+      "model": "VP74"
+    },
+    {
+      "market_name": "VP74",
+      "codename": "wifionly-gms",
+      "model": "VP74-Celcus"
+    },
+    {
+      "market_name": "VP74",
+      "codename": "wifionly-gms",
+      "model": "VP74-Finlux"
+    },
+    {
+      "market_name": "VP74",
+      "codename": "wifionly-gms",
+      "model": "VP74-Luxor"
+    },
+    {
+      "market_name": "VP74",
+      "codename": "wifionly-gms",
+      "model": "VP74-Orava"
+    },
+    {
+      "market_name": "VP74",
+      "codename": "wifionly-gms",
+      "model": "VP74-Telefunken"
+    },
+    {
+      "market_name": "VP74",
+      "codename": "wifionly-gms",
+      "model": "VP74-Vox"
+    },
+    {
+      "market_name": "VSP145M",
+      "codename": "VSP145M",
+      "model": "VSP145M"
+    },
+    {
+      "market_name": "VSP250g",
+      "codename": "VSP250g",
+      "model": "VSP250g"
+    },
+    {
+      "market_name": "VSP250s",
+      "codename": "VSP250s",
+      "model": "VSP250s"
+    },
+    {
+      "market_name": "VSP355g",
+      "codename": "g55",
+      "model": "VSP355g"
+    },
+    {
+      "market_name": "VSP355s",
+      "codename": "s55",
+      "model": "VSP355s"
+    },
+    {
+      "market_name": "VT10E",
+      "codename": "VT10E",
+      "model": "VT10E"
+    },
+    {
+      "market_name": "VT10E2",
+      "codename": "VT10E2",
+      "model": "S TAB 10\\\u0027\\\u0027 II"
+    },
+    {
+      "market_name": "VT10E2",
+      "codename": "VT10E2",
+      "model": "V TAB 10\\\u0027\\\u0027 LITE"
+    },
+    {
+      "market_name": "VT10E2",
+      "codename": "VT10E2",
+      "model": "VT10E2"
+    },
+    {
+      "market_name": "VT785P2",
+      "codename": "VT785P2",
+      "model": "V TAB 7.85\\\u0027\\\u0027 LITE"
+    },
+    {
+      "market_name": "VT785P2",
+      "codename": "VT785P2",
+      "model": "VT785P2-Celcus"
+    },
+    {
+      "market_name": "VT785P2",
+      "codename": "VT785P2",
+      "model": "VT785P2-Cleverpad"
+    },
+    {
+      "market_name": "VT785P2",
+      "codename": "VT785P2",
+      "model": "VT785P2-Finlux"
+    },
+    {
+      "market_name": "VT785P2",
+      "codename": "VT785P2",
+      "model": "VT785P2-Vestel"
+    },
+    {
+      "market_name": "Venus V3 5010",
+      "codename": "DynoLight",
+      "model": "Venus_V3_5010"
+    },
+    {
+      "market_name": "Venus V3 5020",
+      "codename": "Arya",
+      "model": "Venus_V3_5020"
+    },
+    {
+      "market_name": "Venus V3 5030",
+      "codename": "Dyno",
+      "model": "Venus_V3_5030"
+    },
+    {
+      "market_name": "Venus V3 5040",
+      "codename": "Venus_V3_5040",
+      "model": "Venus_V3_5040"
+    },
+    {
+      "market_name": "Venus V3 5040",
+      "codename": "Venus_V3_5045",
+      "model": "Venus_V3_5040_2GB"
+    },
+    {
+      "market_name": "Venus V3 5070",
+      "codename": "Venus_V3_5070",
+      "model": "Venus_V3_5070"
+    },
+    {
+      "market_name": "Venus V3 5570",
+      "codename": "Venus_V3_5570",
+      "model": "Venus_V3_5570"
+    },
+    {
+      "market_name": "Venus V3 5580",
+      "codename": "Orsa",
+      "model": "Venus_V3_5580"
+    }
+  ]
+}

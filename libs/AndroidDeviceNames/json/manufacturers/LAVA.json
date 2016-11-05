@@ -1,0 +1,195 @@
+{
+  "manufacturer": "Lava",
+  "devices": [
+    {
+      "market_name": "A52",
+      "codename": "A52",
+      "model": "A52"
+    },
+    {
+      "market_name": "A67",
+      "codename": "A67",
+      "model": "A67"
+    },
+    {
+      "market_name": "A68",
+      "codename": "A68",
+      "model": "A68"
+    },
+    {
+      "market_name": "A71",
+      "codename": "A71",
+      "model": "A71"
+    },
+    {
+      "market_name": "A79",
+      "codename": "LA79",
+      "model": "A79"
+    },
+    {
+      "market_name": "A82",
+      "codename": "LA82",
+      "model": "A82"
+    },
+    {
+      "market_name": "Era 4G",
+      "codename": "era_4G",
+      "model": "era_4G"
+    },
+    {
+      "market_name": "Flair P3",
+      "codename": "P3",
+      "model": "P3"
+    },
+    {
+      "market_name": "Flair S1",
+      "codename": "S1",
+      "model": "S1"
+    },
+    {
+      "market_name": "Iris 505",
+      "codename": "iris505",
+      "model": "iris505"
+    },
+    {
+      "market_name": "Lava A72",
+      "codename": "A72",
+      "model": "A72"
+    },
+    {
+      "market_name": "Lava A89",
+      "codename": "A89",
+      "model": "Lava A89"
+    },
+    {
+      "market_name": "Lava V2 3GB",
+      "codename": "V23GB",
+      "model": "V23GB"
+    },
+    {
+      "market_name": "Lava X12",
+      "codename": "X12",
+      "model": "X12"
+    },
+    {
+      "market_name": "Lava X17",
+      "codename": "X17",
+      "model": "X17"
+    },
+    {
+      "market_name": "Lava X38",
+      "codename": "X38",
+      "model": "X38"
+    },
+    {
+      "market_name": "Lava X38 2GB",
+      "codename": "X382GB",
+      "model": "X38 2GB"
+    },
+    {
+      "market_name": "Lava X50",
+      "codename": "X50",
+      "model": "X50"
+    },
+    {
+      "market_name": "Lava X81",
+      "codename": "X81",
+      "model": "X81"
+    },
+    {
+      "market_name": "P7",
+      "codename": "P7",
+      "model": "P7"
+    },
+    {
+      "market_name": "Pixel V1",
+      "codename": "PixelV1G_sprout",
+      "model": "PixelV1"
+    },
+    {
+      "market_name": "Pixel V1",
+      "codename": "PixelV1_sprout",
+      "model": "PixelV1"
+    },
+    {
+      "market_name": "V2s",
+      "codename": "V2s",
+      "model": "V2s"
+    },
+    {
+      "market_name": "V2s",
+      "codename": "V2s",
+      "model": "V2s M"
+    },
+    {
+      "market_name": "V5",
+      "codename": "V5",
+      "model": "LAVA V5"
+    },
+    {
+      "market_name": "V5",
+      "codename": "V5",
+      "model": "V5"
+    },
+    {
+      "market_name": "X10",
+      "codename": "X10",
+      "model": "LavaX10"
+    },
+    {
+      "market_name": "X10",
+      "codename": "X10",
+      "model": "X10"
+    },
+    {
+      "market_name": "X11",
+      "codename": "X11",
+      "model": "X11"
+    },
+    {
+      "market_name": "X3",
+      "codename": "X3",
+      "model": "X3"
+    },
+    {
+      "market_name": "X46",
+      "codename": "LX46",
+      "model": "X46"
+    },
+    {
+      "market_name": "XOLO LT900",
+      "codename": "LT900",
+      "model": "LT900"
+    },
+    {
+      "market_name": "XOLO One HD",
+      "codename": "XOLO_One_HD",
+      "model": "XOLO One HD"
+    },
+    {
+      "market_name": "XOLO era 4K",
+      "codename": "XOLO_era_4K",
+      "model": "era 4K"
+    },
+    {
+      "market_name": "Xolo Era X",
+      "codename": "era_X",
+      "model": "era_X"
+    },
+    {
+      "market_name": "iris Fuel F2",
+      "codename": "IFF2",
+      "model": "Fuel F2"
+    },
+    {
+      "market_name": "iris atom",
+      "codename": "A1",
+      "model": "A1"
+    },
+    {
+      "market_name": "iris atom 3",
+      "codename": "A3",
+      "model": "A3"
+    }
+  ]
+}
