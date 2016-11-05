@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basic Root Checker</string>
+
+    <string name="textView_Disclaimer">هذا التطبيق بظهر لك إذا كان جهازك يحتوي على خاصية الـ Root.\n هذا التطبيق لا يعطيك خاصية الـ Root على جهازك.</string>
+    <string name="rootAvailable">يوجد خاصية الـ Root</string>
+    <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
+    <string name="action_licence">حقوق</string>
+    <string name="action_about">عنا</string>
+
+    <!-- About Strings -->
+    <string name="about_part1">حقوق الطبع محفوظ 2015 iboalali\n\n
+هذا التطبيق لا يعطيك خاصية الRoot.\n
+هذا التطبيق يتطلب خاصية الRoot، استعملها على مسؤوليتك.\n
+هذا التطبيق لا يجمع معلومات عن جهازك أو شخصيتك\n\n\n
+اتصل بي:\n</string>
+    <string name="about_not_affiliated">هذا البرنامج ليست تابع ولا مأيّد من Chainfire أو SuperSU</string>
+    <string name="textView_checkForRoot">المس على الزر المستدير في أسفل اليمين للتحقق من حالة من خاصية الـ Root</string>
+    <string name="textViewDevice">اسم الجهاز:</string>
+    <string name="textViewAndroidVersion">نسخة اندرود:</string>
+
+
+</resources>

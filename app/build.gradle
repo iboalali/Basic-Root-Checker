@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.iboalali.basicrootchecker"
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 2
+        versionName "1.1"
+    }
+    signingConfigs {
+        release {
+            storeFile file("basic root checker.jks")
+            storePassword "Ersguterjung3"
+            keyAlias "ibo"
+            keyPassword "Heiderhofring16a"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:cardview-v7:22.0.0'
+    compile 'com.google.android.gms:play-services:7.5.0'
+    compile 'eu.chainfire:libsuperuser:1.0.0.+'
+}
