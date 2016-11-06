@@ -1,8 +1,10 @@
 package com.iboalali.basicrootchecker;
 
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
@@ -66,6 +68,10 @@ public class AboutActivity extends AppCompatActivity {
 
         TextView textView = (TextView) findViewById(R.id.about_appVersion);
         textView.setText(Utils.getAppVersionNumber(this));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primaryDark));
+        }
     }
 
 
