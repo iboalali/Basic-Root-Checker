@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.jaredrummler.android.device.DeviceName;
 
 import org.w3c.dom.Text;
 
@@ -199,9 +200,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        TextView textViewDeviceModel = (TextView) findViewById(R.id.textViewDeviceModel);
-        textViewDeviceModel.setText( getResources().getString(R.string.textViewDevice) + " " + Devices.getDeviceName());
+        DeviceName.with(this).request(new DeviceName.Callback() {
+            @Override
+            public void onFinished(DeviceName.DeviceInfo info, Exception error) {
+                TextView textViewDeviceModel = (TextView) findViewById(R.id.textViewDeviceModel);
+                textViewDeviceModel.setText( getResources().getString(R.string.textViewDevice) + " " + info.marketName);
+            }
+        });
 
 
 
