@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="VersionNames">
+        <item>(no code name)</item>
+        <item>(no code name)</item>
+        <item>Cupcake</item>
+        <item>Donut</item>
+        <item>Eclair</item>
+        <item>Eclair</item>
+        <item>Eclair</item>
+        <item>Froyo</item>
+        <item>Gingerbread</item>
+        <item>Gingerbread</item>
+        <item>Honeycomb</item>
+        <item>Honeycomb</item>
+        <item>Honeycomb</item>
+        <item>Ice Cream Sandwich</item>
+        <item>Ice Cream Sandwich</item>
+        <item>Jelly Bean</item>
+        <item>Jelly Bean</item>
+        <item>Jelly Bean</item>
+        <item>KitKat</item>
+        <item>KitKat Wear</item>
+        <item>Lollipop</item>
+        <item>Lollipop</item>
+        <item>Marshmallow</item>
+        <item>Nougat</item>
+        <item>Nougat</item>
+
+    </string-array>
+</resources>

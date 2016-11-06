@@ -22,11 +22,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
 import com.jaredrummler.android.device.DeviceName;
-
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Field;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -84,13 +81,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private FloatingActionButton fabVerifyRoot;
     private FloatingActionButton fabRoot;
     private FloatingActionButton fabRootSuccess;
     private FloatingActionButton fabRootFail;
     private CoordinatorLayout rootLayout;
     private ProgressBar progressBarLoading;
-    private Toolbar toolbar;
     private AdView mAdView;
     private ImageView imageView;
     private TextView textViewCheckForRoot;
@@ -168,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         rootLayout = (CoordinatorLayout) findViewById(R.id.rootLayout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setNavigationIcon(R.mipmap.ic_launcher);
             setSupportActionBar(toolbar);
@@ -187,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageViewStatus);
         imageView.setBackgroundResource(R.drawable.ic_unknown_c);
 
-        fabVerifyRoot = (FloatingActionButton) findViewById(R.id.fabVerifyRoot);
+        FloatingActionButton fabVerifyRoot = (FloatingActionButton) findViewById(R.id.fabVerifyRoot);
         fabVerifyRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -212,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         TextView textViewAndroidVersion = (TextView) findViewById(R.id.textViewAndroidVersion);
-        textViewAndroidVersion.setText(getResources().getString(R.string.textViewAndroidVersion) + " " + Build.VERSION.RELEASE + " " + Utils.getAndroidName());
+        textViewAndroidVersion.setText(getResources().getString(R.string.textViewAndroidVersion) + " " + Build.VERSION.RELEASE + " " + Utils.getAndroidName(this, Build.VERSION.SDK_INT));
 
 
     }

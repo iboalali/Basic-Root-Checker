@@ -16,7 +16,6 @@ import com.google.android.gms.ads.AdView;
  */
 public class AboutActivity extends AppCompatActivity {
 
-    private CollapsingToolbarLayout collapsingToolbarLayout;
     private AdView mAdView;
 
     @Override
@@ -63,7 +62,7 @@ public class AboutActivity extends AppCompatActivity {
             mAdView.loadAd(adRequest);
         }
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle(getResources().getString(R.string.action_about));
 
         TextView textView = (TextView) findViewById(R.id.about_appVersion);

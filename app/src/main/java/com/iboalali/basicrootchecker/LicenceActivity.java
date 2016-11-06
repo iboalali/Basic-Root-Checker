@@ -15,7 +15,6 @@ import com.google.android.gms.ads.AdView;
  */
 public class LicenceActivity extends AppCompatActivity {
 
-    private CollapsingToolbarLayout collapsingToolbarLayout;
     private AdView mAdView;
 
     @Override
@@ -62,7 +61,7 @@ public class LicenceActivity extends AppCompatActivity {
             mAdView.loadAd(adRequest);
         }
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle(getResources().getString(R.string.action_licence));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
