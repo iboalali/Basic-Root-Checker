@@ -25,31 +25,6 @@ final class Utils {
         return "";
     }
 
-    static String getAndroidName(){
-        StringBuilder builder = new StringBuilder();
-        Field[] fields = Build.VERSION_CODES.class.getFields();
-        for (Field field : fields) {
-            String fieldName = field.getName();
-            int fieldValue = -1;
-
-            try {
-                fieldValue = field.getInt(new Object());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            if (fieldValue == Build.VERSION.SDK_INT) {
-                if (builder.length() != 0){
-                    builder = new StringBuilder();
-                }
-                builder.append(fieldName);
-            }
-        }
-
-        return capitalizeWord(builder.toString().replace('_', ' '));
-
-    }
-
     public static String getAndroidName(Context context, Integer API_Level){
         String[] versionNames = context.getResources().getStringArray(R.array.VersionNames);
         if (API_Level > versionNames.length){

@@ -48,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            //fabRoot.setVisibility(View.GONE);
-            //fabRootSuccess.setVisibility(View.GONE);
-            //fabRootFail.setVisibility(View.GONE);
             imageView.setVisibility(View.GONE);
             progressBarLoading.setVisibility(View.VISIBLE);
         }
@@ -175,9 +172,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         progressBarLoading = (ProgressBar) findViewById(R.id.progressbarLoading);
-        //fabRoot = (FloatingActionButton) findViewById(R.id.fabRoot);
-        //fabRootSuccess = (FloatingActionButton) findViewById(R.id.fabRootSuccess);
-        //fabRootFail = (FloatingActionButton) findViewById(R.id.fabRootFail);
         textViewCheckForRoot = (TextView) findViewById(R.id.textViewCheckForRoot);
         imageView = (ImageView) findViewById(R.id.imageViewStatus);
         imageView.setBackgroundResource(R.drawable.ic_unknown_c);
@@ -203,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
                 textViewDeviceModel.setText( getResources().getString(R.string.textViewDevice) + " " + info.marketName);
             }
         });
-
 
 
         TextView textViewAndroidVersion = (TextView) findViewById(R.id.textViewAndroidVersion);
