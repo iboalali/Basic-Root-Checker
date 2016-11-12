@@ -61,9 +61,31 @@
                     android:id="@+id/licence_supersu_licence"
                     android:text="@string/licence_supersu"
                     android:textColor="@color/text_white"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginRight="25dp"/>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/text_white"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginLeft="25dp"/>
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginRight="25dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/licence_android_device_names_licence"
+                    android:text="@string/licence_android_device_names"
+                    android:textColor="@color/text_white"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginRight="25dp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -73,9 +95,12 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginLeft="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginRight="25dp"
                     android:autoLink="web"
                     android:textColorLink="@color/text_link"
                     android:gravity="center"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -84,7 +109,10 @@
                     android:textColor="@color/text_white"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginLeft="25dp"/>
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="50dp"/>
 
             </LinearLayout>
 
