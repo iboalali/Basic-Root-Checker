@@ -11,14 +11,6 @@ android {
         versionCode 4
         versionName "1.2"
     }
-    signingConfigs {
-        release {
-            storeFile file("basic root checker.jks")
-            storePassword "Ersguterjung3"
-            keyAlias "ibo"
-            keyPassword "Heiderhofring16a"
-        }
-    }
     buildTypes {
         release {
             minifyEnabled true
