@@ -12,7 +12,7 @@
     <dimen name="TextAppearance_Subhead">16sp</dimen>
     <dimen name="text_size_body_1_material">14sp</dimen>
 
-    <dimen name="left_start_margin">15dp</dimen>
-    <dimen name="right_end_margin">15dp</dimen>
+    <dimen name="left_start_margin">16dp</dimen>
+    <dimen name="right_end_margin">16dp</dimen>
     
 </resources>
