@@ -61,9 +61,31 @@
                     android:id="@+id/licence_supersu_licence"
                     android:text="@string/licence_supersu"
                     android:textColor="@color/text_white"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="@dimen/left_start_margin"
+                    android:layout_marginLeft="@dimen/left_start_margin"
+                    android:layout_marginEnd="@dimen/right_end_margin"
+                    android:layout_marginRight="@dimen/right_end_margin"/>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/text_white"
                     android:layout_marginTop="20dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginLeft="25dp"/>
+                    android:layout_marginStart="@dimen/left_start_margin"
+                    android:layout_marginLeft="@dimen/left_start_margin"
+                    android:layout_marginEnd="@dimen/right_end_margin"
+                    android:layout_marginRight="@dimen/right_end_margin"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/licence_android_device_names_licence"
+                    android:text="@string/licence_android_device_names"
+                    android:textColor="@color/text_white"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="@dimen/left_start_margin"
+                    android:layout_marginLeft="@dimen/left_start_margin"
+                    android:layout_marginEnd="@dimen/right_end_margin"
+                    android:layout_marginRight="@dimen/right_end_margin"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -71,11 +93,14 @@
                     android:text="@string/licence_apache_title"
                     android:textColor="@color/text_white"
                     android:layout_marginTop="20dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginLeft="25dp"
+                    android:layout_marginStart="@dimen/left_start_margin"
+                    android:layout_marginLeft="@dimen/left_start_margin"
+                    android:layout_marginEnd="@dimen/right_end_margin"
+                    android:layout_marginRight="@dimen/right_end_margin"
                     android:autoLink="web"
                     android:textColorLink="@color/text_link"
                     android:gravity="center"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,8 +108,11 @@
                     android:text="@string/licence_apache_licence"
                     android:textColor="@color/text_white"
                     android:layout_marginTop="20dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginLeft="25dp"/>
+                    android:layout_marginStart="@dimen/left_start_margin"
+                    android:layout_marginLeft="@dimen/left_start_margin"
+                    android:layout_marginEnd="@dimen/right_end_margin"
+                    android:layout_marginRight="@dimen/right_end_margin"
+                    android:layout_marginBottom="50dp"/>
 
             </LinearLayout>
 
