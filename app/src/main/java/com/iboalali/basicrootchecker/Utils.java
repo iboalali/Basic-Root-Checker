@@ -25,10 +25,15 @@ final class Utils {
         return "";
     }
 
-    public static String getAndroidName(Context context, Integer API_Level){
+    static String getAndroidName(Context context, Integer API_Level){
         String[] versionNames = context.getResources().getStringArray(R.array.VersionNames);
         if (API_Level > versionNames.length){
             return "(Unreleased Android version)";
+        }
+
+        // Android O Beta DP2 is still on API Level 25
+        if (Build.VERSION.RELEASE.equals("O")){
+            return "";
         }
 
         return versionNames[API_Level - 1];
