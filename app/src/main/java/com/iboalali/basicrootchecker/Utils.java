@@ -4,10 +4,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by Ibrahim on 17-Jul-15.

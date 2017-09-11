@@ -17,7 +17,6 @@ public class LicenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_licence);
         initInstances();
-
     }
 
     @Override
@@ -41,7 +40,6 @@ public class LicenceActivity extends AppCompatActivity {
     }
 
     private void initInstances() {
-
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle(getResources().getString(R.string.action_licence));
 

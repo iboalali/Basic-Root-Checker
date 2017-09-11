@@ -8,8 +8,8 @@ android {
         applicationId "com.iboalali.basicrootchecker"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 9
-        versionName "1.2.2"
+        versionCode 11
+        versionName "v1.3vc11"
     }
     buildTypes {
         release {
