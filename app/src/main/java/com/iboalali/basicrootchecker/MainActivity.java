@@ -20,9 +20,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import com.jaredrummler.android.device.DeviceName;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -83,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fabRootFail;
     private CoordinatorLayout rootLayout;
     private ProgressBar progressBarLoading;
-    private AdView mAdView;
     private ImageView imageView;
     private TextView textViewCheckForRoot;
 
@@ -97,25 +93,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
     }
 
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
         super.onDestroy();
     }
 
@@ -153,12 +140,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initInstances() {
-        mAdView = (AdView) findViewById(R.id.adView);
-        if (mAdView != null) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
-
         rootLayout = (CoordinatorLayout) findViewById(R.id.rootLayout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
