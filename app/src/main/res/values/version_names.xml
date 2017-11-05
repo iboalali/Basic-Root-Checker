@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="VersionNames">
-        <item>(no code name)</item>
-        <item>(no code name)</item>
-        <item>Cupcake</item>
-        <item>Donut</item>
-        <item>Eclair</item>
-        <item>Eclair</item>
-        <item>Eclair</item>
-        <item>Froyo</item>
-        <item>Gingerbread</item>
-        <item>Gingerbread</item>
-        <item>Honeycomb</item>
-        <item>Honeycomb</item>
-        <item>Honeycomb</item>
-        <item>Ice Cream Sandwich</item>
-        <item>Ice Cream Sandwich</item>
-        <item>Jelly Bean</item>
-        <item>Jelly Bean</item>
-        <item>Jelly Bean</item>
-        <item>KitKat</item>
-        <item>KitKat Wear</item>
-        <item>Lollipop</item>
-        <item>Lollipop</item>
-        <item>Marshmallow</item>
-        <item>Nougat</item>
-        <item>Nougat</item>
-        <item>Oreo</item>
+        <item>(no code name)</item> // 1
+        <item>(no code name)</item> // 2
+        <item>Cupcake</item> // 3
+        <item>Donut</item> // 4
+        <item>Eclair</item> // 5
+        <item>Eclair</item> // 6
+        <item>Eclair</item> // 7
+        <item>Froyo</item> // 8
+        <item>Gingerbread</item> // 9
+        <item>Gingerbread</item> // 10
+        <item>Honeycomb</item> // 11
+        <item>Honeycomb</item> // 12
+        <item>Honeycomb</item> // 13
+        <item>Ice Cream Sandwich</item> // 14
+        <item>Ice Cream Sandwich</item> // 15
+        <item>Jelly Bean</item> // 16
+        <item>Jelly Bean</item> // 17
+        <item>Jelly Bean</item> // 18
+        <item>KitKat</item> // 19
+        <item>KitKat Wear</item> // 20
+        <item>Lollipop</item> // 21
+        <item>Lollipop</item> // 22
+        <item>Marshmallow</item> // 23
+        <item>Nougat</item> // 24
+        <item>Nougat</item> // 25
+        <item>Oreo</item> // 26
+        <item>Oreo</item> // 27
 
     </string-array>
 </resources>

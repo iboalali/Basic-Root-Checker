@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.0"
 
     defaultConfig {
         applicationId "com.iboalali.basicrootchecker"
         minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 11
-        versionName "v1.3vc11"
+        targetSdkVersion 27
+        versionCode 13
+        versionName "v1.3vc" + getVersionCode()
     }
     buildTypes {
         release {
@@ -24,8 +24,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:design:26+'
-    compile 'com.android.support:cardview-v7:26+'
+    compile 'com.android.support:design:27.+'
+    compile 'com.android.support:cardview-v7:27.+'
     compile 'eu.chainfire:libsuperuser:1.0.0.+'
-    compile 'com.jaredrummler:android-device-names:1.1.2'
+    compile 'com.jaredrummler:android-device-names:1.1.5'
 }

@@ -176,7 +176,7 @@
     <string name="font_family_title_material" translatable="false">sans-serif-medium</string>
     <string name="font_family_subhead_material" translatable="false">sans-serif</string>
     <string name="contentDescription_appIcon" translatable="false">App Icon</string>
-
+    <string name="string_root_status_description" translatable="false">Root Status</string>
 
 
 </resources>
