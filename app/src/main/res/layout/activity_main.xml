@@ -136,6 +136,8 @@
             </LinearLayout>
 
 
+
+
         </android.support.v4.widget.NestedScrollView>
 
 
@@ -150,6 +152,18 @@
             android:src="@drawable/ic_root"
             app:borderWidth="0dp"
             app:fabSize="normal" />
+
+        <Button
+            android:id="@+id/donationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="96dp"
+            android:layout_marginRight="96dp"
+            android:layout_marginBottom="20dp"
+            android:text="Donate" />
 
     </android.support.design.widget.CoordinatorLayout>
 

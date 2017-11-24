@@ -16,11 +16,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.Purchase;
 import com.jaredrummler.android.device.DeviceName;
+
+import com.iboalali.basicrootchecker.BillingManager;
+import com.iboalali.basicrootchecker.BillingManager.BillingUpdatesListener;
+
+import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -82,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBarLoading;
     private ImageView imageView;
     private TextView textViewCheckForRoot;
+    private BillingManager mBillingManager;
+    private UpdateListener updateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +109,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
+        if (mBillingManager != null
+                && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
+            mBillingManager.queryPurchases();
+        }
+
     }
 
     @Override
@@ -152,6 +168,10 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primaryDark));
         }
 
+
+        updateListener = new UpdateListener();
+        mBillingManager = new BillingManager(this, updateListener);
+
         progressBarLoading = (ProgressBar) findViewById(R.id.progressbarLoading);
         textViewCheckForRoot = (TextView) findViewById(R.id.textViewCheckForRoot);
         imageView = (ImageView) findViewById(R.id.imageViewStatus);
@@ -183,7 +203,33 @@ public class MainActivity extends AppCompatActivity {
         TextView textViewAndroidVersion = (TextView) findViewById(R.id.textViewAndroidVersion);
         textViewAndroidVersion.setText(getResources().getString(R.string.textViewAndroidVersion) + " " + Build.VERSION.RELEASE + " " + Utils.getAndroidName(this, Build.VERSION.SDK_INT));
 
+        Button donation_button = findViewById(R.id.donationButton);
+        donation_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
+
+
+    }
+
+    private class UpdateListener implements BillingUpdatesListener {
+
+        @Override
+        public void onBillingClientSetupFinished() {
+
+        }
+
+        @Override
+        public void onConsumeFinished(String token, int result) {
+
+        }
+
+        @Override
+        public void onPurchasesUpdated(List<Purchase> purchases) {
+
+        }
     }
 
 }

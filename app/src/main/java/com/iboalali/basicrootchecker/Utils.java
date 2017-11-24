@@ -27,11 +27,6 @@ final class Utils {
             return "(Unreleased Android version)";
         }
 
-        // Android O Beta DP2 is still on API Level 25
-        if (Build.VERSION.RELEASE.equals("O")){
-            return "";
-        }
-
         return versionNames[API_Level - 1];
     }
 

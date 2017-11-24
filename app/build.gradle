@@ -8,7 +8,7 @@ android {
         applicationId "com.iboalali.basicrootchecker"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 13
+        versionCode 14
         versionName "v1.3vc" + getVersionCode()
     }
     buildTypes {
@@ -24,8 +24,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:design:27.+'
-    compile 'com.android.support:cardview-v7:27.+'
+    compile 'com.android.support:design:27.0.1'
+    compile 'com.android.support:cardview-v7:27.0.1'
     compile 'eu.chainfire:libsuperuser:1.0.0.+'
     compile 'com.android.billingclient:billing:1.0'
     compile 'com.jaredrummler:android-device-names:1.1.5'
