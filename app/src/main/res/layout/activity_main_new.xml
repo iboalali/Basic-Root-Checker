@@ -155,7 +155,7 @@
             android:id="@+id/donationButtonNew"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Donate a little"
+            android:text="@string/string_button_donate_a_little"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"

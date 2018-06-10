@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Basic Root Checker</string>
     <string name="about_not_affiliated">Diese app wird nichts von chainfire oder SuperSU unterstützt.</string>
-    <string name="about_part1">Copyright 2015 &#169; iboalali\n\n
+    <string name="about_part1">Copyright 2018 &#169; iboalali\n\n
 Diese app wird NICHT dein Gerät rooten.\n
 Diese app erfordert ROOT zugriff, benutzen auf eigener gefahr.\n
 Diese app sammelt keine daten oder persönliche informationen.\n\n\n
@@ -11,8 +11,9 @@ Kontaktiere mich:\n</string>
     <string name="action_licence">Lizenzen</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
-    <string name="textView_Disclaimer">Diese app wird NICHT dein Gerät rooten.\nDiese app zeigt nur an ob dein Gerät root zugriff hat.</string>
+    <string name="textView_Disclaimer">Diese app wird <b>NICHT</b> dein Gerät rooten.\nDiese app zeigt nur an ob dein Gerät root zugriff hat.</string>
     <string name="textView_checkForRoot">Berühre die runde Taste unten rechts um den Root-Status überprüfen</string>
     <string name="textViewDevice">Geräte Name: </string>
     <string name="textViewAndroidVersion">Android</string>
+    <string name="string_button_donate_a_little">Eine kleine Spende</string>
 </resources>

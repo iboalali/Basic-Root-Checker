@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         rootLayoutNew = findViewById(R.id.rootLayoutNew);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNew);
         if (toolbar != null) {
-            toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+            toolbar.setNavigationIcon(R.drawable.ic_navigation);
             setSupportActionBar(toolbar);
         }
         context = this;

@@ -1,13 +1,6 @@
 <resources>
     <string name="app_name">Basic Root Checker</string>
 
-    <!-- This is a test ad unit ID-->
-    <!--ca-app-pub-3940256099942544/6300978111-->
-
-    <!-- This is the production ad unit ID-->
-    <!--ca-app-pub-5088991313238327/6641170494-->
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-5088991313238327/6641170494</string>
-
     <!-- Main Strings-->
     <string name="textView_Disclaimer">This app will <b>NOT</b> root your device.\nThis app only shows you if your device has root access.</string>
     <string name="textView_checkForRoot">Touch the \"#\" button on the bottom right to verify Root status</string>
@@ -17,9 +10,10 @@
     <string name="action_about">About</string>
     <string name="textViewDevice">Device Name:</string>
     <string name="textViewAndroidVersion">Android</string>
+    <string name="string_button_donate_a_little">A small donation</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2017 &#169; iboalali\n\n
+    <string name="about_part1">Copyright 2018 &#169; iboalali\n\n
         This app does NOT root your phone.\n
         This app requires ROOT, use it at your own risk.\n
         This app does NOT collect any data or personal information.\n\n\n
