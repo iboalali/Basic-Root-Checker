@@ -14,5 +14,6 @@
 
     <dimen name="left_start_margin">16dp</dimen>
     <dimen name="right_end_margin">16dp</dimen>
-    
+    <dimen name="dimen_bottom_bar_margin_bottom">48dp</dimen>
+
 </resources>

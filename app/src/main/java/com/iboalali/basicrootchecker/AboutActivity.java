@@ -49,7 +49,7 @@ public class AboutActivity extends AppCompatActivity {
         textView.setText(Utils.getAppVersionNumber(this));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primaryDark));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primary));
         }
     }
 

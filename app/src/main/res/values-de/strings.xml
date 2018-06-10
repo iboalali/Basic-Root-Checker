@@ -14,5 +14,5 @@ Kontaktiere mich:\n</string>
     <string name="textView_Disclaimer">Diese app wird NICHT dein Gerät rooten.\nDiese app zeigt nur an ob dein Gerät root zugriff hat.</string>
     <string name="textView_checkForRoot">Berühre die runde Taste unten rechts um den Root-Status überprüfen</string>
     <string name="textViewDevice">Geräte Name: </string>
-    <string name="textViewAndroidVersion">Android Version:</string>
+    <string name="textViewAndroidVersion">Android</string>
 </resources>

@@ -9,14 +9,14 @@
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-5088991313238327/6641170494</string>
 
     <!-- Main Strings-->
-    <string name="textView_Disclaimer">This app will NOT root your device.\nThis app only shows you if your device has root access.</string>
-    <string name="textView_checkForRoot">Touch the round button on the bottom right to verify Root status</string>
+    <string name="textView_Disclaimer">This app will <b>NOT</b> root your device.\nThis app only shows you if your device has root access.</string>
+    <string name="textView_checkForRoot">Touch the \"#\" button on the bottom right to verify Root status</string>
     <string name="rootAvailable">Root access Available</string>
     <string name="rootNotAvailable">Root access Not Available</string>
     <string name="action_licence">Licence</string>
     <string name="action_about">About</string>
     <string name="textViewDevice">Device Name:</string>
-    <string name="textViewAndroidVersion">Android Version:</string>
+    <string name="textViewAndroidVersion">Android</string>
 
     <!-- About Strings -->
     <string name="about_part1">Copyright 2017 &#169; iboalali\n\n

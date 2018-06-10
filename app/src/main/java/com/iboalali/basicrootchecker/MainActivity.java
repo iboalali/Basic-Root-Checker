@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            imageView.setVisibility(View.GONE);
+            imageView.setVisibility(View.INVISIBLE);
             progressBarLoading.setVisibility(View.VISIBLE);
         }
 
@@ -61,23 +62,30 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             Log.d(TAG, "Checking for root");
             suAvailable = Shell.SU.available();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            progressBarLoading.setVisibility(View.GONE);
+            progressBarLoading.setVisibility(View.INVISIBLE);
 
             imageView.setVisibility(View.VISIBLE);
             if (suAvailable){
                 //fabRootSuccess.setVisibility(View.VISIBLE);
                 textViewCheckForRoot.setText("Your Device has Root access");
-                imageView.setBackgroundResource(R.drawable.ic_success_c);
+                imageView.setImageResource(R.drawable.ic_success_c);
                 //imageView.setImageDrawable(getDrawable(R.drawable.ic_success_c));
             }else{
                 //fabRootFail.setVisibility(View.VISIBLE);
                 textViewCheckForRoot.setText("Your Device doesn't have Root access");
-                imageView.setBackgroundResource(R.drawable.ic_fail_c);
+                imageView.setImageResource(R.drawable.ic_fail_c);
             }
         }
     }
@@ -87,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fabRootSuccess;
     private FloatingActionButton fabRootFail;
     private CoordinatorLayout rootLayout;
+    private ConstraintLayout rootLayoutNew;
     private ProgressBar progressBarLoading;
     private ImageView imageView;
     private TextView textViewCheckForRoot;
@@ -96,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_new);
 
         initInstances();
     }
@@ -156,8 +165,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initInstances() {
-        rootLayout = (CoordinatorLayout) findViewById(R.id.rootLayout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //rootLayout = (CoordinatorLayout) findViewById(R.id.rootLayout);
+        rootLayoutNew = findViewById(R.id.rootLayoutNew);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNew);
         if (toolbar != null) {
             toolbar.setNavigationIcon(R.mipmap.ic_launcher);
             setSupportActionBar(toolbar);
@@ -165,19 +175,19 @@ public class MainActivity extends AppCompatActivity {
         context = this;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primaryDark));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primary));
         }
 
 
         updateListener = new UpdateListener();
         mBillingManager = new BillingManager(this, updateListener);
 
-        progressBarLoading = (ProgressBar) findViewById(R.id.progressbarLoading);
-        textViewCheckForRoot = (TextView) findViewById(R.id.textViewCheckForRoot);
-        imageView = (ImageView) findViewById(R.id.imageViewStatus);
+        progressBarLoading = findViewById(R.id.progressbarLoadingNew);
+        textViewCheckForRoot = findViewById(R.id.textViewRootStatusNew);
+        imageView =  findViewById(R.id.imageViewStatusNew);
         imageView.setBackgroundResource(R.drawable.ic_unknown_c);
 
-        FloatingActionButton fabVerifyRoot = (FloatingActionButton) findViewById(R.id.fabVerifyRoot);
+        FloatingActionButton fabVerifyRoot = findViewById(R.id.fabVerifyRootNew);
         fabVerifyRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
                 (new checkForRoot()).setContext(context).execute();
 
-                Snackbar.make(rootLayout, "Checking for Root...", Snackbar.LENGTH_SHORT)
+                Snackbar.make(rootLayoutNew, "Checking for Root...", Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
@@ -194,16 +204,19 @@ public class MainActivity extends AppCompatActivity {
         DeviceName.with(this).request(new DeviceName.Callback() {
             @Override
             public void onFinished(DeviceName.DeviceInfo info, Exception error) {
-                TextView textViewDeviceModel = (TextView) findViewById(R.id.textViewDeviceModel);
-                textViewDeviceModel.setText( getResources().getString(R.string.textViewDevice) + " " + info.marketName);
+                TextView textViewDeviceModel = findViewById(R.id.textViewDeviceModelNew);
+                textViewDeviceModel.setText(info.marketName);
             }
         });
 
 
-        TextView textViewAndroidVersion = (TextView) findViewById(R.id.textViewAndroidVersion);
-        textViewAndroidVersion.setText(getResources().getString(R.string.textViewAndroidVersion) + " " + Build.VERSION.RELEASE + " " + Utils.getAndroidName(this, Build.VERSION.SDK_INT));
+        TextView textViewAndroidVersion = findViewById(R.id.textViewAndroidVersionNew);
+        textViewAndroidVersion.setText(String.format("%s %s %s",
+                getResources().getString(R.string.textViewAndroidVersion),
+                Build.VERSION.RELEASE,
+                Utils.getAndroidName(this, Build.VERSION.SDK_INT)));
 
-        Button donation_button = findViewById(R.id.donationButton);
+        Button donation_button = findViewById(R.id.donationButtonNew);
         donation_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

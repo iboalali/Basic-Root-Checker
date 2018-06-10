@@ -44,7 +44,7 @@ public class LicenceActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(getResources().getString(R.string.action_licence));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primaryDark));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primary));
         }
     }
 
