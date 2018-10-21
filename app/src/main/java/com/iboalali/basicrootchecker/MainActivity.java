@@ -103,7 +103,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_new);
+        if (getResources().getDisplayMetrics().density > 1.5) {
+            setContentView(R.layout.activity_main_new);
+        } else {
+            setContentView(R.layout.activity_main_new_small);
+        }
 
         initInstances();
     }
@@ -163,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initInstances() {
-        //rootLayout = (CoordinatorLayout) findViewById(R.id.rootLayout);
+        //rootLayout = findViewById(R.id.content);
         rootLayoutNew = findViewById(R.id.rootLayoutNew);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNew);
+        Toolbar toolbar = findViewById(R.id.toolbarNew);
         if (toolbar != null) {
             toolbar.setNavigationIcon(R.drawable.ic_navigation);
             setSupportActionBar(toolbar);
@@ -214,13 +218,12 @@ public class MainActivity extends AppCompatActivity {
                 Build.VERSION.RELEASE,
                 Utils.getAndroidName(this, Build.VERSION.SDK_INT)));
 
-        Button donation_button = findViewById(R.id.donationButtonNew);
-        donation_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        //Button donation_button = findViewById(R.id.donationButtonNew);
+        //donation_button.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //    }
+        //});
 
 
     }

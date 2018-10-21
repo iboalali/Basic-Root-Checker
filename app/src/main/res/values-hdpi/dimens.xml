@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="root_status_margin_top">24dp</dimen>
+    <dimen name="your_device_margin_top">16dp</dimen>
+    <dimen name="root_status_text_margin_top">16dp</dimen>
+</resources>

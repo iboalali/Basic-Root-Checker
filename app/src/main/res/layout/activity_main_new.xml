@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,7 +24,7 @@
         android:id="@+id/rootLayoutNew"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomBarLayout"
+        app:layout_constraintBottom_toTopOf="@id/fabVerifyRootNew"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarNew">
@@ -32,7 +33,7 @@
             android:id="@+id/imageViewStatusNew"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:layout_marginTop="96dp"
+            android:layout_marginTop="@dimen/root_status_margin_top"
             android:contentDescription="@string/string_root_status_description"
             android:src="@drawable/ic_unknown_c"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -43,7 +44,7 @@
             android:id="@+id/progressbarLoadingNew"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:layout_marginTop="96dp"
+            android:layout_marginTop="@dimen/root_status_margin_top"
             android:background="@color/transparent"
             android:indeterminate="true"
             android:visibility="invisible"
@@ -57,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
             android:layout_marginLeft="64dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/root_status_text_margin_top"
             android:layout_marginEnd="64dp"
             android:layout_marginRight="64dp"
             android:gravity="center_horizontal"
@@ -80,12 +81,9 @@
                 android:id="@+id/textViewDeviceInfoNew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Device"
+                android:text="@string/string_your_device"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textViewDeviceModelNew"
@@ -126,44 +124,17 @@
     </android.support.constraint.ConstraintLayout>
 
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/bottomBarLayout"
-        android:layout_width="match_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabVerifyRootNew"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="@dimen/dimen_bottom_bar_margin_bottom"
+        android:src="@drawable/ic_root"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabVerifyRootNew"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginBottom="@dimen/dimen_bottom_bar_margin_bottom"
-            android:src="@drawable/ic_root"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <Button
-            android:id="@+id/donationButtonNew"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginBottom="@dimen/dimen_bottom_bar_margin_bottom"
-            android:text="@string/string_button_donate_a_little"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/fabVerifyRootNew"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
