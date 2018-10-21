@@ -28,11 +28,9 @@ import com.jaredrummler.android.device.DeviceName;
 
 import com.iboalali.basicrootchecker.BillingManager;
 import com.iboalali.basicrootchecker.BillingManager.BillingUpdatesListener;
+import com.topjohnwu.superuser.Shell;
 
 import java.util.List;
-
-import eu.chainfire.libsuperuser.Shell;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             Log.d(TAG, "Checking for root");
-            suAvailable = Shell.SU.available();
+            suAvailable = Shell.rootAccess();
 
             try {
                 Thread.sleep(1000);
