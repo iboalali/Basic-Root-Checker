@@ -6,11 +6,12 @@
     <string name="textView_checkForRoot">Touch the \"#\" button on the bottom right to verify Root status</string>
     <string name="rootAvailable">Root access Available</string>
     <string name="rootNotAvailable">Root access Not Available</string>
-    <string name="action_licence">Licence</string>
+    <string name="action_licence">Licences</string>
     <string name="action_about">About</string>
     <string name="textViewDevice">Device Name:</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_button_donate_a_little">A small donation</string>
+    <string name="string_your_device">Your Device</string>
 
     <!-- About Strings -->
     <string name="about_part1">Copyright 2018 &#169; iboalali\n\n
@@ -19,12 +20,12 @@
         This app does NOT collect any data or personal information.\n\n\n
         Contact me at:\n</string>
     <string name="about_email_twitter" translatable="false">contact@iboalali.com\nhttps://twitter.com/iboalali</string>
-    <string name="about_not_affiliated">This app is not endorsed by or affiliated with chainfire or SuperSU</string>
+    <string name="about_not_affiliated">This app is not endorsed by or affiliated with topjohnwu or libsu</string>
 
     <!-- Licence Strings -->
-    <string name="licence_supersu" translatable="false">This product includes software from the
-        SuperUser Library\n\n\n
-        Copyright &#169; 2015 Chainfire, SuperUser Library\n\n
+    <string name="licence_libsu" translatable="false">This product includes software from the
+        libsu Library\n\n\n
+        Copyright &#169; 2018 topjohnwu, libsu Library\n\n
         Licensed under the Apache License, Version 2.0 (the \"License\");\n
         you may not use this file except in compliance with the License.\n\n
         Unless required by application law or agreed to in writing, software distributed under the
@@ -33,7 +34,7 @@
         See the License for the specific language governing permissions and limitations under the License.</string>
     <string name="licence_android_device_names" translatable="false">This product also includes software from the
         AndroidDeviceNames Library\n\n\n
-        Copyright &#169; 2015. Jared Rummler\n\n
+        Copyright &#169; 2018. Jared Rummler\n\n
         Licensed under the Apache License, Version 2.0 (the "License");\n
         you may not use this file except in compliance with the License.\n
         You may obtain a copy of the License at\n\n

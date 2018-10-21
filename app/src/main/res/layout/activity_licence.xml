@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/licence_supersu_licence"
-                    android:text="@string/licence_supersu"
+                    android:text="@string/licence_libsu"
                     android:textColor="@color/text_white"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="@dimen/left_start_margin"

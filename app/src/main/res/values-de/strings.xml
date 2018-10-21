@@ -16,4 +16,5 @@ Kontaktiere mich:\n</string>
     <string name="textViewDevice">Geräte Name: </string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_button_donate_a_little">Eine kleine Spende</string>
+    <string name="string_your_device">Dein Gerät</string>
 </resources>

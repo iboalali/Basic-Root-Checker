@@ -19,6 +19,7 @@
     <string name="textViewDevice">اسم الجهاز:</string>
     <string name="textViewAndroidVersion">اندرود</string>
     <string name="string_button_donate_a_little">صدقة صغيرة</string>
+    <string name="string_your_device">جهازك</string>
 
 
 </resources>
