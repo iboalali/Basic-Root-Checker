@@ -105,22 +105,16 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
         imageView.setBackgroundResource(R.drawable.ic_unknown_c);
 
         FloatingActionButton fabVerifyRoot = findViewById(R.id.fabVerifyRootNew);
-        fabVerifyRoot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Verify root here
-                new RootChecker(MainActivity.this).execute();
-                Snackbar.make(rootLayoutNew, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT)
-                        .show();
-            }
+        fabVerifyRoot.setOnClickListener(view -> {
+            // Verify root here
+            new RootChecker(MainActivity.this).execute();
+            Snackbar.make(rootLayoutNew, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT)
+                    .show();
         });
 
-        DeviceName.with(this).request(new DeviceName.Callback() {
-            @Override
-            public void onFinished(DeviceName.DeviceInfo info, Exception error) {
-                TextView textViewDeviceModel = findViewById(R.id.textViewDeviceModelNew);
-                textViewDeviceModel.setText(info.marketName);
-            }
+        DeviceName.with(this).request((info, error) -> {
+            TextView textViewDeviceModel = findViewById(R.id.textViewDeviceModelNew);
+            textViewDeviceModel.setText(info.marketName);
         });
 
         TextView textViewAndroidVersion = findViewById(R.id.textViewAndroidVersionNew);
