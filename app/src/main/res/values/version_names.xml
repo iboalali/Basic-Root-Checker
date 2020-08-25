@@ -29,6 +29,8 @@
         <item>Oreo</item> // 26
         <item>Oreo</item> // 27
         <item>Pie</item> // 28
+        <item>10</item> // 29
+        <item>11</item> // 30
 
     </string-array>
 </resources>

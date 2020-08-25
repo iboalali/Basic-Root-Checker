@@ -3,6 +3,8 @@ package com.iboalali.basicrootchecker;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.os.Build;
 
 /**
  * Created by Ibrahim on 17-Jul-15.
@@ -20,12 +22,17 @@ final class Utils {
         return "";
     }
 
-    static String getAndroidName(Context context, int API_Level) {
-        String[] versionNames = context.getResources().getStringArray(R.array.VersionNames);
-        if (API_Level > versionNames.length) {
+    static String getAndroidName(Resources resources) {
+        String[] versionNames = resources.getStringArray(R.array.VersionNames);
+
+        if (Build.VERSION.SDK_INT > versionNames.length) {
             return "(Unreleased Android version)";
         }
 
-        return versionNames[API_Level - 1];
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            return versionNames[Build.VERSION.SDK_INT - 1];
+        }
+
+        return "";
     }
 }

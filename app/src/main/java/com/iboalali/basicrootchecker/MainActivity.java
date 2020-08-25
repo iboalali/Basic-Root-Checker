@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
         textViewAndroidVersion.setText(String.format("%s %s %s",
                 getResources().getString(R.string.textViewAndroidVersion),
                 Build.VERSION.RELEASE,
-                Utils.getAndroidName(this, Build.VERSION.SDK_INT)));
+                Utils.getAndroidName(this.getResources())
+        ));
     }
 }
