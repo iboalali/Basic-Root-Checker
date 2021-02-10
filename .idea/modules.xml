@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Basic-Root-Checker.iml" filepath="$PROJECT_DIR$/Basic-Root-Checker.iml" group="Basic-Root-Checker" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Basic-Root-Checker/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Basic-Root-Checker.iml" filepath="$PROJECT_DIR$/.idea/modules/Basic-Root-Checker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Basic-Root-Checker.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Basic-Root-Checker.app.iml" />
     </modules>
   </component>
 </project>
