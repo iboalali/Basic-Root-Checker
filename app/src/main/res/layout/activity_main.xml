@@ -9,23 +9,29 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rootLayoutNew"
+            android:id="@+id/root_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarNew"
+                android:id="@+id/app_bar"
+                style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:elevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbarNew"
+                    android:id="@+id/app_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/transparent" />
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    app:menu="@menu/menu_main" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -36,17 +42,17 @@
                 android:layout_marginTop="@dimen/root_status_margin_top"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/appBarNew">
+                app:layout_constraintTop_toBottomOf="@id/app_bar">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/imageViewStatusNew"
+                    android:id="@+id/image_view_status"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/string_root_status_description"
                     android:src="@drawable/ic_unknown_c" />
 
                 <ProgressBar
-                    android:id="@+id/progressbarLoadingNew"
+                    android:id="@+id/progressbar_loading"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/transparent"
@@ -55,7 +61,7 @@
             </FrameLayout>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textViewRootStatusNew"
+                android:id="@+id/text_view_root_status"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -71,17 +77,17 @@
                 app:layout_constraintTop_toBottomOf="@id/status_container" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/textViewDeviceInfoPanelNew"
+                android:id="@+id/text_view_device_info_panel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/progress_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewRootStatusNew">
+                app:layout_constraintTop_toBottomOf="@id/text_view_root_status">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textViewDeviceInfoNew"
+                    android:id="@+id/text_view_device_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -93,37 +99,37 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textViewDeviceMarketingNameNew"
+                    android:id="@+id/text_view_device_marketing_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewDeviceInfoNew"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_device_info"
                     tools:text="Pixel 3 XL" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textViewDeviceModelNameNew"
+                    android:id="@+id/text_view_device_model_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewDeviceMarketingNameNew"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_device_marketing_name"
                     tools:text="Pixel 3 XL" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textViewAndroidVersionNew"
+                    android:id="@+id/text_view_android_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewDeviceModelNameNew"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_device_model_name"
                     tools:text="Android 10" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textViewNotRootingNew"
+                    android:id="@+id/text_view_not_rooting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
@@ -136,13 +142,13 @@
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewAndroidVersionNew" />
+                    app:layout_constraintTop_toBottomOf="@id/text_view_android_version" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabVerifyRootNew"
+            android:id="@+id/fab_verify_root"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"

@@ -18,17 +18,17 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.material.snackbar.Snackbar;
 import com.iboalali.basicrootchecker.components.RootChecker;
 import com.iboalali.basicrootchecker.components.RootCheckerContract;
-import com.iboalali.basicrootchecker.databinding.ActivityMainNewBinding;
+import com.iboalali.basicrootchecker.databinding.ActivityMainBinding;
 import com.jaredrummler.android.device.DeviceName;
 
 public class MainActivity extends AppCompatActivity implements RootCheckerContract {
 
-    private ActivityMainNewBinding binding;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main_new);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initInstances();
     }
 
@@ -57,34 +57,34 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
 
     private void initInstances() {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        setSupportActionBar(binding.toolbarNew);
+        setSupportActionBar(binding.appToolbar);
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainRootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             binding.mainRootLayout.setPadding(insets.left, 0, insets.right, insets.bottom);
-            binding.appBarNew.setPadding(0, insets.top, 0, 0);
+            binding.appBar.setPadding(0, insets.top, 0, 0);
             return WindowInsetsCompat.CONSUMED;
         });
 
-        binding.imageViewStatusNew.setBackgroundResource(R.drawable.ic_unknown_c);
+        binding.imageViewStatus.setBackgroundResource(R.drawable.ic_unknown_c);
 
-        binding.fabVerifyRootNew.setOnClickListener(view -> {
+        binding.fabVerifyRoot.setOnClickListener(view -> {
             new RootChecker(MainActivity.this).execute();
-            Snackbar.make(binding.rootLayoutNew, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.rootLayout, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT).show();
         });
 
         DeviceName.with(this).request((info, error) -> {
             if (!Utils.equals(info.marketName, info.model)) {
-                binding.textViewDeviceModelNameNew.setVisibility(View.VISIBLE);
-                binding.textViewDeviceModelNameNew.setText(info.model);
+                binding.textViewDeviceModelName.setVisibility(View.VISIBLE);
+                binding.textViewDeviceModelName.setText(info.model);
             } else {
-                binding.textViewDeviceModelNameNew.setVisibility(View.GONE);
+                binding.textViewDeviceModelName.setVisibility(View.GONE);
             }
 
-            binding.textViewDeviceMarketingNameNew.setText(info.marketName);
+            binding.textViewDeviceMarketingName.setText(info.marketName);
         });
 
-        binding.textViewAndroidVersionNew.setText(String.format("%s %s %s",
+        binding.textViewAndroidVersion.setText(String.format("%s %s %s",
                 getResources().getString(R.string.textViewAndroidVersion),
                 Build.VERSION.RELEASE,
                 Utils.getAndroidName(this.getResources())
@@ -93,21 +93,21 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
 
     @Override
     public void onPreExecute() {
-        binding.imageViewStatusNew.setVisibility(View.INVISIBLE);
-        binding.progressbarLoadingNew.setVisibility(View.VISIBLE);
+        binding.imageViewStatus.setVisibility(View.INVISIBLE);
+        binding.progressbarLoading.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onPostExecute(Boolean result) {
-        binding.progressbarLoadingNew.setVisibility(View.INVISIBLE);
+        binding.progressbarLoading.setVisibility(View.INVISIBLE);
 
-        binding.imageViewStatusNew.setVisibility(View.VISIBLE);
+        binding.imageViewStatus.setVisibility(View.VISIBLE);
         if (result != null && result) {
-            binding.textViewRootStatusNew.setText(R.string.rootAvailable);
-            binding.imageViewStatusNew.setImageResource(R.drawable.ic_success_c);
+            binding.textViewRootStatus.setText(R.string.rootAvailable);
+            binding.imageViewStatus.setImageResource(R.drawable.ic_success_c);
         } else {
-            binding.textViewRootStatusNew.setText(R.string.rootNotAvailable);
-            binding.imageViewStatusNew.setImageResource(R.drawable.ic_fail_c);
+            binding.textViewRootStatus.setText(R.string.rootNotAvailable);
+            binding.imageViewStatus.setImageResource(R.drawable.ic_fail_c);
         }
     }
 }
