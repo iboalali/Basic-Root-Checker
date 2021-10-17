@@ -31,6 +31,9 @@
         <item>Pie</item> // 28
         <item>10</item> // 29
         <item>11</item> // 30
+        <item>12</item> // 31
+        <item>12.1</item> // 32
+        <item>13</item> // 33
 
     </string-array>
 </resources>
