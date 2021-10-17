@@ -15,7 +15,7 @@
     <string name="string_checking_for_root">Checking for Root…</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2018 &#169; iboalali\n\n
+    <string name="about_part1">Copyright 2021 &#169; iboalali\n\n
         This app does NOT root your phone.\n
         This app requires ROOT, use it at your own risk.\n
         This app does NOT collect any data or personal information.\n\n\n
@@ -26,7 +26,7 @@
     <!-- Licence Strings -->
     <string name="licence_libsu" translatable="false">This product includes software from the
         libsu Library\n\n\n
-        Copyright &#169; 2018 topjohnwu, libsu Library\n\n
+        Copyright &#169; 2021 topjohnwu, libsu Library\n\n
         Licensed under the Apache License, Version 2.0 (the \"License\");\n
         you may not use this file except in compliance with the License.\n\n
         Unless required by application law or agreed to in writing, software distributed under the
@@ -35,7 +35,7 @@
         See the License for the specific language governing permissions and limitations under the License.</string>
     <string name="licence_android_device_names" translatable="false">This product also includes software from the
         AndroidDeviceNames Library\n\n\n
-        Copyright &#169; 2018. Jared Rummler\n\n
+        Copyright &#169; 2019. Jared Rummler\n\n
         Licensed under the Apache License, Version 2.0 (the "License");\n
         you may not use this file except in compliance with the License.\n
         You may obtain a copy of the License at\n\n
