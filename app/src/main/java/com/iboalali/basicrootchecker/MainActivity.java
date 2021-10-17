@@ -6,58 +6,29 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.databinding.DataBindingUtil;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.iboalali.basicrootchecker.components.RootChecker;
 import com.iboalali.basicrootchecker.components.RootCheckerContract;
+import com.iboalali.basicrootchecker.databinding.ActivityMainNewBinding;
 import com.jaredrummler.android.device.DeviceName;
 
 public class MainActivity extends AppCompatActivity implements RootCheckerContract {
 
-    @Override
-    public void onPreExecute() {
-        imageView.setVisibility(View.INVISIBLE);
-        progressBarLoading.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onPostExecute(Boolean result) {
-        progressBarLoading.setVisibility(View.INVISIBLE);
-
-        imageView.setVisibility(View.VISIBLE);
-        if (result != null && result) {
-            textViewCheckForRoot.setText(R.string.rootAvailable);
-            imageView.setImageResource(R.drawable.ic_success_c);
-        } else {
-            textViewCheckForRoot.setText(R.string.rootNotAvailable);
-            imageView.setImageResource(R.drawable.ic_fail_c);
-        }
-    }
-
-    private ConstraintLayout rootLayoutNew;
-    private ProgressBar progressBarLoading;
-    private ImageView imageView;
-    private TextView textViewCheckForRoot;
+    private ActivityMainNewBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getResources().getDisplayMetrics().density > 1.5) {
-            setContentView(R.layout.activity_main_new);
-        } else {
-            setContentView(R.layout.activity_main_new_small);
-        }
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main_new);
         initInstances();
     }
 
@@ -69,9 +40,6 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.action_about) {
@@ -88,42 +56,58 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
     }
 
     private void initInstances() {
-        rootLayoutNew = findViewById(R.id.rootLayoutNew);
-        Toolbar toolbar = findViewById(R.id.toolbarNew);
-        if (toolbar != null) {
-            toolbar.setNavigationIcon(R.drawable.ic_navigation);
-            setSupportActionBar(toolbar);
-        }
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        setSupportActionBar(binding.toolbarNew);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.primary));
-        }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainRootLayout, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            binding.mainRootLayout.setPadding(insets.left, 0, insets.right, insets.bottom);
+            binding.appBarNew.setPadding(0, insets.top, 0, 0);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
-        progressBarLoading = findViewById(R.id.progressbarLoadingNew);
-        textViewCheckForRoot = findViewById(R.id.textViewRootStatusNew);
-        imageView = findViewById(R.id.imageViewStatusNew);
-        imageView.setBackgroundResource(R.drawable.ic_unknown_c);
+        binding.imageViewStatusNew.setBackgroundResource(R.drawable.ic_unknown_c);
 
-        FloatingActionButton fabVerifyRoot = findViewById(R.id.fabVerifyRootNew);
-        fabVerifyRoot.setOnClickListener(view -> {
-            // Verify root here
+        binding.fabVerifyRootNew.setOnClickListener(view -> {
             new RootChecker(MainActivity.this).execute();
-            Snackbar.make(rootLayoutNew, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT)
-                    .show();
+            Snackbar.make(binding.rootLayoutNew, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT).show();
         });
 
         DeviceName.with(this).request((info, error) -> {
-            TextView textViewDeviceMarketingName = findViewById(R.id.textViewDeviceMarketingNameNew);
-            TextView textViewDeviceModel = findViewById(R.id.textViewDeviceModelNameNew);
-            textViewDeviceMarketingName.setText(info.marketName);
-            textViewDeviceModel.setText(info.model);
+            if (!Utils.equals(info.marketName, info.model)) {
+                binding.textViewDeviceModelNameNew.setVisibility(View.VISIBLE);
+                binding.textViewDeviceModelNameNew.setText(info.model);
+            } else {
+                binding.textViewDeviceModelNameNew.setVisibility(View.GONE);
+            }
+
+            binding.textViewDeviceMarketingNameNew.setText(info.marketName);
         });
 
-        TextView textViewAndroidVersion = findViewById(R.id.textViewAndroidVersionNew);
-        textViewAndroidVersion.setText(String.format("%s %s %s",
+        binding.textViewAndroidVersionNew.setText(String.format("%s %s %s",
                 getResources().getString(R.string.textViewAndroidVersion),
                 Build.VERSION.RELEASE,
                 Utils.getAndroidName(this.getResources())
         ));
+    }
+
+    @Override
+    public void onPreExecute() {
+        binding.imageViewStatusNew.setVisibility(View.INVISIBLE);
+        binding.progressbarLoadingNew.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPostExecute(Boolean result) {
+        binding.progressbarLoadingNew.setVisibility(View.INVISIBLE);
+
+        binding.imageViewStatusNew.setVisibility(View.VISIBLE);
+        if (result != null && result) {
+            binding.textViewRootStatusNew.setText(R.string.rootAvailable);
+            binding.imageViewStatusNew.setImageResource(R.drawable.ic_success_c);
+        } else {
+            binding.textViewRootStatusNew.setText(R.string.rootNotAvailable);
+            binding.imageViewStatusNew.setImageResource(R.drawable.ic_fail_c);
+        }
     }
 }

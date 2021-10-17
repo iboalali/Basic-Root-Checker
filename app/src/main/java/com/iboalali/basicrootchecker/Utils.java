@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 
+import androidx.annotation.Nullable;
+
 /**
  * Created by Ibrahim on 17-Jul-15.
  */
@@ -34,5 +36,10 @@ final class Utils {
         }
 
         return "";
+    }
+
+    @SuppressWarnings("EqualsReplaceableByObjectsCall")
+    static boolean equals(@Nullable Object a, @Nullable Object b) {
+        return (a == b) || (a != null && a.equals(b));
     }
 }

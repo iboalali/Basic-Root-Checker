@@ -15,7 +15,7 @@
     <dimen name="left_start_margin">16dp</dimen>
     <dimen name="right_end_margin">16dp</dimen>
     <dimen name="dimen_bottom_bar_margin_bottom">32dp</dimen>
-    <dimen name="root_status_margin_top">96dp</dimen>
     <dimen name="root_status_text_margin_top">24dp</dimen>
+    <dimen name="progress_size">96dp</dimen>
 
 </resources>
