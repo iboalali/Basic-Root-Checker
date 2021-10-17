@@ -21,6 +21,7 @@
     <string name="string_button_donate_a_little">صدقة صغيرة</string>
     <string name="string_your_device">جهازك</string>
     <string name="string_checking_for_root">تحقق من خاصية الـ Root</string>
+    <string name="content_description_check_for_root">تحقق من خاصية الـ Root</string>
 
 
 </resources>

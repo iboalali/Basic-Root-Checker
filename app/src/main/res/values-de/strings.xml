@@ -18,4 +18,5 @@ Kontaktiere mich:\n</string>
     <string name="string_button_donate_a_little">Eine kleine Spende</string>
     <string name="string_your_device">Dein Gerät</string>
     <string name="string_checking_for_root">Auf Root zugriff überprüfen</string>
+    <string name="content_description_check_for_root">Auf Root zugriff überprüfen Taste</string>
 </resources>

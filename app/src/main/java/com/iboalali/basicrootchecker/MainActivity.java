@@ -113,8 +113,10 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
         });
 
         DeviceName.with(this).request((info, error) -> {
-            TextView textViewDeviceModel = findViewById(R.id.textViewDeviceModelNew);
-            textViewDeviceModel.setText(info.marketName);
+            TextView textViewDeviceMarketingName = findViewById(R.id.textViewDeviceMarketingNameNew);
+            TextView textViewDeviceModel = findViewById(R.id.textViewDeviceModelNameNew);
+            textViewDeviceMarketingName.setText(info.marketName);
+            textViewDeviceModel.setText(info.model);
         });
 
         TextView textViewAndroidVersion = findViewById(R.id.textViewAndroidVersionNew);

@@ -6,128 +6,132 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarNew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarNew"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootLayoutNew"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewStatusNew"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginTop="@dimen/root_status_margin_top"
+            android:contentDescription="@string/string_root_status_description"
+            android:src="@drawable/ic_unknown_c"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressbarLoadingNew"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginTop="@dimen/root_status_margin_top"
+            android:background="@color/transparent"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textViewRootStatusNew"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginTop="@dimen/root_status_text_margin_top"
+            android:layout_marginEnd="64dp"
+            android:layout_marginRight="64dp"
+            android:gravity="center_horizontal"
+            android:text="@string/textView_checkForRoot"
+            android:textColor="@color/text_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewStatusNew" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rootLayoutNew"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:id="@+id/textViewDeviceInfoPanelNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBarNew">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewRootStatusNew">
 
-            <ImageView
-                android:id="@+id/imageViewStatusNew"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:layout_marginTop="@dimen/root_status_margin_top"
-                android:contentDescription="@string/string_root_status_description"
-                android:src="@drawable/ic_unknown_c"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ProgressBar
-                android:id="@+id/progressbarLoadingNew"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:layout_marginTop="@dimen/root_status_margin_top"
-                android:background="@color/transparent"
-                android:indeterminate="true"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewRootStatusNew"
-                android:layout_width="0dp"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textViewDeviceInfoNew"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:layout_marginLeft="64dp"
-                android:layout_marginTop="@dimen/root_status_text_margin_top"
-                android:layout_marginEnd="64dp"
-                android:layout_marginRight="64dp"
-                android:gravity="center_horizontal"
-                android:text="@string/textView_checkForRoot"
-                android:textColor="@color/text_black"
+                android:gravity="center"
+                android:text="@string/string_your_device"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageViewStatusNew" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textViewDeviceMarketingNameNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewDeviceInfoNew"
+                tools:text="Pixel 3 XL" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textViewDeviceModelNameNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewDeviceMarketingNameNew"
+                tools:text="Pixel 3 XL" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textViewAndroidVersionNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewDeviceModelNameNew"
+                tools:text="Android 10" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textViewNotRootingNew"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginLeft="32dp"
+                android:layout_marginTop="64dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
                 android:layout_marginBottom="32dp"
                 android:gravity="center_horizontal"
                 android:text="@string/textView_Disclaimer"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/textViewDeviceInfoPanelNew"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/textViewNotRootingNew"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewRootStatusNew">
-
-                <TextView
-                    android:id="@+id/textViewDeviceInfoNew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/string_your_device"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textViewDeviceModelNew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewDeviceInfoNew"
-                    tools:text="Pixel 3 XL" />
-
-                <TextView
-                    android:id="@+id/textViewAndroidVersionNew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewDeviceModelNew"
-                    tools:text="Android 10" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@id/textViewAndroidVersionNew" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarNew"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarNew"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-        </com.google.android.material.appbar.AppBarLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -138,7 +142,9 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="24dp"
+        android:contentDescription="@string/content_description_check_for_root"
         android:src="@drawable/ic_root"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
