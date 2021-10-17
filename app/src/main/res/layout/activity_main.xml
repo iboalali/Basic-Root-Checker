@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:indeterminate="true"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:indicatorSize="@dimen/progress_size" />
             </FrameLayout>
 
@@ -156,7 +156,7 @@
             android:layout_marginRight="24dp"
             android:layout_marginBottom="24dp"
             android:contentDescription="@string/content_description_check_for_root"
-            android:src="@drawable/ic_root"
+            app:srcCompat="@drawable/ic_baseline_tag_24"
             app:backgroundTint="@color/accent"
             app:fabSize="normal"
             app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
