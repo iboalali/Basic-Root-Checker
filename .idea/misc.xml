@@ -3,9 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/al-alali/Documents/GitHub/Basic-Root-Checker/app/src/main/res/drawable/ic_baseline_clear_24.xml" value="2.14375" />
         <entry key="..\:/Users/al-alali/Documents/GitHub/Basic-Root-Checker/app/src/main/res/drawable/ic_baseline_tag_24.xml" value="2.28125" />
         <entry key="..\:/Users/al-alali/Documents/GitHub/Basic-Root-Checker/app/src/main/res/layout-xxhdpi/activity_main_new.xml" value="0.31929347826086957" />
-        <entry key="..\:/Users/al-alali/Documents/GitHub/Basic-Root-Checker/app/src/main/res/layout/activity_main.xml" value="1.25" />
+        <entry key="..\:/Users/al-alali/Documents/GitHub/Basic-Root-Checker/app/src/main/res/layout/activity_main.xml" value="0.785" />
         <entry key="..\:/Users/al-alali/Documents/GitHub/Basic-Root-Checker/app/src/main/res/layout/activity_main_new.xml" value="0.75" />
         <entry key="..\:/Users/al-alali/Documents/GitHub/Basic-Root-Checker/app/src/main/res/layout/activity_main_new_small.xml" value="0.33" />
       </map>
@@ -66,7 +67,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.3307291666666667" />
+        <option name="scale" value="0.33" />
       </ProjectState>
     </option>
   </component>

@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
             return WindowInsetsCompat.CONSUMED;
         });
 
-        binding.imageViewStatus.setBackgroundResource(R.drawable.ic_unknown_c);
+        binding.imageViewStatus.setImageResource(R.drawable.ic_unknown_c);
 
         binding.fabVerifyRoot.setOnClickListener(view -> {
             new RootChecker(MainActivity.this).execute();

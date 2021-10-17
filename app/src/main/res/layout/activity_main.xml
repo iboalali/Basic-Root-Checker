@@ -57,7 +57,9 @@
                     android:layout_height="match_parent"
                     android:indeterminate="true"
                     android:visibility="invisible"
-                    app:indicatorSize="@dimen/progress_size" />
+                    app:indicatorSize="@dimen/progress_size"
+                    app:trackCornerRadius="4dp"
+                    app:trackThickness="6dp" />
             </FrameLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -71,7 +73,7 @@
                 android:layout_marginRight="24dp"
                 android:gravity="center_horizontal"
                 android:text="@string/textView_checkForRoot"
-                android:textColor="@color/text_black"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/status_container" />
@@ -156,10 +158,10 @@
             android:layout_marginRight="24dp"
             android:layout_marginBottom="24dp"
             android:contentDescription="@string/content_description_check_for_root"
-            app:srcCompat="@drawable/ic_baseline_tag_24"
             app:backgroundTint="@color/accent"
             app:fabSize="normal"
-            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
+            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+            app:srcCompat="@drawable/ic_baseline_tag_24" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
