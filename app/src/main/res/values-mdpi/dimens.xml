@@ -3,5 +3,7 @@
     <dimen name="root_status_margin_top">12dp</dimen>
     <dimen name="your_device_margin_top">24dp</dimen>
     <dimen name="root_status_text_margin_top">16dp</dimen>
-    <dimen name="progress_size">48dp</dimen>
+    <dimen name="progress_container_size">48dp</dimen>
+    <dimen name="progress_size">40dp</dimen>
+
 </resources>

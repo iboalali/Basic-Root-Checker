@@ -37,8 +37,8 @@
 
             <FrameLayout
                 android:id="@+id/status_container"
-                android:layout_width="@dimen/progress_size"
-                android:layout_height="@dimen/progress_size"
+                android:layout_width="@dimen/progress_container_size"
+                android:layout_height="@dimen/progress_container_size"
                 android:layout_marginTop="@dimen/root_status_margin_top"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,13 +51,13 @@
                     android:contentDescription="@string/string_root_status_description"
                     android:src="@drawable/ic_unknown_c" />
 
-                <ProgressBar
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/progressbar_loading"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/transparent"
                     android:indeterminate="true"
-                    android:visibility="invisible" />
+                    android:visibility="visible"
+                    app:indicatorSize="@dimen/progress_size" />
             </FrameLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -80,7 +80,7 @@
                 android:id="@+id/text_view_device_info_panel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/progress_size"
+                android:layout_marginBottom="@dimen/progress_container_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
