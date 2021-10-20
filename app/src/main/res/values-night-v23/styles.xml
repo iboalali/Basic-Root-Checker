@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+    <style name="Theme.iboalali.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
+
+    <style name="Theme.iboalali.Base.Other" parent="Theme.iboalali.Base">
+        <item name="colorSurface">@color/md_purple_900_dark</item> <!-- todo this color is not being used -->
+        <item name="android:textColorLink">@color/md_purple_200</item>
+    </style>
+
+    <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base" />
+
+    <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other" />
 </resources>

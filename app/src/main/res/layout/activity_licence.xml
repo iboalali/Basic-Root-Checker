@@ -6,32 +6,30 @@
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimary"
+        android:background="?attr/colorSurface"
         android:clipToPadding="false"
+        android:theme="@style/Theme.iboalali.Other"
         tools:context=".LicenceActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_licence"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:background="@color/transparent"
-            android:theme="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface">
+            android:layout_height="250dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsingToolbarLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:expandedTitleGravity="center|bottom"
+                app:expandedTitleGravity="bottom|start|left"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
                     android:minHeight="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"
-                    app:theme="@style/Widget.MaterialComponents.Toolbar.PrimarySurface" />
+                    app:layout_collapseMode="pin" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -56,7 +54,7 @@
                     android:layout_marginEnd="@dimen/right_end_margin"
                     android:layout_marginRight="@dimen/right_end_margin"
                     android:text="@string/licence_libsu"
-                    android:textColor="@color/text_white" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                 <View
                     android:layout_width="fill_parent"
@@ -65,8 +63,7 @@
                     android:layout_marginLeft="@dimen/left_start_margin"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="@dimen/right_end_margin"
-                    android:layout_marginRight="@dimen/right_end_margin"
-                    android:background="@color/text_white" />
+                    android:layout_marginRight="@dimen/right_end_margin" />
 
                 <TextView
                     android:id="@+id/licence_android_device_names_licence"
@@ -78,7 +75,7 @@
                     android:layout_marginEnd="@dimen/right_end_margin"
                     android:layout_marginRight="@dimen/right_end_margin"
                     android:text="@string/licence_android_device_names"
-                    android:textColor="@color/text_white" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                 <TextView
                     android:id="@+id/licence_apache_licence_title"
@@ -92,8 +89,7 @@
                     android:autoLink="web"
                     android:gravity="center"
                     android:text="@string/licence_apache_title"
-                    android:textColor="@color/text_white"
-                    android:textColorLink="@color/text_link" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                 <TextView
                     android:id="@+id/licence_apache_licence"
@@ -106,7 +102,7 @@
                     android:layout_marginRight="@dimen/right_end_margin"
                     android:layout_marginBottom="50dp"
                     android:text="@string/licence_apache_licence"
-                    android:textColor="@color/text_white" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

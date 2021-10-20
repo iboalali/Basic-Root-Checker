@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="Theme.iboalali.Base.Other" parent="Theme.iboalali.Main">
+        <item name="colorSurface">@color/md_purple_200</item>
+        <item name="android:textColorLink">@color/md_purple_900</item>
+    </style>
+
+    <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other" />
+
 </resources>

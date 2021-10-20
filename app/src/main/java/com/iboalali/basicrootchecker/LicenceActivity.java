@@ -36,16 +36,4 @@ public class LicenceActivity extends AppCompatActivity {
             return WindowInsetsCompat.CONSUMED;
         });
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Utils.setSystemWindowLightMode(this, false);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Utils.setSystemWindowLightMode(this, true);
-    }
 }

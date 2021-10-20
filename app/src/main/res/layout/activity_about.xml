@@ -6,7 +6,8 @@
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimary"
+        android:theme="@style/Theme.iboalali.Other"
+        android:background="?attr/colorSurface"
         tools:context=".AboutActivity">
 
         <LinearLayout
@@ -35,7 +36,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/contentDescription_appIcon"
-                    android:src="@mipmap/ic_launcher" />
+                    app:srcCompat="@drawable/ic_baseline_tag_24" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/about_appName"
@@ -45,8 +46,7 @@
                     android:layout_toRightOf="@+id/about_appIcon"
                     android:fontFamily="@string/font_family_title_material"
                     android:text="@string/app_name"
-                    android:textColor="@color/text_white"
-                    android:textSize="@dimen/TextAppearance_Title" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/about_appVersion"
@@ -56,8 +56,9 @@
                     android:layout_toEndOf="@+id/about_appIcon"
                     android:layout_toRightOf="@+id/about_appIcon"
                     android:fontFamily="@string/font_family_subhead_material"
-                    android:textColor="@color/text_white"
-                    android:textSize="@dimen/TextAppearance_Subhead" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textSize="@dimen/TextAppearance_Subhead"
+                    tools:text="v1.6vc22" />
 
             </RelativeLayout>
 
@@ -68,7 +69,7 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/about_part1"
-                android:textColor="@color/text_white" />
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
@@ -78,15 +79,14 @@
                 android:layout_marginTop="-10dp"
                 android:autoLink="all"
                 android:text="@string/about_email_twitter"
-                android:textColor="@color/text_white"
-                android:textColorLink="@color/text_link" />
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="25dp"
                 android:text="@string/about_not_affiliated"
-                android:textColor="@color/text_white" />
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
