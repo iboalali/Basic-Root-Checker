@@ -5,6 +5,7 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="colorAccent">@color/md_purple_200</item>
     </style>
 
     <style name="Theme.iboalali.Base.Other" parent="Theme.iboalali.Base">

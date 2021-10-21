@@ -18,5 +18,10 @@
     <dimen name="root_status_text_margin_top">24dp</dimen>
     <dimen name="progress_container_size">96dp</dimen>
     <dimen name="progress_size">88dp</dimen>
+    <dimen name="default_padding">16dp</dimen>
+    <dimen name="default_corner_radius">16dp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="default_margin_one_and_half">24dp</dimen>
+    <dimen name="elevation_none">0dp</dimen>
 
 </resources>

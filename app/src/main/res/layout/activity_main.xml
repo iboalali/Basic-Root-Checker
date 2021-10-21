@@ -5,9 +5,9 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/mainRootLayout"
-        android:background="?attr/colorSurface"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/root_layout"
@@ -19,7 +19,7 @@
                 style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:elevation="0dp"
+                app:elevation="@dimen/elevation_none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -35,114 +35,139 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-            <FrameLayout
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/status_container"
-                android:layout_width="@dimen/progress_container_size"
-                android:layout_height="@dimen/progress_container_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/default_margin"
                 android:layout_marginTop="@dimen/root_status_margin_top"
+                app:cardBackgroundColor="?attr/colorPrimarySurface"
+                app:cardCornerRadius="@dimen/default_corner_radius"
+                app:cardElevation="@dimen/elevation_none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/app_bar">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/image_view_status"
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/string_root_status_description"
-                    android:src="@drawable/ic_unknown_c" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_padding">
 
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/progressbar_loading"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:indeterminate="true"
-                    android:visibility="invisible"
-                    app:indicatorSize="@dimen/progress_size"
-                    app:trackCornerRadius="4dp"
-                    app:trackThickness="6dp" />
-            </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="@dimen/progress_container_size"
+                        android:layout_height="@dimen/progress_container_size"
+                        android:layout_gravity="center_horizontal">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/text_view_root_status"
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/image_view_status"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/string_root_status_description"
+                            android:src="@drawable/ic_unknown_c" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/progressbar_loading"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:indeterminate="true"
+                            android:visibility="invisible"
+                            app:indicatorSize="@dimen/progress_size"
+                            app:trackCornerRadius="4dp"
+                            app:trackThickness="6dp" />
+                    </FrameLayout>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_view_root_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="@dimen/root_status_text_margin_top"
+                        android:layout_marginEnd="24dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/textView_checkForRoot"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/status_container" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/text_view_device_info_panel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="@dimen/root_status_text_margin_top"
-                android:layout_marginEnd="24dp"
-                android:gravity="center_horizontal"
-                android:text="@string/textView_checkForRoot"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/status_container" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/text_view_device_info_panel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/default_margin"
                 android:layout_marginBottom="@dimen/progress_container_size"
+                app:cardBackgroundColor="?attr/colorPrimarySurface"
+                app:cardCornerRadius="@dimen/default_corner_radius"
+                app:elevation="@dimen/elevation_none"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_view_root_status">
+                app:layout_constraintTop_toBottomOf="@id/status_container">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text_view_device_info"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/string_your_device"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:padding="@dimen/default_padding">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text_view_device_marketing_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_view_device_info"
-                    tools:text="Pixel 3 XL" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_view_device_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/string_your_device"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text_view_device_model_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_view_device_marketing_name"
-                    tools:text="Pixel 3 XL" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_view_device_marketing_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_view_device_info"
+                        tools:text="Pixel 3 XL" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text_view_android_version"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_view_device_model_name"
-                    tools:text="Android 10" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_view_device_model_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_view_device_marketing_name"
+                        tools:text="Pixel 3 XL" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text_view_not_rooting"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/textView_Disclaimer"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_view_android_version" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_view_android_version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_view_device_model_name"
+                        tools:text="Android 10" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_view_not_rooting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_margin_one_and_half"
+                        android:gravity="center_horizontal"
+                        android:text="@string/textView_Disclaimer"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_view_android_version" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -150,13 +175,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="@dimen/default_margin_one_and_half"
+            android:layout_marginRight="@dimen/default_margin_one_and_half"
+            android:layout_marginBottom="@dimen/default_margin_one_and_half"
             android:contentDescription="@string/content_description_check_for_root"
             app:backgroundTint="?attr/colorAccent"
             app:fabSize="normal"
             app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.iboalali.Rectangle.Rounded"
             app:srcCompat="@drawable/ic_baseline_tag_24" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/md_purple_700</item>
         <item name="colorAccent">@color/md_purple_200</item>
         <item name="colorSurface">@color/md_purple_50</item>
+        <item name="colorPrimarySurface">@color/md_purple_100</item>
     </style>
 
     <style name="Theme.iboalali.Base.Other" parent="Theme.iboalali.Base">
@@ -17,5 +18,10 @@
     <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base" />
 
     <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other" />
+
+    <style name="ShapeAppearanceOverlay.iboalali.Rectangle.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
 
 </resources>
