@@ -33,7 +33,6 @@ public class AboutActivity extends AppCompatActivity {
         ActionBar supportActionBar = getSupportActionBar();
 
         if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setTitle("");
         }
 

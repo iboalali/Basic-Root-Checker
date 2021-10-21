@@ -28,6 +28,7 @@ public class LicenceActivity extends AppCompatActivity {
     private void initInstances() {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         binding.collapsingToolbarLayout.setTitle(getResources().getString(R.string.action_licence));
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.rootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
