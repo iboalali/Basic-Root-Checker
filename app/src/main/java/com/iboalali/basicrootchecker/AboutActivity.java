@@ -2,6 +2,7 @@ package com.iboalali.basicrootchecker;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -27,6 +28,17 @@ public class AboutActivity extends AppCompatActivity {
 
     private void initInstances() {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        setSupportActionBar(binding.appToolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setTitle("");
+        }
+
+        binding.appToolbar.setNavigationOnClickListener(v -> finish());
+
 
         binding.aboutAppVersion.setText(Utils.getAppVersionNumber(this));
 

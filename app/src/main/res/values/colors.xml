@@ -18,6 +18,7 @@
 
     <!-- Dark Purple Colors -->
     <color name="md_purple_dark">#1C1425</color>
+    <color name="md_purple_not_so_dark">#2A1E37</color>
     <color name="md_purple_A700">#6200EA</color>
     <color name="md_purple_A400">#651FFF</color>
     <color name="md_purple_A200">#7C4DFF</color>

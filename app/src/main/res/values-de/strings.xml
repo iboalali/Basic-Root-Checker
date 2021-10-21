@@ -6,7 +6,7 @@
 Diese app wird NICHT dein Gerät rooten.\n
 Diese app erfordert ROOT zugriff, benutzen auf eigener gefahr.\n
 Diese app sammelt keine daten oder persönliche informationen.\n\n\n
-Kontaktiere mich:\n</string>
+Kontaktiere mich:</string>
     <string name="action_about">Über</string>
     <string name="action_licence">Lizenzen</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>

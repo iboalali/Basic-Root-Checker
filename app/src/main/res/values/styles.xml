@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/md_purple_200</item>
         <item name="colorSurface">@color/md_purple_50</item>
         <item name="colorPrimarySurface">@color/md_purple_100</item>
+        <item name="colorOnSurface">@color/md_purple_dark</item>
+        <item name="colorOnPrimarySurface">@color/md_purple_300</item>
     </style>
 
     <style name="Theme.iboalali.Base.Other" parent="Theme.iboalali.Base">

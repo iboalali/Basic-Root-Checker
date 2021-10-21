@@ -2,96 +2,125 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorSurface"
-        android:theme="@style/Theme.iboalali.Other"
-        tools:context=".AboutActivity">
+        android:theme="@style/Theme.iboalali.Other">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:elevation="@dimen/elevation_none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/app_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingHorizontal="@dimen/default_padding">
+            android:layout_height="match_parent"
+            android:padding="@dimen/default_padding_double"
+            tools:context=".AboutActivity">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rootLayout"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="?attr/colorOnPrimarySurface"
+                app:cardCornerRadius="@dimen/default_corner_radius"
+                app:cardElevation="@dimen/elevation_none">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/about_appIcon"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:contentDescription="@string/contentDescription_appIcon"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_baseline_tag_24" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/about_appName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:text="@string/app_name"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/about_appIcon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/about_appVersion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    android:textSize="@dimen/TextAppearance_Subhead"
-                    app:layout_constraintStart_toEndOf="@id/about_appIcon"
-                    app:layout_constraintTop_toBottomOf="@id/about_appName"
-                    tools:text="v1.6vc22" />
-
-                <androidx.constraintlayout.widget.Barrier
-                    android:id="@+id/app_name_barrier"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="about_appIcon, about_appName, about_appVersion" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/about_copyright"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/default_padding"
-                    android:paddingTop="@dimen/default_padding"
-                    android:text="@string/about_part1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintTop_toBottomOf="@id/app_name_barrier" />
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="@dimen/default_padding_double">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/about_contact"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="all"
-                    android:text="@string/about_email_twitter"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/about_copyright" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/about_appIcon"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:contentDescription="@string/contentDescription_appIcon"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_baseline_tag_24" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/about_not_affiliated"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="25dp"
-                    android:text="@string/about_not_affiliated"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintTop_toBottomOf="@id/about_contact" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/about_appName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:text="@string/app_name"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/about_appIcon"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/about_appVersion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        android:textSize="@dimen/TextAppearance_Subhead"
+                        app:layout_constraintStart_toEndOf="@id/about_appIcon"
+                        app:layout_constraintTop_toBottomOf="@id/about_appName"
+                        tools:text="v1.6vc22" />
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/app_name_barrier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="about_appIcon, about_appName, about_appVersion" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/about_copyright"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/default_padding"
+                        android:text="@string/about_part1"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintTop_toBottomOf="@id/app_name_barrier" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/about_contact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginLeft="32dp"
+                        android:autoLink="all"
+                        android:text="@string/about_email_twitter"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/about_copyright" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/about_not_affiliated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:text="@string/about_not_affiliated"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintTop_toBottomOf="@id/about_contact" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
         </FrameLayout>
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
