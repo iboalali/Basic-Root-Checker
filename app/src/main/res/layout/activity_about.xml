@@ -2,92 +2,96 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/rootLayout"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="@style/Theme.iboalali.Other"
         android:background="?attr/colorSurface"
+        android:theme="@style/Theme.iboalali.Other"
         tools:context=".AboutActivity">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="@dimen/activity_horizontal_margin"
-            android:paddingEnd="@dimen/activity_horizontal_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_gravity="center"
+            android:paddingHorizontal="@dimen/default_padding">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rootLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="16dp">
+                android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/about_appIcon"
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:contentDescription="@string/contentDescription_appIcon"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_baseline_tag_24" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/about_appName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/about_appIcon"
-                    android:layout_toRightOf="@+id/about_appIcon"
-                    android:fontFamily="@string/font_family_title_material"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
                     android:text="@string/app_name"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/about_appIcon"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/about_appVersion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/about_appName"
-                    android:layout_toEndOf="@+id/about_appIcon"
-                    android:layout_toRightOf="@+id/about_appIcon"
-                    android:fontFamily="@string/font_family_subhead_material"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textSize="@dimen/TextAppearance_Subhead"
+                    app:layout_constraintStart_toEndOf="@id/about_appIcon"
+                    app:layout_constraintTop_toBottomOf="@id/about_appName"
                     tools:text="v1.6vc22" />
 
-            </RelativeLayout>
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/app_name_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="about_appIcon, about_appName, about_appVersion" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/about_part1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/about_copyright"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/default_padding"
+                    android:paddingTop="@dimen/default_padding"
+                    android:text="@string/about_part1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    app:layout_constraintTop_toBottomOf="@id/app_name_barrier" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="45dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginTop="-10dp"
-                android:autoLink="all"
-                android:text="@string/about_email_twitter"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/about_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="all"
+                    android:text="@string/about_email_twitter"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/about_copyright" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="25dp"
-                android:text="@string/about_not_affiliated"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/about_not_affiliated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="25dp"
+                    android:text="@string/about_not_affiliated"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    app:layout_constraintTop_toBottomOf="@id/about_contact" />
 
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+    </FrameLayout>
 </layout>
