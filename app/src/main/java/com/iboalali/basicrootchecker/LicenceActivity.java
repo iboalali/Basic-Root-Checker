@@ -16,16 +16,10 @@ import com.iboalali.basicrootchecker.databinding.ActivityLicenceBinding;
  */
 public class LicenceActivity extends AppCompatActivity {
 
-    private ActivityLicenceBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_licence);
-        initInstances();
-    }
-
-    private void initInstances() {
+        ActivityLicenceBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_licence);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         binding.collapsingToolbarLayout.setTitle(getResources().getString(R.string.action_licence));
         binding.toolbar.setNavigationOnClickListener(v -> finish());

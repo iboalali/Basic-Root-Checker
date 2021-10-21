@@ -24,5 +24,6 @@
     <dimen name="default_margin">16dp</dimen>
     <dimen name="default_margin_one_and_half">24dp</dimen>
     <dimen name="elevation_none">0dp</dimen>
+    <dimen name="elevation_minimum">1dp</dimen>
 
 </resources>

@@ -24,14 +24,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.Toolbar
+                <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/app_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    app:menu="@menu/menu_main" />
+                    app:menu="@menu/menu_main"
+                    app:title="@string/app_name"
+                    app:titleCentered="true" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,7 +42,7 @@
                 android:layout_marginTop="@dimen/root_status_margin_top"
                 app:cardBackgroundColor="?attr/colorPrimarySurface"
                 app:cardCornerRadius="@dimen/default_corner_radius"
-                app:cardElevation="@dimen/elevation_none"
+                app:cardElevation="@dimen/elevation_minimum"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/app_bar">
@@ -52,7 +51,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/default_padding">
+                    android:paddingHorizontal="@dimen/default_padding"
+                    android:paddingVertical="@dimen/default_padding_double">
 
                     <FrameLayout
                         android:layout_width="@dimen/progress_container_size"
@@ -101,7 +101,7 @@
                 android:layout_marginBottom="@dimen/progress_container_size"
                 app:cardBackgroundColor="?attr/colorPrimarySurface"
                 app:cardCornerRadius="@dimen/default_corner_radius"
-                app:elevation="@dimen/elevation_none"
+                app:cardElevation="@dimen/elevation_minimum"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -110,7 +110,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding">
+                    android:paddingHorizontal="@dimen/default_padding"
+                    android:paddingVertical="@dimen/default_padding_double">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/text_view_device_info"

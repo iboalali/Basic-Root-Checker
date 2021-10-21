@@ -17,28 +17,12 @@ import com.iboalali.basicrootchecker.databinding.ActivityAboutBinding;
  */
 public class AboutActivity extends AppCompatActivity {
 
-    private ActivityAboutBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
-        initInstances();
-    }
-
-    private void initInstances() {
+        ActivityAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
-        setSupportActionBar(binding.appToolbar);
-        ActionBar supportActionBar = getSupportActionBar();
-
-        if (supportActionBar != null) {
-            supportActionBar.setTitle("");
-        }
-
         binding.appToolbar.setNavigationOnClickListener(v -> finish());
-
-
         binding.aboutAppVersion.setText(Utils.getAppVersionNumber(this));
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.rootLayout, (v, windowInsets) -> {

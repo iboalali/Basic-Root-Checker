@@ -3,12 +3,15 @@ package com.iboalali.basicrootchecker;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -21,6 +24,8 @@ import com.iboalali.basicrootchecker.components.RootCheckerContract;
 import com.iboalali.basicrootchecker.databinding.ActivityMainBinding;
 import com.jaredrummler.android.device.DeviceName;
 
+import java.lang.reflect.Field;
+
 public class MainActivity extends AppCompatActivity implements RootCheckerContract {
 
     private ActivityMainBinding binding;
@@ -32,32 +37,36 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
         initInstances();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_about) {
-            Intent intent = new Intent(this, AboutActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.action_licence) {
-            Intent intent = new Intent(this, LicenceActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void initInstances() {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        setSupportActionBar(binding.appToolbar);
+        binding.appToolbar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.action_about) {
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (id == R.id.action_licence) {
+                Intent intent = new Intent(this, LicenceActivity.class);
+                startActivity(intent);
+                return true;
+            }
+
+            return false;
+        });
+
+        //try {
+        //    Field mTitleTextViewField = binding.appToolbar.getClass().getDeclaredField("mTitleTextView");
+        //    mTitleTextViewField.setAccessible(true);
+        //    AppCompatTextView title = (AppCompatTextView) mTitleTextViewField.get(binding.appToolbar);
+        //    if (title != null) {
+        //        title.setGravity(Gravity.CENTER);
+        //    }
+        //} catch (NoSuchFieldException e) {
+        //    e.printStackTrace();
+        //} catch (IllegalAccessException e) {
+        //    e.printStackTrace();
+        //}
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainRootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -19,12 +19,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/app_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="center"
-                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,7 +40,7 @@
                 android:layout_gravity="center"
                 app:cardBackgroundColor="?attr/colorOnPrimarySurface"
                 app:cardCornerRadius="@dimen/default_corner_radius"
-                app:cardElevation="@dimen/elevation_none">
+                app:cardElevation="@dimen/elevation_minimum">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
