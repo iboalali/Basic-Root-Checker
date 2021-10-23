@@ -55,19 +55,6 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
             return false;
         });
 
-        //try {
-        //    Field mTitleTextViewField = binding.appToolbar.getClass().getDeclaredField("mTitleTextView");
-        //    mTitleTextViewField.setAccessible(true);
-        //    AppCompatTextView title = (AppCompatTextView) mTitleTextViewField.get(binding.appToolbar);
-        //    if (title != null) {
-        //        title.setGravity(Gravity.CENTER);
-        //    }
-        //} catch (NoSuchFieldException e) {
-        //    e.printStackTrace();
-        //} catch (IllegalAccessException e) {
-        //    e.printStackTrace();
-        //}
-
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainRootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             binding.mainRootLayout.setPadding(insets.left, 0, insets.right, insets.bottom);
