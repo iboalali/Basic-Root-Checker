@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="VersionNames">
-        <item>(no code name)</item> // 1
-        <item>(no code name)</item> // 2
-        <item>Cupcake</item> // 3
-        <item>Donut</item> // 4
-        <item>Eclair</item> // 5
-        <item>Eclair</item> // 6
-        <item>Eclair</item> // 7
-        <item>Froyo</item> // 8
-        <item>Gingerbread</item> // 9
-        <item>Gingerbread</item> // 10
-        <item>Honeycomb</item> // 11
-        <item>Honeycomb</item> // 12
-        <item>Honeycomb</item> // 13
-        <item>Ice Cream Sandwich</item> // 14
-        <item>Ice Cream Sandwich</item> // 15
-        <item>Jelly Bean</item> // 16
-        <item>Jelly Bean</item> // 17
-        <item>Jelly Bean</item> // 18
-        <item>KitKat</item> // 19
-        <item>KitKat Wear</item> // 20
-        <item>Lollipop</item> // 21
-        <item>Lollipop</item> // 22
-        <item>Marshmallow</item> // 23
-        <item>Nougat</item> // 24
-        <item>Nougat</item> // 25
-        <item>Oreo</item> // 26
-        <item>Oreo</item> // 27
-        <item>Pie</item> // 28
+        <item>1.0 (no code name)</item> // 1
+        <item>1.1 (no code name)</item> // 2
+        <item>1.5 Cupcake</item> // 3
+        <item>1.6 Donut</item> // 4
+        <item>2.0 Eclair</item> // 5
+        <item>2.0.1 Eclair</item> // 6
+        <item>2.1 Eclair</item> // 7
+        <item>2.2 Froyo</item> // 8
+        <item>2.3 Gingerbread</item> // 9
+        <item>2.3 Gingerbread</item> // 10
+        <item>3.0 Honeycomb</item> // 11
+        <item>3.1 Honeycomb</item> // 12
+        <item>3.2 Honeycomb</item> // 13
+        <item>4.0 Ice Cream Sandwich</item> // 14
+        <item>4.0 Ice Cream Sandwich</item> // 15
+        <item>4.1 Jelly Bean</item> // 16
+        <item>4.2 Jelly Bean</item> // 17
+        <item>4.3 Jelly Bean</item> // 18
+        <item>4.4 KitKat</item> // 19
+        <item>4.4 KitKat Wear</item> // 20
+        <item>5.0 Lollipop</item> // 21
+        <item>5.1 Lollipop</item> // 22
+        <item>6.0 Marshmallow</item> // 23
+        <item>7.0 Nougat</item> // 24
+        <item>7.1 Nougat</item> // 25
+        <item>8.0 Oreo</item> // 26
+        <item>8.1 Oreo</item> // 27
+        <item>9.0 Pie</item> // 28
         <item>10</item> // 29
         <item>11</item> // 30
         <item>12</item> // 31
-        <item>12.1</item> // 32
+        <item>12L</item> // 32
         <item>13</item> // 33
 
     </string-array>

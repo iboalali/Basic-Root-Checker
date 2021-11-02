@@ -34,11 +34,7 @@ final class Utils {
             return "(Unreleased Android version)";
         }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            return versionNames[Build.VERSION.SDK_INT - 1];
-        }
-
-        return "";
+        return versionNames[Build.VERSION.SDK_INT - 1];
     }
 
     @SuppressWarnings("EqualsReplaceableByObjectsCall")

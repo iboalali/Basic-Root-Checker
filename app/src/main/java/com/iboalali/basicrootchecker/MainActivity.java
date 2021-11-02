@@ -80,9 +80,8 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
             binding.textViewDeviceMarketingName.setText(info.marketName);
         });
 
-        binding.textViewAndroidVersion.setText(String.format("%s %s %s",
+        binding.textViewAndroidVersion.setText(String.format("%s %s",
                 getResources().getString(R.string.textViewAndroidVersion),
-                Build.VERSION.RELEASE,
                 Utils.getAndroidName(this.getResources())
         ));
     }
