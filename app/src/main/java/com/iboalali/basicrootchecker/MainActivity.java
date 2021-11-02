@@ -7,10 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -26,8 +23,6 @@ import com.iboalali.basicrootchecker.components.RootChecker;
 import com.iboalali.basicrootchecker.components.RootCheckerContract;
 import com.iboalali.basicrootchecker.databinding.ActivityMainBinding;
 import com.jaredrummler.android.device.DeviceName;
-
-import java.lang.reflect.Field;
 
 public class MainActivity extends AppCompatActivity implements RootCheckerContract {
 
@@ -61,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
                     }
 
                     Log.d("SplashScreen", String.format("exitTimeDelay is %s ", exitTimeDelay));
-                    //ValueAnimator valueAnimator = ValueAnimator.ofFloat(splashScreenProvider.getView(), View.ALPHA, 1f, 0f);
                     ValueAnimator valueAnimator = ValueAnimator.ofFloat(1f, 0f);
                     valueAnimator.addListener(new AnimatorListenerAdapter() {
                         @Override
