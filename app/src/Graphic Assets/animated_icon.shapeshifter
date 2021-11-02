@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "layers": {
+    "vectorLayer": {
+      "id": "89",
+      "name": "vector",
+      "type": "vector",
+      "width": 24,
+      "height": 24,
+      "children": [
+        {
+          "id": "95",
+          "name": "left_part",
+          "type": "path",
+          "pathData": "M 8 4 L 10 4 L 10 20 L 8 20 Z"
+        },
+        {
+          "id": "241",
+          "name": "right_part",
+          "type": "path",
+          "pathData": "M 14 4 L 16 4 L 16 20 L 14 20 Z"
+        },
+        {
+          "id": "398",
+          "name": "top_part",
+          "type": "path",
+          "pathData": "M 4 8 L 20 8 L 20 10 L 4 10 Z"
+        },
+        {
+          "id": "534",
+          "name": "bottom_part",
+          "type": "path",
+          "pathData": "M 4 14 L 20 14 L 20 16 L 4 16 Z"
+        }
+      ]
+    },
+    "hiddenLayerIds": []
+  },
+  "timeline": {
+    "animation": {
+      "id": "2",
+      "name": "anim",
+      "duration": 200,
+      "blocks": [
+        {
+          "id": "682",
+          "layerId": "95",
+          "propertyName": "pathData",
+          "startTime": 0,
+          "endTime": 200,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "path",
+          "fromValue": "M -2 0 L 0 0 L 0 24 L -2 24 Z",
+          "toValue": "M 8 4 L 10 4 L 10 20 L 8 20 Z"
+        },
+        {
+          "id": "2427",
+          "layerId": "241",
+          "propertyName": "pathData",
+          "startTime": 0,
+          "endTime": 200,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "path",
+          "fromValue": "M 24 0 L 26 0 L 26 24 L 24 24 Z",
+          "toValue": "M 14 4 L 16 4 L 16 20 L 14 20 Z"
+        },
+        {
+          "id": "9933",
+          "layerId": "398",
+          "propertyName": "pathData",
+          "startTime": 0,
+          "endTime": 200,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "path",
+          "fromValue": "M 0 -2 L 24 -2 L 24 0 L 0 0 Z",
+          "toValue": "M 4 8 L 20 8 L 20 10 L 4 10 Z"
+        },
+        {
+          "id": "16235",
+          "layerId": "534",
+          "propertyName": "pathData",
+          "startTime": 0,
+          "endTime": 200,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "path",
+          "fromValue": "M 0 24 L 24 24 L 24 26 L 0 26 Z",
+          "toValue": "M 4 14 L 20 14 L 20 16 L 4 16 Z"
+        },
+        {
+          "id": "39189",
+          "layerId": "89",
+          "propertyName": "alpha",
+          "startTime": 0,
+          "endTime": 50,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "number",
+          "fromValue": 0,
+          "toValue": 1
+        }
+      ]
+    }
+  }
+}

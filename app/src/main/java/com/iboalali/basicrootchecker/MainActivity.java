@@ -1,18 +1,12 @@
 package com.iboalali.basicrootchecker;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.graphics.Insets;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,8 +18,6 @@ import com.iboalali.basicrootchecker.components.RootCheckerContract;
 import com.iboalali.basicrootchecker.databinding.ActivityMainBinding;
 import com.jaredrummler.android.device.DeviceName;
 
-import java.lang.reflect.Field;
-
 public class MainActivity extends AppCompatActivity implements RootCheckerContract {
 
     private ActivityMainBinding binding;
@@ -33,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SplashScreen.installSplashScreen(this);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initInstances();
     }
