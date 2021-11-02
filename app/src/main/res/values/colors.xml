@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Icon color -->
+    <color name="ic_launcher_v2_background">#673AB7</color>
+
     <!-- Main Activity Theme -->
     <color name="textLinkMain">#ffc6b0ff</color>
     <color name="textBlackMain">#ff07061a</color>
