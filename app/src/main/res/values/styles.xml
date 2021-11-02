@@ -21,6 +21,8 @@
     <!-- App Themes -->
     <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base" />
 
+    <style name="Theme.iboalali.SplashScreen" parent="Theme.iboalali.Main" />
+
     <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other" />
 
     <!-- Shape Overlays -->

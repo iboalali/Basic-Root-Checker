@@ -4,9 +4,9 @@
     <!-- Base Themes -->
     <style name="Theme.iboalali.SplashScreen.Base" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/md_purple_50</item>
-        <item name="postSplashScreenTheme">@style/Theme.iboalali.Main</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/vd_base_icon_48</item>
-        <item name="windowSplashScreenAnimationDuration">10000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_screen</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.iboalali.Base.v21</item>
     </style>
 
     <style name="Theme.iboalali.Base.v21" parent="Theme.iboalali.Base">

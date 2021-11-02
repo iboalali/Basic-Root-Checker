@@ -4,17 +4,19 @@
     <!-- Base Themes -->
     <style name="Theme.iboalali.SplashScreen.Base.v23.Night" parent="Theme.iboalali.SplashScreen.Base.v23">
         <item name="windowSplashScreenBackground">?attr/colorSurface</item>
+        <item name="postSplashScreenTheme">@style/Theme.iboalali.Base.v23.Night</item>
     </style>
 
     <style name="Theme.iboalali.Base.v23.Night" parent="Theme.iboalali.Base.v23">
         <item name="android:windowLightStatusBar">false</item>
         <item name="colorAccent">@color/md_purple_not_so_dark</item>
+        <item name="colorSurface">@color/md_purple_dark</item>
+        <item name="colorPrimarySurface">@color/md_purple_not_so_dark</item>
         <item name="colorOnSurface">@color/md_purple_200</item>
         <item name="colorOnPrimarySurface">@color/md_purple_not_so_dark</item>
     </style>
 
     <style name="Theme.iboalali.Base.Other.v23.Night" parent="Theme.iboalali.Base.v23.Night">
-        <item name="colorSurface">@color/md_purple_dark</item>
         <item name="android:textColorLink">@color/md_purple_200</item>
     </style>
 

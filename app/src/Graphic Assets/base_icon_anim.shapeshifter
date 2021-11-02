@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "layers": {
+    "vectorLayer": {
+      "id": "89",
+      "name": "base_icon",
+      "type": "vector",
+      "width": 48,
+      "height": 48,
+      "children": [
+        {
+          "id": "306868",
+          "name": "left_part_group",
+          "type": "group",
+          "children": [
+            {
+              "id": "481019",
+              "name": "left_part_shadow",
+              "type": "path",
+              "pathData": "M 20 16 L 22 16 L 22 32 L 20 32 Z",
+              "fillColor": "#9e9e9e"
+            },
+            {
+              "id": "95",
+              "name": "left_part",
+              "type": "path",
+              "pathData": "M 20 16 L 22 16 L 22 32 L 20 32 Z",
+              "fillColor": "#000000"
+            }
+          ]
+        },
+        {
+          "id": "354959",
+          "name": "right_part_group",
+          "type": "group",
+          "children": [
+            {
+              "id": "494467",
+              "name": "right_part_shadow",
+              "type": "path",
+              "pathData": "M 26 16 L 28 16 L 28 32 L 26 32 Z",
+              "fillColor": "#9e9e9e"
+            },
+            {
+              "id": "241",
+              "name": "right_part",
+              "type": "path",
+              "pathData": "M 26 16 L 28 16 L 28 32 L 26 32 Z",
+              "fillColor": "#000000"
+            }
+          ]
+        },
+        {
+          "id": "396344",
+          "name": "top_part_group",
+          "type": "group",
+          "children": [
+            {
+              "id": "494468",
+              "name": "top_part_shadow",
+              "type": "path",
+              "pathData": "M 16 20 L 32 20 L 32 22 L 16 22 Z",
+              "fillColor": "#9e9e9e"
+            },
+            {
+              "id": "398",
+              "name": "top_part",
+              "type": "path",
+              "pathData": "M 16 20 L 32 20 L 32 22 L 16 22 Z",
+              "fillColor": "#000000"
+            }
+          ]
+        },
+        {
+          "id": "396345",
+          "name": "bottom_part_group",
+          "type": "group",
+          "children": [
+            {
+              "id": "494469",
+              "name": "bottom_part_shadow",
+              "type": "path",
+              "pathData": "M 16 26 L 32 26 L 32 28 L 16 28 Z",
+              "fillColor": "#9e9e9e"
+            },
+            {
+              "id": "534",
+              "name": "bottom_part",
+              "type": "path",
+              "pathData": "M 16 26 L 32 26 L 32 28 L 16 28 Z",
+              "fillColor": "#000000"
+            }
+          ]
+        }
+      ]
+    },
+    "hiddenLayerIds": []
+  },
+  "timeline": {
+    "animation": {
+      "id": "2",
+      "name": "anim",
+      "duration": 1000,
+      "blocks": [
+        {
+          "id": "438711",
+          "layerId": "95",
+          "propertyName": "pathData",
+          "startTime": 0,
+          "endTime": 900,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "path",
+          "fromValue": "M 20 16 L 22 16 L 22 16 L 20 16 Z",
+          "toValue": "M 20 16 L 22 16 L 22 32 L 20 32 Z"
+        },
+        {
+          "id": "450326",
+          "layerId": "241",
+          "propertyName": "pathData",
+          "startTime": 50,
+          "endTime": 1000,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "path",
+          "fromValue": "M 26 16 L 28 16 L 28 16 L 26 16 Z",
+          "toValue": "M 26 16 L 28 16 L 28 32 L 26 32 Z"
+        },
+        {
+          "id": "464874",
+          "layerId": "398",
+          "propertyName": "pathData",
+          "startTime": 0,
+          "endTime": 900,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "path",
+          "fromValue": "M 16 20 L 16 20 L 16 22 L 16 22 Z",
+          "toValue": "M 16 20 L 32 20 L 32 22 L 16 22 Z"
+        },
+        {
+          "id": "468971",
+          "layerId": "534",
+          "propertyName": "pathData",
+          "startTime": 50,
+          "endTime": 1000,
+          "interpolator": "FAST_OUT_SLOW_IN",
+          "type": "path",
+          "fromValue": "M 16 26 L 16 26 L 16 28 L 16 28 Z",
+          "toValue": "M 16 26 L 32 26 L 32 28 L 16 28 Z"
+        }
+      ]
+    }
+  }
+}

@@ -2,7 +2,9 @@
 <resources>
 
     <!-- Base Themes -->
-    <style name="Theme.iboalali.SplashScreen.Base.v23" parent="Theme.iboalali.SplashScreen.Base" />
+    <style name="Theme.iboalali.SplashScreen.Base.v23" parent="Theme.iboalali.SplashScreen.Base" >
+        <item name="postSplashScreenTheme">@style/Theme.iboalali.Base.v23</item>
+    </style>
 
     <style name="Theme.iboalali.Base.v23" parent="Theme.iboalali.Base.v21">
         <item name="android:windowLightStatusBar">true</item>
