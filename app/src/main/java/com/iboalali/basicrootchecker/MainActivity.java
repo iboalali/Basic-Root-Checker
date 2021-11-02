@@ -90,6 +90,13 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
     }
 
     private void initInstances() {
+        // Start of workaround:
+        // this is here because when the splash screen theme is being used, the status bar is not in
+        // light mode, event though reading it's value does indicate that it is set to light mode
+        boolean isNight = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_YES) == Configuration.UI_MODE_NIGHT_YES;
+        new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView()).setAppearanceLightStatusBars(!isNight);
+        // End of workaround
+
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         binding.appToolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
