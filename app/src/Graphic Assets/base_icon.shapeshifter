@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "layers": {
+    "vectorLayer": {
+      "id": "89",
+      "name": "base_icon",
+      "type": "vector",
+      "width": 48,
+      "height": 48,
+      "children": [
+        {
+          "id": "95",
+          "name": "left_part",
+          "type": "path",
+          "pathData": "M 20 16 L 22 16 L 22 32 L 20 32 Z",
+          "fillColor": "#000000"
+        },
+        {
+          "id": "241",
+          "name": "right_part",
+          "type": "path",
+          "pathData": "M 26 16 L 28 16 L 28 32 L 26 32 Z",
+          "fillColor": "#000000"
+        },
+        {
+          "id": "398",
+          "name": "top_part",
+          "type": "path",
+          "pathData": "M 16 20 L 32 20 L 32 22 L 16 22 Z",
+          "fillColor": "#000000"
+        },
+        {
+          "id": "534",
+          "name": "bottom_part",
+          "type": "path",
+          "pathData": "M 16 26 L 32 26 L 32 28 L 16 28 Z",
+          "fillColor": "#000000"
+        }
+      ]
+    },
+    "hiddenLayerIds": []
+  },
+  "timeline": {
+    "animation": {
+      "id": "2",
+      "name": "anim",
+      "duration": 1000,
+      "blocks": []
+    }
+  }
+}

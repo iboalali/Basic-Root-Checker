@@ -1,80 +1,83 @@
-<animated-vector
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt">
     <aapt:attr name="android:drawable">
         <vector
-            android:name="vector"
+            android:name="base_icon"
             android:width="24dp"
             android:height="24dp"
             android:viewportWidth="24"
             android:viewportHeight="24">
             <path
                 android:name="left_part"
-                android:pathData="M 8 4 L 10 4 L 10 20 L 8 20 Z"/>
+                android:fillColor="@color/md_purple_500"
+                android:pathData="M 8 4 L 10 4 L 10 20 L 8 20 Z" />
             <path
                 android:name="right_part"
-                android:pathData="M 14 4 L 16 4 L 16 20 L 14 20 Z"/>
+                android:fillColor="@color/md_purple_500"
+                android:pathData="M 14 4 L 16 4 L 16 20 L 14 20 Z" />
             <path
                 android:name="top_part"
-                android:pathData="M 4 8 L 20 8 L 20 10 L 4 10 Z"/>
+                android:fillColor="@color/md_purple_500"
+                android:pathData="M 4 8 L 20 8 L 20 10 L 4 10 Z" />
             <path
                 android:name="bottom_part"
-                android:pathData="M 4 14 L 20 14 L 20 16 L 4 16 Z"/>
+                android:fillColor="@color/md_purple_500"
+                android:pathData="M 4 14 L 20 14 L 20 16 L 4 16 Z" />
         </vector>
     </aapt:attr>
     <target android:name="left_part">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:duration="1500"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
                 android:propertyName="pathData"
-                android:duration="200"
                 android:valueFrom="M -2 0 L 0 0 L 0 24 L -2 24 Z"
                 android:valueTo="M 8 4 L 10 4 L 10 20 L 8 20 Z"
-                android:valueType="pathType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                android:valueType="pathType" />
         </aapt:attr>
     </target>
     <target android:name="right_part">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:duration="1500"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
                 android:propertyName="pathData"
-                android:duration="200"
                 android:valueFrom="M 24 0 L 26 0 L 26 24 L 24 24 Z"
                 android:valueTo="M 14 4 L 16 4 L 16 20 L 14 20 Z"
-                android:valueType="pathType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                android:valueType="pathType" />
         </aapt:attr>
     </target>
     <target android:name="top_part">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:duration="1500"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
                 android:propertyName="pathData"
-                android:duration="200"
                 android:valueFrom="M 0 -2 L 24 -2 L 24 0 L 0 0 Z"
                 android:valueTo="M 4 8 L 20 8 L 20 10 L 4 10 Z"
-                android:valueType="pathType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                android:valueType="pathType" />
         </aapt:attr>
     </target>
     <target android:name="bottom_part">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:duration="1500"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
                 android:propertyName="pathData"
-                android:duration="200"
                 android:valueFrom="M 0 24 L 24 24 L 24 26 L 0 26 Z"
                 android:valueTo="M 4 14 L 20 14 L 20 16 L 4 16 Z"
-                android:valueType="pathType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                android:valueType="pathType" />
         </aapt:attr>
     </target>
-    <target android:name="vector">
+    <target android:name="base_icon">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:duration="200"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
                 android:propertyName="alpha"
-                android:duration="50"
-                android:valueFrom="0"
-                android:valueTo="1"
-                android:valueType="floatType"
-                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                android:valueFrom="0.0"
+                android:valueTo="1.0"
+                android:valueType="floatType" />
         </aapt:attr>
     </target>
 </animated-vector>
