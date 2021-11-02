@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.iboalali.SplashScreen" parent="Theme.SplashScreen" >
-        <item name="windowSplashScreenBackground">@color/md_purple_50</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_anim</item>
-        <item name="windowSplashScreenAnimationDuration">200</item>
-        <item name="postSplashScreenTheme">@style/Theme.iboalali.Main</item>
-    </style>
+    <!-- Base Themes -->
+    <style name="Theme.iboalali.SplashScreen.Base.v23" parent="Theme.iboalali.SplashScreen.Base" />
 
-    <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+    <style name="Theme.iboalali.Base.v23" parent="Theme.iboalali.Base.v21">
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.iboalali.Base.Other" parent="Theme.iboalali.Main">
+    <style name="Theme.iboalali.Base.Other.v23" parent="Theme.iboalali.Base.v23">
         <item name="colorSurface">@color/md_purple_200</item>
         <item name="android:textColorLink">@color/md_purple_900</item>
     </style>
 
-    <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other" />
+    <!-- App Themes -->
+    <style name="Theme.iboalali.SplashScreen" parent="Theme.iboalali.SplashScreen.Base.v23" />
+
+    <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base.v23" />
+
+    <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other.v23" />
 
 </resources>

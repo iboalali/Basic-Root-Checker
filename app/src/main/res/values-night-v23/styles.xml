@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.iboalali.SplashScreen" parent="Theme.SplashScreen" >
+    <!-- Base Themes -->
+    <style name="Theme.iboalali.SplashScreen.Base.v23.Night" parent="Theme.iboalali.SplashScreen.Base.v23">
         <item name="windowSplashScreenBackground">?attr/colorSurface</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_anim</item>
-        <item name="windowSplashScreenAnimationDuration">200</item>
-        <item name="postSplashScreenTheme">@style/Theme.iboalali.Main</item>
     </style>
 
-    <style name="Theme.iboalali.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+    <style name="Theme.iboalali.Base.v23.Night" parent="Theme.iboalali.Base.v23">
         <item name="android:windowLightStatusBar">false</item>
         <item name="colorAccent">@color/md_purple_not_so_dark</item>
         <item name="colorOnSurface">@color/md_purple_200</item>
         <item name="colorOnPrimarySurface">@color/md_purple_not_so_dark</item>
     </style>
 
-    <style name="Theme.iboalali.Base.Other" parent="Theme.iboalali.Base">
+    <style name="Theme.iboalali.Base.Other.v23.Night" parent="Theme.iboalali.Base.v23.Night">
         <item name="colorSurface">@color/md_purple_dark</item>
         <item name="android:textColorLink">@color/md_purple_200</item>
     </style>
 
-    <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base" />
+    <!-- App Themes -->
+    <style name="Theme.iboalali.SplashScreen" parent="Theme.iboalali.SplashScreen.Base.v23.Night" />
 
-    <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other" />
+    <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base.v23.Night" />
+
+    <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other.v23.Night" />
+
 </resources>

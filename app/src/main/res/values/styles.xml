@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- Base Themes -->
     <style name="Theme.iboalali.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -17,10 +18,12 @@
         <item name="android:textColorLink">@color/md_purple_900</item>
     </style>
 
+    <!-- App Themes -->
     <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base" />
 
     <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other" />
 
+    <!-- Shape Overlays -->
     <style name="ShapeAppearanceOverlay.iboalali.Rectangle.Rounded" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
