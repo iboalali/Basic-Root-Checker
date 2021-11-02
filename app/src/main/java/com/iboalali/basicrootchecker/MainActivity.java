@@ -1,5 +1,8 @@
 package com.iboalali.basicrootchecker;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -58,62 +61,35 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
                     }
 
                     Log.d("SplashScreen", String.format("exitTimeDelay is %s ", exitTimeDelay));
-                    AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);
-                    alphaAnimation.setDuration(200);
-                    alphaAnimation.setStartOffset(exitTimeDelay);
-                    alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    //ValueAnimator valueAnimator = ValueAnimator.ofFloat(splashScreenProvider.getView(), View.ALPHA, 1f, 0f);
+                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(1f, 0f);
+                    valueAnimator.addListener(new AnimatorListenerAdapter() {
                         @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            Log.d("SplashScreen", "animation ended");
+                        public void onAnimationCancel(Animator animation) {
+                            Log.d("SplashScreen", "animation canceled");
                             splashScreenProvider.remove();
                         }
 
                         @Override
-                        public void onAnimationRepeat(Animation animation) {
-
+                        public void onAnimationEnd(Animator animation) {
+                            Log.d("SplashScreen", "animation ended");
+                            splashScreenProvider.remove();
                         }
                     });
-
-                    Log.d("SplashScreen", "start hiding splash screen animation");
-                    splashScreenProvider.getView().startAnimation(alphaAnimation);
+                    valueAnimator.setStartDelay(exitTimeDelay);
+                    valueAnimator.addUpdateListener(animation -> {
+                        float animatedValue = (float) animation.getAnimatedValue();
+                        splashScreenProvider.getView().setAlpha(animatedValue);
+                        splashScreenProvider.getIconView().setAlpha(animatedValue);
+                    });
+                    valueAnimator.start();
                 });
-
-        try {
-            // for debugging purposes
-            //
-            //noinspection ConstantConditions
-            Field themeIdField = getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredField("mThemeResource");
-            themeIdField.setAccessible(true);
-            //noinspection ConstantConditions
-            int themeId = (int) themeIdField.get(this);
-            Log.d("SplashScreen", "onCreate: theme id = " + themeId);
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                boolean lightStatusBar = (this.getWindow().getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                Log.d("SplashScreen", "onCreate: lightStatusBar = " + lightStatusBar);
-            }
-        } catch (Exception e) {
-            Log.d("SplashScreen", "couldn't read the theme id");
-            e.printStackTrace();
-        }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initInstances();
     }
 
     private void initInstances() {
-        // Start of workaround:
-        // this is here because when the splash screen theme is being used, the status bar is not in
-        // light mode, event though reading it's value does indicate that it is set to light mode
-        boolean isNight = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_YES) == Configuration.UI_MODE_NIGHT_YES;
-        new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView()).setAppearanceLightStatusBars(!isNight);
-        // End of workaround
-
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         binding.appToolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
