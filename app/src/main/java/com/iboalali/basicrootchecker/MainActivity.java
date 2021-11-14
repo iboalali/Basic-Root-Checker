@@ -3,11 +3,16 @@ package com.iboalali.basicrootchecker;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -110,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainRootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            binding.mainRootLayout.setPadding(insets.left, 0, insets.right, insets.bottom);
+            binding.mainRootLayout.setPadding(insets.left, 0, insets.right, 0);
+            binding.scrollContainer.setPadding(0, 0, 0, insets.bottom);
             binding.appBar.setPadding(0, insets.top, 0, 0);
             return WindowInsetsCompat.CONSUMED;
         });
@@ -119,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
 
         binding.fabVerifyRoot.setOnClickListener(view -> {
             new RootChecker(MainActivity.this).execute();
-            Snackbar.make(binding.rootLayout, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.mainRootLayout, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT).show();
         });
 
         DeviceName.with(this).request((info, error) -> {
@@ -137,6 +143,10 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
                 getResources().getString(R.string.textViewAndroidVersion),
                 Utils.getAndroidName(this.getResources())
         ));
+
+        binding.textViewAndroidVersion.setOnLongClickListener(copyContentLongClickListener);
+        binding.textViewDeviceModelName.setOnLongClickListener(copyContentLongClickListener);
+        binding.textViewDeviceMarketingName.setOnLongClickListener(copyContentLongClickListener);
     }
 
     @Override
@@ -158,4 +168,28 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
             binding.imageViewStatus.setImageResource(R.drawable.ic_fail_c);
         }
     }
+
+    private final View.OnLongClickListener copyContentLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            if (v instanceof TextView) {
+                CharSequence text = ((TextView) v).getText();
+                if (text != null) {
+                    String string = text.toString();
+                    String label = "Text";
+                    CharSequence contentDescription = v.getContentDescription();
+                    if (contentDescription != null) {
+                        label = contentDescription.toString();
+                    }
+                    ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    clipboardManager.setPrimaryClip(ClipData.newPlainText(label, string));
+                    Snackbar.make(binding.mainRootLayout, R.string.toast_content_copied, Snackbar.LENGTH_SHORT).show();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+    };
 }

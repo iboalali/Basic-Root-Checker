@@ -22,6 +22,10 @@
     <string name="string_your_device">جهازك</string>
     <string name="string_checking_for_root">تحقق من خاصية الـ Root</string>
     <string name="content_description_check_for_root">تحقق من خاصية الـ Root</string>
+    <string name="content_description_marketing_name">Marketing Name</string>
+    <string name="content_description_model_name">Model Name</string>
+    <string name="content_description_android_version">Android Version</string>
+    <string name="toast_content_copied">Content Copied</string>
 
 
 </resources>
