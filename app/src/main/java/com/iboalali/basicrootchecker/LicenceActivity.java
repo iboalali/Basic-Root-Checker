@@ -22,6 +22,8 @@ public class LicenceActivity extends AppCompatActivity {
         ActivityLicenceBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_licence);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         binding.collapsingToolbarLayout.setTitle(getResources().getString(R.string.action_licence));
+        binding.collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_iboalali_Title_Collapsed_Noto);
+        binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TextAppearance_iboalali_Title_Expanded_Noto);
         binding.toolbar.setNavigationOnClickListener(v -> finish());
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.rootLayout, (v, windowInsets) -> {

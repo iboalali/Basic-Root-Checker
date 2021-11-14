@@ -6,7 +6,7 @@
     <string name="textView_checkForRoot">Touch the \"#\" button on the bottom right to verify Root status</string>
     <string name="rootAvailable">Your Device has Root access</string>
     <string name="rootNotAvailable">Your Device doesn\'t have Root access</string>
-    <string name="action_licence">Licences</string>
+    <string name="action_licence">Licenses</string>
     <string name="action_about">About</string>
     <string name="textViewDevice">Device Name:</string>
     <string name="textViewAndroidVersion">Android</string>
@@ -168,9 +168,6 @@
         =============================</string>
 
     <!-- Style Strings -->
-    <string name="font_family_body_1_material" translatable="false">sans-serif</string>
-    <string name="font_family_title_material" translatable="false">sans-serif-medium</string>
-    <string name="font_family_subhead_material" translatable="false">sans-serif</string>
     <string name="contentDescription_appIcon" translatable="false">App Icon</string>
     <string name="string_root_status_description" translatable="false">Root Status</string>
     <string name="content_description_check_for_root">Check for Root</string>

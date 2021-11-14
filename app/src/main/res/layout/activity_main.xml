@@ -27,6 +27,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="noScroll"
                 app:menu="@menu/menu_main"
+                app:titleTextAppearance="@style/TextAppearance.iboalali.Title.Collapsed.Noto"
                 app:title="@string/app_name"
                 app:titleCentered="true" />
 
