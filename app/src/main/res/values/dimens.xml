@@ -26,5 +26,6 @@
     <dimen name="elevation_none">0dp</dimen>
     <dimen name="elevation_minimum">1dp</dimen>
     <dimen name="max_width">600dp</dimen>
+    <dimen name="collapsing_toolbar_expanded_height">250dp</dimen>
 
 </resources>

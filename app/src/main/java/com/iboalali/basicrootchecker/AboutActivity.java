@@ -21,12 +21,17 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        binding.appToolbar.setNavigationOnClickListener(v -> finish());
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
         binding.aboutAppVersion.setText(Utils.getAppVersionNumber(this));
+
+        binding.collapsingToolbarLayout.setTitle(getResources().getString(R.string.action_about));
+        binding.collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_iboalali_Title_Collapsed_Noto);
+        binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TextAppearance_iboalali_Title_Expanded_Noto);
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.rootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            binding.rootLayout.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            binding.rootLayout.setPadding(insets.left, insets.top, insets.right, 0);
+            binding.scrollContainer.setPadding(0, 0, 0, insets.bottom);
             return WindowInsetsCompat.CONSUMED;
         });
     }
