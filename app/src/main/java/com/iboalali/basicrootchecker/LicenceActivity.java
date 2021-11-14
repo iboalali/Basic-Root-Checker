@@ -28,7 +28,8 @@ public class LicenceActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.rootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            binding.rootLayout.setPadding(insets.left, 0, insets.right, insets.bottom);
+            binding.rootLayout.setPadding(insets.left, 0, insets.right, 0);
+            binding.scrollContainer.setPadding(0, 0, 0, insets.bottom);
             binding.appBarLicence.setPadding(0, insets.top, 0, 0);
             return WindowInsetsCompat.CONSUMED;
         });
