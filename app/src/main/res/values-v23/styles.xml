@@ -11,8 +11,6 @@
     </style>
 
     <style name="Theme.iboalali.Base.Other.v23" parent="Theme.iboalali.Base.v23">
-        <item name="colorSurface">@color/md_purple_200</item>
-        <item name="android:textColorLink">@color/md_purple_900</item>
     </style>
 
     <!-- App Themes -->

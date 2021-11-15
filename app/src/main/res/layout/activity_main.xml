@@ -7,13 +7,14 @@
         android:id="@+id/mainRootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurfaceVariant">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/colorSurfaceVariant"
             app:elevation="@dimen/elevation_none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,9 +28,9 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="noScroll"
                 app:menu="@menu/menu_main"
-                app:titleTextAppearance="@style/TextAppearance.iboalali.Title.Collapsed.Noto"
                 app:title="@string/app_name"
-                app:titleCentered="true" />
+                app:titleCentered="true"
+                app:titleTextAppearance="@style/TextAppearance.iboalali.Title.Collapsed.Noto" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -50,7 +51,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    app:cardBackgroundColor="?attr/colorPrimarySurface"
+                    app:cardBackgroundColor="?attr/colorPrimaryContainer"
                     app:cardCornerRadius="@dimen/default_corner_radius"
                     app:cardElevation="@dimen/elevation_minimum"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +110,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    app:cardBackgroundColor="?attr/colorPrimarySurface"
+                    app:cardBackgroundColor="?attr/colorPrimaryContainer"
                     app:cardCornerRadius="@dimen/default_corner_radius"
                     app:cardElevation="@dimen/elevation_minimum"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -181,7 +182,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    app:cardBackgroundColor="?attr/colorPrimarySurface"
+                    app:cardBackgroundColor="?attr/colorPrimaryContainer"
                     app:cardCornerRadius="@dimen/default_corner_radius"
                     app:cardElevation="@dimen/elevation_minimum"
                     app:contentPaddingBottom="@dimen/default_padding_double"
@@ -218,12 +219,10 @@
             android:layout_marginRight="@dimen/default_margin_one_and_half"
             android:layout_marginBottom="@dimen/default_margin_one_and_half"
             android:contentDescription="@string/content_description_check_for_root"
-            app:backgroundTint="?attr/colorAccent"
             app:fabSize="normal"
             app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.iboalali.Rectangle.Rounded"
-            app:srcCompat="@drawable/ic_baseline_tag_24"
-            app:tint="?attr/colorOnSurface" />
+            app:srcCompat="@drawable/ic_baseline_tag_24" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
