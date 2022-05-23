@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.DisplayCutoutCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -117,15 +118,45 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainRootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            binding.mainRootLayout.setPadding(insets.left, 0, insets.right, 0);
-            binding.scrollContainer.setPadding(0, 0, 0, insets.bottom);
-            binding.appBar.setPadding(0, insets.top, 0, 0);
+
+            int insetsLeft = insets.left;
+            int insetsTop = insets.top;
+            int insetsRight = insets.right;
+            int insetsBottom = insets.bottom;
+
+            DisplayCutoutCompat displayCutout = windowInsets.getDisplayCutout();
+            if (displayCutout != null) {
+                int cutoutSafeInsetLeft = displayCutout.getSafeInsetLeft();
+                int cutoutSafeInsetTop = displayCutout.getSafeInsetTop();
+                int cutoutSafeInsetRight = displayCutout.getSafeInsetRight();
+                int cutoutSafeInsetBottom = displayCutout.getSafeInsetBottom();
+
+                if (cutoutSafeInsetLeft > insetsLeft) {
+                    insetsLeft = cutoutSafeInsetLeft;
+                }
+
+                if (cutoutSafeInsetTop > insetsTop) {
+                    insetsTop = cutoutSafeInsetTop;
+                }
+
+                if (cutoutSafeInsetRight > insetsRight) {
+                    insetsRight = cutoutSafeInsetRight;
+                }
+
+                if (cutoutSafeInsetBottom > insetsBottom) {
+                    insetsBottom = cutoutSafeInsetBottom;
+                }
+            }
+
+            binding.mainRootLayout.setPadding(insetsLeft, 0, insetsRight, 0);
+            binding.scrollContainer.setPadding(0, 0, 0, insetsBottom);
+            binding.appBar.setPadding(0, insetsTop, 0, 0);
             ViewGroup.LayoutParams layoutParams = binding.fabVerifyRoot.getLayoutParams();
             if (layoutParams instanceof ViewGroup.MarginLayoutParams) {
                 if (fabBottomMargin == 0) {
                     fabBottomMargin = ((ViewGroup.MarginLayoutParams) layoutParams).bottomMargin;
                 }
-                ((ViewGroup.MarginLayoutParams) layoutParams).bottomMargin = fabBottomMargin + insets.bottom;
+                ((ViewGroup.MarginLayoutParams) layoutParams).bottomMargin = fabBottomMargin + insetsBottom;
             }
             binding.fabVerifyRoot.setLayoutParams(layoutParams);
             return WindowInsetsCompat.CONSUMED;
