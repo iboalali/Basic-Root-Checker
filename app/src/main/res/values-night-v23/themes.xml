@@ -4,7 +4,7 @@
     <!-- Base Themes -->
     <style name="Theme.iboalali.SplashScreen.Base.v23.Night" parent="Theme.iboalali.SplashScreen.Base.v23">
         <item name="windowSplashScreenBackground">?attr/colorSurface</item>
-        <item name="postSplashScreenTheme">@style/Theme.iboalali.Base.v23.Night</item>
+        <item name="postSplashScreenTheme">@style/Theme.iboalali.Main</item>
     </style>
 
     <style name="Theme.iboalali.Base.v23.Night" parent="Theme.iboalali.Base.v23">

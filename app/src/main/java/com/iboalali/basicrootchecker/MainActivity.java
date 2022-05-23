@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,8 @@ import com.jaredrummler.android.device.DeviceName;
 public class MainActivity extends AppCompatActivity implements RootCheckerContract {
 
     private ActivityMainBinding binding;
+
+    private int fabBottomMargin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +120,14 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
             binding.mainRootLayout.setPadding(insets.left, 0, insets.right, 0);
             binding.scrollContainer.setPadding(0, 0, 0, insets.bottom);
             binding.appBar.setPadding(0, insets.top, 0, 0);
+            ViewGroup.LayoutParams layoutParams = binding.fabVerifyRoot.getLayoutParams();
+            if (layoutParams instanceof ViewGroup.MarginLayoutParams) {
+                if (fabBottomMargin == 0) {
+                    fabBottomMargin = ((ViewGroup.MarginLayoutParams) layoutParams).bottomMargin;
+                }
+                ((ViewGroup.MarginLayoutParams) layoutParams).bottomMargin = fabBottomMargin + insets.bottom;
+            }
+            binding.fabVerifyRoot.setLayoutParams(layoutParams);
             return WindowInsetsCompat.CONSUMED;
         });
 
