@@ -117,35 +117,28 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainRootLayout, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets displayCutoutsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
 
-            int insetsLeft = insets.left;
-            int insetsTop = insets.top;
-            int insetsRight = insets.right;
-            int insetsBottom = insets.bottom;
+            int insetsLeft = systemBarsInsets.left;
+            int insetsTop = systemBarsInsets.top;
+            int insetsRight = systemBarsInsets.right;
+            int insetsBottom = systemBarsInsets.bottom;
 
-            DisplayCutoutCompat displayCutout = windowInsets.getDisplayCutout();
-            if (displayCutout != null) {
-                int cutoutSafeInsetLeft = displayCutout.getSafeInsetLeft();
-                int cutoutSafeInsetTop = displayCutout.getSafeInsetTop();
-                int cutoutSafeInsetRight = displayCutout.getSafeInsetRight();
-                int cutoutSafeInsetBottom = displayCutout.getSafeInsetBottom();
+            if (displayCutoutsInsets.left > insetsLeft) {
+                insetsLeft = displayCutoutsInsets.left;
+            }
 
-                if (cutoutSafeInsetLeft > insetsLeft) {
-                    insetsLeft = cutoutSafeInsetLeft;
-                }
+            if (displayCutoutsInsets.top > insetsTop) {
+                insetsTop = displayCutoutsInsets.top;
+            }
 
-                if (cutoutSafeInsetTop > insetsTop) {
-                    insetsTop = cutoutSafeInsetTop;
-                }
+            if (displayCutoutsInsets.right > insetsRight) {
+                insetsRight = displayCutoutsInsets.right;
+            }
 
-                if (cutoutSafeInsetRight > insetsRight) {
-                    insetsRight = cutoutSafeInsetRight;
-                }
-
-                if (cutoutSafeInsetBottom > insetsBottom) {
-                    insetsBottom = cutoutSafeInsetBottom;
-                }
+            if (displayCutoutsInsets.bottom > insetsBottom) {
+                insetsBottom = displayCutoutsInsets.bottom;
             }
 
             binding.mainRootLayout.setPadding(insetsLeft, 0, insetsRight, 0);
