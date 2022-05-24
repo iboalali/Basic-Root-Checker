@@ -5,9 +5,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/colorSurface"
-        android:theme="@style/Theme.iboalali.Other">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
@@ -48,7 +46,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_padding_double"
-                    app:cardBackgroundColor="?attr/colorOnPrimarySurface"
                     app:cardCornerRadius="@dimen/default_corner_radius"
                     app:cardElevation="@dimen/elevation_minimum"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -119,6 +116,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="32dp"
                             android:layout_marginLeft="32dp"
+                            android:padding="24dp"
                             android:autoLink="all"
                             android:text="@string/about_email_twitter"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"

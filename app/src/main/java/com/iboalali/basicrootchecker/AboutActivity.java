@@ -30,7 +30,8 @@ public class AboutActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.rootLayout, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            binding.rootLayout.setPadding(insets.left, insets.top, insets.right, 0);
+            binding.appBar.setPadding(0, insets.top, 0, 0);
+            binding.rootLayout.setPadding(insets.left, 0, insets.right, 0);
             binding.scrollContainer.setPadding(0, 0, 0, insets.bottom);
             return WindowInsetsCompat.CONSUMED;
         });
