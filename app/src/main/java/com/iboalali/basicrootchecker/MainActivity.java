@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         SplashScreen.installSplashScreen(this)
                 .setOnExitAnimationListener(splashScreenProvider -> {
                     Log.d("SplashScreen", String.format("currentTime is %s ", System.currentTimeMillis()));
@@ -86,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
                     });
                     valueAnimator.start();
                 });
+        super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initInstances();

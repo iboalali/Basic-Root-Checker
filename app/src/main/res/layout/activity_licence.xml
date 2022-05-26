@@ -6,9 +6,7 @@
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorSurface"
         android:clipToPadding="false"
-        android:theme="@style/Theme.iboalali.Other"
         tools:context=".LicenceActivity">
 
         <com.google.android.material.appbar.AppBarLayout
