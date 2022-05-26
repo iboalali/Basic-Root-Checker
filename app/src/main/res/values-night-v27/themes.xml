@@ -10,13 +10,9 @@
         <item name="android:windowLightNavigationBar">false</item>
     </style>
 
-    <style name="Theme.iboalali.Base.Other.v27.Night" parent="Theme.iboalali.Base.v27.Night" />
-
     <!-- App Themes -->
     <style name="Theme.iboalali.SplashScreen" parent="Theme.iboalali.SplashScreen.Base.v27.Night" />
 
     <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base.v27.Night" />
-
-    <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other.v27.Night" />
 
 </resources>

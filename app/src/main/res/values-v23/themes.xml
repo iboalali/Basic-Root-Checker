@@ -10,13 +10,9 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.iboalali.Base.Other.v23" parent="Theme.iboalali.Base.v23" />
-
     <!-- App Themes -->
     <style name="Theme.iboalali.SplashScreen" parent="Theme.iboalali.SplashScreen.Base.v23" />
 
     <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base.v23" />
-
-    <style name="Theme.iboalali.Other" parent="Theme.iboalali.Base.Other.v23" />
 
 </resources>
