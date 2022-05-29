@@ -44,4 +44,4 @@ captures/
 .externalNativeBuild
 app/release/output.json
 app/src/main/res/values/publickey.xml
-.idea/deploymentTargetDropDown.xml
+.idea/
