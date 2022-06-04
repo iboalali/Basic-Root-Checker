@@ -45,3 +45,4 @@ captures/
 app/release/output.json
 app/src/main/res/values/publickey.xml
 .idea/
+app/release/app-release.aab
