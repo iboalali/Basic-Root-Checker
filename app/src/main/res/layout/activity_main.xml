@@ -10,7 +10,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
-            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+            style="@style/Widget.Material3.AppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:elevation="@dimen/elevation_none"

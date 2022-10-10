@@ -8,6 +8,7 @@
     <uses-sdk tools:overrideLibrary="androidx.core.splashscreen" />
 
     <application
+        android:name=".app.BasicRootApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher_v2"
         android:label="@string/app_name"
@@ -16,8 +17,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.iboalali.SplashScreen"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.iboalali.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
