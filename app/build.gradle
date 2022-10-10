@@ -39,17 +39,17 @@ repositories {
 
 dependencies {
     def libsuVersion = '3.1.2'
-    def core_version = "1.7.0"
+    def core_version = "1.9.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "androidx.core:core:${core_version}"
-    implementation "androidx.core:core-splashscreen:1.0.0-rc01"
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.6.0'
+    implementation "androidx.core:core-splashscreen:1.0.0"
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'com.jaredrummler:android-device-names:2.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.annotation:annotation:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.annotation:annotation:1.5.0'
 
     // The core module is used by all other components
     implementation "com.github.topjohnwu.libsu:core:${libsuVersion}"
