@@ -3,7 +3,7 @@
 
     <!-- Base Themes -->
     <style name="Theme.iboalali.SplashScreen.Base.v27" parent="Theme.iboalali.SplashScreen.Base.v23">
-        <item name="postSplashScreenTheme">@style/Theme.iboalali.Base.v27</item>
+        <item name="postSplashScreenTheme">@style/Theme.iboalali.Main</item>
     </style>
 
     <style name="Theme.iboalali.Base.v27" parent="Theme.iboalali.Base.v23">

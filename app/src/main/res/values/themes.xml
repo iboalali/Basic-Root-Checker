@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base Themes -->
-    <style name="Theme.iboalali.Base" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.iboalali.Base" parent="Theme.Material3.DynamicColors.DayNight">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
