@@ -8,8 +8,8 @@ android {
         applicationId "com.iboalali.basicrootchecker"
         minSdkVersion 16
         targetSdkVersion 33
-        versionCode 23
-        versionName "v1.7vc" + getVersionCode()
+        versionCode 24
+        versionName "v1.8vc" + getVersionCode()
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
