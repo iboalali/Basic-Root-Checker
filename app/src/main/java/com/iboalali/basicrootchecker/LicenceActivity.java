@@ -9,6 +9,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.material.color.DynamicColors;
 import com.iboalali.basicrootchecker.databinding.ActivityLicenceBinding;
 
 /**
@@ -18,6 +19,7 @@ public class LicenceActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DynamicColors.applyToActivityIfAvailable(this);
         super.onCreate(savedInstanceState);
         ActivityLicenceBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_licence);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);

@@ -9,6 +9,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.material.color.DynamicColors;
 import com.iboalali.basicrootchecker.databinding.ActivityAboutBinding;
 
 /**
@@ -18,6 +19,7 @@ public class AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DynamicColors.applyToActivityIfAvailable(this);
         super.onCreate(savedInstanceState);
         ActivityAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);

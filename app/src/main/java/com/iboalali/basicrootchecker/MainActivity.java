@@ -23,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.iboalali.basicrootchecker.components.RootChecker;
 import com.iboalali.basicrootchecker.components.RootCheckerContract;
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
                     });
                     valueAnimator.start();
                 });
+        DynamicColors.applyToActivityIfAvailable(this);
+
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);

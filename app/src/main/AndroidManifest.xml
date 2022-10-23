@@ -8,7 +8,6 @@
     <uses-sdk tools:overrideLibrary="androidx.core.splashscreen" />
 
     <application
-        android:name=".app.BasicRootApp"
         android:allowBackup="false"
         android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher_v2"
