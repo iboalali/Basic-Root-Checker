@@ -182,6 +182,10 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
         binding.textViewAndroidVersion.setOnLongClickListener(copyContentLongClickListener);
         binding.textViewDeviceModelName.setOnLongClickListener(copyContentLongClickListener);
         binding.textViewDeviceMarketingName.setOnLongClickListener(copyContentLongClickListener);
+
+        binding.buttonLanguage.setOnClickListener(view -> {
+
+        });
     }
 
     @Override
