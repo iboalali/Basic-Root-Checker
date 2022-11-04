@@ -48,9 +48,9 @@ dependencies {
     implementation "androidx.core:core:${core_version}"
     implementation "androidx.core:core-splashscreen:1.0.0"
     implementation "androidx.activity:activity:$activity_version"
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
     implementation 'com.google.android.material:material:1.7.0'
-    implementation 'com.jaredrummler:android-device-names:2.0.0'
+    implementation 'com.jaredrummler:android-device-names:2.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.annotation:annotation:1.5.0'
 
