@@ -11,7 +11,7 @@ android {
         versionCode 24
         versionName "v1.8vc" + getVersionCode()
         vectorDrawables.useSupportLibrary = true
-        resConfigs "en", "ar", "de"
+        resConfigs 'en', 'ar', 'de'
     }
     buildTypes {
         release {
