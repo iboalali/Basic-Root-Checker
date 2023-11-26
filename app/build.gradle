@@ -4,9 +4,9 @@ android {
     defaultConfig {
         applicationId "com.iboalali.basicrootchecker"
         minSdkVersion 16
-        targetSdkVersion 33
-        compileSdk 33
-        setBuildToolsVersion "33.0.0"
+        targetSdkVersion 34
+        compileSdk 34
+        setBuildToolsVersion "34.0.0"
         versionCode 24
         versionName "v1.8vc" + getVersionCode()
         vectorDrawables.useSupportLibrary = true
@@ -39,19 +39,17 @@ repositories {
 
 dependencies {
     def libsuVersion = '3.1.2'
-    def core_version = "1.9.0"
-    def activity_version = "1.6.1"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "androidx.core:core:${core_version}"
-    implementation "androidx.core:core-splashscreen:1.0.0"
-    implementation "androidx.activity:activity:$activity_version"
-    implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation "androidx.core:core:1.12.0"
+    implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation "androidx.activity:activity:1.7.2"
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha03'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.jaredrummler:android-device-names:2.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.annotation:annotation:1.5.0'
+    implementation 'androidx.annotation:annotation:1.7.0'
 
     // The core module is used by all other components
     implementation "com.github.topjohnwu.libsu:core:${libsuVersion}"
