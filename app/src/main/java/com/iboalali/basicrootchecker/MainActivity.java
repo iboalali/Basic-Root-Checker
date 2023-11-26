@@ -196,7 +196,10 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
             binding.progressbarLoading.setVisibility(View.INVISIBLE);
 
             binding.imageViewStatus.setVisibility(View.VISIBLE);
-            if (result != null && result) {
+            if (result == null) {
+                binding.textViewRootStatus.setText(R.string.rootUnknown);
+                binding.imageViewStatus.setImageResource(R.drawable.ic_fail_c);
+            } else if (result) {
                 binding.textViewRootStatus.setText(R.string.rootAvailable);
                 binding.imageViewStatus.setImageResource(R.drawable.ic_success_c);
             } else {

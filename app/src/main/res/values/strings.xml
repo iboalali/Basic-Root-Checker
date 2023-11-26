@@ -5,6 +5,7 @@
     <string name="textView_Disclaimer">This app will <b>NOT</b> root your device.\nThis app only shows you if your device has root access.</string>
     <string name="textView_checkForRoot">Touch the \"#\" button on the bottom right to verify Root status</string>
     <string name="rootAvailable">Your Device has Root access</string>
+    <string name="rootUnknown">Couldn\'t get Root status of your device</string>
     <string name="rootNotAvailable">Your Device doesn\'t have Root access</string>
     <string name="action_licence">Licenses</string>
     <string name="action_about">About</string>

@@ -4,6 +4,7 @@
 
     <string name="textView_Disclaimer">هذا التطبيق بظهر لك إذا كان جهازك يحتوي على خاصية الـ Root.\n هذا التطبيق لا يعطيك خاصية الـ Root على جهازك.</string>
     <string name="rootAvailable">يوجد خاصية الـ Root</string>
+    <string name="rootUnknown">تعذر الحصول على وجود Root لجهازك</string>
     <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
     <string name="action_licence">حقوق</string>
     <string name="action_about">عنا</string>
