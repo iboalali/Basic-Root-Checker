@@ -7,5 +7,5 @@ public interface RootCheckerContract {
 
     void onPreExecute();
 
-    void onPostExecute(Boolean result);
+    void onResult(Boolean result);
 }

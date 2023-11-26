@@ -33,7 +33,6 @@ import com.jaredrummler.android.device.DeviceName;
 public class MainActivity extends AppCompatActivity implements RootCheckerContract {
 
     private ActivityMainBinding binding;
-
     private int fabBottomMargin = 0;
 
     @Override
@@ -158,8 +157,9 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
 
         binding.imageViewStatus.setImageResource(R.drawable.ic_unknown_c);
 
+        RootChecker rootChecker = RootChecker.create(this);
         binding.fabVerifyRoot.setOnClickListener(view -> {
-            new RootChecker(MainActivity.this).execute();
+            rootChecker.run();
             Snackbar.make(binding.mainRootLayout, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT).show();
         });
 
@@ -195,17 +195,19 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
     }
 
     @Override
-    public void onPostExecute(Boolean result) {
-        binding.progressbarLoading.setVisibility(View.INVISIBLE);
+    public void onResult(Boolean result) {
+        runOnUiThread(() -> {
+            binding.progressbarLoading.setVisibility(View.INVISIBLE);
 
-        binding.imageViewStatus.setVisibility(View.VISIBLE);
-        if (result != null && result) {
-            binding.textViewRootStatus.setText(R.string.rootAvailable);
-            binding.imageViewStatus.setImageResource(R.drawable.ic_success_c);
-        } else {
-            binding.textViewRootStatus.setText(R.string.rootNotAvailable);
-            binding.imageViewStatus.setImageResource(R.drawable.ic_fail_c);
-        }
+            binding.imageViewStatus.setVisibility(View.VISIBLE);
+            if (result != null && result) {
+                binding.textViewRootStatus.setText(R.string.rootAvailable);
+                binding.imageViewStatus.setImageResource(R.drawable.ic_success_c);
+            } else {
+                binding.textViewRootStatus.setText(R.string.rootNotAvailable);
+                binding.imageViewStatus.setImageResource(R.drawable.ic_fail_c);
+            }
+        });
     }
 
     private final View.OnLongClickListener copyContentLongClickListener = new View.OnLongClickListener() {
