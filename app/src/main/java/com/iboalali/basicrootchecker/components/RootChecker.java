@@ -29,7 +29,7 @@ public class RootChecker {
 
         executor.execute(() -> {
             Log.d("RootChecker", "Checking for root");
-            Boolean result = Shell.rootAccess();
+            Boolean result = Shell.isAppGrantedRoot();
 
             try {
                 Thread.sleep(1000);
