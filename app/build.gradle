@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     defaultConfig {
         applicationId "com.iboalali.basicrootchecker"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 34
         compileSdk 34
         setBuildToolsVersion "34.0.0"
