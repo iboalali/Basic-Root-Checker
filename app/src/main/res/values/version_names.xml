@@ -35,6 +35,9 @@
         <item>12L</item> // 32
         <item>13</item> // 33
         <item>14</item> // 34
+        <item>15</item> // 35
+        <item>16</item> // 36
+        <item>17</item> // 37
 
     </string-array>
 </resources>

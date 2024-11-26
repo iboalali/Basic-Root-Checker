@@ -118,7 +118,7 @@
                             android:layout_marginLeft="32dp"
                             android:padding="24dp"
                             android:autoLink="all"
-                            android:text="@string/about_email_twitter"
+                            android:text="@string/about_email_socials"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/about_copyright" />
