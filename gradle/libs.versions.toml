@@ -1,5 +1,6 @@
 [versions]
 activityVersion = "1.9.3"
+androidGradlePlugin = "8.7.2"
 androidDeviceNamesVersion = "2.1.1"
 annotationVersion = "1.9.1"
 appcompatVersion = "1.7.0"
@@ -21,4 +22,5 @@ libsu-core = { module = "com.github.topjohnwu.libsu:core", version.ref = "core" 
 material = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 
 [plugins]
+androidApplication = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 
