@@ -14,6 +14,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         resourceConfigurations += ['en', 'ar', 'de']
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -30,7 +31,7 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    lintOptions {
+    lint {
         disable 'MissingTranslation'
     }
 
