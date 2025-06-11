@@ -3,6 +3,7 @@
 
     <!-- Icon color -->
     <color name="ic_launcher_v2_background">#673AB7</color>
+    <color name="ic_launcher_v2_debug_background">#2196F3</color>
 
     <!-- Main Activity Theme -->
     <color name="textLinkMain">#ffc6b0ff</color>
