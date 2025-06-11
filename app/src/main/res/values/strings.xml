@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Basic Root Checker</string>
+    <string name="app_name" translatable="false">Basic Root Checker</string>
+    <string name="base_app_name" translatable="false">Basic Root Checker</string>
 
     <!-- Main Strings-->
     <string name="textView_Disclaimer">This app will <b>NOT</b> root your device.\nThis app only shows you if your device has root access.</string>
@@ -21,7 +22,7 @@
         This app requires ROOT, use it at your own risk.\n
         This app does NOT collect any data or personal information.\n\n\n
         Contact me at:</string>
-    <string name="about_email_socials" translatable="false">contact@iboalali.com\nhttps://mastodon.social/@iboalali\nhttps://bsky.app/profile/iboalali.bsky.social</string>
+    <string name="about_email_socials" translatable="false">contact@iboalali.com\nmastodon.social/@iboalali\nbluesky.iboalali.com</string>
     <string name="about_not_affiliated">This app is not endorsed by or affiliated with topjohnwu or libsu</string>
 
     <!-- Licence Strings -->

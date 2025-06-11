@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Basic Root Checker</string>
     <string name="about_not_affiliated">Diese app wird nichts von chainfire oder SuperSU unterstützt.</string>
     <string name="about_part1">Copyright 2024 &#169; iboalali\n\n
 Diese app wird NICHT dein Gerät rooten.\n
