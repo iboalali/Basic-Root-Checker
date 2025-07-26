@@ -28,4 +28,4 @@ google-material = { module = "com.google.android.material:material", version.ref
 topjohnwu-libsu-core = { module = "com.github.topjohnwu.libsu:core", version.ref = "topjohnwu-libsu-core" }
 
 [plugins]
-android-gradle-plugin = { id = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
