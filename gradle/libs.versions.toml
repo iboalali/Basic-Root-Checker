@@ -1,24 +1,31 @@
 [versions]
-activityVersion = "1.10.1"
-androidDeviceNamesVersion = "2.1.1"
-annotationVersion = "1.9.1"
-appcompatVersion = "1.7.1"
-constraintlayoutVersion = "2.2.1"
-core = "5.2.1"
-coreSplashscreenVersion = "1.0.1"
-coreVersion = "1.16.0"
-materialVersion = "1.12.0"
+jaredrummler-android-device-names = "2.1.1"
+
+androidx-activity = "1.10.1"
+androidx-annotation = "1.9.1"
+androidx-appcompat = "1.7.1"
+androidx-constraintlayout = "2.2.1"
+androidx-core-splashscreen = "1.0.1"
+androidx-core = "1.16.0"
+android-gradle-plugin = "8.11.1"
+
+google-material = "1.12.0"
+
+topjohnwu-libsu-core = "5.2.1"
 
 [libraries]
-android-device-names = { module = "com.jaredrummler:android-device-names", version.ref = "androidDeviceNamesVersion" }
-annotation = { module = "androidx.annotation:annotation", version.ref = "annotationVersion" }
-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
-activity = { module = "androidx.activity:activity", version.ref = "activityVersion" }
-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
-core = { module = "androidx.core:core", version.ref = "coreVersion" }
-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreenVersion" }
-libsu-core = { module = "com.github.topjohnwu.libsu:core", version.ref = "core" }
-material = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+jaredrummler-android-device-names = { module = "com.jaredrummler:android-device-names", version.ref = "jaredrummler-android-device-names" }
+
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-splashscreen" }
+
+google-material = { module = "com.google.android.material:material", version.ref = "google-material" }
+
+topjohnwu-libsu-core = { module = "com.github.topjohnwu.libsu:core", version.ref = "topjohnwu-libsu-core" }
 
 [plugins]
-
+android-gradle-plugin = { id = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }

@@ -34,15 +34,15 @@ android {
 }
 
 dependencies {
-    implementation libs.core
-    implementation libs.core.splashscreen
-    implementation libs.activity
-    implementation libs.appcompat
-    implementation libs.material
-    implementation libs.android.device.names
-    implementation libs.constraintlayout
-    implementation libs.annotation
+    implementation libs.androidx.core
+    implementation libs.androidx.core.splashscreen
+    implementation libs.androidx.activity
+    implementation libs.androidx.appcompat
+    implementation libs.google.material
+    implementation libs.jaredrummler.android.device.names
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.annotation
 
     // The core module is used by all other components
-    implementation libs.libsu.core
+    implementation libs.topjohnwu.libsu.core
 }
