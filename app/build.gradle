@@ -10,7 +10,7 @@ android {
         compileSdk 36
         setBuildToolsVersion "36.0.0"
         versionCode 28
-        versionName "v1.11vc" + getVersionCode()
+        versionName "v1.12vc" + getVersionCode()
         vectorDrawables.useSupportLibrary = true
         resourceConfigurations += ['en', 'ar', 'de']
     }
@@ -21,6 +21,10 @@ android {
             lintOptions {
                 disable 'MissingTranslation'
             }
+        }
+        debug {
+            versionNameSuffix "-debug"
+            applicationIdSuffix ".debug"
         }
     }
 
