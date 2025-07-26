@@ -1,12 +1,12 @@
 [versions]
-activityVersion = "1.9.3"
+activityVersion = "1.10.1"
 androidDeviceNamesVersion = "2.1.1"
 annotationVersion = "1.9.1"
-appcompatVersion = "1.7.0"
-constraintlayoutVersion = "2.2.0"
+appcompatVersion = "1.7.1"
+constraintlayoutVersion = "2.2.1"
 core = "5.2.1"
 coreSplashscreenVersion = "1.0.1"
-coreVersion = "1.15.0"
+coreVersion = "1.16.0"
 materialVersion = "1.12.0"
 
 [libraries]
