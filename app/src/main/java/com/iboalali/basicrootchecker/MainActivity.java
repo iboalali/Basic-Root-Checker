@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +29,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.iboalali.basicrootchecker.components.RootChecker;
 import com.iboalali.basicrootchecker.components.RootCheckerContract;
 import com.iboalali.basicrootchecker.databinding.ActivityMainBinding;
-import com.jaredrummler.android.device.DeviceName;
+
+import de.boehrsi.devicemarketingnames.DeviceMarketingNames;
 
 public class MainActivity extends AppCompatActivity implements RootCheckerContract {
 
@@ -163,17 +165,10 @@ public class MainActivity extends AppCompatActivity implements RootCheckerContra
             Snackbar.make(binding.mainRootLayout, R.string.string_checking_for_root, Snackbar.LENGTH_SHORT).show();
         });
 
-        DeviceName.with(this).request((info, error) -> {
-            if (!Utils.equals(info.marketName, info.model)) {
-                binding.textViewDeviceModelName.setVisibility(View.VISIBLE);
-                binding.textViewDeviceModelName.setText(info.model);
-            } else {
-                binding.textViewDeviceModelName.setVisibility(View.GONE);
-            }
+        DeviceMarketingNames.INSTANCE.getNames();
 
-            binding.textViewDeviceMarketingName.setText(info.marketName);
-        });
-
+        binding.textViewDeviceModelName.setText(Build.MODEL);
+        binding.textViewDeviceMarketingName.setText(DeviceMarketingNames.INSTANCE.getSingleName());
         binding.textViewAndroidVersion.setText(String.format("%s %s",
                 getResources().getString(R.string.textViewAndroidVersion),
                 Utils.getAndroidName(this.getResources())
