@@ -24,7 +24,7 @@
     <string name="about_email_socials" translatable="false">contact@iboalali.com\nhttps://mastodon.social/@iboalali\nhttps://bsky.app/profile/iboalali.bsky.social</string>
     <string name="about_not_affiliated">This app is not endorsed by or affiliated with topjohnwu or libsu</string>
 
-    <!-- Licence Strings -->
+    <!-- License Strings -->
     <string name="licence_libsu" translatable="false">This product includes software from the
         libsu Library\n\n\n
         Copyright &#169; 2021 topjohnwu, libsu Library\n\n

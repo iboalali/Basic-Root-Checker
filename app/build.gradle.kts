@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -8,11 +10,10 @@ android {
 
     defaultConfig {
         applicationId = "com.iboalali.basicrootchecker"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
-        versionCode = 30
-        versionName = "v1.14vc$versionCode"
-        vectorDrawables.useSupportLibrary = true
+        versionCode = 40
+        versionName = "v2.0vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de")
     }
@@ -29,7 +30,7 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
+        compose = true
         buildConfig = true
     }
 
@@ -42,13 +43,30 @@ android {
 dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.annotation)
 
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Lifecycle
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Navigation 3
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.core)
+
+    // Material (for DynamicColors)
     implementation(libs.google.material)
 
+    // Third-party
     implementation(libs.boehrsi.devicemarketingnames)
     implementation(libs.topjohnwu.libsu.core)
 }
