@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Icon color -->
-    <color name="ic_launcher_v2_background">#673AB7</color>
+    <color name="ic_launcher_v2_background">@color/md_purple_500</color>
 
     <!-- Main Activity Theme -->
     <color name="textLinkMain">#ffc6b0ff</color>
