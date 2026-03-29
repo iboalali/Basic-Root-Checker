@@ -2,7 +2,7 @@
     <string name="app_name">Basic Root Checker</string>
 
     <!-- Main Strings-->
-    <string name="textView_Disclaimer">This app will <b>NOT</b> root your device.\nThis app only shows you if your device has root access.</string>
+    <string name="textView_Disclaimer"><![CDATA[This app will <b>NOT</b> root your device.<br>This app only shows you if your device has root access.]]></string>
     <string name="textView_checkForRoot">Touch the \"#\" button on the bottom right to verify Root status</string>
     <string name="rootAvailable">Your Device has Root access</string>
     <string name="rootUnknown">Couldn\'t get Root status of your device</string>
@@ -16,7 +16,7 @@
     <string name="string_checking_for_root">Checking for Root…</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2024 &#169; iboalali\n\n
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
         This app does NOT root your phone.\n
         This app requires ROOT, use it at your own risk.\n
         This app does NOT collect any data or personal information.\n\n\n
@@ -24,7 +24,7 @@
     <string name="about_email_socials" translatable="false">contact@iboalali.com\nhttps://mastodon.social/@iboalali\nhttps://bsky.app/profile/iboalali.bsky.social</string>
     <string name="about_not_affiliated">This app is not endorsed by or affiliated with topjohnwu or libsu</string>
 
-    <!-- Licence Strings -->
+    <!-- License Strings -->
     <string name="licence_libsu" translatable="false">This product includes software from the
         libsu Library\n\n\n
         Copyright &#169; 2021 topjohnwu, libsu Library\n\n
@@ -175,7 +175,16 @@
     <string name="content_description_marketing_name">Marketing Name</string>
     <string name="content_description_model_name">Model Name</string>
     <string name="content_description_android_version">Android Version</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">Device Name</string>
+    <string name="label_model">Model</string>
+    <string name="label_android_version">Android Version</string>
     <string name="toast_content_copied">Content Copied</string>
 
+    <!-- Other Apps -->
+    <string name="other_apps_title">Other Apps</string>
+    <string name="other_apps_billboard_description">This app will help you to show large text on the screen, and makes it as big as possible without cutting off the text.\n\nCan be used in meetings to vote on a subject with a number or a text.</string>
+    <string name="other_apps_hide_notifications_description">Choose a persistent notification to hide, and keep it hidden as long as this app is installed.</string>
 
 </resources>

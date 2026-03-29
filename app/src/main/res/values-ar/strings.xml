@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Basic Root Checker</string>
 
-    <string name="textView_Disclaimer">هذا التطبيق بظهر لك إذا كان جهازك يحتوي على خاصية الـ Root.\n هذا التطبيق لا يعطيك خاصية الـ Root على جهازك.</string>
+    <string name="textView_Disclaimer"><![CDATA[هذا التطبيق بظهر لك إذا كان جهازك يحتوي على خاصية الـ Root.<br>هذا التطبيق لا يعطيك خاصية الـ Root على جهازك.]]></string>
     <string name="rootAvailable">يوجد خاصية الـ Root</string>
     <string name="rootUnknown">تعذر الحصول على وجود Root لجهازك</string>
     <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
@@ -10,7 +10,7 @@
     <string name="action_about">عنا</string>
 
     <!-- About Strings -->
-    <string name="about_part1">حقوق الطبع محفوظ 2024 iboalali\n\n
+    <string name="about_part1">حقوق الطبع محفوظ 2026 iboalali\n\n
 هذا التطبيق لا يعطيك خاصية الRoot.\n
 هذا التطبيق يتطلب خاصية الRoot، استعملها على مسؤوليتك.\n
 هذا التطبيق لا يجمع معلومات عن جهازك أو شخصيتك\n\n\n
@@ -28,5 +28,12 @@
     <string name="content_description_android_version">Android Version</string>
     <string name="toast_content_copied">Content Copied</string>
 
+    <!-- Device Info Labels -->
+    <string name="label_device_name">اسم الجهاز</string>
+    <string name="label_model">الموديل</string>
+    <string name="label_android_version">إصدار الأندرويد</string>
+    <string name="other_apps_title">تطبيقات أخرى</string>
+    <string name="other_apps_billboard_description">هذا التطبيق يساعدك على عرض نص كبير على الشاشة، ويجعله بأكبر حجم ممكن دون قطع النص.\n\nيمكن استخدامه في الاجتماعات للتصويت على موضوع برقم أو نص.</string>
+    <string name="other_apps_hide_notifications_description">اختر إشعارًا دائمًا لإخفائه، وسيبقى مخفيًا طالما هذا التطبيق مثبت.</string>
 
 </resources>

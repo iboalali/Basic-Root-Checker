@@ -6,6 +6,7 @@
 
     <application
         android:allowBackup="false"
+        android:supportsRtl="true"
         android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher_v2"
         android:localeConfig="@xml/app_locales_config"
@@ -21,9 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".LicenceActivity" />
-
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
