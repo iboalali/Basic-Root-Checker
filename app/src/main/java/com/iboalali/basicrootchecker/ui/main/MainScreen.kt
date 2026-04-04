@@ -439,6 +439,42 @@ private fun MainScreenRootedPreview() {
     }
 }
 
+@Preview(showBackground = true, locale = "de")
+@Composable
+private fun MainScreenGermanPreview() {
+    BasicRootCheckerTheme {
+        MainScreenContent(
+            uiState = MainUiState(
+                rootStatus = RootStatus.NOT_CHECKED,
+                deviceMarketingName = "Pixel 8 Pro",
+                deviceModelName = "husky",
+                androidVersion = "Android 16",
+            ),
+            onCheckRoot = {},
+            onNavigateToAbout = {},
+            onNavigateToLicence = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, locale = "ar")
+@Composable
+private fun MainScreenArabicPreview() {
+    BasicRootCheckerTheme {
+        MainScreenContent(
+            uiState = MainUiState(
+                rootStatus = RootStatus.NOT_CHECKED,
+                deviceMarketingName = "Pixel 8 Pro",
+                deviceModelName = "husky",
+                androidVersion = "Android 16",
+            ),
+            onCheckRoot = {},
+            onNavigateToAbout = {},
+            onNavigateToLicence = {},
+        )
+    }
+}
+
 @PreviewDynamicColors
 @PreviewLightDark
 @PreviewFontScale
