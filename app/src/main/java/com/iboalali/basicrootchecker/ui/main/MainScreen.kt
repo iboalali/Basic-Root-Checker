@@ -346,7 +346,8 @@ fun MainScreenContent(
                 )
             }
 
-            Spacer(Modifier.height(24.dp + bottomPadding))
+            // 24dp spacing + FAB height (56dp) + FAB bottom margin (16dp) + system bottom padding
+            Spacer(Modifier.height(24.dp + 56.dp + 16.dp + bottomPadding))
         }
     }
 }
