@@ -175,6 +175,11 @@
     <string name="content_description_marketing_name">Marketing Name</string>
     <string name="content_description_model_name">Model Name</string>
     <string name="content_description_android_version">Android Version</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">Device Name</string>
+    <string name="label_model">Model</string>
+    <string name="label_android_version">Android Version</string>
     <string name="toast_content_copied">Content Copied</string>
 
 

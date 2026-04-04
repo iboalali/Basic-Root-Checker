@@ -28,5 +28,10 @@
     <string name="content_description_android_version">Android Version</string>
     <string name="toast_content_copied">Content Copied</string>
 
+    <!-- Device Info Labels -->
+    <string name="label_device_name">اسم الجهاز</string>
+    <string name="label_model">الموديل</string>
+    <string name="label_android_version">إصدار الأندرويد</string>
+
 
 </resources>

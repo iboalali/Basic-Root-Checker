@@ -305,16 +305,19 @@ fun MainScreenContent(
                     )
 
                     DeviceInfoText(
+                        label = stringResource(R.string.label_device_name),
                         text = uiState.deviceMarketingName,
                         contentDescription = stringResource(R.string.content_description_marketing_name),
                         onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
                     )
                     DeviceInfoText(
+                        label = stringResource(R.string.label_model),
                         text = uiState.deviceModelName,
                         contentDescription = stringResource(R.string.content_description_model_name),
                         onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
                     )
                     DeviceInfoText(
+                        label = stringResource(R.string.label_android_version),
                         text = uiState.androidVersion,
                         contentDescription = stringResource(R.string.content_description_android_version),
                         onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
@@ -333,8 +336,10 @@ fun MainScreenContent(
                 shape = RoundedCornerShape(32.dp),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
+                val htmlString = stringResource(R.string.textView_Disclaimer)
+                val text = remember { AnnotatedString.fromHtml(htmlString) }
                 Text(
-                    text = AnnotatedString.fromHtml(stringResource(R.string.textView_Disclaimer)),
+                    text = text,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(24.dp),
                 )
@@ -348,14 +353,13 @@ fun MainScreenContent(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DeviceInfoText(
+    label: String,
     text: String,
     contentDescription: String,
     onCopied: () -> Unit,
 ) {
     val context = LocalContext.current
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyLarge,
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(
@@ -368,7 +372,17 @@ private fun DeviceInfoText(
                 },
             )
             .padding(vertical = 4.dp),
-    )
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+        )
+    }
 }
 
 @Preview(showBackground = true)

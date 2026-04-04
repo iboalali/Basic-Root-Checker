@@ -13,7 +13,7 @@ Kontaktiere mich:</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
     <string name="textView_Disclaimer">Diese app wird <b>NICHT</b> dein Gerät rooten.\nDiese app zeigt nur an ob dein Gerät root zugriff hat.</string>
-    <string name="textView_checkForRoot">Berühre die runde Taste unten rechts um den Root-Status überprüfen</string>
+    <string name="textView_checkForRoot">Drücke die <b>#</b> Taste unten rechts um den Root-Status überprüfen</string>
     <string name="textViewDevice">Geräte Name: </string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_button_donate_a_little">Eine kleine Spende</string>
@@ -24,4 +24,9 @@ Kontaktiere mich:</string>
     <string name="content_description_model_name">Model Name</string>
     <string name="content_description_android_version">Android Version</string>
     <string name="toast_content_copied">Content Copied</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">Gerätename</string>
+    <string name="label_model">Modell</string>
+    <string name="label_android_version">Android Version</string>
 </resources>
