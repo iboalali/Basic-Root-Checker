@@ -2,7 +2,7 @@
     <string name="app_name">Basic Root Checker</string>
 
     <!-- Main Strings-->
-    <string name="textView_Disclaimer">This app will <b>NOT</b> root your device.\nThis app only shows you if your device has root access.</string>
+    <string name="textView_Disclaimer"><![CDATA[This app will <b>NOT</b> root your device.<br>This app only shows you if your device has root access.]]></string>
     <string name="textView_checkForRoot">Touch the \"#\" button on the bottom right to verify Root status</string>
     <string name="rootAvailable">Your Device has Root access</string>
     <string name="rootUnknown">Couldn\'t get Root status of your device</string>
