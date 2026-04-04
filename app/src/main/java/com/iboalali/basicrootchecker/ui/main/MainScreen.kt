@@ -76,6 +76,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.ui.theme.PreviewLocales
 import kotlinx.coroutines.launch
 
 @Composable
@@ -439,27 +440,9 @@ private fun MainScreenRootedPreview() {
     }
 }
 
-@Preview(showBackground = true, locale = "de")
+@PreviewLocales
 @Composable
-private fun MainScreenGermanPreview() {
-    BasicRootCheckerTheme {
-        MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_CHECKED,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
-            onCheckRoot = {},
-            onNavigateToAbout = {},
-            onNavigateToLicence = {},
-        )
-    }
-}
-
-@Preview(showBackground = true, locale = "ar")
-@Composable
-private fun MainScreenArabicPreview() {
+private fun MainScreenLocalesPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
             uiState = MainUiState(

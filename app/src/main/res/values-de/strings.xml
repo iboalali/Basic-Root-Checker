@@ -29,4 +29,7 @@ Kontaktiere mich:</string>
     <string name="label_device_name">Gerätename</string>
     <string name="label_model">Modell</string>
     <string name="label_android_version">Android Version</string>
+    <string name="other_apps_title">Weitere Apps</string>
+    <string name="other_apps_billboard_description">Diese App hilft dir, großen Text auf dem Bildschirm anzuzeigen, und macht ihn so groß wie möglich, ohne den Text abzuschneiden.\n\nKann in Meetings verwendet werden, um über ein Thema mit einer Zahl oder einem Text abzustimmen.</string>
+    <string name="other_apps_hide_notifications_description">Wähle eine dauerhafte Benachrichtigung zum Ausblenden aus und halte sie versteckt, solange diese App installiert ist.</string>
 </resources>

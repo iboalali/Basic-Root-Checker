@@ -32,6 +32,8 @@
     <string name="label_device_name">اسم الجهاز</string>
     <string name="label_model">الموديل</string>
     <string name="label_android_version">إصدار الأندرويد</string>
-
+    <string name="other_apps_title">تطبيقات أخرى</string>
+    <string name="other_apps_billboard_description">هذا التطبيق يساعدك على عرض نص كبير على الشاشة، ويجعله بأكبر حجم ممكن دون قطع النص.\n\nيمكن استخدامه في الاجتماعات للتصويت على موضوع برقم أو نص.</string>
+    <string name="other_apps_hide_notifications_description">اختر إشعارًا دائمًا لإخفائه، وسيبقى مخفيًا طالما هذا التطبيق مثبت.</string>
 
 </resources>

@@ -37,12 +37,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.ui.theme.PreviewLocales
 import com.iboalali.basicrootchecker.util.DeviceInfo
+import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -141,11 +142,31 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
             }
 
             Spacer(Modifier.height(16.dp))
+
+            OtherAppsCard(
+                apps = persistentListOf(
+                    OtherApp(
+                        name = "Billboard",
+                        descriptionRes = R.string.other_apps_billboard_description,
+                        iconRes = R.mipmap.billboard_app_icon,
+                        packageName = "com.iboalali.billboard",
+                    ),
+                    OtherApp(
+                        name = "Hide Persistent Notifications",
+                        descriptionRes = R.string.other_apps_hide_notifications_description,
+                        iconRes = R.mipmap.hide_persistent_notification_app_icon,
+                        packageName = "com.iboalali.hidepersistentnotifications",
+                    ),
+                ),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
+            )
+
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
 
-@Preview(showBackground = true)
+@PreviewLocales
 @Composable
 private fun AboutScreenPreview() {
     BasicRootCheckerTheme {

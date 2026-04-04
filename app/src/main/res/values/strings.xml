@@ -182,5 +182,9 @@
     <string name="label_android_version">Android Version</string>
     <string name="toast_content_copied">Content Copied</string>
 
+    <!-- Other Apps -->
+    <string name="other_apps_title">Other Apps</string>
+    <string name="other_apps_billboard_description">This app will help you to show large text on the screen, and makes it as big as possible without cutting off the text.\n\nCan be used in meetings to vote on a subject with a number or a text.</string>
+    <string name="other_apps_hide_notifications_description">Choose a persistent notification to hide, and keep it hidden as long as this app is installed.</string>
 
 </resources>
