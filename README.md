@@ -12,7 +12,7 @@ A simple Android app that checks whether your device has root access. Displays d
 
 ## Requirements
 
-- Android 5.0+ (API 21)
+- Android 6.0+ (API 23)
 - JDK 17
 
 ## Building
@@ -27,8 +27,10 @@ A simple Android app that checks whether your device has root access. Displays d
 
 ## Tech Stack
 
-- **Language:** Java
-- **UI:** Data Binding, Material 3, ConstraintLayout
+- **Language:** Kotlin
+- **UI:** Jetpack Compose with Material 3
+- **Architecture:** ViewModel + StateFlow + Coroutines
+- **Navigation:** [Navigation 3](https://developer.android.com/guide/navigation/navigation-3) (`androidx.navigation3`)
 - **Root detection:** [libsu](https://github.com/topjohnwu/libsu) (`Shell.isAppGrantedRoot()`)
 - **Device names:** [DeviceMarketingNames](https://github.com/nicoaccessmedia/DeviceMarketingNames)
 - **Build system:** Gradle with Kotlin DSL and version catalog
