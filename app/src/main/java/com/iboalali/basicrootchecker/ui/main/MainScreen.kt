@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -77,7 +76,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
-import com.iboalali.basicrootchecker.ui.theme.PreviewLocales
+import com.iboalali.basicrootchecker.util.PreviewLocales
 import kotlinx.coroutines.launch
 
 @Composable

@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
-import com.iboalali.basicrootchecker.ui.theme.PreviewLocales
+import com.iboalali.basicrootchecker.util.PreviewLocales
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import kotlinx.collections.immutable.persistentListOf
 

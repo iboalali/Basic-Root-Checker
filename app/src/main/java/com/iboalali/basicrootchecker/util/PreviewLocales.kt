@@ -1,4 +1,4 @@
-package com.iboalali.basicrootchecker.ui.theme
+package com.iboalali.basicrootchecker.util
 
 import androidx.compose.ui.tooling.preview.Preview
 

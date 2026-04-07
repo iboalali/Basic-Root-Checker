@@ -34,7 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
-import com.iboalali.basicrootchecker.ui.theme.PreviewLocales
+import com.iboalali.basicrootchecker.util.PreviewLocales
 import androidx.core.net.toUri
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
