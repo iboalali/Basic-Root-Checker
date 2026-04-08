@@ -336,7 +336,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/arrow_back/baseline_arrow_back_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Android/Sdk/icons/material/materialsymbolsoutlined/more_vert/more_vert_24px.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -346,8 +346,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_arrow_back_24" />
-                            <entry key="sourceFile" value="C:\Users\al-alali\Documents\GitHub\Basic-Root-Checker" />
+                            <entry key="outputName" value="more_vert_24px" />
+                            <entry key="sourceFile" value="$USER_HOME$/C:\Users\al-alali\Documents\GitHub\Basic-Root-Checker" />
                           </map>
                         </option>
                       </PersistentState>

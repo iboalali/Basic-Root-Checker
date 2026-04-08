@@ -17,9 +17,7 @@
 اتصل بي:</string>
     <string name="about_not_affiliated">هذا البرنامج ليست تابع ولا مأيّد من Chainfire أو SuperSU</string>
     <string name="textView_checkForRoot">المس على الزر المستدير في أسفل اليمين للتحقق من حالة من خاصية الـ Root</string>
-    <string name="textViewDevice">اسم الجهاز:</string>
     <string name="textViewAndroidVersion">اندرود</string>
-    <string name="string_button_donate_a_little">صدقة صغيرة</string>
     <string name="string_your_device">جهازك</string>
     <string name="string_checking_for_root">تحقق من خاصية الـ Root</string>
     <string name="content_description_check_for_root">تحقق من خاصية الـ Root</string>

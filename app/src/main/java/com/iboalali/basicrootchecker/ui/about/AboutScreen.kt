@@ -16,10 +16,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
-import com.iboalali.basicrootchecker.util.PreviewLocales
 import com.iboalali.basicrootchecker.util.DeviceInfo
+import com.iboalali.basicrootchecker.util.PreviewLocales
 import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +58,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
+                            painter = painterResource(R.drawable.arrow_back_24px),
                             contentDescription = null,
                         )
                     }

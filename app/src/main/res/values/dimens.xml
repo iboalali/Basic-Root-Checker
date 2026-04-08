@@ -1,31 +1,6 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="fab_margin_right">0dp</dimen>
-    <dimen name="fab_margin_bottom">0dp</dimen>
-    <dimen name="marginBottom_with_ad">50dp</dimen>
-    <dimen name="marginBottom_without_ad">0dp</dimen>
 
     <!-- style dimens -->
-    <dimen name="TextAppearance_Title">20sp</dimen>
-    <dimen name="TextAppearance_Subhead">16sp</dimen>
-    <dimen name="text_size_body_1_material">14sp</dimen>
-
-    <dimen name="left_start_margin">16dp</dimen>
-    <dimen name="right_end_margin">16dp</dimen>
-    <dimen name="dimen_bottom_bar_margin_bottom">32dp</dimen>
-    <dimen name="root_status_text_margin_top">24dp</dimen>
-    <dimen name="progress_container_size">96dp</dimen>
-    <dimen name="progress_size">88dp</dimen>
-    <dimen name="default_padding">16dp</dimen>
-    <dimen name="default_padding_double">32dp</dimen>
-    <dimen name="default_corner_radius">32dp</dimen>
-    <dimen name="default_margin">16dp</dimen>
-    <dimen name="default_margin_one_and_half">24dp</dimen>
-    <dimen name="elevation_none">0dp</dimen>
-    <dimen name="elevation_minimum">1dp</dimen>
-    <dimen name="max_width">600dp</dimen>
-    <dimen name="collapsing_toolbar_expanded_height">250dp</dimen>
 
 </resources>

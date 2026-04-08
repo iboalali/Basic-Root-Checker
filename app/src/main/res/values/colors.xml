@@ -5,12 +5,6 @@
     <color name="ic_launcher_v2_background">@color/md_purple_500</color>
 
     <!-- Main Activity Theme -->
-    <color name="textLinkMain">#ffc6b0ff</color>
-    <color name="textBlackMain">#ff07061a</color>
-
-    <color name="gray">#9E9E9E</color>
-    <color name="success">#8BC34A</color>
-    <color name="fail">#F44336</color>
 
     <color name="md_theme_light_primary">#AB3500</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
@@ -37,8 +31,6 @@
     <color name="md_theme_light_outline">#79747E</color>
     <color name="md_theme_light_inverseOnSurface">#F4EFF4</color>
     <color name="md_theme_light_inverseSurface">#313033</color>
-    <color name="md_theme_light_inversePrimary">#FFB59B</color>
-    <color name="md_theme_light_shadow">#000000</color>
     <color name="md_theme_light_primaryInverse">#FFB59B</color>
 
     <color name="md_theme_dark_primary">#FFB59B</color>
@@ -66,8 +58,6 @@
     <color name="md_theme_dark_outline">#938F99</color>
     <color name="md_theme_dark_inverseOnSurface">#1C1B1F</color>
     <color name="md_theme_dark_inverseSurface">#E6E1E5</color>
-    <color name="md_theme_dark_inversePrimary">#AB3500</color>
-    <color name="md_theme_dark_shadow">#000000</color>
     <color name="md_theme_dark_primaryInverse">#AB3500</color>
 
 </resources>

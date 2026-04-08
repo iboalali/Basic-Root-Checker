@@ -4,9 +4,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val Success = Color(0xFF8BC34A)
-val Fail = Color(0xFFF44336)
-
 val LightColorScheme = lightColorScheme(
     primary = Color(0xFFAB3500),
     onPrimary = Color(0xFFFFFFFF),

@@ -14,9 +14,7 @@ Kontaktiere mich:</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
     <string name="textView_Disclaimer"><![CDATA[Diese app wird <b>NICHT</b> dein Gerät rooten.<br>Diese app zeigt nur an ob dein Gerät root zugriff hat.]]></string>
     <string name="textView_checkForRoot">Drücke die <b>#</b> Taste unten rechts um den Root-Status überprüfen</string>
-    <string name="textViewDevice">Geräte Name: </string>
     <string name="textViewAndroidVersion">Android</string>
-    <string name="string_button_donate_a_little">Eine kleine Spende</string>
     <string name="string_your_device">Dein Gerät</string>
     <string name="string_checking_for_root">Auf Root zugriff überprüfen</string>
     <string name="content_description_check_for_root">Auf Root zugriff überprüfen</string>
