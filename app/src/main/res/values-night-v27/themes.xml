@@ -2,11 +2,11 @@
 <resources>
 
     <!-- Base Themes -->
-    <style name="Theme.iboalali.SplashScreen.Base.v27.Night" parent="Theme.iboalali.SplashScreen.Base">
+    <style name="Theme.iboalali.SplashScreen.Base.v27.Night" parent="Theme.iboalali.SplashScreen.Base.Night">
         <item name="postSplashScreenTheme">@style/Theme.iboalali.Main</item>
     </style>
 
-    <style name="Theme.iboalali.Base.v27.Night" parent="Theme.iboalali.Base">
+    <style name="Theme.iboalali.Base.v27.Night" parent="Theme.iboalali.Base.Night">
         <item name="android:windowLightNavigationBar">false</item>
     </style>
 

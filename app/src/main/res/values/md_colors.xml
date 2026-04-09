@@ -2,6 +2,7 @@
 <resources>
 
     <!-- Dark Purple Colors -->
+    <color name="md_purple_900">#4A148C</color>
     <color name="md_purple_500">#673AB7</color>
     <color name="md_purple_50">#EDE7F6</color>
 

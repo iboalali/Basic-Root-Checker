@@ -3,18 +3,18 @@ kotlin = "2.3.20"
 android-gradle-plugin = "9.1.0"
 
 androidx-activity = "1.13.0"
-androidx-annotation = "1.9.1"
+androidx-annotation = "1.10.0"
 androidx-compose-bom = "2026.03.01"
 androidx-core = "1.18.0"
 androidx-core-splashscreen = "1.2.0"
 androidx-lifecycle = "2.10.0"
-androidx-navigation3 = "1.0.1"
+androidx-navigation3 = "1.1.0"
 
 boehrsi-devicemarketingnames = "1.0.5"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
 google-material = "1.13.0"
 kotlinx-collections-immutable = "0.4.0"
 kotlinx-serialization-core = "1.10.0"
-topjohnwu-libsu-core = "5.2.1"
+topjohnwu-libsu-core = "6.0.0"                  # https://github.com/topjohnwu/libsu/releases
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }

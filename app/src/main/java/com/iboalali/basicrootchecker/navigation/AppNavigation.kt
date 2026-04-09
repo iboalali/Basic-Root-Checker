@@ -38,8 +38,6 @@ private val animation: ContentTransform = ContentTransform(
 fun AppNavigation() {
     val backStack = remember { mutableStateListOf<Any>(MainRoute) }
 
-    val animDuration = 300
-
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
