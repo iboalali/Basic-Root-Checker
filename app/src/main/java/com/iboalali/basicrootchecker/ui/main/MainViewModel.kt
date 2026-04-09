@@ -42,12 +42,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val app = getApplication<Application>()
         val resources = app.resources
 
-        DeviceMarketingNames.getNames()
-
         _uiState.update {
             it.copy(
                 deviceMarketingName = DeviceMarketingNames.getSingleName(),
-                deviceModelName = Build.MODEL,
+                deviceModelName = Build.DEVICE,
                 androidVersion = "${resources.getString(R.string.textViewAndroidVersion)} ${DeviceInfo.getAndroidVersionName()}",
             )
         }

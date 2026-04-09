@@ -31,9 +31,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_primaryInverse</item>
     </style>
 
-    <style name="Theme.iboalali.SplashScreen.Base.Night" parent="Theme.iboalali.SplashScreen.Base">
-        <item name="windowSplashScreenBackground">@color/md_purple_900</item>
-    </style>
+    <style name="Theme.iboalali.SplashScreen.Base.Night" parent="Theme.iboalali.SplashScreen.Base" />
 
     <!-- App Themes -->
     <style name="Theme.iboalali.Main" parent="Theme.iboalali.Base.Night" />

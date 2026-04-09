@@ -318,12 +318,14 @@ fun MainScreenContent(
                         contentDescription = stringResource(R.string.content_description_marketing_name),
                         onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
                     )
-                    DeviceInfoText(
-                        label = stringResource(R.string.label_model),
-                        text = uiState.deviceModelName,
-                        contentDescription = stringResource(R.string.content_description_model_name),
-                        onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
-                    )
+                    if (!uiState.deviceMarketingName.equals(uiState.deviceModelName, ignoreCase = true)) {
+                        DeviceInfoText(
+                            label = stringResource(R.string.label_model),
+                            text = uiState.deviceModelName,
+                            contentDescription = stringResource(R.string.content_description_model_name),
+                            onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
+                        )
+                    }
                     DeviceInfoText(
                         label = stringResource(R.string.label_android_version),
                         text = uiState.androidVersion,
