@@ -34,15 +34,16 @@ Android app that checks whether a device has root access, written in Kotlin with
 - **MainActivity** — Single activity host. Sets up splash screen with custom exit animation, dynamic colors, edge-to-edge, and hosts Compose UI via `setContent`.
 - **AppNavigation** (`navigation/`) — Navigation 3 setup with `NavDisplay`, `@Serializable` route keys (`MainRoute`, `AboutRoute`, `LicenceRoute`), and explicit back stack management.
 - **MainScreen** (`ui/main/`) — Main screen composable. Displays device info (model, marketing name, Android version) and root status. FAB triggers root check. Long-press on device info copies to clipboard.
-- **MainViewModel** (`ui/main/`) — ViewModel with `StateFlow<MainUiState>` for root check state and device info. Uses coroutines to run root check via `RootChecker`.
-- **AboutScreen** (`ui/about/`) — About screen with collapsing toolbar, app version, contact links.
+- **MainViewModel** (`ui/main/`) — AndroidViewModel with `StateFlow<MainUiState>` for root check state and device info. Uses coroutines to run root check via `RootChecker`.
+- **AboutScreen** (`ui/about/`) — About screen with collapsing toolbar, app version, contact links, and other apps card (`OtherAppsCard`).
 - **LicenceScreen** (`ui/licence/`) — License screen with collapsing toolbar, license texts.
 - **RootChecker** (`data/`) — Suspend function that runs `Shell.isAppGrantedRoot()` from [libsu](https://github.com/topjohnwu/libsu) on `Dispatchers.IO`. Returns `Boolean?`: `true` = rooted, `false` = not rooted, `null` = unknown.
 - **DeviceInfo** (`util/`) — Helpers for app version retrieval and Android version name lookup (maps API level to name via `version_names` string array resource).
+- **Preview Utilities** (`util/`) — Custom preview annotations: `@PreviewLocales` (en, de, ar) and `@PreviewPlayStoreListing` (Phone, 7" Tablet, 10" Tablet).
 
 ### Build Configuration
 
-- **Gradle:** Kotlin DSL with version catalog (`gradle/libs.versions.toml`)
+- **Gradle:** Kotlin DSL with version catalog (`gradle/libs.versions.toml`), AGP 9.1.0
 - **SDK:** compile/target 36, min 23
 - **Kotlin:** 2.3.20, JVM target 17
 - **Build variants:** debug (appId suffix `.debug`, version suffix `-debug`) and release (minification + resource shrinking enabled)

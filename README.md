@@ -30,7 +30,7 @@ A simple Android app that checks whether your device has root access. Displays d
 - **Language:** Kotlin
 - **UI:** Jetpack Compose with Material 3
 - **Architecture:** ViewModel + StateFlow + Coroutines
-- **Navigation:** [Navigation 3](https://developer.android.com/guide/navigation/navigation-3) (`androidx.navigation3`)
+- **Navigation:** [Navigation 3](https://developer.android.com/guide/navigation/navigation-3) (`androidx.navigation3`) with Kotlin Serialization for type-safe routes
 - **Root detection:** [libsu](https://github.com/topjohnwu/libsu) (`Shell.isAppGrantedRoot()`)
 - **Device names:** [DeviceMarketingNames](https://github.com/nicoaccessmedia/DeviceMarketingNames)
-- **Build system:** Gradle with Kotlin DSL and version catalog
+- **Build system:** Gradle with Kotlin DSL and version catalog (AGP 9.1.0)
