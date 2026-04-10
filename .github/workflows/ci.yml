@@ -25,6 +25,8 @@ jobs:
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
+      with:
+        allow-checksums: e2b82129ab64751fd40437007bd2f7f2afb3c6e41a9198e628650b22d5824a14
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -51,3 +53,5 @@ jobs:
 
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4
+      with:
+        allow-checksums: e2b82129ab64751fd40437007bd2f7f2afb3c6e41a9198e628650b22d5824a14
