@@ -16,6 +16,7 @@ android {
         versionName = "v2.0vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de")
+        manifestPlaceholders["telemetryDeckAppId"] = "YOUR-TELEMETRYDECK-APP-ID"
     }
     buildTypes {
         release {
@@ -68,5 +69,6 @@ dependencies {
 
     // Third-party
     implementation(libs.boehrsi.devicemarketingnames)
+    implementation(libs.telemetrydeck.sdk)
     implementation(libs.topjohnwu.libsu.core)
 }
