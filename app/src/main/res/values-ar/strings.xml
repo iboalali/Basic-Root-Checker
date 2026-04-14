@@ -8,6 +8,7 @@
     <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
     <string name="action_licence">حقوق</string>
     <string name="action_about">عنا</string>
+    <string name="action_privacy_policy">سياسة الخصوصية</string>
 
     <!-- About Strings -->
     <string name="about_part1">حقوق الطبع محفوظ 2026 iboalali\n\n

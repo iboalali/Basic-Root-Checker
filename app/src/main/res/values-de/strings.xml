@@ -8,6 +8,7 @@ Diese app erfordert ROOT zugriff, benutzen auf eigener gefahr.\n
 Diese app sammelt keine daten oder persönliche informationen.\n\n\n
 Kontaktiere mich:</string>
     <string name="action_about">Über</string>
+    <string name="action_privacy_policy">Datenschutzerklärung</string>
     <string name="action_licence">Lizenzen</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
