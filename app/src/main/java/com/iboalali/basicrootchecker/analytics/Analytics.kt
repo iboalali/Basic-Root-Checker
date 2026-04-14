@@ -12,6 +12,13 @@ object Analytics {
         TelemetryDeck.signal("rootCheckStarted")
     }
 
+    fun trackOtherAppClicked(packageName: String) {
+        TelemetryDeck.signal(
+            "otherAppClicked",
+            mapOf("packageName" to packageName),
+        )
+    }
+
     fun trackRootCheckResult(result: String) {
         TelemetryDeck.signal(
             "rootCheckCompleted",

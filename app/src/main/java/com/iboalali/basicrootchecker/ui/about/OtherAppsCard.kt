@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import androidx.core.net.toUri
@@ -74,7 +75,10 @@ fun OtherAppsCard(
             filteredApps.forEach { app ->
                 OtherAppItem(
                     app = app,
-                    onClick = { openPlayStoreListing(context, app.packageName) },
+                    onClick = {
+                        Analytics.trackOtherAppClicked(app.packageName)
+                        openPlayStoreListing(context, app.packageName)
+                    },
                 )
             }
         }
