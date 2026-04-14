@@ -16,7 +16,7 @@ android {
         versionName = "v2.0vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de")
-        manifestPlaceholders["telemetryDeckAppId"] = "YOUR-TELEMETRYDECK-APP-ID"
+        manifestPlaceholders["telemetryDeckAppId"] = "613251CD-B223-443A-9583-3A18586FAB55"
     }
     buildTypes {
         release {
