@@ -49,11 +49,11 @@ fun AppNavigation() {
             entry<MainRoute> {
                 MainScreen(
                     onNavigateToAbout = {
-                        Analytics.trackNavigation("Main", "About")
+                        Analytics.trackNavigation("/main", "/about")
                         backStack.add(AboutRoute)
                     },
                     onNavigateToLicence = {
-                        Analytics.trackNavigation("Main", "Licence")
+                        Analytics.trackNavigation("/main", "/licence")
                         backStack.add(LicenceRoute)
                     },
                 )
@@ -62,7 +62,7 @@ fun AppNavigation() {
             entry<AboutRoute> {
                 AboutScreen(
                     onNavigateBack = {
-                        Analytics.trackNavigation("About", "Main")
+                        Analytics.trackNavigation("/about", "/main")
                         backStack.removeLastOrNull()
                     },
                 )
@@ -71,7 +71,7 @@ fun AppNavigation() {
             entry<LicenceRoute> {
                 LicenceScreen(
                     onNavigateBack = {
-                        Analytics.trackNavigation("Licence", "Main")
+                        Analytics.trackNavigation("/licence", "/main")
                         backStack.removeLastOrNull()
                     },
                 )
