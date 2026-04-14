@@ -12,6 +12,10 @@ object Analytics {
         TelemetryDeck.signal("rootCheckStarted")
     }
 
+    fun trackPrivacyPolicyClicked() {
+        TelemetryDeck.signal("privacyPolicyClicked")
+    }
+
     fun trackOtherAppClicked(packageName: String) {
         TelemetryDeck.signal(
             "otherAppClicked",

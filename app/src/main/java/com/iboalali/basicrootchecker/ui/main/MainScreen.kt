@@ -75,6 +75,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.core.net.toUri
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import kotlinx.coroutines.launch
@@ -144,6 +145,7 @@ fun MainScreenContent(
                             text = { Text(stringResource(R.string.action_privacy_policy)) },
                             onClick = {
                                 menuExpanded = false
+                                Analytics.trackPrivacyPolicyClicked()
                                 context.startActivity(
                                     Intent(
                                         Intent.ACTION_VIEW,
