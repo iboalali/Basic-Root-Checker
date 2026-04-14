@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.data.RootChecker
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import de.boehrsi.devicemarketingnames.DeviceMarketingNames
@@ -54,6 +55,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun checkRoot() {
         viewModelScope.launch {
             _uiState.update { it.copy(rootStatus = RootStatus.CHECKING) }
+            Analytics.trackRootCheckStarted()
             val result = RootChecker.checkRoot()
             val status = when (result) {
                 true -> RootStatus.ROOTED
@@ -61,6 +63,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 null -> RootStatus.UNKNOWN
             }
             _uiState.update { it.copy(rootStatus = status) }
+            Analytics.trackRootCheckResult(status.name)
         }
     }
 }

@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreen
@@ -47,20 +48,32 @@ fun AppNavigation() {
         entryProvider = entryProvider {
             entry<MainRoute> {
                 MainScreen(
-                    onNavigateToAbout = { backStack.add(AboutRoute) },
-                    onNavigateToLicence = { backStack.add(LicenceRoute) },
+                    onNavigateToAbout = {
+                        Analytics.trackNavigation("/main", "/about")
+                        backStack.add(AboutRoute)
+                    },
+                    onNavigateToLicence = {
+                        Analytics.trackNavigation("/main", "/licence")
+                        backStack.add(LicenceRoute)
+                    },
                 )
             }
 
             entry<AboutRoute> {
                 AboutScreen(
-                    onNavigateBack = { backStack.removeLastOrNull() },
+                    onNavigateBack = {
+                        Analytics.trackNavigation("/about", "/main")
+                        backStack.removeLastOrNull()
+                    },
                 )
             }
 
             entry<LicenceRoute> {
                 LicenceScreen(
-                    onNavigateBack = { backStack.removeLastOrNull() },
+                    onNavigateBack = {
+                        Analytics.trackNavigation("/licence", "/main")
+                        backStack.removeLastOrNull()
+                    },
                 )
             }
         },

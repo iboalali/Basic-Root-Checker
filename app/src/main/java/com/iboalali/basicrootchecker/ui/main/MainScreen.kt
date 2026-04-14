@@ -3,6 +3,7 @@ package com.iboalali.basicrootchecker.ui.main
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -72,7 +73,9 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.core.net.toUri
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import kotlinx.coroutines.launch
@@ -101,6 +104,7 @@ fun MainScreenContent(
     onNavigateToAbout: () -> Unit,
     onNavigateToLicence: () -> Unit,
 ) {
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var menuExpanded by remember { mutableStateOf(false) }
@@ -135,6 +139,19 @@ fun MainScreenContent(
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToLicence()
+                            },
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_privacy_policy)) },
+                            onClick = {
+                                menuExpanded = false
+                                Analytics.trackPrivacyPolicyClicked()
+                                context.startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        "https://iboalali.com/app/basic_root_checker/".toUri(),
+                                    )
+                                )
                             },
                         )
                         DropdownMenuItem(
