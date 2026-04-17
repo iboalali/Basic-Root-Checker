@@ -34,6 +34,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.iboalali.basicrootchecker.R
@@ -163,7 +167,11 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
     }
 }
 
+@PreviewLightDark
+@PreviewDynamicColors
+@PreviewScreenSizes
 @PreviewLocales
+@PreviewFontScale
 @Composable
 private fun AboutScreenPreview() {
     BasicRootCheckerTheme {

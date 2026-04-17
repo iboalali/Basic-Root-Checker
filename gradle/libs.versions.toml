@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.3.20"
-android-gradle-plugin = "9.1.0"
+android-gradle-plugin = "9.1.1"
 
 androidx-activity = "1.13.0"
 androidx-annotation = "1.10.0"
