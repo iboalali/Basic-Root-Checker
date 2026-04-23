@@ -22,6 +22,7 @@ private fun MainScreenPlayStoreListing() {
             onCheckRoot = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
+            onNavigateToSettings = {},
         )
     }
 }

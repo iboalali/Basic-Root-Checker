@@ -3,7 +3,6 @@ package com.iboalali.basicrootchecker.ui.main
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -73,9 +72,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.core.net.toUri
 import com.iboalali.basicrootchecker.R
-import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import kotlinx.coroutines.launch
@@ -84,6 +81,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     onNavigateToAbout: () -> Unit,
     onNavigateToLicence: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     viewModel: MainViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -93,6 +91,7 @@ fun MainScreen(
         onCheckRoot = viewModel::checkRoot,
         onNavigateToAbout = onNavigateToAbout,
         onNavigateToLicence = onNavigateToLicence,
+        onNavigateToSettings = onNavigateToSettings,
     )
 }
 
@@ -103,8 +102,8 @@ fun MainScreenContent(
     onCheckRoot: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToLicence: () -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
-    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var menuExpanded by remember { mutableStateOf(false) }
@@ -142,16 +141,10 @@ fun MainScreenContent(
                             },
                         )
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.action_privacy_policy)) },
+                            text = { Text(stringResource(R.string.action_settings)) },
                             onClick = {
                                 menuExpanded = false
-                                Analytics.trackPrivacyPolicyClicked()
-                                context.startActivity(
-                                    Intent(
-                                        Intent.ACTION_VIEW,
-                                        "https://iboalali.com/app/basic_root_checker/".toUri(),
-                                    )
-                                )
+                                onNavigateToSettings()
                             },
                         )
                         DropdownMenuItem(
@@ -427,6 +420,7 @@ private fun MainScreenNotCheckedPreview() {
             onCheckRoot = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
+            onNavigateToSettings = {},
         )
     }
 }
@@ -445,6 +439,7 @@ private fun MainScreenCheckingPreview() {
             onCheckRoot = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
+            onNavigateToSettings = {},
         )
     }
 }
@@ -463,6 +458,7 @@ private fun MainScreenRootedPreview() {
             onCheckRoot = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
+            onNavigateToSettings = {},
         )
     }
 }
@@ -481,6 +477,7 @@ private fun MainScreenLocalesPreview() {
             onCheckRoot = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
+            onNavigateToSettings = {},
         )
     }
 }
@@ -502,6 +499,7 @@ private fun MainScreenNotRootedPreview() {
             onCheckRoot = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
+            onNavigateToSettings = {},
         )
     }
 }

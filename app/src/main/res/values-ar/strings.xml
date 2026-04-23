@@ -8,7 +8,13 @@
     <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
     <string name="action_licence">حقوق</string>
     <string name="action_about">عنا</string>
+    <string name="action_settings">الإعدادات</string>
     <string name="action_privacy_policy">سياسة الخصوصية</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_telemetry_title">مشاركة بيانات الاستخدام المجهولة</string>
+    <string name="settings_telemetry_description">يساعد على تحسين التطبيق عبر TelemetryDeck. عند التفعيل، يسري المفعول عند إعادة تشغيل التطبيق.</string>
+    <string name="settings_privacy_policy_description">عرض سياسة الخصوصية على الإنترنت</string>
 
     <!-- About Strings -->
     <string name="about_part1">حقوق الطبع محفوظ 2026 iboalali\n\n

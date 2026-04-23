@@ -16,6 +16,7 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreen
+import com.iboalali.basicrootchecker.ui.settings.SettingsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,6 +27,9 @@ data object AboutRoute : NavKey
 
 @Serializable
 data object LicenceRoute : NavKey
+
+@Serializable
+data object SettingsRoute : NavKey
 
 private val animation: ContentTransform = ContentTransform(
     targetContentEnter = slideInHorizontally(tween(300)) { it } +
@@ -55,6 +59,19 @@ fun AppNavigation() {
                     onNavigateToLicence = {
                         Analytics.trackNavigation("/main", "/licence")
                         backStack.add(LicenceRoute)
+                    },
+                    onNavigateToSettings = {
+                        Analytics.trackNavigation("/main", "/settings")
+                        backStack.add(SettingsRoute)
+                    },
+                )
+            }
+
+            entry<SettingsRoute> {
+                SettingsScreen(
+                    onNavigateBack = {
+                        Analytics.trackNavigation("/settings", "/main")
+                        backStack.removeLastOrNull()
                     },
                 )
             }

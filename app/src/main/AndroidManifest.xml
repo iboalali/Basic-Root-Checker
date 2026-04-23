@@ -7,6 +7,7 @@
     <uses-sdk tools:overrideLibrary="androidx.core.splashscreen" />
 
     <application
+        android:name=".BasicRootCheckerApplication"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:enableOnBackInvokedCallback="true"
@@ -33,9 +34,11 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
-        <meta-data
-            android:name="com.telemetrydeck.appID"
-            android:value="${telemetryDeckAppId}" />
+
+        <provider
+            android:name="com.telemetrydeck.sdk.TelemetryDeckInitProvider"
+            android:authorities="${applicationId}.telemetrydeckinitprovider"
+            tools:node="remove" />
     </application>
 
 </manifest>
