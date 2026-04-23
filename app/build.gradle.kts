@@ -16,7 +16,7 @@ android {
         versionName = "v2.0vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de")
-        manifestPlaceholders["telemetryDeckAppId"] = "613251CD-B223-443A-9583-3A18586FAB55"
+        buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")
     }
     buildTypes {
         release {
@@ -57,6 +57,9 @@ dependencies {
     // Lifecycle
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 
     // Navigation 3
     implementation(libs.androidx.navigation3.runtime)

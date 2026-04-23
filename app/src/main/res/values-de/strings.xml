@@ -10,6 +10,12 @@ Kontaktiere mich:</string>
     <string name="action_about">Über</string>
     <string name="action_privacy_policy">Datenschutzerklärung</string>
     <string name="action_licence">Lizenzen</string>
+    <string name="action_settings">Einstellungen</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_telemetry_title">Anonyme Nutzungsdaten teilen</string>
+    <string name="settings_telemetry_description">Hilft dabei, die App über TelemetryDeck zu verbessern. Wenn aktiviert, wird die Änderung beim nächsten App-Start wirksam.</string>
+    <string name="settings_privacy_policy_description">Datenschutzerklärung online ansehen</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
