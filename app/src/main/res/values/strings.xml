@@ -187,6 +187,16 @@
     <string name="label_android_version">Android Version</string>
     <string name="toast_content_copied">Content Copied</string>
 
+    <!-- In-app updates -->
+    <string name="update_available_title">Update available</string>
+    <string name="update_available_body">A new version of the app is ready to download.</string>
+    <string name="update_action_update">Update</string>
+    <string name="update_downloading">Downloading update…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s MB</string>
+    <string name="update_downloaded_title">Update downloaded</string>
+    <string name="update_action_install">Install now</string>
+    <string name="update_failed">Update failed. It will retry automatically.</string>
+
     <!-- Other Apps -->
     <string name="other_apps_title">Other Apps</string>
     <string name="other_apps_billboard_description">This app will help you to show large text on the screen, and makes it as big as possible without cutting off the text.\n\nCan be used in meetings to vote on a subject with a number or a text.</string>

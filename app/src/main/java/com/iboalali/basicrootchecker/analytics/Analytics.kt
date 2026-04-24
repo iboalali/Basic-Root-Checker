@@ -41,4 +41,27 @@ object Analytics {
             mapOf("result" to result),
         )
     }
+
+    fun trackUpdateAvailable() {
+        if (!enabled) return
+        TelemetryDeck.signal("updateAvailable")
+    }
+
+    fun trackUpdateStarted() {
+        if (!enabled) return
+        TelemetryDeck.signal("updateStarted")
+    }
+
+    fun trackUpdateDownloaded() {
+        if (!enabled) return
+        TelemetryDeck.signal("updateDownloaded")
+    }
+
+    fun trackUpdateFailed(error: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "updateFailed",
+            mapOf("error" to error),
+        )
+    }
 }

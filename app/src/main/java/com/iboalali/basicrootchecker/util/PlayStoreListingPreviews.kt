@@ -20,6 +20,8 @@ private fun MainScreenPlayStoreListing() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},

@@ -41,4 +41,14 @@
     <string name="other_apps_billboard_description">هذا التطبيق يساعدك على عرض نص كبير على الشاشة، ويجعله بأكبر حجم ممكن دون قطع النص.\n\nيمكن استخدامه في الاجتماعات للتصويت على موضوع برقم أو نص.</string>
     <string name="other_apps_hide_notifications_description">اختر إشعارًا دائمًا لإخفائه، وسيبقى مخفيًا طالما هذا التطبيق مثبت.</string>
 
+    <!-- In-app updates -->
+    <string name="update_available_title">تحديث متاح</string>
+    <string name="update_available_body">إصدار جديد من التطبيق جاهز للتنزيل.</string>
+    <string name="update_action_update">تحديث</string>
+    <string name="update_downloading">جاري تنزيل التحديث…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s م.ب.</string>
+    <string name="update_downloaded_title">تم تنزيل التحديث</string>
+    <string name="update_action_install">التثبيت الآن</string>
+    <string name="update_failed">فشل التحديث. ستتم إعادة المحاولة تلقائيًا.</string>
+
 </resources>

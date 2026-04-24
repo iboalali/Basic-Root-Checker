@@ -4,9 +4,11 @@ import android.app.Application
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.data.RootChecker
+import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import de.boehrsi.devicemarketingnames.DeviceMarketingNames
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,15 +30,24 @@ data class MainUiState(
     val deviceMarketingName: String = "",
     val deviceModelName: String = "",
     val androidVersion: String = "",
+    val updateStatus: AppUpdateEvent = AppUpdateEvent.None,
 )
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val appUpdateController =
+        (application as BasicRootCheckerApplication).appUpdateController
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
     init {
         loadDeviceInfo()
+        viewModelScope.launch {
+            appUpdateController.events.collect { event ->
+                _uiState.update { it.copy(updateStatus = event) }
+            }
+        }
     }
 
     private fun loadDeviceInfo() {
@@ -65,5 +76,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _uiState.update { it.copy(rootStatus = status) }
             Analytics.trackRootCheckResult(status.name)
         }
+    }
+
+    fun onUpdateRequested() {
+        appUpdateController.startFlexibleFlow()
+    }
+
+    fun onInstallRequested() {
+        appUpdateController.completeUpdate()
     }
 }

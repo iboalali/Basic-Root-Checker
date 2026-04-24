@@ -13,6 +13,7 @@ androidx-navigation3 = "1.1.0"
 
 boehrsi-devicemarketingnames = "1.0.6"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
 google-material = "1.13.0"
+google-play-app-update = "2.1.0"                 # https://developer.android.com/reference/com/google/android/play/core/release-notes-in_app_updates
 kotlinx-collections-immutable = "0.4.0"
 kotlinx-serialization-core = "1.11.0"
 telemetrydeck = "6.3.0"                          # https://github.com/TelemetryDeck/KotlinSDK/releases
@@ -36,6 +37,7 @@ androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", vers
 
 boehrsi-devicemarketingnames = { module = "de.boehrsi:devicemarketingnames", version.ref = "boehrsi-devicemarketingnames" }
 google-material = { module = "com.google.android.material:material", version.ref = "google-material" }
+google-play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "google-play-app-update" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization-core" }
 telemetrydeck-sdk = { module = "com.telemetrydeck:kotlin-sdk", version.ref = "telemetrydeck" }

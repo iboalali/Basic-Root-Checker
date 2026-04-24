@@ -30,6 +30,17 @@ android {
         }
     }
 
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("gplay") {
+            dimension = "distribution"
+            isDefault = true
+        }
+        create("foss") {
+            dimension = "distribution"
+        }
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -74,4 +85,7 @@ dependencies {
     implementation(libs.boehrsi.devicemarketingnames)
     implementation(libs.telemetrydeck.sdk)
     implementation(libs.topjohnwu.libsu.core)
+
+    // In-app updates (gplay flavor only)
+    "gplayImplementation"(libs.google.play.app.update.ktx)
 }

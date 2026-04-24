@@ -74,6 +74,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import kotlinx.coroutines.launch
 
@@ -89,6 +90,8 @@ fun MainScreen(
     MainScreenContent(
         uiState = uiState,
         onCheckRoot = viewModel::checkRoot,
+        onUpdateRequested = viewModel::onUpdateRequested,
+        onInstallRequested = viewModel::onInstallRequested,
         onNavigateToAbout = onNavigateToAbout,
         onNavigateToLicence = onNavigateToLicence,
         onNavigateToSettings = onNavigateToSettings,
@@ -100,6 +103,8 @@ fun MainScreen(
 fun MainScreenContent(
     uiState: MainUiState,
     onCheckRoot: () -> Unit,
+    onUpdateRequested: () -> Unit,
+    onInstallRequested: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToLicence: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -301,6 +306,16 @@ fun MainScreenContent(
 
             Spacer(Modifier.height(24.dp))
 
+            if (uiState.updateStatus !is AppUpdateEvent.None) {
+                // Update Card (hidden when updateStatus is None)
+                UpdateCard(
+                    updateStatus = uiState.updateStatus,
+                    onUpdateClick = onUpdateRequested,
+                    onInstallClick = onInstallRequested,
+                )
+                Spacer(Modifier.height(24.dp))
+            }
+
             // Device Info Card
             OutlinedCard(
                 modifier = Modifier
@@ -418,6 +433,8 @@ private fun MainScreenNotCheckedPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -437,6 +454,8 @@ private fun MainScreenCheckingPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -456,6 +475,8 @@ private fun MainScreenRootedPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -475,6 +496,8 @@ private fun MainScreenLocalesPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -497,6 +520,8 @@ private fun MainScreenNotRootedPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
