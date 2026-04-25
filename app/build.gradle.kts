@@ -12,7 +12,7 @@ android {
         applicationId = "com.iboalali.basicrootchecker"
         minSdk = 23
         targetSdk = 36
-        versionCode = 42
+        versionCode = 43
         versionName = "v2.0vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de")
@@ -27,6 +27,17 @@ android {
         debug {
             versionNameSuffix = "-debug"
             applicationIdSuffix = ".debug"
+        }
+    }
+
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("gplay") {
+            dimension = "distribution"
+            isDefault = true
+        }
+        create("foss") {
+            dimension = "distribution"
         }
     }
 
@@ -74,4 +85,7 @@ dependencies {
     implementation(libs.boehrsi.devicemarketingnames)
     implementation(libs.telemetrydeck.sdk)
     implementation(libs.topjohnwu.libsu.core)
+
+    // In-app updates (gplay flavor only)
+    "gplayImplementation"(libs.google.play.app.update.ktx)
 }

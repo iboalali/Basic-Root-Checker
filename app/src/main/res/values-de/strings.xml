@@ -37,4 +37,15 @@ Kontaktiere mich:</string>
     <string name="other_apps_title">Weitere Apps</string>
     <string name="other_apps_billboard_description">Diese App hilft dir, großen Text auf dem Bildschirm anzuzeigen, und macht ihn so groß wie möglich, ohne den Text abzuschneiden.\n\nKann in Meetings verwendet werden, um über ein Thema mit einer Zahl oder einem Text abzustimmen.</string>
     <string name="other_apps_hide_notifications_description">Wähle eine dauerhafte Benachrichtigung zum Ausblenden aus und halte sie versteckt, solange diese App installiert ist.</string>
+
+    <!-- In-app updates -->
+    <string name="update_available_title">Update verfügbar</string>
+    <string name="update_available_body">Eine neue Version der App steht zum Download bereit.</string>
+    <string name="update_action_update">Aktualisieren</string>
+    <string name="update_downloading">Update wird heruntergeladen…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s MB</string>
+    <string name="update_downloaded_title">Update heruntergeladen</string>
+    <string name="update_action_install">Jetzt installieren</string>
+    <string name="update_failed">Update fehlgeschlagen. Es wird automatisch erneut versucht.</string>
+    <string name="app_updated_snackbar">App wurde aktualisiert</string>
 </resources>

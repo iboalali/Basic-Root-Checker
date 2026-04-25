@@ -42,6 +42,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -74,6 +75,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import kotlinx.coroutines.launch
 
@@ -89,6 +91,9 @@ fun MainScreen(
     MainScreenContent(
         uiState = uiState,
         onCheckRoot = viewModel::checkRoot,
+        onUpdateRequested = viewModel::onUpdateRequested,
+        onInstallRequested = viewModel::onInstallRequested,
+        onAppUpdatedSnackbarShown = viewModel::onAppUpdatedSnackbarShown,
         onNavigateToAbout = onNavigateToAbout,
         onNavigateToLicence = onNavigateToLicence,
         onNavigateToSettings = onNavigateToSettings,
@@ -100,6 +105,9 @@ fun MainScreen(
 fun MainScreenContent(
     uiState: MainUiState,
     onCheckRoot: () -> Unit,
+    onUpdateRequested: () -> Unit,
+    onInstallRequested: () -> Unit,
+    onAppUpdatedSnackbarShown: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToLicence: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -111,6 +119,14 @@ fun MainScreenContent(
 
     val checkingText = stringResource(R.string.string_checking_for_root)
     val copiedText = stringResource(R.string.toast_content_copied)
+    val appUpdatedText = stringResource(R.string.app_updated_snackbar)
+
+    LaunchedEffect(uiState.appUpdatedShown) {
+        if (uiState.appUpdatedShown) {
+            snackbarHostState.showSnackbar(appUpdatedText)
+            onAppUpdatedSnackbarShown()
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -175,7 +191,14 @@ fun MainScreenContent(
                 )
             }
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    shape = RoundedCornerShape(16.dp),
+                )
+            }
+        },
     ) { innerPadding ->
         val layoutDirection = LocalLayoutDirection.current
         val topPadding = innerPadding.calculateTopPadding()
@@ -301,6 +324,16 @@ fun MainScreenContent(
 
             Spacer(Modifier.height(24.dp))
 
+            if (uiState.updateStatus !is AppUpdateEvent.None) {
+                // Update Card (hidden when updateStatus is None)
+                UpdateCard(
+                    updateStatus = uiState.updateStatus,
+                    onUpdateClick = onUpdateRequested,
+                    onInstallClick = onInstallRequested,
+                )
+                Spacer(Modifier.height(24.dp))
+            }
+
             // Device Info Card
             OutlinedCard(
                 modifier = Modifier
@@ -418,6 +451,9 @@ private fun MainScreenNotCheckedPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -437,6 +473,9 @@ private fun MainScreenCheckingPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -456,6 +495,9 @@ private fun MainScreenRootedPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -475,6 +517,9 @@ private fun MainScreenLocalesPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -497,6 +542,9 @@ private fun MainScreenNotRootedPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
