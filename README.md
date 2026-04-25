@@ -34,3 +34,6 @@ A simple Android app that checks whether your device has root access. Displays d
 - **Root detection:** [libsu](https://github.com/topjohnwu/libsu) (`Shell.isAppGrantedRoot()`)
 - **Device names:** [DeviceMarketingNames](https://github.com/nicoaccessmedia/DeviceMarketingNames)
 - **Build system:** Gradle with Kotlin DSL and version catalog (AGP 9.1.0)
+
+## Todo
+* Magisk root check
