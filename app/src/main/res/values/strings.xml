@@ -196,6 +196,7 @@
     <string name="update_downloaded_title">Update downloaded</string>
     <string name="update_action_install">Install now</string>
     <string name="update_failed">Update failed. It will retry automatically.</string>
+    <string name="app_updated_snackbar">App was updated</string>
 
     <!-- Other Apps -->
     <string name="other_apps_title">Other Apps</string>

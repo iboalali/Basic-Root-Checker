@@ -47,4 +47,5 @@ Kontaktiere mich:</string>
     <string name="update_downloaded_title">Update heruntergeladen</string>
     <string name="update_action_install">Jetzt installieren</string>
     <string name="update_failed">Update fehlgeschlagen. Es wird automatisch erneut versucht.</string>
+    <string name="app_updated_snackbar">App wurde aktualisiert</string>
 </resources>

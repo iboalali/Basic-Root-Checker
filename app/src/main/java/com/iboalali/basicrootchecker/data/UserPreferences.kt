@@ -3,6 +3,7 @@ package com.iboalali.basicrootchecker.data
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -27,7 +28,19 @@ class UserPreferences(private val context: Context) {
     fun telemetryEnabledBlocking(): Boolean =
         runBlocking { telemetryEnabled.first() }
 
+    val lastSeenVersionCode: Flow<Int> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[LAST_SEEN_VERSION_CODE] ?: 0
+        }
+
+    suspend fun setLastSeenVersionCode(code: Int) {
+        context.userSettingsDataStore.edit { preferences ->
+            preferences[LAST_SEEN_VERSION_CODE] = code
+        }
+    }
+
     companion object {
         private val TELEMETRY_ENABLED = booleanPreferencesKey("telemetry_enabled")
+        private val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
     }
 }

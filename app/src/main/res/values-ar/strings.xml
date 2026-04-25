@@ -50,5 +50,6 @@
     <string name="update_downloaded_title">تم تنزيل التحديث</string>
     <string name="update_action_install">التثبيت الآن</string>
     <string name="update_failed">فشل التحديث. ستتم إعادة المحاولة تلقائيًا.</string>
+    <string name="app_updated_snackbar">تم تحديث التطبيق</string>
 
 </resources>

@@ -22,6 +22,7 @@ private fun MainScreenPlayStoreListing() {
             onCheckRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},

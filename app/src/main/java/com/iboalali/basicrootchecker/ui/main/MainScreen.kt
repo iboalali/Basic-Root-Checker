@@ -42,6 +42,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -92,6 +93,7 @@ fun MainScreen(
         onCheckRoot = viewModel::checkRoot,
         onUpdateRequested = viewModel::onUpdateRequested,
         onInstallRequested = viewModel::onInstallRequested,
+        onAppUpdatedSnackbarShown = viewModel::onAppUpdatedSnackbarShown,
         onNavigateToAbout = onNavigateToAbout,
         onNavigateToLicence = onNavigateToLicence,
         onNavigateToSettings = onNavigateToSettings,
@@ -105,6 +107,7 @@ fun MainScreenContent(
     onCheckRoot: () -> Unit,
     onUpdateRequested: () -> Unit,
     onInstallRequested: () -> Unit,
+    onAppUpdatedSnackbarShown: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToLicence: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -116,6 +119,14 @@ fun MainScreenContent(
 
     val checkingText = stringResource(R.string.string_checking_for_root)
     val copiedText = stringResource(R.string.toast_content_copied)
+    val appUpdatedText = stringResource(R.string.app_updated_snackbar)
+
+    LaunchedEffect(uiState.appUpdatedShown) {
+        if (uiState.appUpdatedShown) {
+            snackbarHostState.showSnackbar(appUpdatedText)
+            onAppUpdatedSnackbarShown()
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -180,7 +191,14 @@ fun MainScreenContent(
                 )
             }
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    shape = RoundedCornerShape(16.dp),
+                )
+            }
+        },
     ) { innerPadding ->
         val layoutDirection = LocalLayoutDirection.current
         val topPadding = innerPadding.calculateTopPadding()
@@ -435,6 +453,7 @@ private fun MainScreenNotCheckedPreview() {
             onCheckRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -456,6 +475,7 @@ private fun MainScreenCheckingPreview() {
             onCheckRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -477,6 +497,7 @@ private fun MainScreenRootedPreview() {
             onCheckRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -498,6 +519,7 @@ private fun MainScreenLocalesPreview() {
             onCheckRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
@@ -522,6 +544,7 @@ private fun MainScreenNotRootedPreview() {
             onCheckRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
             onNavigateToLicence = {},
             onNavigateToSettings = {},
