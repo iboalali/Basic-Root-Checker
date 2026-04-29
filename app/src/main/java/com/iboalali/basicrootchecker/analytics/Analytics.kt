@@ -26,6 +26,11 @@ object Analytics {
         TelemetryDeck.signal("privacyPolicyClicked")
     }
 
+    fun trackWebsiteClicked() {
+        if (!enabled) return
+        TelemetryDeck.signal("websiteClicked")
+    }
+
     fun trackOtherAppClicked(packageName: String) {
         if (!enabled) return
         TelemetryDeck.signal(

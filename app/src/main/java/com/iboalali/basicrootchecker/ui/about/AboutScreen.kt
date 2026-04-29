@@ -1,8 +1,10 @@
 package com.iboalali.basicrootchecker.ui.about
 
+import android.content.Intent
 import android.text.util.Linkify
 import android.widget.TextView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,7 +42,9 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -133,7 +137,39 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                         modifier = Modifier.padding(start = 32.dp),
                     )
 
-                    Spacer(Modifier.height(25.dp))
+                    Spacer(Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                Analytics.trackWebsiteClicked()
+                                context.startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        "https://iboalali.com/?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=home".toUri(),
+                                    )
+                                )
+                            }
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.about_visit_website),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Icon(
+                            painter = painterResource(R.drawable.open_in_new_24px),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp),
+                        )
+                    }
+
+                    Spacer(Modifier.height(16.dp))
 
                     Text(
                         text = stringResource(R.string.about_not_affiliated),
