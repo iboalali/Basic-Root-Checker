@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basic Root Checker</string>
+
+    <!-- Main Strings-->
+    <string name="textView_Disclaimer"><![CDATA[Это приложение <b>НЕ</b> предоставит root-доступ устройству.<br>Оно лишь показывает, имеется ли root-доступ на устройстве.]]></string>
+    <string name="textView_checkForRoot">Нажмите кнопку «#» в правом нижнем углу, чтобы проверить наличие root-доступа</string>
+    <string name="rootAvailable">На устройстве есть root-доступ</string>
+    <string name="rootUnknown">Не удалось определить наличие root-доступа</string>
+    <string name="rootNotAvailable">На устройстве нет root-доступа</string>
+    <string name="action_licence">Лицензии</string>
+    <string name="action_about">О приложении</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_privacy_policy">Политика конфиденциальности</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_telemetry_title">Отправлять анонимные данные об использовании</string>
+    <string name="settings_telemetry_description">Помогает улучшать приложение через TelemetryDeck. Изменения вступают в силу при следующем запуске приложения.</string>
+    <string name="settings_privacy_policy_description">Открыть политику конфиденциальности в браузере</string>
+    <string name="textViewAndroidVersion">Android</string>
+    <string name="string_your_device">Ваше устройство</string>
+    <string name="string_checking_for_root">Проверка root-доступа…</string>
+
+    <!-- About Strings -->
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
+        Это приложение НЕ предоставляет root-доступ.\n
+        Для работы требуется root-доступ — используйте на свой страх и риск.\n
+        Приложение не собирает никаких данных и личной информации.\n\n\n
+        Связаться со мной:</string>
+    <string name="about_visit_website">Посетить мой сайт</string>
+    <string name="about_not_affiliated">Это приложение не связано с topjohnwu и libsu и не одобрено ими</string>
+
+    <!-- Style Strings -->
+    <string name="content_description_check_for_root">Проверить root-доступ</string>
+    <string name="content_description_marketing_name">Маркетинговое название</string>
+    <string name="content_description_model_name">Название модели</string>
+    <string name="content_description_android_version">Версия Android</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">Название устройства</string>
+    <string name="label_model">Модель</string>
+    <string name="label_android_version">Версия Android</string>
+    <string name="toast_content_copied">Скопировано</string>
+
+    <!-- In-app updates -->
+    <string name="update_available_title">Доступно обновление</string>
+    <string name="update_available_body">Новая версия приложения готова к загрузке.</string>
+    <string name="update_action_update">Обновить</string>
+    <string name="update_downloading">Загрузка обновления…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s МБ</string>
+    <string name="update_downloaded_title">Обновление загружено</string>
+    <string name="update_action_install">Установить сейчас</string>
+    <string name="update_failed">Не удалось загрузить обновление. Повторная попытка будет выполнена автоматически.</string>
+    <string name="app_updated_snackbar">Приложение обновлено</string>
+
+    <!-- Other Apps -->
+    <string name="other_apps_title">Другие приложения</string>
+    <string name="other_apps_billboard_description">Это приложение помогает выводить крупный текст на экран и автоматически подбирает максимально возможный размер шрифта без обрезания текста.\n\nПодходит для совещаний — для голосования по теме числом или словом.</string>
+    <string name="other_apps_hide_notifications_description">Выберите постоянное уведомление, которое нужно скрыть, и оно будет оставаться скрытым, пока установлено это приложение.</string>
+
+</resources>
