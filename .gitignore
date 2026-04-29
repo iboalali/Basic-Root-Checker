@@ -43,6 +43,10 @@ captures/
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
 app/release/*
+app/*/release/
 app/src/main/res/values/publickey.xml
 .idea/
 /.kotlin/*
+
+# Claude Code per-project state
+.claude/

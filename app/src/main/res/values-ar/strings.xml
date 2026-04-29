@@ -23,6 +23,7 @@
 هذا التطبيق لا يجمع معلومات عن جهازك أو شخصيتك\n\n\n
 اتصل بي:</string>
     <string name="about_not_affiliated">هذا البرنامج ليست تابع ولا مأيّد من Chainfire أو SuperSU</string>
+    <string name="about_visit_website">زيارة موقعي الإلكتروني</string>
     <string name="textView_checkForRoot">المس على الزر المستدير في أسفل اليمين للتحقق من حالة من خاصية الـ Root</string>
     <string name="textViewAndroidVersion">اندرود</string>
     <string name="string_your_device">جهازك</string>
