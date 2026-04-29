@@ -8,7 +8,7 @@ A simple Android app that checks whether your device has root access. Displays d
 - Device info display (model, marketing name, Android version)
 - Material 3 theming with dynamic colors
 - Splash screen with custom exit animation
-- Localized in English, German, and Arabic
+- Localized in English, German, Arabic, and Russian
 
 ## Requirements
 
@@ -37,3 +37,4 @@ A simple Android app that checks whether your device has root access. Displays d
 
 ## Todo
 * Magisk root check
+* In-app language picker in the settings screen
