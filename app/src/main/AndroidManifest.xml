@@ -4,6 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <queries>
+        <package android:name="com.topjohnwu.magisk" />
+        <package android:name="com.topjohnwu.magisk.debug" />
+        <package android:name="com.topjohnwu.magisk.canary" />
+        <package android:name="com.topjohnwu.magisk.alpha" />
+    </queries>
+
     <application
         android:name=".BasicRootCheckerApplication"
         android:allowBackup="false"
