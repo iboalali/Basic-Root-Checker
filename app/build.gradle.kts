@@ -15,7 +15,7 @@ android {
         versionCode = 44
         versionName = "v2.0vc$versionCode"
         @Suppress("UnstableApiUsage")
-        androidResources.localeFilters += listOf("en", "ar", "de")
+        androidResources.localeFilters += listOf("en", "ar", "de", "ru")
         buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")
     }
     buildTypes {
