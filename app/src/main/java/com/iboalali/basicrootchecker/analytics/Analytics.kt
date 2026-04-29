@@ -47,6 +47,17 @@ object Analytics {
         )
     }
 
+    fun trackRootProvider(provider: String, version: String?) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "rootProviderDetected",
+            mapOf(
+                "provider" to provider,
+                "version" to (version ?: ""),
+            ),
+        )
+    }
+
     fun trackUpdateAvailable() {
         if (!enabled) return
         TelemetryDeck.signal("updateAvailable")

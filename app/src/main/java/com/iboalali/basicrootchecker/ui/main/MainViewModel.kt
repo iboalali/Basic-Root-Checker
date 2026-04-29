@@ -9,6 +9,8 @@ import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.data.RootChecker
+import com.iboalali.basicrootchecker.data.RootProvider
+import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.DeviceInfo
@@ -30,6 +32,8 @@ enum class RootStatus {
 
 data class MainUiState(
     val rootStatus: RootStatus = RootStatus.NOT_CHECKED,
+    val rootProvider: RootProvider = RootProvider.UNKNOWN,
+    val rootProviderVersion: String? = null,
     val deviceMarketingName: String = "",
     val deviceModelName: String = "",
     val androidVersion: String = "",
@@ -87,16 +91,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun checkRoot() {
         viewModelScope.launch {
-            _uiState.update { it.copy(rootStatus = RootStatus.CHECKING) }
-            Analytics.trackRootCheckStarted()
-            val result = RootChecker.checkRoot()
-            val status = when (result) {
-                true -> RootStatus.ROOTED
-                false -> RootStatus.NOT_ROOTED
-                null -> RootStatus.UNKNOWN
+            _uiState.update {
+                it.copy(
+                    rootStatus = RootStatus.CHECKING,
+                    rootProvider = RootProvider.UNKNOWN,
+                    rootProviderVersion = null,
+                )
             }
-            _uiState.update { it.copy(rootStatus = status) }
+            Analytics.trackRootCheckStarted()
+            val result = RootChecker.check(getApplication())
+            val (status, provider, version) = when (result) {
+                is RootResult.Rooted -> Triple(RootStatus.ROOTED, result.provider, result.version)
+                RootResult.NotRooted -> Triple(RootStatus.NOT_ROOTED, RootProvider.UNKNOWN, null)
+                RootResult.Unknown -> Triple(RootStatus.UNKNOWN, RootProvider.UNKNOWN, null)
+            }
+            _uiState.update {
+                it.copy(
+                    rootStatus = status,
+                    rootProvider = provider,
+                    rootProviderVersion = version,
+                )
+            }
             Analytics.trackRootCheckResult(status.name)
+            if (status == RootStatus.ROOTED) {
+                Analytics.trackRootProvider(provider.name, version)
+            }
         }
     }
 

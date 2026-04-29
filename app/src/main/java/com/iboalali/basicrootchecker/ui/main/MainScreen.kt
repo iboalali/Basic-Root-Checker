@@ -74,6 +74,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -319,6 +320,29 @@ fun MainScreenContent(
                             textAlign = TextAlign.Center,
                         )
                     }
+
+                    if (uiState.rootStatus == RootStatus.ROOTED &&
+                        uiState.rootProvider != RootProvider.UNKNOWN
+                    ) {
+                        val providerName = when (uiState.rootProvider) {
+                            RootProvider.MAGISK -> stringResource(R.string.root_provider_magisk)
+                            RootProvider.OTHER -> stringResource(R.string.root_provider_other)
+                            RootProvider.UNKNOWN -> ""
+                        }
+                        val version = uiState.rootProviderVersion
+                        val providerText = if (version != null) {
+                            stringResource(R.string.root_provider_via_with_version, providerName, version)
+                        } else {
+                            stringResource(R.string.root_provider_via, providerName)
+                        }
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = providerText,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 }
             }
 
@@ -490,6 +514,8 @@ private fun MainScreenRootedPreview() {
         MainScreenContent(
             uiState = MainUiState(
                 rootStatus = RootStatus.ROOTED,
+                rootProvider = RootProvider.MAGISK,
+                rootProviderVersion = "27.0",
                 deviceMarketingName = "Pixel 8 Pro",
                 deviceModelName = "husky",
                 androidVersion = "Android 16",
