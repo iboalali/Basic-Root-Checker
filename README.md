@@ -37,3 +37,4 @@ A simple Android app that checks whether your device has root access. Displays d
 
 ## Todo
 * Magisk root check
+* In-app language picker in the settings screen
