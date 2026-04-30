@@ -19,13 +19,14 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallErrorCode
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.analytics.Analytics
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 private const val TAG = "GPlayAppUpdate"
-private const val STALENESS_DAYS_THRESHOLD = 1
+private val STALENESS_DAYS_THRESHOLD = if (BuildConfig.DEBUG) 0 else 1
 
 class GPlayAppUpdateController(context: Context) : AppUpdateController {
 
@@ -107,6 +108,20 @@ class GPlayAppUpdateController(context: Context) : AppUpdateController {
             .addOnSuccessListener { info ->
                 latestUpdateInfo = info
                 val current = _events.value
+
+                val availability = info.updateAvailability()
+                val staleness = info.clientVersionStalenessDays()
+                val flexibleAllowed = info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
+                Log.d(
+                    TAG,
+                    "appUpdateInfo: availability=${availabilityName(availability)}" +
+                        ", installStatus=${installStatusName(info.installStatus())}" +
+                        ", availableVersionCode=${info.availableVersionCode()}" +
+                        ", clientVersionStalenessDays=$staleness" +
+                        ", flexibleAllowed=$flexibleAllowed" +
+                        ", stalenessThreshold=$STALENESS_DAYS_THRESHOLD",
+                )
+
                 if (current is AppUpdateEvent.Downloading) return@addOnSuccessListener
 
                 if (info.installStatus() == InstallStatus.DOWNLOADED) {
@@ -114,9 +129,8 @@ class GPlayAppUpdateController(context: Context) : AppUpdateController {
                     return@addOnSuccessListener
                 }
 
-                val available = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                val flexibleAllowed = info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
-                val stale = (info.clientVersionStalenessDays() ?: -1) >= STALENESS_DAYS_THRESHOLD
+                val available = availability == UpdateAvailability.UPDATE_AVAILABLE
+                val stale = (staleness ?: -1) >= STALENESS_DAYS_THRESHOLD
 
                 if (available && flexibleAllowed && stale) {
                     if (current !is AppUpdateEvent.Available) {
@@ -153,6 +167,26 @@ class GPlayAppUpdateController(context: Context) : AppUpdateController {
     override fun completeUpdate() {
         appUpdateManager.completeUpdate()
     }
+
+    private fun availabilityName(value: Int): String = when (value) {
+        UpdateAvailability.UNKNOWN -> "UNKNOWN"
+        UpdateAvailability.UPDATE_NOT_AVAILABLE -> "UPDATE_NOT_AVAILABLE"
+        UpdateAvailability.UPDATE_AVAILABLE -> "UPDATE_AVAILABLE"
+        UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> "DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS"
+        else -> "UNMAPPED"
+    } + " ($value)"
+
+    private fun installStatusName(value: Int): String = when (value) {
+        InstallStatus.UNKNOWN -> "UNKNOWN"
+        InstallStatus.PENDING -> "PENDING"
+        InstallStatus.DOWNLOADING -> "DOWNLOADING"
+        InstallStatus.DOWNLOADED -> "DOWNLOADED"
+        InstallStatus.INSTALLING -> "INSTALLING"
+        InstallStatus.INSTALLED -> "INSTALLED"
+        InstallStatus.FAILED -> "FAILED"
+        InstallStatus.CANCELED -> "CANCELED"
+        else -> "UNMAPPED"
+    } + " ($value)"
 
     private fun formatInstallError(code: Int): String {
         val name = when (code) {
