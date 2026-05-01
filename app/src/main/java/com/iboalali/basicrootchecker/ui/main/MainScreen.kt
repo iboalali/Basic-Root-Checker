@@ -34,7 +34,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -74,6 +73,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -149,22 +149,22 @@ fun MainScreenContent(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false },
                     ) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.action_licence)) },
+                        AppBarDropdownMenuItem(
+                            text = stringResource(R.string.action_licence),
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToLicence()
                             },
                         )
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.action_settings)) },
+                        AppBarDropdownMenuItem(
+                            text = stringResource(R.string.action_settings),
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToSettings()
                             },
                         )
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.action_about)) },
+                        AppBarDropdownMenuItem(
+                            text = stringResource(R.string.action_about),
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToAbout()
