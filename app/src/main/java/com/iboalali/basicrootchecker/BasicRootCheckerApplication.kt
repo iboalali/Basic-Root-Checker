@@ -21,6 +21,7 @@ class BasicRootCheckerApplication : Application() {
             val builder = TelemetryDeck.Builder()
                 .appID(BuildConfig.TELEMETRY_DECK_APP_ID)
                 .showDebugLogs(BuildConfig.DEBUG)
+                .testMode(BuildConfig.DEBUG)
             TelemetryDeck.start(applicationContext, builder)
         }
     }
