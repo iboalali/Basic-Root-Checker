@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace = "com.iboalali.basicrootchecker"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.iboalali.basicrootchecker"
         minSdk = 23
-        targetSdk = 36
-        versionCode = 45
-        versionName = "v2.0vc$versionCode"
+        targetSdk = 37
+        versionCode = 46
+        versionName = "v2.1vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de")
         buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")

@@ -1,15 +1,15 @@
 [versions]
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 android-gradle-plugin = "9.2.0"
 
 androidx-activity = "1.13.0"
 androidx-annotation = "1.10.0"
-androidx-compose-bom = "2026.03.01"
+androidx-compose-bom = "2026.04.01"
 androidx-core = "1.18.0"
 androidx-core-splashscreen = "1.2.0"
 androidx-datastore = "1.2.1"
 androidx-lifecycle = "2.10.0"
-androidx-navigation3 = "1.1.0"
+androidx-navigation3 = "1.1.1"
 
 boehrsi-devicemarketingnames = "1.0.6"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
 google-material = "1.13.0"
