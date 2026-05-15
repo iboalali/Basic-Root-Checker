@@ -1,18 +1,18 @@
 [versions]
 kotlin = "2.3.21"
-android-gradle-plugin = "9.2.0"
+android-gradle-plugin = "9.2.1"
 
 androidx-activity = "1.13.0"
 androidx-annotation = "1.10.0"
-androidx-compose-bom = "2026.04.01"
+androidx-compose-bom = "2026.05.00"
 androidx-core = "1.18.0"
 androidx-core-splashscreen = "1.2.0"
 androidx-datastore = "1.2.1"
 androidx-lifecycle = "2.10.0"
 androidx-navigation3 = "1.1.1"
 
-boehrsi-devicemarketingnames = "1.0.6"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
-google-material = "1.13.0"
+boehrsi-devicemarketingnames = "1.0.7"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
+google-material = "1.14.0"
 google-play-app-update = "2.1.0"                 # https://developer.android.com/reference/com/google/android/play/core/release-notes-in_app_updates
 kotlinx-collections-immutable = "0.4.0"
 kotlinx-serialization-core = "1.11.0"
