@@ -27,6 +27,10 @@ A simple Android app that checks whether your device has root access. Displays d
 ./gradlew assembleRelease
 ```
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for the release history.
+
 ## Tech Stack
 
 - **Language:** Kotlin

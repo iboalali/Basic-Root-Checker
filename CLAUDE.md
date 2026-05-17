@@ -60,3 +60,9 @@ Three locales: English (`en`), German (`de`), Arabic (`ar`). Locale config in `r
 ### Theming
 
 Compose Material3 with dynamic colors (API 31+), fallback to custom light/dark color schemes defined in `ui/theme/Color.kt`. Splash screen theme chain in XML (`values-v21/v23/v27/v31` theme qualifiers).
+
+## Changelog
+
+`CHANGELOG.md` at the repo root follows the [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) format with sections **Added / Changed / Deprecated / Removed / Fixed / Security**. In-flight work lives under `## [Unreleased]`; at release time that heading is renamed to `## [<version>] - <YYYY-MM-DD>` and a fresh empty `[Unreleased]` is added above it.
+
+**Update the changelog as part of every feature, bug fix, or user-visible behavior change.** Add a bullet under the appropriate section of `[Unreleased]` in the same commit (or PR) that introduces the change. Write entries in user-facing language — no commit SHAs, no internal jargon. Skip the changelog only for pure refactors, internal docs edits, dependency-only bumps with no user impact, or build-config tweaks that don't change shipped behavior.
