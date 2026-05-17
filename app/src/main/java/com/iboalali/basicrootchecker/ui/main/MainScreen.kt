@@ -35,6 +35,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -73,6 +74,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
@@ -91,6 +93,7 @@ fun MainScreen(
     MainScreenContent(
         uiState = uiState,
         onCheckRoot = viewModel::checkRoot,
+        onRequestRoot = viewModel::requestRoot,
         onUpdateRequested = viewModel::onUpdateRequested,
         onInstallRequested = viewModel::onInstallRequested,
         onAppUpdatedSnackbarShown = viewModel::onAppUpdatedSnackbarShown,
@@ -105,6 +108,7 @@ fun MainScreen(
 fun MainScreenContent(
     uiState: MainUiState,
     onCheckRoot: () -> Unit,
+    onRequestRoot: () -> Unit,
     onUpdateRequested: () -> Unit,
     onInstallRequested: () -> Unit,
     onAppUpdatedSnackbarShown: () -> Unit,
@@ -266,11 +270,13 @@ fun MainScreenContent(
                                     val imageRes = when (status) {
                                         RootStatus.ROOTED -> R.drawable.ic_success_c
                                         RootStatus.NOT_ROOTED, RootStatus.UNKNOWN -> R.drawable.ic_fail_c
+                                        RootStatus.NOT_GRANTED -> R.drawable.ic_unknown_c
                                         else -> R.drawable.ic_unknown_c
                                     }
                                     val isResult = status == RootStatus.ROOTED ||
                                             status == RootStatus.NOT_ROOTED ||
-                                            status == RootStatus.UNKNOWN
+                                            status == RootStatus.UNKNOWN ||
+                                            status == RootStatus.NOT_GRANTED
                                     val scale = remember { Animatable(if (isResult) 0f else 1f) }
                                     LaunchedEffect(Unit) {
                                         if (isResult) {
@@ -314,10 +320,44 @@ fun MainScreenContent(
                                 RootStatus.ROOTED -> stringResource(R.string.rootAvailable)
                                 RootStatus.NOT_ROOTED -> stringResource(R.string.rootNotAvailable)
                                 RootStatus.UNKNOWN -> stringResource(R.string.rootUnknown)
+                                RootStatus.NOT_GRANTED -> stringResource(R.string.rootNotGranted)
                             },
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Center,
                         )
+                    }
+
+                    val showProvider = (uiState.rootStatus == RootStatus.ROOTED ||
+                            uiState.rootStatus == RootStatus.NOT_GRANTED) &&
+                            uiState.rootProvider != RootProvider.UNKNOWN
+                    if (showProvider) {
+                        val providerName = when (uiState.rootProvider) {
+                            RootProvider.MAGISK -> stringResource(R.string.root_provider_magisk)
+                            RootProvider.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
+                            RootProvider.APATCH -> stringResource(R.string.root_provider_apatch)
+                            RootProvider.OTHER -> stringResource(R.string.root_provider_other)
+                            RootProvider.UNKNOWN -> ""
+                        }
+                        val version = uiState.rootProviderVersion
+                        val providerText = if (version != null) {
+                            stringResource(R.string.root_provider_via_with_version, providerName, version)
+                        } else {
+                            stringResource(R.string.root_provider_via, providerName)
+                        }
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = providerText,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+
+                    if (uiState.rootStatus == RootStatus.NOT_GRANTED) {
+                        Spacer(Modifier.height(16.dp))
+                        FilledTonalButton(onClick = onRequestRoot) {
+                            Text(text = stringResource(R.string.action_request_root))
+                        }
                     }
                 }
             }
@@ -451,6 +491,7 @@ private fun MainScreenNotCheckedPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
@@ -473,6 +514,7 @@ private fun MainScreenCheckingPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
@@ -490,11 +532,14 @@ private fun MainScreenRootedPreview() {
         MainScreenContent(
             uiState = MainUiState(
                 rootStatus = RootStatus.ROOTED,
+                rootProvider = RootProvider.MAGISK,
+                rootProviderVersion = "27.0",
                 deviceMarketingName = "Pixel 8 Pro",
                 deviceModelName = "husky",
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
@@ -517,6 +562,31 @@ private fun MainScreenLocalesPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onRequestRoot = {},
+            onUpdateRequested = {},
+            onInstallRequested = {},
+            onAppUpdatedSnackbarShown = {},
+            onNavigateToAbout = {},
+            onNavigateToLicence = {},
+            onNavigateToSettings = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MainScreenNotGrantedPreview() {
+    BasicRootCheckerTheme {
+        MainScreenContent(
+            uiState = MainUiState(
+                rootStatus = RootStatus.NOT_GRANTED,
+                rootProvider = RootProvider.MAGISK,
+                deviceMarketingName = "Pixel 8 Pro",
+                deviceModelName = "husky",
+                androidVersion = "Android 16",
+            ),
+            onCheckRoot = {},
+            onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
@@ -542,6 +612,7 @@ private fun MainScreenNotRootedPreview() {
                 androidVersion = "Android 16",
             ),
             onCheckRoot = {},
+            onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},

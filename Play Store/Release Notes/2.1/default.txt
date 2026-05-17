@@ -1,0 +1,7 @@
+Version 2.1:
+➕ Detects the root provider — Magisk, KernelSU or APatch — and shows it on the result card
+➕ Shows the Magisk version once root is granted
+➕ New "Not granted" state when root is installed but the app hasn't been allowed yet, with a button to request access
+➕ Detects plain "su" binaries too, so devices rooted without a manager aren't missed
+➕ Added support for Android 17
+🛠️ About and Licence screens are now fully edge-to-edge

@@ -149,7 +149,7 @@ fun SettingsScreenContent(
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    "https://iboalali.com/app/basic_root_checker/?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy#privacy".toUri(),
+                                    "https://iboalali.com/app/basic_root_checker/?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy#privacy-policy".toUri(),
                                 )
                             )
                         }

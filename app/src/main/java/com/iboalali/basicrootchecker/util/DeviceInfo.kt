@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.analytics.ERROR_CATEGORY_APP_STATE
 
 object DeviceInfo {
 
@@ -14,6 +16,7 @@ object DeviceInfo {
                 .versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e("DeviceInfo", "getAppVersionName: ", e)
+            Analytics.trackError(e, id = "getAppVersionName", category = ERROR_CATEGORY_APP_STATE)
             ""
         }
     }

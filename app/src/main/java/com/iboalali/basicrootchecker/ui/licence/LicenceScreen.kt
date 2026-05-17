@@ -3,6 +3,7 @@ package com.iboalali.basicrootchecker.ui.licence
 import android.text.util.Linkify
 import android.widget.TextView
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,10 +59,18 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
             )
         },
     ) { innerPadding ->
+        val layoutDirection = LocalLayoutDirection.current
+        val contentPadding = PaddingValues(
+            top = innerPadding.calculateTopPadding(),
+            start = innerPadding.calculateLeftPadding(layoutDirection),
+            end = innerPadding.calculateRightPadding(layoutDirection),
+        )
+        val bottomPadding = innerPadding.calculateBottomPadding()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(contentPadding)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -114,7 +124,7 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
 
-                Spacer(Modifier.height(50.dp))
+                Spacer(Modifier.height(50.dp + bottomPadding))
             }
         }
     }
