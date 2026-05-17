@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
@@ -75,10 +77,17 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
             )
         },
     ) { innerPadding ->
+        val layoutDirection = LocalLayoutDirection.current
+        val contentPadding = PaddingValues(
+            top = innerPadding.calculateTopPadding(),
+            start = innerPadding.calculateLeftPadding(layoutDirection),
+            end = innerPadding.calculateRightPadding(layoutDirection),
+        )
+        val bottomPadding = innerPadding.calculateBottomPadding()
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(contentPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -198,7 +207,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                 modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp + bottomPadding))
         }
     }
 }
