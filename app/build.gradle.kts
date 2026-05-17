@@ -88,4 +88,7 @@ dependencies {
 
     // In-app updates (gplay flavor only)
     "gplayImplementation"(libs.google.play.app.update.ktx)
+
+    // Unit tests
+    testImplementation(libs.junit)
 }

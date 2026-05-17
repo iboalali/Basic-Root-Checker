@@ -19,6 +19,8 @@ kotlinx-serialization-core = "1.11.0"
 telemetrydeck = "6.3.0"                          # https://github.com/TelemetryDeck/KotlinSDK/releases
 topjohnwu-libsu-core = "6.0.0"                  # https://github.com/topjohnwu/libsu/releases
 
+junit = "4.13.2"
+
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
@@ -42,6 +44,8 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization-core" }
 telemetrydeck-sdk = { module = "com.telemetrydeck:kotlin-sdk", version.ref = "telemetrydeck" }
 topjohnwu-libsu-core = { module = "com.github.topjohnwu.libsu:core", version.ref = "topjohnwu-libsu-core" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

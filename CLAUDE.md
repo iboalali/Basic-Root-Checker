@@ -19,9 +19,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # Lint check
 ./gradlew lint
+
+# Run unit tests
+./gradlew :app:testGplayDebugUnitTest
 ```
 
-There are no tests in this project.
+Unit tests live in `app/src/test/` and currently cover `RootChecker`'s pure decision logic (`classify`) and `parseMagiskVersionCode`. The hardware-dependent probes are not unit-tested; verify them on a real rooted device.
 
 ## Architecture
 
