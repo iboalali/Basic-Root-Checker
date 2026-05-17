@@ -7,14 +7,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.File
+import kotlin.time.Duration.Companion.milliseconds
 
 sealed interface RootResult {
     data object NotRooted : RootResult
     data object Unknown : RootResult
     data class Rooted(val provider: RootProvider, val version: String?) : RootResult
+    data class RootedNotGranted(val provider: RootProvider) : RootResult
 }
 
-enum class RootProvider { MAGISK, OTHER, UNKNOWN }
+enum class RootProvider { MAGISK, KERNELSU, APATCH, OTHER, UNKNOWN }
 
 object RootChecker {
 
@@ -25,31 +27,85 @@ object RootChecker {
         "com.topjohnwu.magisk.alpha",
     )
 
+    private val KERNELSU_PACKAGES = listOf(
+        "me.weishu.kernelsu",
+        "com.rifsxd.ksunext",
+    )
+
+    private val APATCH_PACKAGES = listOf(
+        "me.bmax.apatch",
+    )
+
+    private val SU_PATHS = listOf(
+        "/system/bin/su",
+        "/system/xbin/su",
+        "/sbin/su",
+        "/su/bin/su",
+        "/su/xbin/su",
+        "/data/local/xbin/su",
+        "/data/local/bin/su",
+        "/data/local/su",
+        "/system/sd/xbin/su",
+        "/system/bin/failsafe/su",
+        "/magisk/.core/bin/su",
+    )
+
     suspend fun check(context: Context): RootResult = withContext(Dispatchers.IO) {
-        val granted = Shell.isAppGrantedRoot()
-        val packageHit = probeMagiskPackage(context)
-        val mountHit = probeMagiskMounts()
-
-        val result = when (granted) {
-            true -> {
-                val version = queryMagiskVersion()
-                val isMagisk = version != null || packageHit || mountHit || probeMagiskFiles()
-                RootResult.Rooted(
-                    provider = if (isMagisk) RootProvider.MAGISK else RootProvider.OTHER,
-                    version = version,
-                )
-            }
-
-            false -> RootResult.NotRooted
-            null -> RootResult.Unknown
-        }
-        delay(1000)
+        val result = evaluate(context)
+        delay(1000.milliseconds)
         result
     }
 
-    private fun probeMagiskPackage(context: Context): Boolean {
+    suspend fun requestRoot(context: Context): RootResult = withContext(Dispatchers.IO) {
+        // Forces libsu to construct its main shell, which prompts the Magisk/KernelSU/APatch
+        // allow dialog if the user has not yet made a decision.
+        Shell.cmd("id").exec()
+        val result = evaluate(context)
+        delay(1000.milliseconds)
+        result
+    }
+
+    private fun evaluate(context: Context): RootResult {
+        val granted = Shell.isAppGrantedRoot()
+        val magiskPackage = probeAnyPackage(context, MAGISK_PACKAGES)
+        val magiskMount = probeMagiskMounts()
+        val kernelsuPackage = probeAnyPackage(context, KERNELSU_PACKAGES)
+        val apatchPackage = probeAnyPackage(context, APATCH_PACKAGES)
+        val suBinary = probeSuBinary()
+
+        return when (granted) {
+            true -> {
+                val version = queryMagiskVersion()
+                val magiskCertain = version != null || magiskPackage || magiskMount || probeMagiskFiles()
+                val provider = when {
+                    magiskCertain -> RootProvider.MAGISK
+                    kernelsuPackage -> RootProvider.KERNELSU
+                    apatchPackage -> RootProvider.APATCH
+                    else -> RootProvider.OTHER
+                }
+                RootResult.Rooted(provider, version)
+            }
+
+            false, null -> {
+                val provider = when {
+                    magiskPackage || magiskMount -> RootProvider.MAGISK
+                    kernelsuPackage -> RootProvider.KERNELSU
+                    apatchPackage -> RootProvider.APATCH
+                    suBinary -> RootProvider.OTHER
+                    else -> null
+                }
+                when {
+                    provider != null -> RootResult.RootedNotGranted(provider)
+                    granted == false -> RootResult.NotRooted
+                    else -> RootResult.Unknown
+                }
+            }
+        }
+    }
+
+    private fun probeAnyPackage(context: Context, packages: List<String>): Boolean {
         val pm = context.packageManager
-        return MAGISK_PACKAGES.any { name ->
+        return packages.any { name ->
             try {
                 pm.getPackageInfo(name, 0)
                 true
@@ -63,6 +119,14 @@ object RootChecker {
         File("/proc/self/mounts").readText().contains("magisk", ignoreCase = true)
     } catch (_: Exception) {
         false
+    }
+
+    private fun probeSuBinary(): Boolean = SU_PATHS.any { path ->
+        try {
+            File(path).exists()
+        } catch (_: SecurityException) {
+            false
+        }
     }
 
     private fun probeMagiskFiles(): Boolean {

@@ -7,7 +7,11 @@
     <string name="rootAvailable">Your Device has Root access</string>
     <string name="rootUnknown">Couldn\'t get Root status of your device</string>
     <string name="rootNotAvailable">Your Device doesn\'t have Root access</string>
+    <string name="rootNotGranted">Root is available but this app has not been granted access</string>
+    <string name="action_request_root">Request Root access</string>
     <string name="root_provider_magisk" translatable="false">Magisk</string>
+    <string name="root_provider_kernelsu" translatable="false">KernelSU</string>
+    <string name="root_provider_apatch" translatable="false">APatch</string>
     <string name="root_provider_other">Other</string>
     <string name="root_provider_via">via %1$s</string>
     <string name="root_provider_via_with_version">via %1$s v%2$s</string>

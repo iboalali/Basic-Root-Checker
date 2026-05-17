@@ -21,6 +21,11 @@ object Analytics {
         TelemetryDeck.signal("rootCheckStarted")
     }
 
+    fun trackRootRequested() {
+        if (!enabled) return
+        TelemetryDeck.signal("rootRequested")
+    }
+
     fun trackPrivacyPolicyClicked() {
         if (!enabled) return
         TelemetryDeck.signal("privacyPolicyClicked")

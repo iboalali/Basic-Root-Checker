@@ -6,6 +6,7 @@ A simple Android app that checks whether your device has root access. Displays d
 
 - Root detection powered by [libsu](https://github.com/topjohnwu/libsu)
 - Magisk detection with version (when rooted)
+- Detects Magisk, KernelSU, and APatch even when the app has not yet been granted root, with an in-app "Request Root access" action
 - Device info display (model, marketing name, Android version)
 - Material 3 theming with dynamic colors
 - Splash screen with custom exit animation
@@ -32,6 +33,6 @@ A simple Android app that checks whether your device has root access. Displays d
 - **UI:** Jetpack Compose with Material 3
 - **Architecture:** ViewModel + StateFlow + Coroutines
 - **Navigation:** [Navigation 3](https://developer.android.com/guide/navigation/navigation-3) (`androidx.navigation3`) with Kotlin Serialization for type-safe routes
-- **Root detection:** [libsu](https://github.com/topjohnwu/libsu) (`Shell.isAppGrantedRoot()`) with Magisk provider + version detection
+- **Root detection:** [libsu](https://github.com/topjohnwu/libsu) (`Shell.isAppGrantedRoot()`) plus unprivileged heuristics (package query, `/proc/self/mounts`, `su` binary search) for Magisk, KernelSU, and APatch
 - **Device names:** [DeviceMarketingNames](https://github.com/nicoaccessmedia/DeviceMarketingNames)
 - **Build system:** Gradle with Kotlin DSL and version catalog (AGP 9.1.0)

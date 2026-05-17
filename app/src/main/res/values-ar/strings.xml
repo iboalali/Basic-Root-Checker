@@ -6,6 +6,11 @@
     <string name="rootAvailable">يوجد خاصية الـ Root</string>
     <string name="rootUnknown">تعذر الحصول على وجود Root لجهازك</string>
     <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
+    <string name="rootNotGranted">صلاحية الـ Root متوفرة ولكن لم يتم منحها لهذا التطبيق</string>
+    <string name="action_request_root">طلب صلاحية الـ Root</string>
+    <string name="root_provider_other">أخرى</string>
+    <string name="root_provider_via">عبر %1$s</string>
+    <string name="root_provider_via_with_version">عبر %1$s v%2$s</string>
     <string name="action_licence">حقوق</string>
     <string name="action_about">عنا</string>
     <string name="action_settings">الإعدادات</string>

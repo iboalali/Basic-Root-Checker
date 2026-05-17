@@ -9,6 +9,9 @@
         <package android:name="com.topjohnwu.magisk.debug" />
         <package android:name="com.topjohnwu.magisk.canary" />
         <package android:name="com.topjohnwu.magisk.alpha" />
+        <package android:name="me.weishu.kernelsu" />
+        <package android:name="com.rifsxd.ksunext" />
+        <package android:name="me.bmax.apatch" />
     </queries>
 
     <application

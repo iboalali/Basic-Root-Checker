@@ -28,6 +28,7 @@ enum class RootStatus {
     ROOTED,
     NOT_ROOTED,
     UNKNOWN,
+    NOT_GRANTED,
 }
 
 data class MainUiState(
@@ -91,31 +92,54 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun checkRoot() {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    rootStatus = RootStatus.CHECKING,
-                    rootProvider = RootProvider.UNKNOWN,
-                    rootProviderVersion = null,
-                )
-            }
+            startRootCheck()
             Analytics.trackRootCheckStarted()
-            val result = RootChecker.check(getApplication())
-            val (status, provider, version) = when (result) {
-                is RootResult.Rooted -> Triple(RootStatus.ROOTED, result.provider, result.version)
-                RootResult.NotRooted -> Triple(RootStatus.NOT_ROOTED, RootProvider.UNKNOWN, null)
-                RootResult.Unknown -> Triple(RootStatus.UNKNOWN, RootProvider.UNKNOWN, null)
-            }
-            _uiState.update {
-                it.copy(
-                    rootStatus = status,
-                    rootProvider = provider,
-                    rootProviderVersion = version,
-                )
-            }
-            Analytics.trackRootCheckResult(status.name)
-            if (status == RootStatus.ROOTED) {
-                Analytics.trackRootProvider(provider.name, version)
-            }
+            applyResult(RootChecker.check(getApplication()))
+        }
+    }
+
+    fun requestRoot() {
+        viewModelScope.launch {
+            startRootCheck()
+            Analytics.trackRootRequested()
+            applyResult(RootChecker.requestRoot(getApplication()))
+        }
+    }
+
+    private fun startRootCheck() {
+        _uiState.update {
+            it.copy(
+                rootStatus = RootStatus.CHECKING,
+                rootProvider = RootProvider.UNKNOWN,
+                rootProviderVersion = null,
+            )
+        }
+    }
+
+    private data class ResolvedRoot(
+        val status: RootStatus,
+        val provider: RootProvider,
+        val version: String?,
+    )
+
+    private fun applyResult(result: RootResult) {
+        val resolved = when (result) {
+            is RootResult.Rooted -> ResolvedRoot(RootStatus.ROOTED, result.provider, result.version)
+            RootResult.NotRooted -> ResolvedRoot(RootStatus.NOT_ROOTED, RootProvider.UNKNOWN, null)
+            RootResult.Unknown -> ResolvedRoot(RootStatus.UNKNOWN, RootProvider.UNKNOWN, null)
+            is RootResult.RootedNotGranted ->
+                ResolvedRoot(RootStatus.NOT_GRANTED, result.provider, null)
+        }
+        _uiState.update {
+            it.copy(
+                rootStatus = resolved.status,
+                rootProvider = resolved.provider,
+                rootProviderVersion = resolved.version,
+            )
+        }
+        Analytics.trackRootCheckResult(resolved.status.name)
+        if (resolved.status == RootStatus.ROOTED) {
+            Analytics.trackRootProvider(resolved.provider.name, resolved.version)
         }
     }
 
