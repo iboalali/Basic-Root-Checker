@@ -24,5 +24,11 @@ class BasicRootCheckerApplication : Application() {
                 .testMode(BuildConfig.DEBUG)
             TelemetryDeck.start(applicationContext, builder)
         }
+
+        val previous = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            Analytics.trackError(throwable)
+            previous?.uncaughtException(thread, throwable)
+        }
     }
 }

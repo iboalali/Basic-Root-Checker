@@ -2,6 +2,7 @@ package com.iboalali.basicrootchecker.data
 
 import android.content.Context
 import android.content.pm.PackageManager
+import com.iboalali.basicrootchecker.analytics.Analytics
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -143,14 +144,16 @@ object RootChecker {
 
     private fun probeMagiskMounts(): Boolean = try {
         File("/proc/self/mounts").readText().contains("magisk", ignoreCase = true)
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+        Analytics.trackError(e, id = "probeMagiskMounts")
         false
     }
 
     private fun probeSuBinary(): Boolean = SU_PATHS.any { path ->
         try {
             File(path).exists()
-        } catch (_: SecurityException) {
+        } catch (e: SecurityException) {
+            Analytics.trackError(e, id = "probeSuBinary")
             false
         }
     }

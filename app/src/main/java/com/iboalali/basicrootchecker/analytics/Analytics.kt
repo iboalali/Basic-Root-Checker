@@ -2,6 +2,10 @@ package com.iboalali.basicrootchecker.analytics
 
 import com.telemetrydeck.sdk.TelemetryDeck
 
+const val ERROR_CATEGORY_THROWN_EXCEPTION = "thrown-exception"
+const val ERROR_CATEGORY_USER_INPUT = "user-input"
+const val ERROR_CATEGORY_APP_STATE = "app-state"
+
 object Analytics {
 
     @Volatile
@@ -9,6 +13,29 @@ object Analytics {
 
     fun setEnabled(enabled: Boolean) {
         this.enabled = enabled
+    }
+
+    fun trackError(
+        id: String,
+        message: String? = null,
+        category: String = ERROR_CATEGORY_THROWN_EXCEPTION,
+    ) {
+        if (!enabled) return
+        val params = buildMap {
+            put("TelemetryDeck.Error.id", id)
+            if (!message.isNullOrEmpty()) put("TelemetryDeck.Error.message", message)
+            put("TelemetryDeck.Error.category", category)
+        }
+        TelemetryDeck.signal("TelemetryDeck.Error.occurred", params)
+    }
+
+    fun trackError(
+        throwable: Throwable,
+        id: String? = null,
+        category: String = ERROR_CATEGORY_THROWN_EXCEPTION,
+    ) {
+        val errorId = id ?: throwable::class.simpleName ?: "UnknownThrowable"
+        trackError(errorId, throwable.message, category)
     }
 
     fun trackNavigation(sourcePath: String, destinationPath: String) {
