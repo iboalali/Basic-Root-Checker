@@ -1,0 +1,7 @@
+Version 2.1:
+➕ Erkennt jetzt den Root-Anbieter — Magisk, KernelSU oder APatch — und zeigt ihn auf der Ergebniskarte
+➕ Zeigt die Magisk-Version, sobald Root gewährt wurde
+➕ Neuer Status, wenn Root installiert, aber für die App noch nicht freigegeben ist, mit Schaltfläche zum Anfordern des Zugriffs
+➕ Erkennt auch generische su-Binaries
+➕ Unterstützung für Android 17 hinzugefügt
+🛠️ Über- und Lizenz-Bildschirme jetzt vollständig edge-to-edge
