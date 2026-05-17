@@ -67,21 +67,20 @@ object RootChecker {
 
     private fun probeMagiskFiles(): Boolean {
         val result = Shell.cmd(
-            "test -d /data/adb/magisk || test -d /sbin/.magisk || test -d /data/adb/modules"
+            "test -d /data/adb/magisk || test -d /debug_ramdisk/.magisk || test -d /sbin/.magisk || test -d /data/adb/modules"
         ).exec()
         return result.isSuccess
     }
 
     private fun queryMagiskVersion(): String? {
-        val nameResult = Shell.cmd("magisk -V").exec()
+        val nameResult = Shell.cmd("magisk -v").exec()
         if (nameResult.isSuccess) {
             val name = nameResult.out.firstOrNull()?.trim().orEmpty()
             if (name.isNotEmpty()) return name
         }
-        val codeResult = Shell.cmd("magisk -vV").exec()
+        val codeResult = Shell.cmd("magisk -V").exec()
         if (codeResult.isSuccess) {
-            val raw = codeResult.out.firstOrNull()?.trim().orEmpty()
-            val code = raw.substringBefore(':').toLongOrNull()
+            val code = codeResult.out.firstOrNull()?.trim()?.toLongOrNull()
             if (code != null) {
                 val major = code / 1000
                 val minor = (code % 1000) / 100
