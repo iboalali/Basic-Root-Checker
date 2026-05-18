@@ -8,6 +8,11 @@
     <string name="rootAvailable">На устройстве есть root-доступ</string>
     <string name="rootUnknown">Не удалось определить наличие root-доступа</string>
     <string name="rootNotAvailable">На устройстве нет root-доступа</string>
+    <string name="rootNotGranted">Root-доступ доступен, но не предоставлен этому приложению</string>
+    <string name="action_request_root">Запросить root-доступ</string>
+    <string name="root_provider_other">Другой</string>
+    <string name="root_provider_via">через %1$s</string>
+    <string name="root_provider_via_with_version">через %1$s v%2$s</string>
     <string name="action_licence">Лицензии</string>
     <string name="action_about">О приложении</string>
     <string name="action_settings">Настройки</string>
