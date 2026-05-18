@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Magisk version detection now recognizes the modern `/debug_ramdisk/.magisk` path and falls back from `magisk -v` to decoding `magisk -V` when only the numeric version code is available.
 - Privacy policy menu item points to the correct URL.
+- Translated the "Content Copied" toast and the marketing-name / model-name / Android-version accessibility labels in German and Arabic, which had been left as English fallbacks.
 
 ### Removed
 - Vendored `libs/AndroidDeviceNames` source — unused since v1.14 when device-name lookup moved to the `boehrsi/devicemarketingnames` Maven dependency.
