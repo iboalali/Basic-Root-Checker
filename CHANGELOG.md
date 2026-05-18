@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error telemetry: previously silent failures inside the root probes and unhandled crashes are now reported via [TelemetryDeck](https://telemetrydeck.com/)'s preset-errors signal, gated by the existing in-app telemetry preference.
 - Added support for Android 17 (API 37). Minimum supported version is unchanged (Android 6.0, API 23).
 - Russian (`ru`) localization, selectable from the Android 13+ per-app language picker alongside English, German, and Arabic.
+- Spanish (`es`) localization using neutral Spanish, also selectable from the per-app language picker.
 
 ### Changed
 - Root status now distinguishes four outcomes: *Rooted*, *Not granted*, *Not rooted*, and *Unknown*. *Not granted* is new and means a root provider was detected on the device but the app has not been granted access to it yet.

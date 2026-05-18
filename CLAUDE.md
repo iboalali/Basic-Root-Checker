@@ -42,7 +42,7 @@ Android app that checks whether a device has root access, written in Kotlin with
 - **LicenceScreen** (`ui/licence/`) — License screen with collapsing toolbar, license texts.
 - **RootChecker** (`data/`) — Two suspend entry points on `Dispatchers.IO`: `check(context)` evaluates passively; `requestRoot(context)` executes `Shell.cmd("id")` first to force libsu's main shell to construct (which triggers the Magisk/KernelSU/APatch allow dialog) before re-evaluating. Both return a `RootResult` sealed interface (`NotRooted` / `Unknown` / `Rooted(provider, version)` / `RootedNotGranted(provider)`). Providers are classified via the `RootProvider` enum (`MAGISK` / `KERNELSU` / `APATCH` / `OTHER` / `UNKNOWN`). Unprivileged probes (installed packages declared in `<queries>`, `/proc/self/mounts` scan, `su` binary existence across standard paths) run regardless of grant state, so a device with root installed but the app not yet allowed is reported as `RootedNotGranted` rather than `NotRooted`. When granted, the Magisk version is read via `magisk -v` / `magisk -V` and the `/data/adb/magisk` etc. paths confirm the provider.
 - **DeviceInfo** (`util/`) — Helpers for app version retrieval and Android version name lookup (maps API level to name via `version_names` string array resource).
-- **Preview Utilities** (`util/`) — Custom preview annotations: `@PreviewLocales` (en, de, ar) and `@PreviewPlayStoreListing` (Phone, 7" Tablet, 10" Tablet).
+- **Preview Utilities** (`util/`) — Custom preview annotations: `@PreviewLocales` (en, de, ar, es, ru) and `@PreviewPlayStoreListing` (Phone, 7" Tablet, 10" Tablet).
 
 ### Build Configuration
 
@@ -55,7 +55,7 @@ Android app that checks whether a device has root access, written in Kotlin with
 
 ### Localization
 
-Three locales: English (`en`), German (`de`), Arabic (`ar`). Locale config in `res/xml/app_locales_config.xml`.
+Five locales: English (`en`), German (`de`), Arabic (`ar`), Spanish (`es`), Russian (`ru`). Locale config in `res/xml/app_locales_config.xml`.
 
 ### Theming
 
