@@ -1,0 +1,3 @@
+Version 2.2:
+➕ App jetzt auf Russisch und Spanisch verfügbar
+🛠️ Einige deutsche und arabische Texte übersetzt, die noch auf Englisch waren (Bedienungshilfen-Beschriftungen, „Inhalt kopiert"-Hinweis)

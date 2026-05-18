@@ -1,0 +1,3 @@
+Version 2.2:
+➕ App now available in Russian and Spanish
+🛠️ Translated a few German and Arabic strings that had been left in English (accessibility labels, "Content copied" toast)

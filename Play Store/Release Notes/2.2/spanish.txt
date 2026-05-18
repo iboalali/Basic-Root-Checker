@@ -1,0 +1,3 @@
+Versión 2.2:
+➕ La aplicación ya está disponible en ruso y español
+🛠️ Se tradujeron algunos textos en alemán y árabe que aún estaban en inglés (etiquetas de accesibilidad, aviso «Contenido copiado»)
