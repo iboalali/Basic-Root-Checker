@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Privacy policy link now points to the dedicated `iboalali.com/app/basic_root_checker/privacy` page instead of the in-page section on the product page.
+- Main screen overflow menu items now show leading icons next to Licences, Settings, and About.
 
 ### Fixed
 - Translated the "Content Copied" toast and the marketing-name / model-name / Android-version accessibility labels in German and Arabic, which had been left as English fallbacks.

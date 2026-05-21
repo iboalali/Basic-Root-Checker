@@ -155,6 +155,12 @@ fun MainScreenContent(
                     ) {
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_licence),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_baseline_text_snippet_24),
+                                    contentDescription = null,
+                                )
+                            },
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToLicence()
@@ -162,6 +168,12 @@ fun MainScreenContent(
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_settings),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.settings_24px),
+                                    contentDescription = null,
+                                )
+                            },
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToSettings()
@@ -169,6 +181,12 @@ fun MainScreenContent(
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_about),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_baseline_android_24),
+                                    contentDescription = null,
+                                )
+                            },
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToAbout()
