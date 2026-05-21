@@ -32,7 +32,8 @@
         Esta aplicación requiere ROOT, úsala bajo tu propia responsabilidad.\n
         Esta aplicación NO recopila datos ni información personal.\n\n\n
         Contáctame en:</string>
-    <string name="about_visit_website">Visita mi sitio web</string>
+    <string name="about_link_email">Correo</string>
+    <string name="about_link_website">Sitio web</string>
     <string name="about_not_affiliated">Esta aplicación no está respaldada por topjohnwu ni libsu, ni afiliada a ellos</string>
 
     <!-- Style Strings -->

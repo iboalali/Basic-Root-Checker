@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Russian (`ru`) localization, selectable from the Android 13+ per-app language picker alongside English, German, and Arabic.
 - Spanish (`es`) localization using neutral Spanish, also selectable from the per-app language picker.
+- Email, Mastodon, and Bluesky contact links on the About screen, grouped with the website link inside a single tonal card.
 
 ### Changed
 - Privacy policy link now points to the dedicated `iboalali.com/app/basic_root_checker/privacy` page instead of the in-page section on the product page.
 - Main screen overflow menu items now show leading icons next to Licences, Settings, and About.
+- About screen contact section has been redesigned as a grouped icon-led list instead of plain auto-linked text.
 
 ### Fixed
 - Translated the "Content Copied" toast and the marketing-name / model-name / Android-version accessibility labels in German and Arabic, which had been left as English fallbacks.

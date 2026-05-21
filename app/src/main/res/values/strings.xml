@@ -34,8 +34,10 @@
         This app requires ROOT, use it at your own risk.\n
         This app does NOT collect any data or personal information.\n\n\n
         Contact me at:</string>
-    <string name="about_email_socials" translatable="false">contact@iboalali.com\nhttps://mastodon.social/@iboalali\nhttps://bsky.app/profile/iboalali.bsky.social</string>
-    <string name="about_visit_website">Visit my website</string>
+    <string name="about_link_email">Email</string>
+    <string name="about_link_mastodon" translatable="false">Mastodon</string>
+    <string name="about_link_bluesky" translatable="false">Bluesky</string>
+    <string name="about_link_website">Website</string>
     <string name="about_not_affiliated">This app is not endorsed by or affiliated with topjohnwu or libsu</string>
 
     <!-- License Strings -->

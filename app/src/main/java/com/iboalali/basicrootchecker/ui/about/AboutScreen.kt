@@ -1,8 +1,6 @@
 package com.iboalali.basicrootchecker.ui.about
 
 import android.content.Intent
-import android.text.util.Linkify
-import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,8 +17,10 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -32,7 +32,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -43,7 +42,6 @@ import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
@@ -57,8 +55,11 @@ import kotlinx.collections.immutable.persistentListOf
 fun AboutScreen(onNavigateBack: () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
-    val linkColor = MaterialTheme.colorScheme.primary.toArgb()
-    val textColor = MaterialTheme.colorScheme.onSurface.toArgb()
+
+    val openUri: (String, String) -> Unit = { platform, uri ->
+        Analytics.trackSocialLinkClicked(platform)
+        context.startActivity(Intent(Intent.ACTION_VIEW, uri.toUri()))
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -129,52 +130,46 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                         style = MaterialTheme.typography.bodyMedium,
                     )
 
-                    Spacer(Modifier.height(8.dp))
-
-                    AndroidView(
-                        factory = { ctx ->
-                            TextView(ctx).apply {
-                                text = ctx.getString(R.string.about_email_socials)
-                                @Suppress("DEPRECATION")
-                                autoLinkMask = Linkify.ALL
-                                setTextColor(textColor)
-                                setLinkTextColor(linkColor)
-                                textSize = 14f
-                                setPadding(0, 0, 0, 0)
-                            }
-                        },
-                        modifier = Modifier.padding(start = 32.dp),
-                    )
-
                     Spacer(Modifier.height(16.dp))
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                Analytics.trackWebsiteClicked()
-                                context.startActivity(
-                                    Intent(
-                                        Intent.ACTION_VIEW,
-                                        "https://iboalali.com/?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=home".toUri(),
-                                    )
-                                )
-                            }
-                            .padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        ),
+                        shape = RoundedCornerShape(20.dp),
                     ) {
-                        Text(
-                            text = stringResource(R.string.about_visit_website),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.weight(1f),
+                        SocialLinkRow(
+                            iconRes = R.drawable.alternate_email_24px,
+                            label = stringResource(R.string.about_link_email),
+                            handle = "contact@iboalali.com",
+                            onClick = { openUri("email", "mailto:contact@iboalali.com") },
                         )
-                        Spacer(Modifier.width(8.dp))
-                        Icon(
-                            painter = painterResource(R.drawable.open_in_new_24px),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(20.dp),
+                        SocialLinkDivider()
+                        SocialLinkRow(
+                            iconRes = R.drawable.mastodon,
+                            label = stringResource(R.string.about_link_mastodon),
+                            handle = "@iboalali@mastodon.social",
+                            onClick = { openUri("mastodon", "https://mastodon.social/@iboalali") },
+                        )
+                        SocialLinkDivider()
+                        SocialLinkRow(
+                            iconRes = R.drawable.bluesky,
+                            label = stringResource(R.string.about_link_bluesky),
+                            handle = "@iboalali.bsky.social",
+                            onClick = { openUri("bluesky", "https://bsky.app/profile/iboalali.bsky.social") },
+                        )
+                        SocialLinkDivider()
+                        SocialLinkRow(
+                            iconRes = R.drawable.public_24px,
+                            label = stringResource(R.string.about_link_website),
+                            handle = "iboalali.com",
+                            onClick = {
+                                openUri(
+                                    "website",
+                                    "https://iboalali.com/?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=home",
+                                )
+                            },
                         )
                     }
 
@@ -210,6 +205,49 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
             Spacer(Modifier.height(16.dp + bottomPadding))
         }
     }
+}
+
+@Composable
+private fun SocialLinkRow(
+    iconRes: Int,
+    label: String,
+    handle: String,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            painter = painterResource(iconRes),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp),
+        )
+        Spacer(Modifier.width(16.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Text(
+                text = handle,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SocialLinkDivider() {
+    HorizontalDivider(
+        modifier = Modifier.padding(start = 56.dp),
+        color = MaterialTheme.colorScheme.outlineVariant,
+    )
 }
 
 @PreviewLightDark
