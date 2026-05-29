@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2] - 2026-05-29
+
 ### Added
 - Haptic feedback for the root check, toggleable with a new "Haptic feedback" switch in Settings (on by default). Every device gives a short outcome buzz — a positive "dot-daaat" when rooted, a "dot-dot" when not rooted or unknown, and a single soft pulse when a root provider is detected but access has not yet been granted. Devices with advanced haptic actuators additionally feel a rising-frequency vibration while the check runs.
 - Debug builds only: developer demo modes for exercising the UI without the real conditions. The root-check button opens a picker that forces any result (rooted with each provider, not granted, not rooted, unknown) through the real check flow, and an overflow-menu "Demo: in-app update" entry drives the update card through its states (available, animated downloading, downloaded, failed). Not included in release builds.
