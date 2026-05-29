@@ -1,3 +1,7 @@
 Version 2.2:
+➕ Haptisches Feedback bei der Root-Prüfung — Ergebnis spürbar, mit neuem Schalter in den Einstellungen
 ➕ App jetzt auf Russisch und Spanisch verfügbar
-🛠️ Einige deutsche und arabische Texte übersetzt, die noch auf Englisch waren (Bedienungshilfen-Beschriftungen, „Inhalt kopiert"-Hinweis)
+➕ E-Mail-, Mastodon- und Bluesky-Links im Info-Bildschirm
+🛠️ App-Einstellungen werden jetzt über Androids automatische Sicherung wiederhergestellt
+🛠️ Überarbeitete Kontaktlinks und Menüsymbole im Info-Bildschirm
+🔨 Fehlende deutsche und arabische Übersetzungen für Toast und Bedienungshilfen behoben
