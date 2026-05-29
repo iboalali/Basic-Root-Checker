@@ -115,4 +115,20 @@ object Analytics {
             mapOf("error" to error),
         )
     }
+
+    fun trackHapticCapabilities(
+        envelopeEffectsSupported: Boolean,
+        amplitudeControl: Boolean,
+        sdkInt: Int,
+    ) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "hapticCapabilities",
+            mapOf(
+                "envelopeEffectsSupported" to envelopeEffectsSupported.toString(),
+                "amplitudeControl" to amplitudeControl.toString(),
+                "sdkInt" to sdkInt.toString(),
+            ),
+        )
+    }
 }

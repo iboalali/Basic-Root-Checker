@@ -13,11 +13,11 @@ import com.iboalali.basicrootchecker.analytics.ERROR_CATEGORY_APP_STATE
 /**
  * Plays the vibration feedback that accompanies a root check.
  *
- * The [Vibrator] is resolved once. While the check runs, devices with a precise actuator that
- * support envelope effects (API 36+) feel one continuous buzz that gently builds in amplitude while
- * sweeping from the actuator's min to max supported frequency; devices without that support get no
- * checking ramp at all. Once the result is known, every device feels a short outcome buzz
- * (amplitude-controlled waveform on API 26+, or the legacy pattern API on API 23-25).
+ * The [Vibrator] is resolved once. The checking ramp is a genuine rising-frequency sweep that only
+ * plays on actuators supporting wave-envelope (PWLE) effects (API 36+ and HAL support — rare
+ * today); every other device gets no checking vibration. Once the result is known, every device
+ * feels a short outcome buzz (amplitude-controlled waveform on API 26+, or the legacy pattern API
+ * on API 23-25).
  */
 class RootHaptics(context: Context) {
 
@@ -25,6 +25,35 @@ class RootHaptics(context: Context) {
 
     private val available: Boolean
         get() = vibrator?.hasVibrator() == true
+
+    init {
+        logAndTrackCapabilities()
+    }
+
+    /** Logs and reports (once, on creation) whether this device can do the advanced sweep. */
+    private fun logAndTrackCapabilities() {
+        val v = vibrator
+        val sdk = Build.VERSION.SDK_INT
+        val hasVibrator = v?.hasVibrator() == true
+        val amplitudeControl =
+            v != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && v.hasAmplitudeControl()
+        var envelopeSupported = false
+        var freqProfile = "n/a"
+        if (v != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            envelopeSupported = v.areEnvelopeEffectsSupported()
+            val profile = v.frequencyProfile
+            if (profile != null) {
+                freqProfile = "${profile.minFrequencyHz}-${profile.maxFrequencyHz}Hz"
+            }
+        }
+        Log.i(
+            TAG,
+            "capabilities: sdk=$sdk hasVibrator=$hasVibrator " +
+                "envelopeEffectsSupported=$envelopeSupported " +
+                "amplitudeControl=$amplitudeControl freqProfile=$freqProfile",
+        )
+        Analytics.trackHapticCapabilities(envelopeSupported, amplitudeControl, sdk)
+    }
 
     /**
      * Starts one continuous buzz that gently builds in amplitude while rising in frequency, until
@@ -34,20 +63,36 @@ class RootHaptics(context: Context) {
     fun startCheckingRamp() {
         val v = vibrator ?: return
         if (!available) return
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) {
+            Log.i(TAG, "startCheckingRamp: no wave-envelope API (SDK ${Build.VERSION.SDK_INT}) — result buzz only")
+            return
+        }
         startSweep(v)
     }
 
+    /**
+     * Plays a genuine rising-frequency sweep via the wave-envelope ([VibrationEffect]
+     * [VibrationEffect.WaveformEnvelopeBuilder]) API, sweeping the actuator's full supported
+     * frequency range at building amplitude. Only actuators that support envelope effects (PWLE) get
+     * any checking vibration; everything else falls through to just the result buzz.
+     */
     @RequiresApi(Build.VERSION_CODES.BAKLAVA)
     private fun startSweep(v: Vibrator) {
-        if (!v.areEnvelopeEffectsSupported()) return
-        val profile = v.frequencyProfile ?: return
-        val low = profile.minFrequencyHz
-        val high = profile.maxFrequencyHz
-        if (!low.isFinite() || !high.isFinite() || high <= low || low <= 0f) return
+        if (!v.areEnvelopeEffectsSupported()) {
+            Log.i(TAG, "startCheckingRamp: wave envelope unsupported — result buzz only")
+            return
+        }
+        val profile = v.frequencyProfile
+        val low = profile?.minFrequencyHz ?: Float.NaN
+        val high = profile?.maxFrequencyHz ?: Float.NaN
+        if (!low.isFinite() || !high.isFinite() || high <= low || low <= 0f) {
+            Log.i(TAG, "startCheckingRamp: no usable frequency profile ($low..$high) — result buzz only")
+            return
+        }
         try {
-            // Soft attack to a low amplitude at the low frequency, then build amplitude AND
-            // frequency together up to full strength, and a short release at the top.
+            Log.i(TAG, "startCheckingRamp: wave-envelope frequency sweep $low->$high Hz")
+            // Soft attack at the low frequency, then build amplitude while sweeping up to the high
+            // frequency, and a short release at the top.
             val effect = VibrationEffect.WaveformEnvelopeBuilder()
                 .addControlPoint(RAMP_START_AMPLITUDE, low, RAMP_ATTACK_MS)
                 .addControlPoint(1f, high, RAMP_SWEEP_MS)
@@ -144,9 +189,9 @@ class RootHaptics(context: Context) {
         private const val TAG = "RootHaptics"
         private const val NO_REPEAT = -1
 
-        // Frequency-sweep envelope (API 36+): soft attack to a low amplitude, then build amplitude
-        // and frequency together to full strength, short release. ~1s total to match the check.
-        private const val RAMP_START_AMPLITUDE = 0.55f
+        // Wave-envelope frequency sweep (envelope-capable devices only): soft attack at the low
+        // frequency, then build amplitude while sweeping up to the high frequency, short release.
+        private const val RAMP_START_AMPLITUDE = 0.4f
         private const val RAMP_ATTACK_MS = 60L
         private const val RAMP_SWEEP_MS = 900L
         private const val RAMP_RELEASE_MS = 40L
