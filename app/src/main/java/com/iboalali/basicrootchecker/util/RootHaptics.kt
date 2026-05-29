@@ -6,16 +6,18 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.analytics.ERROR_CATEGORY_APP_STATE
 
 /**
- * Plays the vibration feedback that accompanies a root check: an accelerating, intensifying "ramp"
- * while the check runs, then a short outcome buzz once the result is known.
+ * Plays the vibration feedback that accompanies a root check.
  *
- * The [Vibrator] is resolved once and the helper degrades gracefully across the supported API range
- * (minSdk 23): amplitude-controlled waveforms when the motor supports them (API 26+), an on/off
- * waveform when it does not, and the legacy [Vibrator.vibrate] pattern API on API 23-25.
+ * The [Vibrator] is resolved once. While the check runs, devices with a precise actuator that
+ * support envelope effects (API 36+) feel one continuous buzz that gently builds in amplitude while
+ * sweeping from the actuator's min to max supported frequency; devices without that support get no
+ * checking ramp at all. Once the result is known, every device feels a short outcome buzz
+ * (amplitude-controlled waveform on API 26+, or the legacy pattern API on API 23-25).
  */
 class RootHaptics(context: Context) {
 
@@ -24,12 +26,40 @@ class RootHaptics(context: Context) {
     private val available: Boolean
         get() = vibrator?.hasVibrator() == true
 
-    /** Accelerating, intensifying pulses that loop a strong fast buzz until [cancel] is called. */
-    fun startCheckingRamp() = play(
-        "haptic-ramp",
-        RAMP_AMPLITUDE_TIMINGS, RAMP_AMPLITUDES, RAMP_AMPLITUDE_REPEAT,
-        RAMP_PATTERN, RAMP_PATTERN_REPEAT,
-    )
+    /**
+     * Starts one continuous buzz that gently builds in amplitude while rising in frequency, until
+     * [cancel] is called. This only plays on actuators that support envelope effects (API 36+);
+     * other devices get no checking ramp and feel only the result buzz.
+     */
+    fun startCheckingRamp() {
+        val v = vibrator ?: return
+        if (!available) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) return
+        startSweep(v)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.BAKLAVA)
+    private fun startSweep(v: Vibrator) {
+        if (!v.areEnvelopeEffectsSupported()) return
+        val profile = v.frequencyProfile ?: return
+        val low = profile.minFrequencyHz
+        val high = profile.maxFrequencyHz
+        if (!low.isFinite() || !high.isFinite() || high <= low || low <= 0f) return
+        try {
+            // Soft attack to a low amplitude at the low frequency, then build amplitude AND
+            // frequency together up to full strength, and a short release at the top.
+            val effect = VibrationEffect.WaveformEnvelopeBuilder()
+                .addControlPoint(RAMP_START_AMPLITUDE, low, RAMP_ATTACK_MS)
+                .addControlPoint(1f, high, RAMP_SWEEP_MS)
+                .addControlPoint(0f, high, RAMP_RELEASE_MS)
+                .build()
+            v.cancel()
+            v.vibrate(effect)
+        } catch (e: Exception) {
+            Log.e(TAG, "startSweep: ", e)
+            Analytics.trackError(e, id = "haptic-ramp", category = ERROR_CATEGORY_APP_STATE)
+        }
+    }
 
     /** A short pulse then a longer one ("dot-daaat") for a rooted result. */
     fun playSuccess() = play(
@@ -114,27 +144,16 @@ class RootHaptics(context: Context) {
         private const val TAG = "RootHaptics"
         private const val NO_REPEAT = -1
 
-        // Ramp, amplitude path: paired [duration, amplitude]; on segments grow and intensify while
-        // off gaps shrink. Loops the final strong segment (index 16) so it sustains during a slow
-        // first-grant request and is simply cut short for the normal ~1s check.
-        private val RAMP_AMPLITUDE_TIMINGS = longArrayOf(
-            20, 140, 25, 110, 30, 85, 35, 65, 40, 45, 50, 30, 60, 18, 70, 12, 90, 10,
-        )
-        private val RAMP_AMPLITUDES = intArrayOf(
-            70, 0, 100, 0, 130, 0, 160, 0, 190, 0, 220, 0, 245, 0, 255, 0, 255, 0,
-        )
-        private const val RAMP_AMPLITUDE_REPEAT = 16
-
-        // Ramp, duration-only path (no-amplitude waveform + legacy): leading 0 is the initial off
-        // delay, so the loop index shifts to 17.
-        private val RAMP_PATTERN = longArrayOf(
-            0, 20, 140, 25, 110, 30, 85, 35, 65, 40, 45, 50, 30, 60, 18, 70, 12, 90, 10,
-        )
-        private const val RAMP_PATTERN_REPEAT = 17
+        // Frequency-sweep envelope (API 36+): soft attack to a low amplitude, then build amplitude
+        // and frequency together to full strength, short release. ~1s total to match the check.
+        private const val RAMP_START_AMPLITUDE = 0.55f
+        private const val RAMP_ATTACK_MS = 60L
+        private const val RAMP_SWEEP_MS = 900L
+        private const val RAMP_RELEASE_MS = 40L
 
         // Success "dot-daaat": a short medium pulse, a gap, then a longer full-strength pulse.
-        private val SUCCESS_AMPLITUDE_TIMINGS = longArrayOf(40, 90, 200)
-        private val SUCCESS_AMPLITUDES = intArrayOf(200, 0, 255)
+        private val SUCCESS_AMPLITUDE_TIMINGS = longArrayOf(90, 50, 200)
+        private val SUCCESS_AMPLITUDES = intArrayOf(150, 0, 255)
         private val SUCCESS_PATTERN = longArrayOf(0, 40, 90, 200)
 
         // Error "dot-dot": two equal short pulses.
