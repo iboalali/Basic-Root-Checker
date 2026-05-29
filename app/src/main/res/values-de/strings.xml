@@ -2,7 +2,8 @@
 <resources>
     <string name="app_name">Basic Root Checker</string>
     <string name="about_not_affiliated">Diese app wird nichts von chainfire oder SuperSU unterstützt.</string>
-    <string name="about_visit_website">Meine Webseite besuchen</string>
+    <string name="about_link_email">E-Mail</string>
+    <string name="about_link_website">Website</string>
     <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
 Diese app wird NICHT dein Gerät rooten.\n
 Diese app erfordert ROOT zugriff, benutzen auf eigener gefahr.\n
@@ -16,6 +17,8 @@ Kontaktiere mich:</string>
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Anonyme Nutzungsdaten teilen</string>
     <string name="settings_telemetry_description">Hilft dabei, die App über TelemetryDeck zu verbessern. Wenn aktiviert, wird die Änderung beim nächsten App-Start wirksam.</string>
+    <string name="settings_haptics_title">Haptisches Feedback</string>
+    <string name="settings_haptics_description">Vibriert während der Root-Prüfung und wenn das Ergebnis erscheint.</string>
     <string name="settings_privacy_policy_description">Datenschutzerklärung online ansehen</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
@@ -31,10 +34,10 @@ Kontaktiere mich:</string>
     <string name="string_your_device">Dein Gerät</string>
     <string name="string_checking_for_root">Auf Root zugriff überprüfen</string>
     <string name="content_description_check_for_root">Auf Root zugriff überprüfen</string>
-    <string name="content_description_marketing_name">Marketing Name</string>
-    <string name="content_description_model_name">Model Name</string>
-    <string name="content_description_android_version">Android Version</string>
-    <string name="toast_content_copied">Content Copied</string>
+    <string name="content_description_marketing_name">Marketingname</string>
+    <string name="content_description_model_name">Modellname</string>
+    <string name="content_description_android_version">Android-Version</string>
+    <string name="toast_content_copied">Inhalt kopiert</string>
 
     <!-- Device Info Labels -->
     <string name="label_device_name">Gerätename</string>

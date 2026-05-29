@@ -73,8 +73,10 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.data.RootProvider
+import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
@@ -94,6 +96,16 @@ fun MainScreen(
         uiState = uiState,
         onCheckRoot = viewModel::checkRoot,
         onRequestRoot = viewModel::requestRoot,
+        onCheckRootDemo = viewModel::checkRootDemo,
+        onDemoUpdateChoice = { choice ->
+            when (choice) {
+                DebugUpdateChoice.AVAILABLE -> viewModel.demoUpdate(AppUpdateEvent.Available)
+                DebugUpdateChoice.DOWNLOADING -> viewModel.demoUpdateDownloading()
+                DebugUpdateChoice.DOWNLOADED -> viewModel.demoUpdate(AppUpdateEvent.Downloaded)
+                DebugUpdateChoice.FAILED -> viewModel.demoUpdate(AppUpdateEvent.Failed(-100))
+                DebugUpdateChoice.RESET -> viewModel.demoUpdate(AppUpdateEvent.None)
+            }
+        },
         onUpdateRequested = viewModel::onUpdateRequested,
         onInstallRequested = viewModel::onInstallRequested,
         onAppUpdatedSnackbarShown = viewModel::onAppUpdatedSnackbarShown,
@@ -115,10 +127,14 @@ fun MainScreenContent(
     onNavigateToAbout: () -> Unit,
     onNavigateToLicence: () -> Unit,
     onNavigateToSettings: () -> Unit,
+    onCheckRootDemo: (RootResult) -> Unit = {},
+    onDemoUpdateChoice: (DebugUpdateChoice) -> Unit = {},
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var menuExpanded by remember { mutableStateOf(false) }
+    var showDemoDialog by remember { mutableStateOf(false) }
+    var showUpdateDemoDialog by remember { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val checkingText = stringResource(R.string.string_checking_for_root)
@@ -155,6 +171,12 @@ fun MainScreenContent(
                     ) {
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_licence),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_baseline_text_snippet_24),
+                                    contentDescription = null,
+                                )
+                            },
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToLicence()
@@ -162,6 +184,12 @@ fun MainScreenContent(
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_settings),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.settings_24px),
+                                    contentDescription = null,
+                                )
+                            },
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToSettings()
@@ -169,11 +197,26 @@ fun MainScreenContent(
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_about),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_baseline_android_24),
+                                    contentDescription = null,
+                                )
+                            },
                             onClick = {
                                 menuExpanded = false
                                 onNavigateToAbout()
                             },
                         )
+                        if (BuildConfig.DEBUG) {
+                            AppBarDropdownMenuItem(
+                                text = "Demo: in-app update",
+                                onClick = {
+                                    menuExpanded = false
+                                    showUpdateDemoDialog = true
+                                },
+                            )
+                        }
                     }
                 },
                 scrollBehavior = scrollBehavior,
@@ -182,8 +225,12 @@ fun MainScreenContent(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    onCheckRoot()
-                    scope.launch { snackbarHostState.showSnackbar(checkingText) }
+                    if (BuildConfig.DEBUG) {
+                        showDemoDialog = true
+                    } else {
+                        onCheckRoot()
+                        scope.launch { snackbarHostState.showSnackbar(checkingText) }
+                    }
                 },
                 shape = RoundedCornerShape(16.dp),
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -441,6 +488,32 @@ fun MainScreenContent(
             // 24dp spacing + FAB height (56dp) + FAB bottom margin (16dp) + system bottom padding
             Spacer(Modifier.height(24.dp + 56.dp + 16.dp + bottomPadding))
         }
+    }
+
+    if (BuildConfig.DEBUG && showDemoDialog) {
+        DebugRootResultDialog(
+            onSelectResult = { result ->
+                showDemoDialog = false
+                onCheckRootDemo(result)
+                scope.launch { snackbarHostState.showSnackbar(checkingText) }
+            },
+            onRealCheck = {
+                showDemoDialog = false
+                onCheckRoot()
+                scope.launch { snackbarHostState.showSnackbar(checkingText) }
+            },
+            onDismiss = { showDemoDialog = false },
+        )
+    }
+
+    if (BuildConfig.DEBUG && showUpdateDemoDialog) {
+        DebugUpdateDialog(
+            onSelect = { choice ->
+                showUpdateDemoDialog = false
+                onDemoUpdateChoice(choice)
+            },
+            onDismiss = { showUpdateDemoDialog = false },
+        )
     }
 }
 

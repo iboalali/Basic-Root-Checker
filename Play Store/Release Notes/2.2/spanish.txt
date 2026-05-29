@@ -1,0 +1,7 @@
+Versión 2.2:
+➕ Respuesta háptica al comprobar el root — siente el resultado, con un nuevo interruptor en Ajustes
+➕ La aplicación ya está disponible en ruso y español
+➕ Enlaces de correo, Mastodon y Bluesky en la pantalla Acerca de
+🛠️ Los ajustes ahora se incluyen en la copia de seguridad de Android y se restauran al reinstalar
+🛠️ Enlaces de contacto e iconos de menú renovados en Acerca de
+🔨 Se corrigieron etiquetas de accesibilidad y el aviso «Contenido copiado» que seguían en inglés

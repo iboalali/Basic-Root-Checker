@@ -52,10 +52,13 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = viewModel(),
 ) {
     val telemetryEnabled by viewModel.telemetryEnabled.collectAsStateWithLifecycle()
+    val hapticsEnabled by viewModel.hapticsEnabled.collectAsStateWithLifecycle()
 
     SettingsScreenContent(
         telemetryEnabled = telemetryEnabled,
         onTelemetryEnabledChange = viewModel::setTelemetryEnabled,
+        hapticsEnabled = hapticsEnabled,
+        onHapticsEnabledChange = viewModel::setHapticsEnabled,
         onNavigateBack = onNavigateBack,
     )
 }
@@ -65,6 +68,8 @@ fun SettingsScreen(
 fun SettingsScreenContent(
     telemetryEnabled: Boolean,
     onTelemetryEnabledChange: (Boolean) -> Unit,
+    hapticsEnabled: Boolean,
+    onHapticsEnabledChange: (Boolean) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -144,12 +149,48 @@ fun SettingsScreenContent(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.settings_haptics_title),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                        Text(
+                            text = stringResource(R.string.settings_haptics_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    Switch(
+                        checked = hapticsEnabled,
+                        onCheckedChange = onHapticsEnabledChange,
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            OutlinedCard(
+                modifier = Modifier
+                    .widthIn(max = 600.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(),
+                shape = RoundedCornerShape(32.dp),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .clickable {
                             Analytics.trackPrivacyPolicyClicked()
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    "https://iboalali.com/app/basic_root_checker/?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy#privacy-policy".toUri(),
+                                    "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy".toUri(),
                                 )
                             )
                         }
@@ -193,6 +234,8 @@ private fun SettingsScreenPreview() {
         SettingsScreenContent(
             telemetryEnabled = true,
             onTelemetryEnabledChange = {},
+            hapticsEnabled = true,
+            onHapticsEnabledChange = {},
             onNavigateBack = {},
         )
     }
@@ -205,6 +248,8 @@ private fun SettingsScreenTelemetryOffPreview() {
         SettingsScreenContent(
             telemetryEnabled = false,
             onTelemetryEnabledChange = {},
+            hapticsEnabled = false,
+            onHapticsEnabledChange = {},
             onNavigateBack = {},
         )
     }

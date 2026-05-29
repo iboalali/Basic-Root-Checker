@@ -4,12 +4,12 @@ android-gradle-plugin = "9.2.1"
 
 androidx-activity = "1.13.0"
 androidx-annotation = "1.10.0"
-androidx-compose-bom = "2026.05.00"
+androidx-compose-bom = "2026.05.01"
 androidx-core = "1.18.0"
 androidx-core-splashscreen = "1.2.0"
 androidx-datastore = "1.2.1"
 androidx-lifecycle = "2.10.0"
-androidx-navigation3 = "1.1.1"
+androidx-navigation3 = "1.1.2"
 
 boehrsi-devicemarketingnames = "1.0.7"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
 google-material = "1.14.0"

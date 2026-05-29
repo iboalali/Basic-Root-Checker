@@ -19,6 +19,8 @@
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">مشاركة بيانات الاستخدام المجهولة</string>
     <string name="settings_telemetry_description">يساعد على تحسين التطبيق عبر TelemetryDeck. عند التفعيل، يسري المفعول عند إعادة تشغيل التطبيق.</string>
+    <string name="settings_haptics_title">الاهتزاز التفاعلي</string>
+    <string name="settings_haptics_description">يهتز أثناء التحقق من الروت وعند ظهور النتيجة.</string>
     <string name="settings_privacy_policy_description">عرض سياسة الخصوصية على الإنترنت</string>
 
     <!-- About Strings -->
@@ -28,16 +30,17 @@
 هذا التطبيق لا يجمع معلومات عن جهازك أو شخصيتك\n\n\n
 اتصل بي:</string>
     <string name="about_not_affiliated">هذا البرنامج ليست تابع ولا مأيّد من Chainfire أو SuperSU</string>
-    <string name="about_visit_website">زيارة موقعي الإلكتروني</string>
+    <string name="about_link_email">البريد الإلكتروني</string>
+    <string name="about_link_website">الموقع الإلكتروني</string>
     <string name="textView_checkForRoot">المس على الزر المستدير في أسفل اليمين للتحقق من حالة من خاصية الـ Root</string>
     <string name="textViewAndroidVersion">اندرود</string>
     <string name="string_your_device">جهازك</string>
     <string name="string_checking_for_root">تحقق من خاصية الـ Root</string>
     <string name="content_description_check_for_root">تحقق من خاصية الـ Root</string>
-    <string name="content_description_marketing_name">Marketing Name</string>
-    <string name="content_description_model_name">Model Name</string>
-    <string name="content_description_android_version">Android Version</string>
-    <string name="toast_content_copied">Content Copied</string>
+    <string name="content_description_marketing_name">الاسم التسويقي</string>
+    <string name="content_description_model_name">اسم الطراز</string>
+    <string name="content_description_android_version">إصدار أندرويد</string>
+    <string name="toast_content_copied">تم نسخ المحتوى</string>
 
     <!-- Device Info Labels -->
     <string name="label_device_name">اسم الجهاز</string>

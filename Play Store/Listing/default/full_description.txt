@@ -1,0 +1,21 @@
+Uncertain about your device's Root status?
+
+Basic Root Checker offers a fast, simple, and reliable way to verify root access (also known as superuser privileges) on your Android device. Whether you're an advanced user, a developer, or just curious if your phone or tablet is rooted, this app provides an instant, definitive answer — and now tells you which root manager you're using.
+
+What Basic Root Checker Does:
+* Accurately Checks for Root Access: Get a clear answer about your device's root status, with four possible outcomes — rooted, not rooted, not yet granted, or unknown.
+* Identifies the Root Provider: Detects Magisk, KernelSU, and APatch, and shows you which one is on your device — along with the Magisk version when root is granted.
+* Detects Pending Grants: Even if root is installed but the app hasn't been allowed access yet, Basic Root Checker recognizes it and offers a one-tap "Request Root access" button.
+* Falls Back to Plain "su" Binaries: Devices rooted without a recognized manager are still detected by scanning the common su binary paths.
+* Instant Verification: Quickly determine if your device has superuser capabilities.
+* Simple & Intuitive: Material 3 design with dynamic colors on Android 12+, available in English, German, Arabic, Spanish, and Russian.
+
+Important Considerations:
+* DOES NOT Root Your Device: Basic Root Checker is purely a diagnostic tool. It will NOT modify your device, install any root files, or assist in the rooting process. It simply checks if root access is already present on your system.
+* Understand Your Rooted Environment: Interacting with a rooted device involves system modifications and carries inherent responsibilities. This app empowers you with accurate information to better understand your device's root status and manage your rooted environment.
+
+Your Privacy Matters:
+* Basic Root Checker does not collect personal data from your device. Anonymous usage statistics via TelemetryDeck are enabled by default to help improve the app, and can be disabled at any time from the app's settings.
+
+Disclaimer:
+* This app is an independent tool and is not endorsed by or affiliated with topjohnwu or libsu.

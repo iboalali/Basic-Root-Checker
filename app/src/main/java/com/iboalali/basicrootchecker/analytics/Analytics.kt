@@ -58,9 +58,12 @@ object Analytics {
         TelemetryDeck.signal("privacyPolicyClicked")
     }
 
-    fun trackWebsiteClicked() {
+    fun trackSocialLinkClicked(platform: String) {
         if (!enabled) return
-        TelemetryDeck.signal("websiteClicked")
+        TelemetryDeck.signal(
+            "socialLinkClicked",
+            mapOf("platform" to platform),
+        )
     }
 
     fun trackOtherAppClicked(packageName: String) {
@@ -110,6 +113,22 @@ object Analytics {
         TelemetryDeck.signal(
             "updateFailed",
             mapOf("error" to error),
+        )
+    }
+
+    fun trackHapticCapabilities(
+        envelopeEffectsSupported: Boolean,
+        amplitudeControl: Boolean,
+        sdkInt: Int,
+    ) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "hapticCapabilities",
+            mapOf(
+                "envelopeEffectsSupported" to envelopeEffectsSupported.toString(),
+                "amplitudeControl" to amplitudeControl.toString(),
+                "sdkInt" to sdkInt.toString(),
+            ),
         )
     }
 }

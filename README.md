@@ -10,7 +10,7 @@ A simple Android app that checks whether your device has root access. Displays d
 - Device info display (model, marketing name, Android version)
 - Material 3 theming with dynamic colors
 - Splash screen with custom exit animation
-- Localized in English, German, and Arabic
+- Localized in English, German, Arabic, Spanish, and Russian
 
 ## Requirements
 
@@ -40,3 +40,6 @@ See [CHANGELOG.md](CHANGELOG.md) for the release history.
 - **Root detection:** [libsu](https://github.com/topjohnwu/libsu) (`Shell.isAppGrantedRoot()`) plus unprivileged heuristics (package query, `/proc/self/mounts`, `su` binary search) for Magisk, KernelSU, and APatch
 - **Device names:** [DeviceMarketingNames](https://github.com/nicoaccessmedia/DeviceMarketingNames)
 - **Build system:** Gradle with Kotlin DSL and version catalog (AGP 9.1.0)
+
+## Todo
+* In-app language picker in the settings screen

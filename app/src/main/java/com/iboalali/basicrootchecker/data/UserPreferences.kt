@@ -28,6 +28,17 @@ class UserPreferences(private val context: Context) {
     fun telemetryEnabledBlocking(): Boolean =
         runBlocking { telemetryEnabled.first() }
 
+    val hapticsEnabled: Flow<Boolean> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[HAPTICS_ENABLED] ?: true
+        }
+
+    suspend fun setHapticsEnabled(enabled: Boolean) {
+        context.userSettingsDataStore.edit { preferences ->
+            preferences[HAPTICS_ENABLED] = enabled
+        }
+    }
+
     val lastSeenVersionCode: Flow<Int> =
         context.userSettingsDataStore.data.map { preferences ->
             preferences[LAST_SEEN_VERSION_CODE] ?: 0
@@ -41,6 +52,7 @@ class UserPreferences(private val context: Context) {
 
     companion object {
         private val TELEMETRY_ENABLED = booleanPreferencesKey("telemetry_enabled")
+        private val HAPTICS_ENABLED = booleanPreferencesKey("haptics_enabled")
         private val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
     }
 }

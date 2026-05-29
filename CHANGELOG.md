@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Haptic feedback for the root check, toggleable with a new "Haptic feedback" switch in Settings (on by default). Every device gives a short outcome buzz — a positive "dot-daaat" when rooted, a "dot-dot" when not rooted or unknown, and a single soft pulse when a root provider is detected but access has not yet been granted. Devices with advanced haptic actuators additionally feel a rising-frequency vibration while the check runs.
+- Debug builds only: developer demo modes for exercising the UI without the real conditions. The root-check button opens a picker that forces any result (rooted with each provider, not granted, not rooted, unknown) through the real check flow, and an overflow-menu "Demo: in-app update" entry drives the update card through its states (available, animated downloading, downloaded, failed). Not included in release builds.
+- Russian (`ru`) localization, selectable from the Android 13+ per-app language picker alongside English, German, and Arabic.
+- Spanish (`es`) localization using neutral Spanish, also selectable from the per-app language picker.
+- Email, Mastodon, and Bluesky contact links on the About screen, grouped with the website link inside a single tonal card.
+- App settings (the telemetry preference) are now included in Android's automatic backup, so they are restored after reinstalling the app or moving to a new device.
+
+### Changed
+- Privacy policy link now points to the dedicated `iboalali.com/app/basic_root_checker/privacy` page instead of the in-page section on the product page.
+- Main screen overflow menu items now show leading icons next to Licences, Settings, and About.
+- About screen contact section has been redesigned as a grouped icon-led list instead of plain auto-linked text.
+
+### Fixed
+- Translated the "Content Copied" toast and the marketing-name / model-name / Android-version accessibility labels in German and Arabic, which had been left as English fallbacks.
+
+## [2.1] - 2026-05-17
+
+### Added
 - Root provider detection: when the device is rooted, the app now identifies whether root is provided by [Magisk](https://github.com/topjohnwu/Magisk), [KernelSU](https://github.com/tiann/KernelSU), [APatch](https://github.com/bmax121/APatch), or an unknown superuser, and displays the provider on the result card.
 - Magisk version detection — shown alongside the provider when the app has been granted root.
 - Generic `su` binary detection across the common system paths, so devices rooted without one of the recognized managers are still detected.

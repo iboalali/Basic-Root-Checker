@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basic Root Checker</string>
+
+    <!-- Main Strings-->
+    <string name="textView_Disclaimer"><![CDATA[Esta aplicación <b>NO</b> rooteará tu dispositivo.<br>Solo muestra si tu dispositivo tiene acceso root.]]></string>
+    <string name="textView_checkForRoot">Toca el botón «#» en la esquina inferior derecha para comprobar el estado de root</string>
+    <string name="rootAvailable">Tu dispositivo tiene acceso root</string>
+    <string name="rootUnknown">No se pudo obtener el estado de root del dispositivo</string>
+    <string name="rootNotAvailable">Tu dispositivo no tiene acceso root</string>
+    <string name="rootNotGranted">Root está disponible, pero esta aplicación no tiene acceso concedido</string>
+    <string name="action_request_root">Solicitar acceso root</string>
+    <string name="root_provider_other">Otro</string>
+    <string name="root_provider_via">vía %1$s</string>
+    <string name="root_provider_via_with_version">vía %1$s v%2$s</string>
+    <string name="action_licence">Licencias</string>
+    <string name="action_about">Acerca de</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="action_privacy_policy">Política de privacidad</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_telemetry_title">Compartir datos de uso anónimos</string>
+    <string name="settings_telemetry_description">Ayuda a mejorar la aplicación mediante TelemetryDeck. Si se activa, surtirá efecto en el próximo inicio.</string>
+    <string name="settings_haptics_title">Respuesta háptica</string>
+    <string name="settings_haptics_description">Vibra durante la comprobación de root y cuando aparece el resultado.</string>
+    <string name="settings_privacy_policy_description">Consulta nuestra política de privacidad en línea</string>
+    <string name="textViewAndroidVersion">Android</string>
+    <string name="string_your_device">Tu dispositivo</string>
+    <string name="string_checking_for_root">Comprobando root…</string>
+
+    <!-- About Strings -->
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
+        Esta aplicación NO rootea tu teléfono.\n
+        Esta aplicación requiere ROOT, úsala bajo tu propia responsabilidad.\n
+        Esta aplicación NO recopila datos ni información personal.\n\n\n
+        Contáctame en:</string>
+    <string name="about_link_email">Correo</string>
+    <string name="about_link_website">Sitio web</string>
+    <string name="about_not_affiliated">Esta aplicación no está respaldada por topjohnwu ni libsu, ni afiliada a ellos</string>
+
+    <!-- Style Strings -->
+    <string name="content_description_check_for_root">Comprobar root</string>
+    <string name="content_description_marketing_name">Nombre comercial</string>
+    <string name="content_description_model_name">Nombre del modelo</string>
+    <string name="content_description_android_version">Versión de Android</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">Nombre del dispositivo</string>
+    <string name="label_model">Modelo</string>
+    <string name="label_android_version">Versión de Android</string>
+    <string name="toast_content_copied">Contenido copiado</string>
+
+    <!-- In-app updates -->
+    <string name="update_available_title">Actualización disponible</string>
+    <string name="update_available_body">Hay una nueva versión de la aplicación lista para descargar.</string>
+    <string name="update_action_update">Actualizar</string>
+    <string name="update_downloading">Descargando actualización…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s MB</string>
+    <string name="update_downloaded_title">Actualización descargada</string>
+    <string name="update_action_install">Instalar ahora</string>
+    <string name="update_failed">La actualización falló. Se reintentará automáticamente.</string>
+    <string name="app_updated_snackbar">Aplicación actualizada</string>
+
+    <!-- Other Apps -->
+    <string name="other_apps_title">Otras aplicaciones</string>
+    <string name="other_apps_billboard_description">Esta aplicación te ayuda a mostrar texto grande en la pantalla, ajustándolo al máximo tamaño posible sin recortarlo.\n\nÚtil en reuniones para votar sobre un tema con un número o un texto.</string>
+    <string name="other_apps_hide_notifications_description">Elige una notificación persistente que quieras ocultar, y permanecerá oculta mientras esta aplicación esté instalada.</string>
+
+</resources>

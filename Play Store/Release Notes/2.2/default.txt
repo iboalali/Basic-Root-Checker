@@ -1,0 +1,7 @@
+Version 2.2:
+➕ Haptic feedback for the root check — feel the result, with a new toggle in Settings
+➕ App now available in Russian and Spanish
+➕ Email, Mastodon, and Bluesky links on the About screen
+🛠️ App settings are now part of Android's automatic backup, so they're restored when you reinstall
+🛠️ Refreshed About screen contact links and overflow menu icons
+🔨 Fixed untranslated toast and accessibility labels in German and Arabic
