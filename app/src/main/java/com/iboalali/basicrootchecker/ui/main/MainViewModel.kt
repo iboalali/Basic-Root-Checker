@@ -16,6 +16,8 @@ import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import com.iboalali.basicrootchecker.util.RootHaptics
 import de.boehrsi.devicemarketingnames.DeviceMarketingNames
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,7 +61,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         loadDeviceInfo()
         viewModelScope.launch {
             appUpdateController.events.collect { event ->
-                _uiState.update { it.copy(updateStatus = event) }
+                if (!demoUpdateActive) _uiState.update { it.copy(updateStatus = event) }
             }
         }
         viewModelScope.launch { checkForAppUpdate() }
@@ -123,6 +125,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         is RootResult.RootedNotGranted -> haptics.playNeutral()
     }
 
+    /**
+     * Debug-only: forces [result] through the same flow a real check uses (CHECKING state, haptic
+     * ramp, ~1s delay, then result + outcome haptic) so the animations and haptics can be exercised
+     * on-device without a matching root state. Only ever called from the debug-gated demo dialog.
+     */
+    fun checkRootDemo(result: RootResult) {
+        viewModelScope.launch {
+            val hapticsOn = userPreferences.hapticsEnabled.first()
+            startRootCheck()
+            if (hapticsOn) haptics.startCheckingRamp()
+            delay(1000)
+            applyResult(result)
+            if (hapticsOn) playResultHaptic(result)
+        }
+    }
+
     private fun startRootCheck() {
         _uiState.update {
             it.copy(
@@ -161,11 +179,51 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onUpdateRequested() {
+        if (demoUpdateActive) {
+            demoUpdateDownloading()
+            return
+        }
         appUpdateController.startFlexibleFlow()
     }
 
     fun onInstallRequested() {
+        if (demoUpdateActive) {
+            // Can't actually restart into a fake update — just hide the card.
+            demoUpdate(AppUpdateEvent.None)
+            return
+        }
         appUpdateController.completeUpdate()
+    }
+
+    // ---- Debug-only in-app-update demo ----
+    // Pushes fake AppUpdateEvents straight into updateStatus, bypassing the Play controller, so the
+    // UpdateCard's states and download animation can be exercised without a real Play update. Only
+    // ever reached from the debug-gated demo dialog and the demo-aware buttons above.
+    private var demoUpdateActive = false
+    private var demoUpdateJob: Job? = null
+
+    fun demoUpdate(event: AppUpdateEvent) {
+        demoUpdateJob?.cancel()
+        demoUpdateActive = event != AppUpdateEvent.None
+        _uiState.update { it.copy(updateStatus = event) }
+    }
+
+    fun demoUpdateDownloading() {
+        demoUpdateJob?.cancel()
+        demoUpdateActive = true
+        demoUpdateJob = viewModelScope.launch {
+            val total = 18L * 1024 * 1024
+            val step = total / 24
+            var downloaded = 0L
+            while (downloaded < total) {
+                _uiState.update {
+                    it.copy(updateStatus = AppUpdateEvent.Downloading(downloaded, total))
+                }
+                delay(120)
+                downloaded += step
+            }
+            _uiState.update { it.copy(updateStatus = AppUpdateEvent.Downloaded) }
+        }
     }
 
     override fun onCleared() {
