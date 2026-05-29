@@ -21,6 +21,8 @@
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Compartir datos de uso anónimos</string>
     <string name="settings_telemetry_description">Ayuda a mejorar la aplicación mediante TelemetryDeck. Si se activa, surtirá efecto en el próximo inicio.</string>
+    <string name="settings_haptics_title">Respuesta háptica</string>
+    <string name="settings_haptics_description">Vibra durante la comprobación de root y cuando aparece el resultado.</string>
     <string name="settings_privacy_policy_description">Consulta nuestra política de privacidad en línea</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Tu dispositivo</string>

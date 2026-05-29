@@ -14,6 +14,7 @@ import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.DeviceInfo
+import com.iboalali.basicrootchecker.util.RootHaptics
 import de.boehrsi.devicemarketingnames.DeviceMarketingNames
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,6 +49,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         (application as BasicRootCheckerApplication).appUpdateController
 
     private val userPreferences = UserPreferences(application)
+
+    private val haptics = RootHaptics(application)
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -92,18 +95,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun checkRoot() {
         viewModelScope.launch {
+            val hapticsOn = userPreferences.hapticsEnabled.first()
             startRootCheck()
+            if (hapticsOn) haptics.startCheckingRamp()
             Analytics.trackRootCheckStarted()
-            applyResult(RootChecker.check(getApplication()))
+            val result = RootChecker.check(getApplication())
+            applyResult(result)
+            if (hapticsOn) playResultHaptic(result)
         }
     }
 
     fun requestRoot() {
         viewModelScope.launch {
+            val hapticsOn = userPreferences.hapticsEnabled.first()
             startRootCheck()
+            if (hapticsOn) haptics.startCheckingRamp()
             Analytics.trackRootRequested()
-            applyResult(RootChecker.requestRoot(getApplication()))
+            val result = RootChecker.requestRoot(getApplication())
+            applyResult(result)
+            if (hapticsOn) playResultHaptic(result)
         }
+    }
+
+    private fun playResultHaptic(result: RootResult) = when (result) {
+        is RootResult.Rooted -> haptics.playSuccess()
+        RootResult.NotRooted, RootResult.Unknown -> haptics.playError()
+        is RootResult.RootedNotGranted -> haptics.playNeutral()
     }
 
     private fun startRootCheck() {
@@ -149,5 +166,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onInstallRequested() {
         appUpdateController.completeUpdate()
+    }
+
+    override fun onCleared() {
+        haptics.cancel()
     }
 }

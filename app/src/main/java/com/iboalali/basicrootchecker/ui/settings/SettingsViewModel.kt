@@ -26,4 +26,16 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             Analytics.setEnabled(enabled)
         }
     }
+
+    val hapticsEnabled: StateFlow<Boolean> = prefs.hapticsEnabled.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = true,
+    )
+
+    fun setHapticsEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            prefs.setHapticsEnabled(enabled)
+        }
+    }
 }

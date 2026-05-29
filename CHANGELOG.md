@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Haptic feedback during the root check: an accelerating vibration while the check runs, then a short outcome buzz — a positive "dot-daaat" when rooted, a "dot-dot" when not rooted or unknown, and a single soft pulse when a root provider is detected but access has not been granted. Can be turned off with the new "Haptic feedback" toggle in Settings.
 - Russian (`ru`) localization, selectable from the Android 13+ per-app language picker alongside English, German, and Arabic.
 - Spanish (`es`) localization using neutral Spanish, also selectable from the per-app language picker.
 - Email, Mastodon, and Bluesky contact links on the About screen, grouped with the website link inside a single tonal card.
