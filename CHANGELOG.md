@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Russian (`ru`) localization, selectable from the Android 13+ per-app language picker alongside English, German, and Arabic.
 - Spanish (`es`) localization using neutral Spanish, also selectable from the per-app language picker.
 - Email, Mastodon, and Bluesky contact links on the About screen, grouped with the website link inside a single tonal card.
+- App settings (the telemetry preference) are now included in Android's automatic backup, so they are restored after reinstalling the app or moving to a new device.
 
 ### Changed
 - Privacy policy link now points to the dedicated `iboalali.com/app/basic_root_checker/privacy` page instead of the in-page section on the product page.
