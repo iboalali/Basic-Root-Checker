@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,18 +24,24 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -44,6 +53,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
 
 @Composable
@@ -53,12 +63,15 @@ fun SettingsScreen(
 ) {
     val telemetryEnabled by viewModel.telemetryEnabled.collectAsStateWithLifecycle()
     val hapticsEnabled by viewModel.hapticsEnabled.collectAsStateWithLifecycle()
+    val currentLanguageTag = AppLanguage.currentTag(LocalContext.current)
 
     SettingsScreenContent(
         telemetryEnabled = telemetryEnabled,
         onTelemetryEnabledChange = viewModel::setTelemetryEnabled,
         hapticsEnabled = hapticsEnabled,
         onHapticsEnabledChange = viewModel::setHapticsEnabled,
+        currentLanguageTag = currentLanguageTag,
+        onLanguageSelected = viewModel::setLanguage,
         onNavigateBack = onNavigateBack,
     )
 }
@@ -70,10 +83,13 @@ fun SettingsScreenContent(
     onTelemetryEnabledChange: (Boolean) -> Unit,
     hapticsEnabled: Boolean,
     onHapticsEnabledChange: (Boolean) -> Unit,
+    currentLanguageTag: String?,
+    onLanguageSelected: (String?) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
+    var showLanguageDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -172,6 +188,47 @@ fun SettingsScreenContent(
                 }
             }
 
+            if (AppLanguage.isSupported) {
+                Spacer(Modifier.height(24.dp))
+
+                OutlinedCard(
+                    modifier = Modifier
+                        .widthIn(max = 600.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(),
+                    shape = RoundedCornerShape(32.dp),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showLanguageDialog = true }
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.settings_language_title),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            Text(
+                                text = currentLanguageTag?.let { AppLanguage.displayName(it) }
+                                    ?: stringResource(R.string.language_system_default),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
+                        Spacer(Modifier.width(16.dp))
+                        Icon(
+                            painter = painterResource(R.drawable.chevron_right_24px),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+
             Spacer(Modifier.height(24.dp))
 
             OutlinedCard(
@@ -221,6 +278,69 @@ fun SettingsScreenContent(
             Spacer(Modifier.height(16.dp))
         }
     }
+
+    if (showLanguageDialog) {
+        LanguagePickerDialog(
+            currentTag = currentLanguageTag,
+            onSelect = {
+                showLanguageDialog = false
+                onLanguageSelected(it)
+            },
+            onDismiss = { showLanguageDialog = false },
+        )
+    }
+}
+
+@Composable
+private fun LanguagePickerDialog(
+    currentTag: String?,
+    onSelect: (String?) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_language_title)) },
+        text = {
+            Column(modifier = Modifier.selectableGroup()) {
+                LanguageOptionRow(
+                    label = stringResource(R.string.language_system_default),
+                    selected = currentTag == null,
+                    onClick = { onSelect(null) },
+                )
+                AppLanguage.SUPPORTED_TAGS.forEach { tag ->
+                    LanguageOptionRow(
+                        label = AppLanguage.displayName(tag),
+                        selected = currentTag == tag,
+                        onClick = { onSelect(tag) },
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(android.R.string.cancel))
+            }
+        },
+    )
+}
+
+@Composable
+private fun LanguageOptionRow(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        RadioButton(selected = selected, onClick = null)
+        Spacer(Modifier.width(16.dp))
+        Text(text = label, style = MaterialTheme.typography.bodyLarge)
+    }
 }
 
 @PreviewLightDark
@@ -236,6 +356,8 @@ private fun SettingsScreenPreview() {
             onTelemetryEnabledChange = {},
             hapticsEnabled = true,
             onHapticsEnabledChange = {},
+            currentLanguageTag = "de",
+            onLanguageSelected = {},
             onNavigateBack = {},
         )
     }
@@ -250,6 +372,8 @@ private fun SettingsScreenTelemetryOffPreview() {
             onTelemetryEnabledChange = {},
             hapticsEnabled = false,
             onHapticsEnabledChange = {},
+            currentLanguageTag = null,
+            onLanguageSelected = {},
             onNavigateBack = {},
         )
     }

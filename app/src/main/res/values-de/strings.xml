@@ -20,6 +20,8 @@ Kontaktiere mich:</string>
     <string name="settings_haptics_title">Haptisches Feedback</string>
     <string name="settings_haptics_description">Vibriert während der Root-Prüfung und wenn das Ergebnis erscheint.</string>
     <string name="settings_privacy_policy_description">Datenschutzerklärung online ansehen</string>
+    <string name="settings_language_title">Sprache</string>
+    <string name="language_system_default">Systemstandard</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>

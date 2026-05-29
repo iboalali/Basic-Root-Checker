@@ -58,6 +58,14 @@ object Analytics {
         TelemetryDeck.signal("privacyPolicyClicked")
     }
 
+    fun trackLanguageChanged(tag: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "languageChanged",
+            mapOf("language" to tag),
+        )
+    }
+
     fun trackSocialLinkClicked(platform: String) {
         if (!enabled) return
         TelemetryDeck.signal(

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- In-app language picker in Settings (Android 13+): tap **Language** to switch the app between English, German, Arabic, Spanish, and Russian, or follow the system default. The choice is applied immediately, persists across launches, and stays in sync with Android's per-app language setting.
+
+### Fixed
+- The current screen is now preserved when the app is recreated — for example after switching the in-app language or rotating the device — instead of jumping back to the main screen.
+
 ## [2.2] - 2026-05-29
 
 ### Added

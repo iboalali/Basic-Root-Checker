@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.data.UserPreferences
+import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -37,5 +38,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             prefs.setHapticsEnabled(enabled)
         }
+    }
+
+    /** Sets the app language. Pass `null` to follow the system default. */
+    fun setLanguage(tag: String?) {
+        AppLanguage.setLanguage(getApplication(), tag)
+        Analytics.trackLanguageChanged(tag ?: "system")
     }
 }

@@ -7,10 +7,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
@@ -41,7 +40,7 @@ private val animation: ContentTransform = ContentTransform(
 
 @Composable
 fun AppNavigation() {
-    val backStack = remember { mutableStateListOf<Any>(MainRoute) }
+    val backStack = rememberNavBackStack(MainRoute)
 
     NavDisplay(
         backStack = backStack,
