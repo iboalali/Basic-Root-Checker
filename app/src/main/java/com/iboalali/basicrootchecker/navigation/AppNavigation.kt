@@ -11,6 +11,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import androidx.navigationevent.NavigationEvent
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
@@ -37,6 +38,19 @@ private val animation: ContentTransform = ContentTransform(
             fadeOut(tween(300 / 2)),
 )
 
+/**
+ * Pop transition that mirrors the forward push so the back animation follows the swipe side.
+ *
+ * @param towardRight the direction the dismissed (current) screen slides off-screen. The revealed
+ * (previous) screen parallax-enters from that same side. Driven by the predictive-back swipe edge.
+ */
+private fun popTransition(towardRight: Boolean): ContentTransform = ContentTransform(
+    targetContentEnter = slideInHorizontally(tween(300)) { if (towardRight) -it / 4 else it / 4 } +
+            fadeIn(tween(300)),
+    initialContentExit = slideOutHorizontally(tween(300)) { if (towardRight) it else -it } +
+            fadeOut(tween(300 / 2)),
+)
+
 
 @Composable
 fun AppNavigation() {
@@ -46,8 +60,10 @@ fun AppNavigation() {
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
         transitionSpec = { animation },
-        popTransitionSpec = { animation },
-        predictivePopTransitionSpec = { animation },
+        popTransitionSpec = { popTransition(towardRight = true) },
+        predictivePopTransitionSpec = { edge ->
+            popTransition(towardRight = edge != NavigationEvent.EDGE_RIGHT)
+        },
         entryProvider = entryProvider {
             entry<MainRoute> {
                 MainScreen(
