@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - The current screen is now preserved when the app is recreated — for example after switching the in-app language or rotating the device — instead of jumping back to the main screen.
+- Fixed a startup crash on Android 7.x and other devices below Android 8.0 where the app closed immediately on launch. Enabled core library desugaring so the modern date/time APIs used by the analytics SDK resolve on older Android versions.
 
 ## [2.2] - 2026-05-29
 

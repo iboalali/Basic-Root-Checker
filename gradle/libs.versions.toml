@@ -12,6 +12,7 @@ androidx-lifecycle = "2.10.0"
 androidx-navigation3 = "1.1.2"
 
 boehrsi-devicemarketingnames = "1.0.7"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
+desugar-jdk-libs = "2.1.5"                       # https://github.com/google/desugar_jdk_libs/blob/master/CHANGELOG.md
 google-material = "1.14.0"
 google-play-app-update = "2.1.0"                 # https://developer.android.com/reference/com/google/android/play/core/release-notes-in_app_updates
 kotlinx-collections-immutable = "0.4.0"
@@ -38,6 +39,7 @@ androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runt
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "androidx-navigation3" }
 
 boehrsi-devicemarketingnames = { module = "de.boehrsi:devicemarketingnames", version.ref = "boehrsi-devicemarketingnames" }
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk-libs" }
 google-material = { module = "com.google.android.material:material", version.ref = "google-material" }
 google-play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "google-play-app-update" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
