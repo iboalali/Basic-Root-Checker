@@ -1,14 +1,19 @@
 {
   "description": "Structural data for TelemetryDeck app \"Basic Root Checker\". Contains all event types and parameters tracked by this app. Use this with the TQL Guideline to write queries and create charts. Note: Parameters may be event-specific, globally available, or a mix - not all parameters are available on all events.",
-  "exportDate": "2026-05-15T10:38:31.482Z",
+  "exportDate": "2026-06-02T11:47:37.489Z",
   "appId": "613251CD-B223-443A-9583-3A18586FAB55",
   "appName": "Basic Root Checker",
   "events": [
+    "hapticCapabilities",
     "otherAppClicked",
     "privacyPolicyClicked",
     "rootCheckCompleted",
     "rootCheckStarted",
+    "rootProviderDetected",
+    "rootRequested",
+    "socialLinkClicked",
     "TelemetryDeck.Acquisition.newInstallDetected",
+    "TelemetryDeck.Error.occurred",
     "TelemetryDeck.Navigation.pathChanged",
     "TelemetryDeck.Session.started",
     "updateAvailable",
@@ -17,9 +22,13 @@
     "websiteClicked"
   ],
   "parameters": [
+    "amplitudeControl",
+    "envelopeEffectsSupported",
     "floatValue",
     "packageName",
+    "provider",
     "result",
+    "sdkInt",
     "telemetryAPIVersion",
     "TelemetryDeck.Accessibility.fontScale",
     "TelemetryDeck.Accessibility.fontWeightAdjustment",
@@ -55,6 +64,9 @@
     "TelemetryDeck.Device.systemMajorVersion",
     "TelemetryDeck.Device.systemVersion",
     "TelemetryDeck.Device.timeZone",
+    "TelemetryDeck.Error.category",
+    "TelemetryDeck.Error.id",
+    "TelemetryDeck.Error.message",
     "TelemetryDeck.Navigation.destinationPath",
     "TelemetryDeck.Navigation.identifier",
     "TelemetryDeck.Navigation.schemaVersion",
@@ -74,6 +86,7 @@
     "TelemetryDeck.UserPreference.colorScheme",
     "TelemetryDeck.UserPreference.language",
     "TelemetryDeck.UserPreference.layoutDirection",
-    "TelemetryDeck.UserPreference.region"
+    "TelemetryDeck.UserPreference.region",
+    "version"
   ]
 }
