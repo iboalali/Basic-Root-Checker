@@ -54,6 +54,9 @@ class GPlayBillingController(context: Context) : BillingController {
 
     private var activity: ComponentActivity? = null
 
+    /** The tier of the most recently launched flow, for attributing a later cancel. */
+    private var lastLaunchedTier: TipTier? = null
+
     /** Raw Play product details, keyed by product id, for building the purchase flow. */
     private val detailsById = mutableMapOf<String, ProductDetails>()
 
@@ -65,6 +68,7 @@ class GPlayBillingController(context: Context) : BillingController {
                 }
                 BillingClient.BillingResponseCode.USER_CANCELED -> {
                     _purchaseState.value = TipPurchaseState.Idle
+                    Analytics.trackTipCanceled(lastLaunchedTier?.name ?: "unknown")
                 }
                 else -> {
                     Log.w(TAG, "Purchase update failed: ${result.responseCode} ${result.debugMessage}")
@@ -119,6 +123,7 @@ class GPlayBillingController(context: Context) : BillingController {
                 } else {
                     Log.w(TAG, "Billing setup failed: ${result.responseCode} ${result.debugMessage}")
                     _purchaseState.compareAndSet(TipPurchaseState.Connecting, TipPurchaseState.Idle)
+                    Analytics.trackBillingUnavailable(result.responseCode.toString())
                 }
             }
 
@@ -148,10 +153,12 @@ class GPlayBillingController(context: Context) : BillingController {
         billingClient.queryProductDetailsAsync(params) { result, queryResult ->
             if (result.responseCode != BillingClient.BillingResponseCode.OK) {
                 Log.w(TAG, "queryProductDetails failed: ${result.responseCode} ${result.debugMessage}")
+                Analytics.trackTipProductsUnavailable(result.responseCode.toString())
                 return@queryProductDetailsAsync
             }
             detailsById.clear()
             queryResult.productDetailsList.forEach { detailsById[it.productId] = it }
+            if (detailsById.isEmpty()) Analytics.trackTipProductsUnavailable("empty")
             rebuildProducts()
         }
     }
@@ -177,6 +184,7 @@ class GPlayBillingController(context: Context) : BillingController {
         val activity = this.activity ?: return
         val productId = tier.launchProductId(tier in _supporterTiers.value)
         val details = detailsById[productId] ?: return
+        lastLaunchedTier = tier
 
         val productParams = BillingFlowParams.ProductDetailsParams.newBuilder()
             .setProductDetails(details)
@@ -210,18 +218,22 @@ class GPlayBillingController(context: Context) : BillingController {
 
     /** Handles a purchase the user just completed: grant it and show the thank-you. */
     private fun handleFreshPurchase(purchase: Purchase) {
-        if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
-            _purchaseState.value = TipPurchaseState.Pending
-            return
-        }
-        if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) return
-
         val productId = purchase.products.firstOrNull() ?: return
         val tier = tipTierForProductId(productId) ?: return
-        grant(purchase, tier, productId)
 
-        Analytics.trackTipPurchased(productId)
-        _purchaseState.value = TipPurchaseState.Thanks
+        when (purchase.purchaseState) {
+            Purchase.PurchaseState.PENDING -> {
+                _purchaseState.value = TipPurchaseState.Pending
+                Analytics.trackTipPending(productId, tier.name)
+            }
+            Purchase.PurchaseState.PURCHASED -> {
+                grant(purchase, tier, productId)
+                val variant = if (isRecordProductId(productId)) "record" else "repeat"
+                Analytics.trackTipPurchased(productId, tier.name, variant)
+                _purchaseState.value = TipPurchaseState.Thanks
+            }
+            else -> Unit
+        }
     }
 
     /**

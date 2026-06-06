@@ -129,19 +129,41 @@ object Analytics {
         TelemetryDeck.signal("tipJarOpened")
     }
 
-    fun trackTipSelected(productId: String) {
+    fun trackTipSelected(tier: String) {
         if (!enabled) return
         TelemetryDeck.signal(
             "tipSelected",
-            mapOf("productId" to productId),
+            mapOf("tier" to tier),
         )
     }
 
-    fun trackTipPurchased(productId: String) {
+    /** [variant] is "record" (first, durable) or "repeat" (consumable). */
+    fun trackTipPurchased(productId: String, tier: String, variant: String) {
         if (!enabled) return
         TelemetryDeck.signal(
             "tipPurchased",
-            mapOf("productId" to productId),
+            mapOf(
+                "productId" to productId,
+                "tier" to tier,
+                "variant" to variant,
+            ),
+        )
+    }
+
+    /** A deferred-payment purchase awaiting completion. */
+    fun trackTipPending(productId: String, tier: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipPending",
+            mapOf("productId" to productId, "tier" to tier),
+        )
+    }
+
+    fun trackTipCanceled(tier: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipCanceled",
+            mapOf("tier" to tier),
         )
     }
 
@@ -149,6 +171,24 @@ object Analytics {
         if (!enabled) return
         TelemetryDeck.signal(
             "tipFailed",
+            mapOf("reason" to reason),
+        )
+    }
+
+    /** Play Billing could not connect (e.g. no Play services). [code] is the response code. */
+    fun trackBillingUnavailable(code: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "billingUnavailable",
+            mapOf("code" to code),
+        )
+    }
+
+    /** Tip products failed to load (query error, or none configured). */
+    fun trackTipProductsUnavailable(reason: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipProductsUnavailable",
             mapOf("reason" to reason),
         )
     }
