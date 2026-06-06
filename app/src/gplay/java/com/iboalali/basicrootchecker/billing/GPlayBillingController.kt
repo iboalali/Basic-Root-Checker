@@ -24,9 +24,17 @@ import kotlinx.coroutines.flow.asStateFlow
 
 private const val TAG = "GPlayBilling"
 
+/**
+ * Master switch for the tip jar. Temporarily `false` while we reconsider the
+ * model (consumable tips can't be retrieved later to retroactively unlock
+ * features). Flip to `true` to bring the tip jar — and the Settings "Support
+ * development" row — back. All billing code below is retained and unused.
+ */
+private const val TIPPING_ENABLED = false
+
 class GPlayBillingController(context: Context) : BillingController {
 
-    override val isAvailable: Boolean = true
+    override val isAvailable: Boolean = TIPPING_ENABLED
 
     private val _products = MutableStateFlow<List<TipProduct>>(emptyList())
     override val products: StateFlow<List<TipProduct>> = _products.asStateFlow()
@@ -75,6 +83,7 @@ class GPlayBillingController(context: Context) : BillingController {
     }
 
     override fun attach(activity: ComponentActivity) {
+        if (!isAvailable) return
         if (this.activity === activity) return
         if (this.activity != null) detach()
 
