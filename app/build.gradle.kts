@@ -94,6 +94,9 @@ dependencies {
     // In-app updates (gplay flavor only)
     "gplayImplementation"(libs.google.play.app.update.ktx)
 
+    // Tip jar / in-app billing (gplay flavor only)
+    "gplayImplementation"(libs.google.play.billing.ktx)
+
     // Unit tests
     testImplementation(libs.junit)
 }

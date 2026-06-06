@@ -124,6 +124,35 @@ object Analytics {
         )
     }
 
+    fun trackTipJarOpened() {
+        if (!enabled) return
+        TelemetryDeck.signal("tipJarOpened")
+    }
+
+    fun trackTipSelected(productId: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipSelected",
+            mapOf("productId" to productId),
+        )
+    }
+
+    fun trackTipPurchased(productId: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipPurchased",
+            mapOf("productId" to productId),
+        )
+    }
+
+    fun trackTipFailed(reason: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipFailed",
+            mapOf("reason" to reason),
+        )
+    }
+
     fun trackHapticCapabilities(
         envelopeEffectsSupported: Boolean,
         amplitudeControl: Boolean,

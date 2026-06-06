@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,11 +28,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +57,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.billing.TipProduct
+import com.iboalali.basicrootchecker.billing.TipPurchaseState
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -64,6 +71,8 @@ fun SettingsScreen(
     val telemetryEnabled by viewModel.telemetryEnabled.collectAsStateWithLifecycle()
     val hapticsEnabled by viewModel.hapticsEnabled.collectAsStateWithLifecycle()
     val currentLanguageTag = AppLanguage.currentTag(LocalContext.current)
+    val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
+    val tipPurchaseState by viewModel.tipPurchaseState.collectAsStateWithLifecycle()
 
     SettingsScreenContent(
         telemetryEnabled = telemetryEnabled,
@@ -72,6 +81,12 @@ fun SettingsScreen(
         onHapticsEnabledChange = viewModel::setHapticsEnabled,
         currentLanguageTag = currentLanguageTag,
         onLanguageSelected = viewModel::setLanguage,
+        tipJarAvailable = viewModel.tipJarAvailable,
+        tipProducts = tipProducts,
+        tipPurchaseState = tipPurchaseState,
+        onTipJarOpened = viewModel::onTipJarOpened,
+        onTipSelected = viewModel::onTipSelected,
+        onTipResultShown = viewModel::onTipResultShown,
         onNavigateBack = onNavigateBack,
     )
 }
@@ -85,14 +100,40 @@ fun SettingsScreenContent(
     onHapticsEnabledChange: (Boolean) -> Unit,
     currentLanguageTag: String?,
     onLanguageSelected: (String?) -> Unit,
+    tipJarAvailable: Boolean,
+    tipProducts: List<TipProduct>,
+    tipPurchaseState: TipPurchaseState,
+    onTipJarOpened: () -> Unit,
+    onTipSelected: (String) -> Unit,
+    onTipResultShown: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
     var showLanguageDialog by remember { mutableStateOf(false) }
+    var showTipDialog by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val tipThanksMessage = stringResource(R.string.tip_jar_thanks)
+    val tipErrorMessage = stringResource(R.string.tip_jar_error)
+    LaunchedEffect(tipPurchaseState) {
+        when (tipPurchaseState) {
+            TipPurchaseState.Thanks -> {
+                showTipDialog = false
+                snackbarHostState.showSnackbar(tipThanksMessage)
+                onTipResultShown()
+            }
+            TipPurchaseState.Error -> {
+                snackbarHostState.showSnackbar(tipErrorMessage)
+                onTipResultShown()
+            }
+            else -> Unit
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_settings)) },
@@ -229,6 +270,49 @@ fun SettingsScreenContent(
                 }
             }
 
+            if (tipJarAvailable) {
+                Spacer(Modifier.height(24.dp))
+
+                OutlinedCard(
+                    modifier = Modifier
+                        .widthIn(max = 600.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(),
+                    shape = RoundedCornerShape(32.dp),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onTipJarOpened()
+                                showTipDialog = true
+                            }
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.settings_tip_jar_title),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            Text(
+                                text = stringResource(R.string.settings_tip_jar_description),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
+                        Spacer(Modifier.width(16.dp))
+                        Icon(
+                            painter = painterResource(R.drawable.chevron_right_24px),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+
             Spacer(Modifier.height(24.dp))
 
             OutlinedCard(
@@ -289,6 +373,73 @@ fun SettingsScreenContent(
             onDismiss = { showLanguageDialog = false },
         )
     }
+
+    if (showTipDialog) {
+        TipJarDialog(
+            products = tipProducts,
+            onSelect = onTipSelected,
+            onDismiss = { showTipDialog = false },
+        )
+    }
+}
+
+@Composable
+private fun TipJarDialog(
+    products: List<TipProduct>,
+    onSelect: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.tip_jar_dialog_title)) },
+        text = {
+            if (products.isEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                    Spacer(Modifier.width(16.dp))
+                    Text(
+                        text = stringResource(R.string.tip_jar_loading),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            } else {
+                Column {
+                    products.forEach { product ->
+                        TextButton(
+                            onClick = { onSelect(product.productId) },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = product.title,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier.weight(1f),
+                                )
+                                Spacer(Modifier.width(16.dp))
+                                Text(
+                                    text = product.formattedPrice,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(android.R.string.cancel))
+            }
+        },
+    )
 }
 
 @Composable
@@ -358,6 +509,16 @@ private fun SettingsScreenPreview() {
             onHapticsEnabledChange = {},
             currentLanguageTag = "de",
             onLanguageSelected = {},
+            tipJarAvailable = true,
+            tipProducts = listOf(
+                TipProduct("tip_small", "Small tip", "$1.99"),
+                TipProduct("tip_medium", "Medium tip", "$4.99"),
+                TipProduct("tip_large", "Large tip", "$9.99"),
+            ),
+            tipPurchaseState = TipPurchaseState.Idle,
+            onTipJarOpened = {},
+            onTipSelected = {},
+            onTipResultShown = {},
             onNavigateBack = {},
         )
     }
@@ -374,6 +535,12 @@ private fun SettingsScreenTelemetryOffPreview() {
             onHapticsEnabledChange = {},
             currentLanguageTag = null,
             onLanguageSelected = {},
+            tipJarAvailable = false,
+            tipProducts = emptyList(),
+            tipPurchaseState = TipPurchaseState.Idle,
+            onTipJarOpened = {},
+            onTipSelected = {},
+            onTipResultShown = {},
             onNavigateBack = {},
         )
     }

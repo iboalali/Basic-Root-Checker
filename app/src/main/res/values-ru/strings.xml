@@ -26,6 +26,12 @@
     <string name="settings_privacy_policy_description">Открыть политику конфиденциальности в браузере</string>
     <string name="settings_language_title">Язык</string>
     <string name="language_system_default">Язык системы</string>
+    <string name="settings_tip_jar_title">Поддержать разработку</string>
+    <string name="settings_tip_jar_description">Оставьте чаевые, если приложение вам помогло.</string>
+    <string name="tip_jar_dialog_title">Оставить чаевые</string>
+    <string name="tip_jar_loading">Загрузка вариантов чаевых…</string>
+    <string name="tip_jar_thanks">Спасибо за поддержку!</string>
+    <string name="tip_jar_error">Что-то пошло не так. Попробуйте ещё раз.</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Ваше устройство</string>
     <string name="string_checking_for_root">Проверка root-доступа…</string>

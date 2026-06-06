@@ -28,6 +28,12 @@
     <string name="settings_privacy_policy_description">View our privacy policy online</string>
     <string name="settings_language_title">Language</string>
     <string name="language_system_default">System default</string>
+    <string name="settings_tip_jar_title">Support development</string>
+    <string name="settings_tip_jar_description">Leave a tip if the app helped you.</string>
+    <string name="tip_jar_dialog_title">Leave a tip</string>
+    <string name="tip_jar_loading">Loading tip options…</string>
+    <string name="tip_jar_thanks">Thank you for your support!</string>
+    <string name="tip_jar_error">Something went wrong. Please try again.</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Your Device</string>
     <string name="string_checking_for_root">Checking for Root…</string>

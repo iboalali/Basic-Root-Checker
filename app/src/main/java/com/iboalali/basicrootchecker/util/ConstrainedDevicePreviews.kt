@@ -1,6 +1,7 @@
 package com.iboalali.basicrootchecker.util
 
 import androidx.compose.runtime.Composable
+import com.iboalali.basicrootchecker.billing.TipPurchaseState
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
@@ -109,6 +110,12 @@ private fun SettingsScreenConstrainedPreview() {
             onHapticsEnabledChange = {},
             currentLanguageTag = "en",
             onLanguageSelected = {},
+            tipJarAvailable = true,
+            tipProducts = emptyList(),
+            tipPurchaseState = TipPurchaseState.Idle,
+            onTipJarOpened = {},
+            onTipSelected = {},
+            onTipResultShown = {},
             onNavigateBack = {},
         )
     }

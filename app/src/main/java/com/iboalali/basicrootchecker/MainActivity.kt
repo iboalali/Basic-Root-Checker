@@ -27,7 +27,10 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        (application as BasicRootCheckerApplication).appUpdateController.attach(this)
+        (application as BasicRootCheckerApplication).let { app ->
+            app.appUpdateController.attach(this)
+            app.billingController.attach(this)
+        }
 
         // Workaround: splash screen theme doesn't properly set light status bar
         val isNight = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES) == Configuration.UI_MODE_NIGHT_YES

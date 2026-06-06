@@ -3,7 +3,10 @@ package com.iboalali.basicrootchecker.ui.settings
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.billing.TipProduct
+import com.iboalali.basicrootchecker.billing.TipPurchaseState
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,6 +17,8 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val prefs = UserPreferences(application)
+
+    private val billing = (application as BasicRootCheckerApplication).billingController
 
     val telemetryEnabled: StateFlow<Boolean> = prefs.telemetryEnabled.stateIn(
         scope = viewModelScope,
@@ -44,5 +49,27 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun setLanguage(tag: String?) {
         AppLanguage.setLanguage(getApplication(), tag)
         Analytics.trackLanguageChanged(tag ?: "system")
+    }
+
+    // ---- Tip jar ----
+
+    /** Whether the tip jar is supported in this build flavor (Google Play only). */
+    val tipJarAvailable: Boolean = billing.isAvailable
+
+    val tipProducts: StateFlow<List<TipProduct>> = billing.products
+
+    val tipPurchaseState: StateFlow<TipPurchaseState> = billing.purchaseState
+
+    fun onTipJarOpened() {
+        Analytics.trackTipJarOpened()
+    }
+
+    fun onTipSelected(productId: String) {
+        Analytics.trackTipSelected(productId)
+        billing.launchPurchase(productId)
+    }
+
+    fun onTipResultShown() {
+        billing.consumeThanks()
     }
 }

@@ -22,6 +22,12 @@ Kontaktiere mich:</string>
     <string name="settings_privacy_policy_description">Datenschutzerklärung online ansehen</string>
     <string name="settings_language_title">Sprache</string>
     <string name="language_system_default">Systemstandard</string>
+    <string name="settings_tip_jar_title">Entwicklung unterstützen</string>
+    <string name="settings_tip_jar_description">Gib ein Trinkgeld, wenn dir die App geholfen hat.</string>
+    <string name="tip_jar_dialog_title">Trinkgeld geben</string>
+    <string name="tip_jar_loading">Trinkgeld-Optionen werden geladen…</string>
+    <string name="tip_jar_thanks">Danke für deine Unterstützung!</string>
+    <string name="tip_jar_error">Etwas ist schiefgelaufen. Bitte versuche es erneut.</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
