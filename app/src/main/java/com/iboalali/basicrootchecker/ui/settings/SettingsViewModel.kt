@@ -7,6 +7,7 @@ import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipPurchaseState
+import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.coroutines.flow.SharingStarted
@@ -60,13 +61,16 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     val tipPurchaseState: StateFlow<TipPurchaseState> = billing.purchaseState
 
+    /** Tiers whose durable record product is owned. Drives the debug view and future gating. */
+    val supporterTiers: StateFlow<Set<TipTier>> = billing.supporterTiers
+
     fun onTipJarOpened() {
         Analytics.trackTipJarOpened()
     }
 
-    fun onTipSelected(productId: String) {
-        Analytics.trackTipSelected(productId)
-        billing.launchPurchase(productId)
+    fun onTipSelected(tier: TipTier) {
+        Analytics.trackTipSelected(tier.name)
+        billing.launchPurchase(tier)
     }
 
     fun onTipResultShown() {

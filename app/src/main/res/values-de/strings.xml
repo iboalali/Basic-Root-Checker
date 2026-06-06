@@ -25,6 +25,9 @@ Kontaktiere mich:</string>
     <string name="settings_tip_jar_title">Entwicklung unterstützen</string>
     <string name="settings_tip_jar_description">Gib ein Trinkgeld, wenn dir die App geholfen hat.</string>
     <string name="tip_jar_dialog_title">Trinkgeld geben</string>
+    <string name="tip_tier_small">Kleines Trinkgeld</string>
+    <string name="tip_tier_medium">Mittleres Trinkgeld</string>
+    <string name="tip_tier_large">Großes Trinkgeld</string>
     <string name="tip_jar_loading">Trinkgeld-Optionen werden geladen…</string>
     <string name="tip_jar_thanks">Danke für deine Unterstützung!</string>
     <string name="tip_jar_error">Etwas ist schiefgelaufen. Bitte versuche es erneut.</string>

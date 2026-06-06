@@ -29,6 +29,9 @@
     <string name="settings_tip_jar_title">Поддержать разработку</string>
     <string name="settings_tip_jar_description">Оставьте чаевые, если приложение вам помогло.</string>
     <string name="tip_jar_dialog_title">Оставить чаевые</string>
+    <string name="tip_tier_small">Маленькие чаевые</string>
+    <string name="tip_tier_medium">Средние чаевые</string>
+    <string name="tip_tier_large">Большие чаевые</string>
     <string name="tip_jar_loading">Загрузка вариантов чаевых…</string>
     <string name="tip_jar_thanks">Спасибо за поддержку!</string>
     <string name="tip_jar_error">Что-то пошло не так. Попробуйте ещё раз.</string>

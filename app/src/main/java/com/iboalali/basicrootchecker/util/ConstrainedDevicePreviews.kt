@@ -113,6 +113,7 @@ private fun SettingsScreenConstrainedPreview() {
             tipJarAvailable = true,
             tipProducts = emptyList(),
             tipPurchaseState = TipPurchaseState.Idle,
+            supporterTiers = emptySet(),
             onTipJarOpened = {},
             onTipSelected = {},
             onTipResultShown = {},

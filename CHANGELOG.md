@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Tip jar in Settings: leave an optional tip through Google Play, and tip again whenever you like (Google Play builds only; not shown in FOSS builds).
 - In-app language picker in Settings (Android 13+): tap **Language** to switch the app between English, German, Arabic, Spanish, and Russian, or follow the system default. The choice is applied immediately, persists across launches, and stays in sync with Android's per-app language setting.
 
 ### Changed

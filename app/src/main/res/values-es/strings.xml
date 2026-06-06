@@ -29,6 +29,9 @@
     <string name="settings_tip_jar_title">Apoya el desarrollo</string>
     <string name="settings_tip_jar_description">Deja una propina si la app te ha sido útil.</string>
     <string name="tip_jar_dialog_title">Deja una propina</string>
+    <string name="tip_tier_small">Propina pequeña</string>
+    <string name="tip_tier_medium">Propina mediana</string>
+    <string name="tip_tier_large">Propina grande</string>
     <string name="tip_jar_loading">Cargando opciones de propina…</string>
     <string name="tip_jar_thanks">¡Gracias por tu apoyo!</string>
     <string name="tip_jar_error">Algo salió mal. Inténtalo de nuevo.</string>

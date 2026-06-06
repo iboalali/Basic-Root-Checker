@@ -11,8 +11,10 @@ object NoOpBillingController : BillingController {
         MutableStateFlow<List<TipProduct>>(emptyList()).asStateFlow()
     override val purchaseState: StateFlow<TipPurchaseState> =
         MutableStateFlow(TipPurchaseState.Idle).asStateFlow()
+    override val supporterTiers: StateFlow<Set<TipTier>> =
+        MutableStateFlow<Set<TipTier>>(emptySet()).asStateFlow()
 
     override fun attach(activity: ComponentActivity) = Unit
-    override fun launchPurchase(productId: String) = Unit
+    override fun launchPurchase(tier: TipTier) = Unit
     override fun consumeThanks() = Unit
 }

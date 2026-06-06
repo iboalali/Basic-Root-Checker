@@ -55,10 +55,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipPurchaseState
+import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -73,6 +75,7 @@ fun SettingsScreen(
     val currentLanguageTag = AppLanguage.currentTag(LocalContext.current)
     val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
     val tipPurchaseState by viewModel.tipPurchaseState.collectAsStateWithLifecycle()
+    val supporterTiers by viewModel.supporterTiers.collectAsStateWithLifecycle()
 
     SettingsScreenContent(
         telemetryEnabled = telemetryEnabled,
@@ -84,6 +87,7 @@ fun SettingsScreen(
         tipJarAvailable = viewModel.tipJarAvailable,
         tipProducts = tipProducts,
         tipPurchaseState = tipPurchaseState,
+        supporterTiers = supporterTiers,
         onTipJarOpened = viewModel::onTipJarOpened,
         onTipSelected = viewModel::onTipSelected,
         onTipResultShown = viewModel::onTipResultShown,
@@ -103,8 +107,9 @@ fun SettingsScreenContent(
     tipJarAvailable: Boolean,
     tipProducts: List<TipProduct>,
     tipPurchaseState: TipPurchaseState,
+    supporterTiers: Set<TipTier>,
     onTipJarOpened: () -> Unit,
-    onTipSelected: (String) -> Unit,
+    onTipSelected: (TipTier) -> Unit,
     onTipResultShown: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
@@ -359,6 +364,11 @@ fun SettingsScreenContent(
                 }
             }
 
+            if (BuildConfig.DEBUG) {
+                Spacer(Modifier.height(24.dp))
+                DebugTipJarCard(supporterTiers = supporterTiers)
+            }
+
             Spacer(Modifier.height(16.dp))
         }
     }
@@ -386,7 +396,7 @@ fun SettingsScreenContent(
 @Composable
 private fun TipJarDialog(
     products: List<TipProduct>,
-    onSelect: (String) -> Unit,
+    onSelect: (TipTier) -> Unit,
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
@@ -411,7 +421,7 @@ private fun TipJarDialog(
                 Column {
                     products.forEach { product ->
                         TextButton(
-                            onClick = { onSelect(product.productId) },
+                            onClick = { onSelect(product.tier) },
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Row(
@@ -419,7 +429,7 @@ private fun TipJarDialog(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
-                                    text = product.title,
+                                    text = stringResource(product.tier.titleRes),
                                     style = MaterialTheme.typography.bodyLarge,
                                     modifier = Modifier.weight(1f),
                                 )
@@ -511,11 +521,12 @@ private fun SettingsScreenPreview() {
             onLanguageSelected = {},
             tipJarAvailable = true,
             tipProducts = listOf(
-                TipProduct("tip_small", "Small tip", "$1.99"),
-                TipProduct("tip_medium", "Medium tip", "$4.99"),
-                TipProduct("tip_large", "Large tip", "$9.99"),
+                TipProduct(TipTier.SMALL, "$1.99"),
+                TipProduct(TipTier.MEDIUM, "$4.99"),
+                TipProduct(TipTier.LARGE, "$9.99"),
             ),
             tipPurchaseState = TipPurchaseState.Idle,
+            supporterTiers = setOf(TipTier.SMALL),
             onTipJarOpened = {},
             onTipSelected = {},
             onTipResultShown = {},
@@ -538,6 +549,7 @@ private fun SettingsScreenTelemetryOffPreview() {
             tipJarAvailable = false,
             tipProducts = emptyList(),
             tipPurchaseState = TipPurchaseState.Idle,
+            supporterTiers = emptySet(),
             onTipJarOpened = {},
             onTipSelected = {},
             onTipResultShown = {},

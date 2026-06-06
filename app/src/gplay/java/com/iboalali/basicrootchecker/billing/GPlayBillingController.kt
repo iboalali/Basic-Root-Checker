@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.ProductType
 import com.android.billingclient.api.BillingClientStateListener
@@ -25,13 +26,19 @@ import kotlinx.coroutines.flow.asStateFlow
 private const val TAG = "GPlayBilling"
 
 /**
- * Master switch for the tip jar. Temporarily `false` while we reconsider the
- * model (consumable tips can't be retrieved later to retroactively unlock
- * features). Flip to `true` to bring the tip jar — and the Settings "Support
- * development" row — back. All billing code below is retained and unused.
+ * Master switch for the tip jar. Flip to `false` to hide the Settings "Support
+ * development" row and keep the billing client from ever connecting; all code below is
+ * retained either way.
  */
-private const val TIPPING_ENABLED = false
+private const val TIPPING_ENABLED = true
 
+/**
+ * Tip jar over Google Play Billing. Each tier has two products (see [TipTier]): the
+ * record variant is acknowledged and never consumed, so it stays owned forever and acts
+ * as a durable client-side record of having tipped; the repeat variant is always
+ * consumed so the tier can be tipped again. [supporterTiers] is recomputed from owned
+ * record products on every connect, so it survives reinstalls.
+ */
 class GPlayBillingController(context: Context) : BillingController {
 
     override val isAvailable: Boolean = TIPPING_ENABLED
@@ -42,6 +49,9 @@ class GPlayBillingController(context: Context) : BillingController {
     private val _purchaseState = MutableStateFlow(TipPurchaseState.Idle)
     override val purchaseState: StateFlow<TipPurchaseState> = _purchaseState.asStateFlow()
 
+    private val _supporterTiers = MutableStateFlow<Set<TipTier>>(emptySet())
+    override val supporterTiers: StateFlow<Set<TipTier>> = _supporterTiers.asStateFlow()
+
     private var activity: ComponentActivity? = null
 
     /** Raw Play product details, keyed by product id, for building the purchase flow. */
@@ -51,7 +61,7 @@ class GPlayBillingController(context: Context) : BillingController {
         PurchasesUpdatedListener { result, purchases ->
             when (result.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
-                    purchases?.forEach { handlePurchase(it, fromUser = true) }
+                    purchases?.forEach { handleFreshPurchase(it) }
                 }
                 BillingClient.BillingResponseCode.USER_CANCELED -> {
                     _purchaseState.value = TipPurchaseState.Idle
@@ -125,7 +135,7 @@ class GPlayBillingController(context: Context) : BillingController {
     }
 
     private fun queryProductDetails() {
-        val productList = TIP_PRODUCT_IDS.map { id ->
+        val productList = ALL_TIP_PRODUCT_IDS.map { id ->
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId(id)
                 .setProductType(ProductType.INAPP)
@@ -140,18 +150,32 @@ class GPlayBillingController(context: Context) : BillingController {
                 Log.w(TAG, "queryProductDetails failed: ${result.responseCode} ${result.debugMessage}")
                 return@queryProductDetailsAsync
             }
-            val details = queryResult.productDetailsList
             detailsById.clear()
-            details.forEach { detailsById[it.productId] = it }
-
-            _products.value = details
-                .sortedBy { it.priceAmountMicros() }
-                .mapNotNull { it.toTipProductOrNull() }
+            queryResult.productDetailsList.forEach { detailsById[it.productId] = it }
+            rebuildProducts()
         }
     }
 
-    override fun launchPurchase(productId: String) {
+    /**
+     * Emits one [TipProduct] per tier, using whichever variant we'd launch next (record
+     * if not yet owned, otherwise repeat). Tiers whose chosen variant has no Play details
+     * yet are skipped. Sorted cheapest first.
+     */
+    private fun rebuildProducts() {
+        val owned = _supporterTiers.value
+        _products.value = TipTier.entries
+            .mapNotNull { tier ->
+                val details = detailsById[tier.launchProductId(tier in owned)] ?: return@mapNotNull null
+                val offer = details.oneTimePurchaseOfferDetails ?: return@mapNotNull null
+                Triple(tier, offer.formattedPrice, offer.priceAmountMicros)
+            }
+            .sortedBy { it.third }
+            .map { TipProduct(it.first, it.second) }
+    }
+
+    override fun launchPurchase(tier: TipTier) {
         val activity = this.activity ?: return
+        val productId = tier.launchProductId(tier in _supporterTiers.value)
         val details = detailsById[productId] ?: return
 
         val productParams = BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -162,12 +186,20 @@ class GPlayBillingController(context: Context) : BillingController {
             .build()
 
         val result = billingClient.launchBillingFlow(activity, flowParams)
-        if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-            _purchaseState.value = TipPurchaseState.Pending
-        } else {
-            Log.w(TAG, "launchBillingFlow failed: ${result.responseCode} ${result.debugMessage}")
-            _purchaseState.value = TipPurchaseState.Error
-            Analytics.trackTipFailed(formatBillingResult(result))
+        when (result.responseCode) {
+            BillingClient.BillingResponseCode.OK -> {
+                _purchaseState.value = TipPurchaseState.Pending
+            }
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
+                // Our owned set was stale (record already bought). Recover and let the
+                // user retry against the repeat variant.
+                reconcilePurchases()
+            }
+            else -> {
+                Log.w(TAG, "launchBillingFlow failed: ${result.responseCode} ${result.debugMessage}")
+                _purchaseState.value = TipPurchaseState.Error
+                Analytics.trackTipFailed(formatBillingResult(result))
+            }
         }
     }
 
@@ -176,9 +208,27 @@ class GPlayBillingController(context: Context) : BillingController {
         _purchaseState.compareAndSet(TipPurchaseState.Error, TipPurchaseState.Idle)
     }
 
+    /** Handles a purchase the user just completed: grant it and show the thank-you. */
+    private fun handleFreshPurchase(purchase: Purchase) {
+        if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
+            _purchaseState.value = TipPurchaseState.Pending
+            return
+        }
+        if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) return
+
+        val productId = purchase.products.firstOrNull() ?: return
+        val tier = tipTierForProductId(productId) ?: return
+        grant(purchase, tier, productId)
+
+        Analytics.trackTipPurchased(productId)
+        _purchaseState.value = TipPurchaseState.Thanks
+    }
+
     /**
-     * Consumes any tip purchases left over from a previous session (e.g. the app was
-     * killed mid-flow) so the user is not blocked from tipping that tier again.
+     * Recomputes [supporterTiers] from currently-owned purchases. Record products are
+     * acknowledged and kept; leftover repeat products (e.g. the app died mid-flow) are
+     * consumed. Runs on every connect, which is what restores supporter status after a
+     * reinstall.
      */
     private fun reconcilePurchases() {
         val params = QueryPurchasesParams.newBuilder()
@@ -186,44 +236,48 @@ class GPlayBillingController(context: Context) : BillingController {
             .build()
         billingClient.queryPurchasesAsync(params) { result, purchases ->
             if (result.responseCode != BillingClient.BillingResponseCode.OK) return@queryPurchasesAsync
-            purchases.forEach { handlePurchase(it, fromUser = false) }
+            val owned = mutableSetOf<TipTier>()
+            purchases.forEach { purchase ->
+                if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) return@forEach
+                val productId = purchase.products.firstOrNull() ?: return@forEach
+                val tier = tipTierForProductId(productId) ?: return@forEach
+                if (isRecordProductId(productId)) owned += tier
+                grant(purchase, tier, productId)
+            }
+            _supporterTiers.value = owned
+            rebuildProducts()
         }
     }
 
     /**
-     * Grants and consumes a tip purchase. Tips are consumable so they can be bought
-     * again. [fromUser] distinguishes a fresh purchase (show thank-you) from a
-     * leftover one reconciled on connect (consume silently).
+     * Applies the right post-purchase action for the product's role: record products are
+     * acknowledged (kept owned forever); repeat products are consumed (repurchasable).
      */
-    private fun handlePurchase(purchase: Purchase, fromUser: Boolean) {
-        if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) return
-
-        if (fromUser) {
-            purchase.products.forEach { Analytics.trackTipPurchased(it) }
-            _purchaseState.value = TipPurchaseState.Thanks
-        }
-
-        val consumeParams = ConsumeParams.newBuilder()
-            .setPurchaseToken(purchase.purchaseToken)
-            .build()
-        billingClient.consumeAsync(consumeParams) { result, _ ->
-            if (result.responseCode != BillingClient.BillingResponseCode.OK) {
-                Log.w(TAG, "consume failed: ${result.responseCode} ${result.debugMessage}")
+    private fun grant(purchase: Purchase, tier: TipTier, productId: String) {
+        if (isRecordProductId(productId)) {
+            _supporterTiers.value = _supporterTiers.value + tier
+            if (!purchase.isAcknowledged) {
+                val params = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+                billingClient.acknowledgePurchase(params) { result ->
+                    if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+                        Log.w(TAG, "acknowledge failed: ${result.responseCode} ${result.debugMessage}")
+                    }
+                }
+            }
+            rebuildProducts()
+        } else {
+            val params = ConsumeParams.newBuilder()
+                .setPurchaseToken(purchase.purchaseToken)
+                .build()
+            billingClient.consumeAsync(params) { result, _ ->
+                if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+                    Log.w(TAG, "consume failed: ${result.responseCode} ${result.debugMessage}")
+                }
             }
         }
     }
-
-    private fun ProductDetails.toTipProductOrNull(): TipProduct? {
-        val offer = oneTimePurchaseOfferDetails ?: return null
-        return TipProduct(
-            productId = productId,
-            title = name.ifBlank { title },
-            formattedPrice = offer.formattedPrice,
-        )
-    }
-
-    private fun ProductDetails.priceAmountMicros(): Long =
-        oneTimePurchaseOfferDetails?.priceAmountMicros ?: Long.MAX_VALUE
 
     private fun formatBillingResult(result: BillingResult): String =
         "${result.responseCode}"

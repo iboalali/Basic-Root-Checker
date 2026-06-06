@@ -31,6 +31,9 @@
     <string name="settings_tip_jar_title">Support development</string>
     <string name="settings_tip_jar_description">Leave a tip if the app helped you.</string>
     <string name="tip_jar_dialog_title">Leave a tip</string>
+    <string name="tip_tier_small">Small tip</string>
+    <string name="tip_tier_medium">Medium tip</string>
+    <string name="tip_tier_large">Large tip</string>
     <string name="tip_jar_loading">Loading tip options…</string>
     <string name="tip_jar_thanks">Thank you for your support!</string>
     <string name="tip_jar_error">Something went wrong. Please try again.</string>
