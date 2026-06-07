@@ -48,7 +48,7 @@ Android app that checks whether a device has root access, written in Kotlin with
 
 - **Gradle:** Kotlin DSL with version catalog (`gradle/libs.versions.toml`), AGP 9.1.0
 - **SDK:** compile/target 37 (Android 17), min 23
-- **Kotlin:** 2.3.20, JVM target 17
+- **Kotlin:** 2.4.0, JVM target 17
 - **Build variants:** debug (appId suffix `.debug`, version suffix `-debug`) and release (minification + resource shrinking enabled)
 - **Compose** enabled with Compose BOM for dependency management
 - **Navigation 3** (`androidx.navigation3`) with Kotlin Serialization for route keys
