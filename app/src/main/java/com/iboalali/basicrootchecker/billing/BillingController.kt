@@ -1,6 +1,8 @@
 package com.iboalali.basicrootchecker.billing
 
 import androidx.activity.ComponentActivity
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -13,7 +15,7 @@ interface BillingController {
     val isAvailable: Boolean
 
     /** Available tip offers, one per tier, sorted cheapest first. Empty until Play details load. */
-    val products: StateFlow<List<TipProduct>>
+    val products: StateFlow<ImmutableList<TipProduct>>
 
     val purchaseState: StateFlow<TipPurchaseState>
 
@@ -22,7 +24,7 @@ interface BillingController {
      * record of which tips the user has ever given. Future features can gate on this
      * (`isSupporter = supporterTiers.value.isNotEmpty()`).
      */
-    val supporterTiers: StateFlow<Set<TipTier>>
+    val supporterTiers: StateFlow<ImmutableSet<TipTier>>
 
     fun attach(activity: ComponentActivity)
 

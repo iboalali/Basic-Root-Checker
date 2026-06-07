@@ -19,6 +19,13 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.iboalali.basicrootchecker.analytics.Analytics
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.PersistentSet
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,14 +50,14 @@ class GPlayBillingController(context: Context) : BillingController {
 
     override val isAvailable: Boolean = TIPPING_ENABLED
 
-    private val _products = MutableStateFlow<List<TipProduct>>(emptyList())
-    override val products: StateFlow<List<TipProduct>> = _products.asStateFlow()
+    private val _products = MutableStateFlow<ImmutableList<TipProduct>>(persistentListOf())
+    override val products: StateFlow<ImmutableList<TipProduct>> = _products.asStateFlow()
 
     private val _purchaseState = MutableStateFlow(TipPurchaseState.Idle)
     override val purchaseState: StateFlow<TipPurchaseState> = _purchaseState.asStateFlow()
 
-    private val _supporterTiers = MutableStateFlow<Set<TipTier>>(emptySet())
-    override val supporterTiers: StateFlow<Set<TipTier>> = _supporterTiers.asStateFlow()
+    private val _supporterTiers = MutableStateFlow<PersistentSet<TipTier>>(persistentSetOf())
+    override val supporterTiers: StateFlow<ImmutableSet<TipTier>> = _supporterTiers.asStateFlow()
 
     private var activity: ComponentActivity? = null
 
@@ -178,6 +185,7 @@ class GPlayBillingController(context: Context) : BillingController {
             }
             .sortedBy { it.third }
             .map { TipProduct(it.first, it.second) }
+            .toImmutableList()
     }
 
     override fun launchPurchase(tier: TipTier) {
@@ -256,7 +264,7 @@ class GPlayBillingController(context: Context) : BillingController {
                 if (isRecordProductId(productId)) owned += tier
                 grant(purchase, tier, productId)
             }
-            _supporterTiers.value = owned
+            _supporterTiers.value = owned.toPersistentSet()
             rebuildProducts()
         }
     }
@@ -267,7 +275,7 @@ class GPlayBillingController(context: Context) : BillingController {
      */
     private fun grant(purchase: Purchase, tier: TipTier, productId: String) {
         if (isRecordProductId(productId)) {
-            _supporterTiers.value = _supporterTiers.value + tier
+            _supporterTiers.value = _supporterTiers.value.add(tier)
             if (!purchase.isAcknowledged) {
                 val params = AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)

@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.billing.TipTier
+import kotlinx.collections.immutable.ImmutableSet
 
 /**
  * Debug-only readout of which durable record products are currently owned. The only call
@@ -24,7 +25,7 @@ import com.iboalali.basicrootchecker.billing.TipTier
  * Labels are hardcoded English on purpose — developer tool.
  */
 @Composable
-fun DebugTipJarCard(supporterTiers: Set<TipTier>) {
+fun DebugTipJarCard(supporterTiers: ImmutableSet<TipTier>) {
     OutlinedCard(
         modifier = Modifier
             .widthIn(max = 600.dp)

@@ -10,6 +10,8 @@ import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
 import com.iboalali.basicrootchecker.ui.settings.SettingsScreenContent
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 @PreviewConstrainedDevices
 @Composable
@@ -111,9 +113,9 @@ private fun SettingsScreenConstrainedPreview() {
             currentLanguageTag = "en",
             onLanguageSelected = {},
             tipJarAvailable = true,
-            tipProducts = emptyList(),
+            tipProducts = persistentListOf(),
             tipPurchaseState = TipPurchaseState.Idle,
-            supporterTiers = emptySet(),
+            supporterTiers = persistentSetOf(),
             onTipJarOpened = {},
             onTipSelected = {},
             onTipResultShown = {},

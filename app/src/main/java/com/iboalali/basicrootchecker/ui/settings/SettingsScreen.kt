@@ -64,6 +64,10 @@ import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 @Composable
 fun SettingsScreen(
@@ -105,9 +109,9 @@ fun SettingsScreenContent(
     currentLanguageTag: String?,
     onLanguageSelected: (String?) -> Unit,
     tipJarAvailable: Boolean,
-    tipProducts: List<TipProduct>,
+    tipProducts: ImmutableList<TipProduct>,
     tipPurchaseState: TipPurchaseState,
-    supporterTiers: Set<TipTier>,
+    supporterTiers: ImmutableSet<TipTier>,
     onTipJarOpened: () -> Unit,
     onTipSelected: (TipTier) -> Unit,
     onTipResultShown: () -> Unit,
@@ -395,7 +399,7 @@ fun SettingsScreenContent(
 
 @Composable
 private fun TipJarDialog(
-    products: List<TipProduct>,
+    products: ImmutableList<TipProduct>,
     onSelect: (TipTier) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -520,13 +524,13 @@ private fun SettingsScreenPreview() {
             currentLanguageTag = "de",
             onLanguageSelected = {},
             tipJarAvailable = true,
-            tipProducts = listOf(
+            tipProducts = persistentListOf(
                 TipProduct(TipTier.SMALL, "$1.99"),
                 TipProduct(TipTier.MEDIUM, "$4.99"),
                 TipProduct(TipTier.LARGE, "$9.99"),
             ),
             tipPurchaseState = TipPurchaseState.Idle,
-            supporterTiers = setOf(TipTier.SMALL),
+            supporterTiers = persistentSetOf(TipTier.SMALL),
             onTipJarOpened = {},
             onTipSelected = {},
             onTipResultShown = {},
@@ -547,9 +551,9 @@ private fun SettingsScreenTelemetryOffPreview() {
             currentLanguageTag = null,
             onLanguageSelected = {},
             tipJarAvailable = false,
-            tipProducts = emptyList(),
+            tipProducts = persistentListOf(),
             tipPurchaseState = TipPurchaseState.Idle,
-            supporterTiers = emptySet(),
+            supporterTiers = persistentSetOf(),
             onTipJarOpened = {},
             onTipSelected = {},
             onTipResultShown = {},

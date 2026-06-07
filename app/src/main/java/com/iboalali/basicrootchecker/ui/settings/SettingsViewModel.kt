@@ -10,6 +10,8 @@ import com.iboalali.basicrootchecker.billing.TipPurchaseState
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.util.AppLanguage
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -57,12 +59,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     /** Whether the tip jar is supported in this build flavor (Google Play only). */
     val tipJarAvailable: Boolean = billing.isAvailable
 
-    val tipProducts: StateFlow<List<TipProduct>> = billing.products
+    val tipProducts: StateFlow<ImmutableList<TipProduct>> = billing.products
 
     val tipPurchaseState: StateFlow<TipPurchaseState> = billing.purchaseState
 
     /** Tiers whose durable record product is owned. Drives the debug view and future gating. */
-    val supporterTiers: StateFlow<Set<TipTier>> = billing.supporterTiers
+    val supporterTiers: StateFlow<ImmutableSet<TipTier>> = billing.supporterTiers
 
     fun onTipJarOpened() {
         Analytics.trackTipJarOpened()
