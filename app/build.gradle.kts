@@ -12,7 +12,7 @@ android {
         applicationId = "com.iboalali.basicrootchecker"
         minSdk = 23
         targetSdk = 37
-        versionCode = 60
+        versionCode = 61
         versionName = "v2.3vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de", "es", "ru")
