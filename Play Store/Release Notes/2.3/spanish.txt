@@ -1,0 +1,6 @@
+Versión 2.3:
+➕ Bote de propinas en Ajustes — apoya el desarrollo con una propina opcional, repetible cuando quieras
+➕ Selector de idioma en Ajustes: cambia de idioma sin salir de la app (Android 13+)
+🛠️ La animación de deslizar para volver ahora sigue el borde desde el que deslizas
+🔨 La pantalla se conserva al recrear la app (por ejemplo, al girar o cambiar de idioma)
+🔨 Se corrigió un fallo al iniciar en Android 7.x y anteriores
