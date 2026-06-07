@@ -66,3 +66,13 @@ Compose Material3 with dynamic colors (API 31+), fallback to custom light/dark c
 `CHANGELOG.md` at the repo root follows the [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) format with sections **Added / Changed / Deprecated / Removed / Fixed / Security**. In-flight work lives under `## [Unreleased]`; at release time that heading is renamed to `## [<version>] - <YYYY-MM-DD>` and a fresh empty `[Unreleased]` is added above it.
 
 **Update the changelog as part of every feature, bug fix, or user-visible behavior change.** Add a bullet under the appropriate section of `[Unreleased]` in the same commit (or PR) that introduces the change. Write entries in user-facing language — no commit SHAs, no internal jargon. Skip the changelog only for pure refactors, internal docs edits, dependency-only bumps with no user impact, or build-config tweaks that don't change shipped behavior.
+
+## Play Store release notes
+
+Per-version store "What's new" text lives under `Play Store/Release Notes/<version>/`, one file per locale named by language (`default`, `german`, `arabic`, `spanish`, `russian` — matching the `Play Store/Listing/` convention, not BCP-47 codes). Each version folder also has:
+- `play-console.txt` — all locales in Google Play's `<lang-tag>…</lang-tag>` block format (tags: `en-US`, `de-DE`, `ar`, `es-ES`, `ru-RU`) for pasting every language at once.
+- `all-locales.md` — the same content as a human-readable reference.
+
+Conventions: lead each note with `Version <x.y>:` (localized version word), then one line per highlight prefixed with `➕` (added), `🛠️` (changed), or `🔨` (fixed). Keep every locale within Play's **500-character** limit. Mirror the changelog's wording but condensed to user-facing highlights.
+
+**Keep release notes in sync with the changelog.** When `[Unreleased]` is cut to `## [<version>] - <YYYY-MM-DD>`, create `Play Store/Release Notes/<version>/` with all five locale files plus `play-console.txt` and `all-locales.md`, distilling that version's changelog entries into the format above.
