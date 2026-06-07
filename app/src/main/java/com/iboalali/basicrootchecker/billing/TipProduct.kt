@@ -14,7 +14,7 @@ import com.iboalali.basicrootchecker.R
 enum class TipTier(
     val recordProductId: String,
     val repeatProductId: String,
-    @StringRes val titleRes: Int,
+    @field:StringRes val titleRes: Int,
 ) {
     SMALL("tip_small", "tip_small_repeat", R.string.tip_tier_small),
     MEDIUM("tip_medium", "tip_medium_repeat", R.string.tip_tier_medium),
