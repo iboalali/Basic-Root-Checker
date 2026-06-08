@@ -13,7 +13,7 @@ import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.color.DynamicColors
-import com.iboalali.basicrootchecker.navigation.AppNavigation
+import com.iboalali.basicrootchecker.ui.AppRoot
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,15 +27,19 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        (application as BasicRootCheckerApplication).appUpdateController.attach(this)
+        (application as BasicRootCheckerApplication).let { app ->
+            app.appUpdateController.attach(this)
+            app.billingController.attach(this)
+        }
 
         // Workaround: splash screen theme doesn't properly set light status bar
         val isNight = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES) == Configuration.UI_MODE_NIGHT_YES
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = !isNight
 
+        val billingController = (application as BasicRootCheckerApplication).billingController
         setContent {
             BasicRootCheckerTheme {
-                AppNavigation()
+                AppRoot(tipCleared = billingController.tipCleared)
             }
         }
     }

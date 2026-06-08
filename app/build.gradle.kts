@@ -12,8 +12,8 @@ android {
         applicationId = "com.iboalali.basicrootchecker"
         minSdk = 23
         targetSdk = 37
-        versionCode = 50
-        versionName = "v2.2vc$versionCode"
+        versionCode = 63
+        versionName = "v2.3.2vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de", "es", "ru")
         buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")
@@ -47,12 +47,17 @@ android {
     }
 
     compileOptions {
+        // Required so java.time.* (used transitively by TelemetryDeck via kotlinx-datetime)
+        // resolves on API < 26, where it is not part of the platform.
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
     implementation(libs.androidx.core)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
@@ -88,6 +93,9 @@ dependencies {
 
     // In-app updates (gplay flavor only)
     "gplayImplementation"(libs.google.play.app.update.ktx)
+
+    // Tip jar / in-app billing (gplay flavor only)
+    "gplayImplementation"(libs.google.play.billing.ktx)
 
     // Unit tests
     testImplementation(libs.junit)

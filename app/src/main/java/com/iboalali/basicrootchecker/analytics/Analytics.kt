@@ -58,6 +58,14 @@ object Analytics {
         TelemetryDeck.signal("privacyPolicyClicked")
     }
 
+    fun trackLanguageChanged(tag: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "languageChanged",
+            mapOf("language" to tag),
+        )
+    }
+
     fun trackSocialLinkClicked(platform: String) {
         if (!enabled) return
         TelemetryDeck.signal(
@@ -113,6 +121,75 @@ object Analytics {
         TelemetryDeck.signal(
             "updateFailed",
             mapOf("error" to error),
+        )
+    }
+
+    fun trackTipJarOpened() {
+        if (!enabled) return
+        TelemetryDeck.signal("tipJarOpened")
+    }
+
+    fun trackTipSelected(tier: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipSelected",
+            mapOf("tier" to tier),
+        )
+    }
+
+    /** [variant] is "record" (first, durable) or "repeat" (consumable). */
+    fun trackTipPurchased(productId: String, tier: String, variant: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipPurchased",
+            mapOf(
+                "productId" to productId,
+                "tier" to tier,
+                "variant" to variant,
+            ),
+        )
+    }
+
+    /** A deferred-payment purchase awaiting completion. */
+    fun trackTipPending(productId: String, tier: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipPending",
+            mapOf("productId" to productId, "tier" to tier),
+        )
+    }
+
+    fun trackTipCanceled(tier: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipCanceled",
+            mapOf("tier" to tier),
+        )
+    }
+
+    fun trackTipFailed(reason: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipFailed",
+            mapOf("reason" to reason),
+        )
+    }
+
+    /** Play Billing could not connect (e.g. no Play services). [code] is the response code. */
+    fun trackBillingUnavailable(code: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "billingUnavailable",
+            mapOf("code" to code),
+        )
+    }
+
+    /** Tip products failed to load (query error, or none configured). */
+    fun trackTipProductsUnavailable(reason: String) {
+        if (!enabled) return
+        TelemetryDeck.signal(
+            "tipProductsUnavailable",
+            mapOf("reason" to reason),
         )
     }
 

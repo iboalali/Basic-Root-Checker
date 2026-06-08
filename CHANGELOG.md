@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3] - 2026-06-08
+
+### Added
+- Tip jar in Settings: leave an optional tip through Google Play, and tip again whenever you like (Google Play builds only; not shown in FOSS builds).
+- In-app language picker in Settings (Android 13+): tap **Language** to switch the app between English, German, Arabic, Spanish, and Russian, or follow the system default. The choice is applied immediately, persists across launches, and stays in sync with Android's per-app language setting.
+
+### Changed
+- The back-swipe animation now follows the side you swipe from: swiping from the left edge slides the screen off to the right, swiping from the right edge slides it off to the left.
+
+### Fixed
+- The current screen is now preserved when the app is recreated — for example after switching the in-app language or rotating the device — instead of jumping back to the main screen.
+- Fixed a startup crash on Android 7.x and other devices below Android 8.0 where the app closed immediately on launch. Enabled core library desugaring so the modern date/time APIs used by the analytics SDK resolve on older Android versions.
+
 ## [2.2] - 2026-05-29
 
 ### Added

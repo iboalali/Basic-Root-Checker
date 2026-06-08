@@ -1,0 +1,6 @@
+Version 2.3:
+➕ Tip jar in Settings — support development with an optional tip, and tip again any time
+➕ In-app language picker in Settings: switch languages without leaving the app (Android 13+)
+🛠️ The back-swipe animation now follows the edge you swipe from
+🔨 The current screen is kept when the app is recreated (e.g. after rotating or switching language)
+🔨 Fixed a startup crash on Android 7.x and older
