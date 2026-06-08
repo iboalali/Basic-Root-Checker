@@ -34,13 +34,17 @@ Android app that checks whether a device has root access, written in Kotlin with
 
 ### Key Components
 
-- **MainActivity** — Single activity host. Sets up splash screen with custom exit animation, dynamic colors, edge-to-edge, and hosts Compose UI via `setContent`.
-- **AppNavigation** (`navigation/`) — Navigation 3 setup with `NavDisplay`, `@Serializable` route keys (`MainRoute`, `AboutRoute`, `LicenceRoute`), and explicit back stack management.
+- **MainActivity** — Single activity host. Sets up splash screen with custom exit animation, dynamic colors, edge-to-edge, attaches the billing and in-app-update controllers to its lifecycle, and hosts `AppRoot` via `setContent`.
+- **AppRoot** (`ui/`) — Thin root overlay: a `Box` hosting `AppNavigation` plus one app-wide `SnackbarHost` for signals not tied to a single screen (e.g. a late-cleared pending tip). Per-screen Scaffolds still own their own snackbars.
+- **AppNavigation** (`navigation/`) — Navigation 3 setup with `NavDisplay`, `@Serializable` route keys (`MainRoute`, `SettingsRoute`, `AboutRoute`, `LicenceRoute`), and explicit back stack management.
 - **MainScreen** (`ui/main/`) — Main screen composable. Displays device info (model, marketing name, Android version) and root status. FAB triggers root check. Long-press on device info copies to clipboard.
 - **MainViewModel** (`ui/main/`) — AndroidViewModel with `StateFlow<MainUiState>` for root check state, root provider + version, device info, and in-app update flow state. Exposes `checkRoot()` (passive evaluation) and `requestRoot()` (forces shell construction to trigger the superuser allow dialog), both running through `RootChecker` on coroutines.
+- **SettingsScreen / SettingsViewModel** (`ui/settings/`) — Settings: telemetry and haptics toggles, the in-app language picker (Android 13+), the tip jar, and a privacy-policy link. Collects the billing layer's one-shot `TipEvent`s (Thanks/Pending/Error) as snackbars.
 - **AboutScreen** (`ui/about/`) — About screen with collapsing toolbar, app version, contact links, and other apps card (`OtherAppsCard`).
 - **LicenceScreen** (`ui/licence/`) — License screen with collapsing toolbar, license texts.
 - **RootChecker** (`data/`) — Two suspend entry points on `Dispatchers.IO`: `check(context)` evaluates passively; `requestRoot(context)` executes `Shell.cmd("id")` first to force libsu's main shell to construct (which triggers the Magisk/KernelSU/APatch allow dialog) before re-evaluating. Both return a `RootResult` sealed interface (`NotRooted` / `Unknown` / `Rooted(provider, version)` / `RootedNotGranted(provider)`). Providers are classified via the `RootProvider` enum (`MAGISK` / `KERNELSU` / `APATCH` / `OTHER` / `UNKNOWN`). Unprivileged probes (installed packages declared in `<queries>`, `/proc/self/mounts` scan, `su` binary existence across standard paths) run regardless of grant state, so a device with root installed but the app not yet allowed is reported as `RootedNotGranted` rather than `NotRooted`. When granted, the Magisk version is read via `magisk -v` / `magisk -V` and the `/data/adb/magisk` etc. paths confirm the provider.
+- **Billing / tip jar** (`billing/`) — `BillingController` interface with two flavor implementations: `GPlayBillingController` (`gplay/`, Google Play Billing) and `NoOpBillingController` (`foss/`, reports `isAvailable = false` so the tip jar is hidden). Each `TipTier` (SMALL/MEDIUM/LARGE) has a durable *record* product (acknowledged, kept forever) and a *repeat* product (consumed, repurchasable); `supporterTiers` is recomputed from owned records on every connect, so it survives reinstalls. One-shot `events` (`TipEvent`) drive Settings snackbars; `tipCleared` fires app-wide (via `AppRoot`) when a previously-`PENDING` tip clears — pending purchase tokens are persisted in `UserPreferences` so a clear is recognized even after process death or on the next launch (vs. the routine re-grant of an already-owned tip on every connect).
+- **UserPreferences** (`data/`) — DataStore-Preferences store (telemetry, haptics, last-seen version code, pending tip tokens).
 - **DeviceInfo** (`util/`) — Helpers for app version retrieval and Android version name lookup (maps API level to name via `version_names` string array resource).
 - **Preview Utilities** (`util/`) — Custom preview annotations: `@PreviewLocales` (en, de, ar, es, ru) and `@PreviewPlayStoreListing` (Phone, 7" Tablet, 10" Tablet).
 
@@ -50,6 +54,7 @@ Android app that checks whether a device has root access, written in Kotlin with
 - **SDK:** compile/target 37 (Android 17), min 23
 - **Kotlin:** 2.4.0, JVM target 17
 - **Build variants:** debug (appId suffix `.debug`, version suffix `-debug`) and release (minification + resource shrinking enabled)
+- **Product flavors:** `gplay` (Google Play services — the in-app-billing tip jar and in-app updates) and `foss` (no Google services — no-op billing/update implementations). Flavor-specific code lives under `app/src/gplay/` and `app/src/foss/`; unit tests run on the `gplay` variant (`:app:testGplayDebugUnitTest`).
 - **Compose** enabled with Compose BOM for dependency management
 - **Navigation 3** (`androidx.navigation3`) with Kotlin Serialization for route keys
 
