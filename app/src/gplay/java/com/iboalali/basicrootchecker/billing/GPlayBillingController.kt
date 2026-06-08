@@ -26,9 +26,12 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 
 private const val TAG = "GPlayBilling"
 
@@ -53,8 +56,11 @@ class GPlayBillingController(context: Context) : BillingController {
     private val _products = MutableStateFlow<ImmutableList<TipProduct>>(persistentListOf())
     override val products: StateFlow<ImmutableList<TipProduct>> = _products.asStateFlow()
 
-    private val _purchaseState = MutableStateFlow(TipPurchaseState.Idle)
-    override val purchaseState: StateFlow<TipPurchaseState> = _purchaseState.asStateFlow()
+    // A Channel (not a SharedFlow) so an event emitted while the screen is briefly STOPPED
+    // — e.g. behind the Play purchase sheet — is queued and delivered when the collector
+    // resumes, rather than dropped. Each event is delivered to exactly one collector.
+    private val _events = Channel<TipEvent>(Channel.BUFFERED)
+    override val events: Flow<TipEvent> = _events.receiveAsFlow()
 
     private val _supporterTiers = MutableStateFlow<PersistentSet<TipTier>>(persistentSetOf())
     override val supporterTiers: StateFlow<ImmutableSet<TipTier>> = _supporterTiers.asStateFlow()
@@ -63,6 +69,14 @@ class GPlayBillingController(context: Context) : BillingController {
 
     /** The tier of the most recently launched flow, for attributing a later cancel. */
     private var lastLaunchedTier: TipTier? = null
+
+    /**
+     * True between launching a flow and its terminal result. Gates the [TipEvent.Thanks]
+     * celebration to purchases that complete as part of the active flow: a purchase that
+     * lands later (a pending one clearing, or an external/promo grant) is not in flight,
+     * so it grants silently rather than firing a thank-you out of context.
+     */
+    private var purchaseInFlight = false
 
     /** Raw Play product details, keyed by product id, for building the purchase flow. */
     private val detailsById = mutableMapOf<String, ProductDetails>()
@@ -74,12 +88,13 @@ class GPlayBillingController(context: Context) : BillingController {
                     purchases?.forEach { handleFreshPurchase(it) }
                 }
                 BillingClient.BillingResponseCode.USER_CANCELED -> {
-                    _purchaseState.value = TipPurchaseState.Idle
+                    purchaseInFlight = false
                     Analytics.trackTipCanceled(lastLaunchedTier?.name ?: "unknown")
                 }
                 else -> {
                     Log.w(TAG, "Purchase update failed: ${result.responseCode} ${result.debugMessage}")
-                    _purchaseState.value = TipPurchaseState.Error
+                    purchaseInFlight = false
+                    _events.trySend(TipEvent.Error)
                     Analytics.trackTipFailed(formatBillingResult(result))
                 }
             }
@@ -122,14 +137,12 @@ class GPlayBillingController(context: Context) : BillingController {
             onConnected()
             return
         }
-        _purchaseState.compareAndSet(TipPurchaseState.Idle, TipPurchaseState.Connecting)
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(result: BillingResult) {
                 if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                     onConnected()
                 } else {
                     Log.w(TAG, "Billing setup failed: ${result.responseCode} ${result.debugMessage}")
-                    _purchaseState.compareAndSet(TipPurchaseState.Connecting, TipPurchaseState.Idle)
                     Analytics.trackBillingUnavailable(result.responseCode.toString())
                 }
             }
@@ -141,7 +154,6 @@ class GPlayBillingController(context: Context) : BillingController {
     }
 
     private fun onConnected() {
-        _purchaseState.compareAndSet(TipPurchaseState.Connecting, TipPurchaseState.Idle)
         queryProductDetails()
         reconcilePurchases()
     }
@@ -204,7 +216,7 @@ class GPlayBillingController(context: Context) : BillingController {
         val result = billingClient.launchBillingFlow(activity, flowParams)
         when (result.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
-                _purchaseState.value = TipPurchaseState.Pending
+                purchaseInFlight = true
             }
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                 // Our owned set was stale (record already bought). Recover and let the
@@ -213,32 +225,35 @@ class GPlayBillingController(context: Context) : BillingController {
             }
             else -> {
                 Log.w(TAG, "launchBillingFlow failed: ${result.responseCode} ${result.debugMessage}")
-                _purchaseState.value = TipPurchaseState.Error
+                _events.trySend(TipEvent.Error)
                 Analytics.trackTipFailed(formatBillingResult(result))
             }
         }
     }
 
-    override fun consumeThanks() {
-        _purchaseState.compareAndSet(TipPurchaseState.Thanks, TipPurchaseState.Idle)
-        _purchaseState.compareAndSet(TipPurchaseState.Error, TipPurchaseState.Idle)
-    }
-
-    /** Handles a purchase the user just completed: grant it and show the thank-you. */
+    /** Handles a purchase delivered to the listener: grant it and surface the outcome. */
     private fun handleFreshPurchase(purchase: Purchase) {
         val productId = purchase.products.firstOrNull() ?: return
         val tier = tipTierForProductId(productId) ?: return
 
         when (purchase.purchaseState) {
             Purchase.PurchaseState.PENDING -> {
-                _purchaseState.value = TipPurchaseState.Pending
+                // The active flow is over; it may complete later (and grant silently then).
+                purchaseInFlight = false
+                _events.trySend(TipEvent.Pending)
                 Analytics.trackTipPending(productId, tier.name)
             }
             Purchase.PurchaseState.PURCHASED -> {
                 grant(purchase, tier, productId)
                 val variant = if (isRecordProductId(productId)) "record" else "repeat"
                 Analytics.trackTipPurchased(productId, tier.name, variant)
-                _purchaseState.value = TipPurchaseState.Thanks
+                // Celebrate only if this completed the active flow. A deferred pending
+                // purchase clearing later (or an external grant) is granted above but
+                // doesn't fire Thanks, so no thank-you appears out of context.
+                if (purchaseInFlight) {
+                    purchaseInFlight = false
+                    _events.trySend(TipEvent.Thanks)
+                }
             }
             else -> Unit
         }

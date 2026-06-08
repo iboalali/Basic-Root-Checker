@@ -46,11 +46,22 @@ data class TipProduct(
     val formattedPrice: String,
 )
 
-/** Where the tip flow currently is, for driving Settings UI. */
-enum class TipPurchaseState {
-    Idle,
-    Connecting,
-    Pending,
+/**
+ * A one-shot outcome of the tip flow, surfaced to the user as transient UI (a snackbar).
+ * Emitted as an event rather than held as state, so it fires exactly once at the moment it
+ * happens and never re-triggers on recomposition or when the screen is re-observed.
+ */
+enum class TipEvent {
+    /** A purchase the user just made completed — celebrate. */
     Thanks,
+
+    /**
+     * A purchase is awaiting approval and isn't complete yet (slow payment method, family
+     * "Ask to Buy", etc.). It may clear later; when it does we grant it silently rather
+     * than firing [Thanks] out of context.
+     */
+    Pending,
+
+    /** The purchase flow failed. */
     Error,
 }

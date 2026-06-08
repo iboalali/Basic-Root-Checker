@@ -36,6 +36,7 @@
     <string name="tip_tier_large">Large tip</string>
     <string name="tip_jar_loading">Loading tip options…</string>
     <string name="tip_jar_thanks">Thank you for your support!</string>
+    <string name="tip_jar_pending">Your tip is pending — it\'ll complete once your payment is approved.</string>
     <string name="tip_jar_error">Something went wrong. Please try again.</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Your Device</string>

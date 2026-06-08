@@ -34,6 +34,7 @@
     <string name="tip_tier_large">Propina grande</string>
     <string name="tip_jar_loading">Cargando opciones de propina…</string>
     <string name="tip_jar_thanks">¡Gracias por tu apoyo!</string>
+    <string name="tip_jar_pending">Tu propina está pendiente: se completará cuando se apruebe tu pago.</string>
     <string name="tip_jar_error">Algo salió mal. Inténtalo de nuevo.</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Tu dispositivo</string>

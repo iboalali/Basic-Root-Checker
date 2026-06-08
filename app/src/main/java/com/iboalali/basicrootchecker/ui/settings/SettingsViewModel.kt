@@ -5,13 +5,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
-import com.iboalali.basicrootchecker.billing.TipPurchaseState
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -61,7 +62,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     val tipProducts: StateFlow<ImmutableList<TipProduct>> = billing.products
 
-    val tipPurchaseState: StateFlow<TipPurchaseState> = billing.purchaseState
+    /** One-shot tip outcomes (thanks / pending / error) to surface as snackbars. */
+    val tipEvents: Flow<TipEvent> = billing.events
 
     /** Tiers whose durable record product is owned. Drives the debug view and future gating. */
     val supporterTiers: StateFlow<ImmutableSet<TipTier>> = billing.supporterTiers
@@ -73,9 +75,5 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun onTipSelected(tier: TipTier) {
         Analytics.trackTipSelected(tier.name)
         billing.launchPurchase(tier)
-    }
-
-    fun onTipResultShown() {
-        billing.consumeThanks()
     }
 }

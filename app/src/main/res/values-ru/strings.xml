@@ -34,6 +34,7 @@
     <string name="tip_tier_large">Большие чаевые</string>
     <string name="tip_jar_loading">Загрузка вариантов чаевых…</string>
     <string name="tip_jar_thanks">Спасибо за поддержку!</string>
+    <string name="tip_jar_pending">Ваши чаевые ожидают подтверждения — они будут зачислены после одобрения платежа.</string>
     <string name="tip_jar_error">Что-то пошло не так. Попробуйте ещё раз.</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Ваше устройство</string>

@@ -56,13 +56,16 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
-import com.iboalali.basicrootchecker.billing.TipPurchaseState
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.AppLanguage
@@ -71,6 +74,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun SettingsScreen(
@@ -81,7 +86,6 @@ fun SettingsScreen(
     val hapticsEnabled by viewModel.hapticsEnabled.collectAsStateWithLifecycle()
     val currentLanguageTag = AppLanguage.currentTag(LocalContext.current)
     val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
-    val tipPurchaseState by viewModel.tipPurchaseState.collectAsStateWithLifecycle()
     val supporterTiers by viewModel.supporterTiers.collectAsStateWithLifecycle()
 
     SettingsScreenContent(
@@ -93,11 +97,10 @@ fun SettingsScreen(
         onLanguageSelected = viewModel::setLanguage,
         tipJarAvailable = viewModel.tipJarAvailable,
         tipProducts = tipProducts,
-        tipPurchaseState = tipPurchaseState,
+        tipEvents = viewModel.tipEvents,
         supporterTiers = supporterTiers,
         onTipJarOpened = viewModel::onTipJarOpened,
         onTipSelected = viewModel::onTipSelected,
-        onTipResultShown = viewModel::onTipResultShown,
         onNavigateBack = onNavigateBack,
     )
 }
@@ -113,11 +116,10 @@ fun SettingsScreenContent(
     onLanguageSelected: (String?) -> Unit,
     tipJarAvailable: Boolean,
     tipProducts: ImmutableList<TipProduct>,
-    tipPurchaseState: TipPurchaseState,
+    tipEvents: Flow<TipEvent>,
     supporterTiers: ImmutableSet<TipTier>,
     onTipJarOpened: () -> Unit,
     onTipSelected: (TipTier) -> Unit,
-    onTipResultShown: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -127,19 +129,26 @@ fun SettingsScreenContent(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val tipThanksMessage = stringResource(R.string.tip_jar_thanks)
+    val tipPendingMessage = stringResource(R.string.tip_jar_pending)
     val tipErrorMessage = stringResource(R.string.tip_jar_error)
-    LaunchedEffect(tipPurchaseState) {
-        when (tipPurchaseState) {
-            TipPurchaseState.Thanks -> {
-                showTipDialog = false
-                snackbarHostState.showSnackbar(tipThanksMessage)
-                onTipResultShown()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(tipEvents, lifecycleOwner) {
+        // One-shot events: collect only while at least STARTED, so a snackbar can't fire
+        // for an event delivered while the screen is in the background.
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            tipEvents.collect { event ->
+                when (event) {
+                    TipEvent.Thanks -> {
+                        showTipDialog = false
+                        snackbarHostState.showSnackbar(tipThanksMessage)
+                    }
+                    TipEvent.Pending -> {
+                        showTipDialog = false
+                        snackbarHostState.showSnackbar(tipPendingMessage)
+                    }
+                    TipEvent.Error -> snackbarHostState.showSnackbar(tipErrorMessage)
+                }
             }
-            TipPurchaseState.Error -> {
-                snackbarHostState.showSnackbar(tipErrorMessage)
-                onTipResultShown()
-            }
-            else -> Unit
         }
     }
 
@@ -594,11 +603,10 @@ private fun SettingsScreenPreview() {
                 TipProduct(TipTier.MEDIUM, "$4.99"),
                 TipProduct(TipTier.LARGE, "$9.99"),
             ),
-            tipPurchaseState = TipPurchaseState.Idle,
+            tipEvents = emptyFlow(),
             supporterTiers = persistentSetOf(TipTier.SMALL),
             onTipJarOpened = {},
             onTipSelected = {},
-            onTipResultShown = {},
             onNavigateBack = {},
         )
     }
@@ -617,11 +625,10 @@ private fun SettingsScreenTelemetryOffPreview() {
             onLanguageSelected = {},
             tipJarAvailable = false,
             tipProducts = persistentListOf(),
-            tipPurchaseState = TipPurchaseState.Idle,
+            tipEvents = emptyFlow(),
             supporterTiers = persistentSetOf(),
             onTipJarOpened = {},
             onTipSelected = {},
-            onTipResultShown = {},
             onNavigateBack = {},
         )
     }

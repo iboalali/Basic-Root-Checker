@@ -1,7 +1,6 @@
 package com.iboalali.basicrootchecker.util
 
 import androidx.compose.runtime.Composable
-import com.iboalali.basicrootchecker.billing.TipPurchaseState
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
@@ -12,6 +11,7 @@ import com.iboalali.basicrootchecker.ui.settings.SettingsScreenContent
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.coroutines.flow.emptyFlow
 
 @PreviewConstrainedDevices
 @Composable
@@ -114,11 +114,10 @@ private fun SettingsScreenConstrainedPreview() {
             onLanguageSelected = {},
             tipJarAvailable = true,
             tipProducts = persistentListOf(),
-            tipPurchaseState = TipPurchaseState.Idle,
+            tipEvents = emptyFlow(),
             supporterTiers = persistentSetOf(),
             onTipJarOpened = {},
             onTipSelected = {},
-            onTipResultShown = {},
             onNavigateBack = {},
         )
     }
