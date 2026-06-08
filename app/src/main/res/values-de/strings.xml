@@ -31,6 +31,7 @@ Kontaktiere mich:</string>
     <string name="tip_jar_loading">Trinkgeld-Optionen werden geladen…</string>
     <string name="tip_jar_thanks">Danke für deine Unterstützung!</string>
     <string name="tip_jar_pending">Dein Trinkgeld steht noch aus – es wird abgeschlossen, sobald deine Zahlung bestätigt ist.</string>
+    <string name="tip_jar_cleared">Dein ausstehendes Trinkgeld wurde abgeschlossen – danke für deine Unterstützung!</string>
     <string name="tip_jar_error">Etwas ist schiefgelaufen. Bitte versuche es erneut.</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>

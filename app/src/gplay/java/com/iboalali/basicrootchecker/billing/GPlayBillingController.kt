@@ -19,6 +19,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.data.UserPreferences
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.PersistentSet
@@ -26,12 +27,17 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 private const val TAG = "GPlayBilling"
 
@@ -61,6 +67,17 @@ class GPlayBillingController(context: Context) : BillingController {
     // resumes, rather than dropped. Each event is delivered to exactly one collector.
     private val _events = Channel<TipEvent>(Channel.BUFFERED)
     override val events: Flow<TipEvent> = _events.receiveAsFlow()
+
+    // Late clears of previously-pending tips, surfaced app-wide. Buffered for the same
+    // reason as _events: the signal can be emitted from reconcile on connect before the
+    // app-root collector has resumed.
+    private val _tipCleared = Channel<TipTier>(Channel.BUFFERED)
+    override val tipCleared: Flow<TipTier> = _tipCleared.receiveAsFlow()
+
+    // App-scoped: this controller is an Application singleton. Used for DataStore reads/
+    // writes from the fire-and-forget billing callbacks.
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val prefs = UserPreferences(context)
 
     private val _supporterTiers = MutableStateFlow<PersistentSet<TipTier>>(persistentSetOf())
     override val supporterTiers: StateFlow<ImmutableSet<TipTier>> = _supporterTiers.asStateFlow()
@@ -240,6 +257,7 @@ class GPlayBillingController(context: Context) : BillingController {
             Purchase.PurchaseState.PENDING -> {
                 // The active flow is over; it may complete later (and grant silently then).
                 purchaseInFlight = false
+                rememberPending(purchase)
                 _events.trySend(TipEvent.Pending)
                 Analytics.trackTipPending(productId, tier.name)
             }
@@ -254,8 +272,31 @@ class GPlayBillingController(context: Context) : BillingController {
                     purchaseInFlight = false
                     _events.trySend(TipEvent.Thanks)
                 }
+                // Independently, if this tip was one we'd seen pending, announce the clear
+                // app-wide (covers a same-session pending->cleared, where Thanks is suppressed).
+                announceIfLateClear(purchase, tier)
             }
             else -> Unit
+        }
+    }
+
+    /** Persists a tip token seen pending, so a later clear can be recognized as a late clear. */
+    private fun rememberPending(purchase: Purchase) {
+        val token = purchase.purchaseToken
+        scope.launch { prefs.addPendingTipToken(token) }
+    }
+
+    /**
+     * If [purchase] is one we previously recorded as pending, announce the late clear
+     * app-wide and forget the token, so repeated reconciles don't re-announce it.
+     */
+    private fun announceIfLateClear(purchase: Purchase, tier: TipTier) {
+        val token = purchase.purchaseToken
+        scope.launch {
+            if (token in prefs.pendingTipTokens.first()) {
+                _tipCleared.trySend(tier)
+                prefs.clearPendingTipTokens(setOf(token))
+            }
         }
     }
 
@@ -273,11 +314,19 @@ class GPlayBillingController(context: Context) : BillingController {
             if (result.responseCode != BillingClient.BillingResponseCode.OK) return@queryPurchasesAsync
             val owned = mutableSetOf<TipTier>()
             purchases.forEach { purchase ->
-                if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) return@forEach
                 val productId = purchase.products.firstOrNull() ?: return@forEach
                 val tier = tipTierForProductId(productId) ?: return@forEach
-                if (isRecordProductId(productId)) owned += tier
-                grant(purchase, tier, productId)
+                when (purchase.purchaseState) {
+                    // A tip left pending (possibly bought outside the app while it was closed):
+                    // remember it so we announce the clear on a later connect.
+                    Purchase.PurchaseState.PENDING -> rememberPending(purchase)
+                    Purchase.PurchaseState.PURCHASED -> {
+                        if (isRecordProductId(productId)) owned += tier
+                        grant(purchase, tier, productId)
+                        announceIfLateClear(purchase, tier)
+                    }
+                    else -> Unit
+                }
             }
             _supporterTiers.value = owned.toPersistentSet()
             rebuildProducts()

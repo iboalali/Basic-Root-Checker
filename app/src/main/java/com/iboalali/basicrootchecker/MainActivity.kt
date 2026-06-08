@@ -13,7 +13,7 @@ import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.color.DynamicColors
-import com.iboalali.basicrootchecker.navigation.AppNavigation
+import com.iboalali.basicrootchecker.ui.AppRoot
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,9 +36,10 @@ class MainActivity : ComponentActivity() {
         val isNight = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES) == Configuration.UI_MODE_NIGHT_YES
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = !isNight
 
+        val billingController = (application as BasicRootCheckerApplication).billingController
         setContent {
             BasicRootCheckerTheme {
-                AppNavigation()
+                AppRoot(tipCleared = billingController.tipCleared)
             }
         }
     }

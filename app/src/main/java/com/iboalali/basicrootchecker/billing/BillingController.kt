@@ -27,6 +27,14 @@ interface BillingController {
     val events: Flow<TipEvent>
 
     /**
+     * Fires when a tip that was previously PENDING clears (becomes PURCHASED) — including
+     * when it cleared while the app was closed, caught on the next connect. Surfaced
+     * app-wide (any screen) rather than tied to the tip dialog, since the clear typically
+     * happens long after the purchase and away from Settings. Carries the cleared tier.
+     */
+    val tipCleared: Flow<TipTier>
+
+    /**
      * Tiers whose durable record product is currently owned — a permanent, on-device
      * record of which tips the user has ever given. Future features can gate on this
      * (`isSupporter = supporterTiers.value.isNotEmpty()`).

@@ -16,6 +16,7 @@ object NoOpBillingController : BillingController {
     override val products: StateFlow<ImmutableList<TipProduct>> =
         MutableStateFlow<ImmutableList<TipProduct>>(persistentListOf()).asStateFlow()
     override val events: Flow<TipEvent> = emptyFlow()
+    override val tipCleared: Flow<TipTier> = emptyFlow()
     override val supporterTiers: StateFlow<ImmutableSet<TipTier>> =
         MutableStateFlow<ImmutableSet<TipTier>>(persistentSetOf()).asStateFlow()
 

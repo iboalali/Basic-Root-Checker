@@ -33,6 +33,7 @@
     <string name="tip_jar_loading">جارٍ تحميل خيارات الإكرامية…</string>
     <string name="tip_jar_thanks">شكرًا على دعمك!</string>
     <string name="tip_jar_pending">إكراميتك قيد الانتظار — ستكتمل بمجرد الموافقة على الدفع.</string>
+    <string name="tip_jar_cleared">تمت معالجة إكراميتك المعلّقة — شكرًا على دعمك!</string>
     <string name="tip_jar_error">حدث خطأ ما. يرجى المحاولة مرة أخرى.</string>
 
     <!-- About Strings -->
