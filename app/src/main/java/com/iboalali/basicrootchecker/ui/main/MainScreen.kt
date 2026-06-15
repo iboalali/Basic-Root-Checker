@@ -375,9 +375,15 @@ fun MainScreenContent(
                         )
                     }
 
+                    // A bare "Other" (root present but no recognized manager) tells the user
+                    // nothing, so suppress the line; a named OTHER-family manager (e.g. SuperSU)
+                    // still shows.
+                    val isGenericOther = uiState.rootManager == null &&
+                            uiState.rootProvider == RootProvider.OTHER
                     val showProvider = (uiState.rootStatus == RootStatus.ROOTED ||
                             uiState.rootStatus == RootStatus.NOT_GRANTED) &&
-                            uiState.rootProvider != RootProvider.UNKNOWN
+                            uiState.rootProvider != RootProvider.UNKNOWN &&
+                            !isGenericOther
                     if (showProvider) {
                         // Prefer the specific installed manager; fall back to the family name when
                         // only a mount/path/su signal identified it (no package).
