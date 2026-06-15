@@ -1,6 +1,7 @@
 Version 2.3:
-➕ Trinkgeld-Funktion in den Einstellungen — unterstütze die Entwicklung mit einem optionalen Trinkgeld, jederzeit wiederholbar
+➕ Trinkgeld in den Einstellungen — unterstütze die Entwicklung mit einem optionalen, wiederholbaren Trinkgeld
 ➕ Sprachauswahl in den Einstellungen: Sprache wechseln, ohne die App zu verlassen (Android 13+)
-🛠️ Die Wisch-zurück-Animation folgt jetzt der Kante, von der du wischst
-🔨 Der angezeigte Bildschirm bleibt erhalten, wenn die App neu erstellt wird (z. B. nach Drehung oder Sprachwechsel)
+🛠️ Schnellerer App-Start, besonders auf langsameren Geräten
+🛠️ Die Wisch-zurück-Animation folgt der Kante, von der du wischst
+🔨 Der Bildschirm bleibt beim Neuerstellen der App erhalten (z. B. bei Drehung/Sprachwechsel)
 🔨 Absturz beim Start unter Android 7.x und älter behoben
