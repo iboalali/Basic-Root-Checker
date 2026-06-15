@@ -56,9 +56,16 @@ private fun popTransition(towardRight: Boolean): ContentTransform = ContentTrans
 fun AppNavigation() {
     val backStack = rememberNavBackStack(MainRoute)
 
+    // NavDisplay requires a non-empty back stack. Guard every pop so a double-back — a fast
+    // system back-gesture, or tapping Up again while the exit animation still has the screen
+    // composed — can never remove the root entry and crash with "backstack cannot be empty".
+    val popBackStack: () -> Unit = {
+        if (backStack.size > 1) backStack.removeLastOrNull()
+    }
+
     NavDisplay(
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = { popBackStack() },
         transitionSpec = { animation },
         popTransitionSpec = { popTransition(towardRight = true) },
         predictivePopTransitionSpec = { edge ->
@@ -86,7 +93,7 @@ fun AppNavigation() {
                 SettingsScreen(
                     onNavigateBack = {
                         Analytics.trackNavigation("/settings", "/main")
-                        backStack.removeLastOrNull()
+                        popBackStack()
                     },
                 )
             }
@@ -95,7 +102,7 @@ fun AppNavigation() {
                 AboutScreen(
                     onNavigateBack = {
                         Analytics.trackNavigation("/about", "/main")
-                        backStack.removeLastOrNull()
+                        popBackStack()
                     },
                 )
             }
@@ -104,7 +111,7 @@ fun AppNavigation() {
                 LicenceScreen(
                     onNavigateBack = {
                         Analytics.trackNavigation("/licence", "/main")
-                        backStack.removeLastOrNull()
+                        popBackStack()
                     },
                 )
             }

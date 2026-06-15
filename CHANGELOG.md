@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed a rare crash when navigating back: pressing back twice in quick succession on Settings, About, or Licences (or a fast back-swipe) could close the app with an error instead of returning to the main screen.
+
 ## [2.3] - 2026-06-08
 
 ### Added
