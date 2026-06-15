@@ -8,12 +8,7 @@ const val ERROR_CATEGORY_APP_STATE = "app-state"
 
 object Analytics {
 
-    private enum class State { PENDING, ENABLED, DISABLED }
-
-    private const val MAX_QUEUE = 100
-    private val lock = Any()
-    private var state = State.PENDING
-    private val queue = ArrayDeque<() -> Unit>()
+    private val gate = SignalGate()
 
     /**
      * Resolve the telemetry opt-out preference, read asynchronously at startup.
@@ -25,41 +20,13 @@ object Analytics {
      *
      * Also used by the Settings toggle at runtime, where the queue is already empty.
      */
-    fun setEnabled(enabled: Boolean) {
-        val flush: List<() -> Unit>
-        synchronized(lock) {
-            if (enabled) {
-                state = State.ENABLED
-                flush = queue.toList()
-                queue.clear()
-            } else {
-                state = State.DISABLED
-                queue.clear()
-                flush = emptyList()
-            }
-        }
-        flush.forEach { it() }
-    }
+    fun setEnabled(enabled: Boolean) = gate.resolve(enabled)
 
     /**
      * Run [action] now if telemetry is live, buffer it while the opt-out preference
      * is still being read at startup, or drop it once telemetry is known disabled.
-     * Buffered actions call [TelemetryDeck] directly, so flushing never re-enters [lock].
      */
-    private fun track(action: () -> Unit) {
-        val runNow: Boolean
-        synchronized(lock) {
-            when (state) {
-                State.PENDING -> {
-                    if (queue.size < MAX_QUEUE) queue.add(action)
-                    runNow = false
-                }
-                State.ENABLED -> runNow = true
-                State.DISABLED -> runNow = false
-            }
-        }
-        if (runNow) action()
-    }
+    private fun track(action: () -> Unit) = gate.submit(action)
 
     fun trackError(
         id: String,
