@@ -8,19 +8,64 @@ const val ERROR_CATEGORY_APP_STATE = "app-state"
 
 object Analytics {
 
-    @Volatile
-    private var enabled: Boolean = false
+    private enum class State { PENDING, ENABLED, DISABLED }
 
+    private const val MAX_QUEUE = 100
+    private val lock = Any()
+    private var state = State.PENDING
+    private val queue = ArrayDeque<() -> Unit>()
+
+    /**
+     * Resolve the telemetry opt-out preference, read asynchronously at startup.
+     *
+     * - enabled: switch to live and flush, in order, any signals buffered while
+     *   the preference was still being read. MUST be called only after
+     *   [TelemetryDeck.start] has run so the flushed signals reach an initialized SDK.
+     * - disabled: drop everything buffered and stay silent.
+     *
+     * Also used by the Settings toggle at runtime, where the queue is already empty.
+     */
     fun setEnabled(enabled: Boolean) {
-        this.enabled = enabled
+        val flush: List<() -> Unit>
+        synchronized(lock) {
+            if (enabled) {
+                state = State.ENABLED
+                flush = queue.toList()
+                queue.clear()
+            } else {
+                state = State.DISABLED
+                queue.clear()
+                flush = emptyList()
+            }
+        }
+        flush.forEach { it() }
+    }
+
+    /**
+     * Run [action] now if telemetry is live, buffer it while the opt-out preference
+     * is still being read at startup, or drop it once telemetry is known disabled.
+     * Buffered actions call [TelemetryDeck] directly, so flushing never re-enters [lock].
+     */
+    private fun track(action: () -> Unit) {
+        val runNow: Boolean
+        synchronized(lock) {
+            when (state) {
+                State.PENDING -> {
+                    if (queue.size < MAX_QUEUE) queue.add(action)
+                    runNow = false
+                }
+                State.ENABLED -> runNow = true
+                State.DISABLED -> runNow = false
+            }
+        }
+        if (runNow) action()
     }
 
     fun trackError(
         id: String,
         message: String? = null,
         category: String = ERROR_CATEGORY_THROWN_EXCEPTION,
-    ) {
-        if (!enabled) return
+    ) = track {
         val params = buildMap {
             put("TelemetryDeck.Error.id", id)
             if (!message.isNullOrEmpty()) put("TelemetryDeck.Error.message", message)
@@ -38,60 +83,45 @@ object Analytics {
         trackError(errorId, throwable.message, category)
     }
 
-    fun trackNavigation(sourcePath: String, destinationPath: String) {
-        if (!enabled) return
+    fun trackNavigation(sourcePath: String, destinationPath: String) = track {
         TelemetryDeck.navigate(sourcePath, destinationPath)
     }
 
-    fun trackRootCheckStarted() {
-        if (!enabled) return
-        TelemetryDeck.signal("rootCheckStarted")
-    }
+    fun trackRootCheckStarted() = track { TelemetryDeck.signal("rootCheckStarted") }
 
-    fun trackRootRequested() {
-        if (!enabled) return
-        TelemetryDeck.signal("rootRequested")
-    }
+    fun trackRootRequested() = track { TelemetryDeck.signal("rootRequested") }
 
-    fun trackPrivacyPolicyClicked() {
-        if (!enabled) return
-        TelemetryDeck.signal("privacyPolicyClicked")
-    }
+    fun trackPrivacyPolicyClicked() = track { TelemetryDeck.signal("privacyPolicyClicked") }
 
-    fun trackLanguageChanged(tag: String) {
-        if (!enabled) return
+    fun trackLanguageChanged(tag: String) = track {
         TelemetryDeck.signal(
             "languageChanged",
             mapOf("language" to tag),
         )
     }
 
-    fun trackSocialLinkClicked(platform: String) {
-        if (!enabled) return
+    fun trackSocialLinkClicked(platform: String) = track {
         TelemetryDeck.signal(
             "socialLinkClicked",
             mapOf("platform" to platform),
         )
     }
 
-    fun trackOtherAppClicked(packageName: String) {
-        if (!enabled) return
+    fun trackOtherAppClicked(packageName: String) = track {
         TelemetryDeck.signal(
             "otherAppClicked",
             mapOf("packageName" to packageName),
         )
     }
 
-    fun trackRootCheckResult(result: String) {
-        if (!enabled) return
+    fun trackRootCheckResult(result: String) = track {
         TelemetryDeck.signal(
             "rootCheckCompleted",
             mapOf("result" to result),
         )
     }
 
-    fun trackRootProvider(provider: String, version: String?) {
-        if (!enabled) return
+    fun trackRootProvider(provider: String, version: String?) = track {
         TelemetryDeck.signal(
             "rootProviderDetected",
             mapOf(
@@ -101,36 +131,22 @@ object Analytics {
         )
     }
 
-    fun trackUpdateAvailable() {
-        if (!enabled) return
-        TelemetryDeck.signal("updateAvailable")
-    }
+    fun trackUpdateAvailable() = track { TelemetryDeck.signal("updateAvailable") }
 
-    fun trackUpdateStarted() {
-        if (!enabled) return
-        TelemetryDeck.signal("updateStarted")
-    }
+    fun trackUpdateStarted() = track { TelemetryDeck.signal("updateStarted") }
 
-    fun trackUpdateDownloaded() {
-        if (!enabled) return
-        TelemetryDeck.signal("updateDownloaded")
-    }
+    fun trackUpdateDownloaded() = track { TelemetryDeck.signal("updateDownloaded") }
 
-    fun trackUpdateFailed(error: String) {
-        if (!enabled) return
+    fun trackUpdateFailed(error: String) = track {
         TelemetryDeck.signal(
             "updateFailed",
             mapOf("error" to error),
         )
     }
 
-    fun trackTipJarOpened() {
-        if (!enabled) return
-        TelemetryDeck.signal("tipJarOpened")
-    }
+    fun trackTipJarOpened() = track { TelemetryDeck.signal("tipJarOpened") }
 
-    fun trackTipSelected(tier: String) {
-        if (!enabled) return
+    fun trackTipSelected(tier: String) = track {
         TelemetryDeck.signal(
             "tipSelected",
             mapOf("tier" to tier),
@@ -138,8 +154,7 @@ object Analytics {
     }
 
     /** [variant] is "record" (first, durable) or "repeat" (consumable). */
-    fun trackTipPurchased(productId: String, tier: String, variant: String) {
-        if (!enabled) return
+    fun trackTipPurchased(productId: String, tier: String, variant: String) = track {
         TelemetryDeck.signal(
             "tipPurchased",
             mapOf(
@@ -151,24 +166,21 @@ object Analytics {
     }
 
     /** A deferred-payment purchase awaiting completion. */
-    fun trackTipPending(productId: String, tier: String) {
-        if (!enabled) return
+    fun trackTipPending(productId: String, tier: String) = track {
         TelemetryDeck.signal(
             "tipPending",
             mapOf("productId" to productId, "tier" to tier),
         )
     }
 
-    fun trackTipCanceled(tier: String) {
-        if (!enabled) return
+    fun trackTipCanceled(tier: String) = track {
         TelemetryDeck.signal(
             "tipCanceled",
             mapOf("tier" to tier),
         )
     }
 
-    fun trackTipFailed(reason: String) {
-        if (!enabled) return
+    fun trackTipFailed(reason: String) = track {
         TelemetryDeck.signal(
             "tipFailed",
             mapOf("reason" to reason),
@@ -176,8 +188,7 @@ object Analytics {
     }
 
     /** Play Billing could not connect (e.g. no Play services). [code] is the response code. */
-    fun trackBillingUnavailable(code: String) {
-        if (!enabled) return
+    fun trackBillingUnavailable(code: String) = track {
         TelemetryDeck.signal(
             "billingUnavailable",
             mapOf("code" to code),
@@ -185,8 +196,7 @@ object Analytics {
     }
 
     /** Tip products failed to load (query error, or none configured). */
-    fun trackTipProductsUnavailable(reason: String) {
-        if (!enabled) return
+    fun trackTipProductsUnavailable(reason: String) = track {
         TelemetryDeck.signal(
             "tipProductsUnavailable",
             mapOf("reason" to reason),
@@ -197,8 +207,7 @@ object Analytics {
         envelopeEffectsSupported: Boolean,
         amplitudeControl: Boolean,
         sdkInt: Int,
-    ) {
-        if (!enabled) return
+    ) = track {
         TelemetryDeck.signal(
             "hapticCapabilities",
             mapOf(
