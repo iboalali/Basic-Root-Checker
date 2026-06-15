@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In-app language picker in Settings (Android 13+): tap **Language** to switch the app between English, German, Arabic, Spanish, and Russian, or follow the system default. The choice is applied immediately, persists across launches, and stays in sync with Android's per-app language setting.
 
 ### Changed
+- The app now starts faster, especially on slower devices: analytics initialization no longer blocks the launch sequence.
 - The back-swipe animation now follows the side you swipe from: swiping from the left edge slides the screen off to the right, swiping from the right edge slides it off to the left.
 
 ### Fixed
