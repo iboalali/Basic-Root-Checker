@@ -16,9 +16,9 @@ desugar-jdk-libs = "2.1.5"                       # https://github.com/google/des
 google-material = "1.14.0"
 google-play-app-update = "2.1.0"                 # https://developer.android.com/reference/com/google/android/play/core/release-notes-in_app_updates
 google-play-billing = "9.0.0"                    # https://developer.android.com/google/play/billing/release-notes
-kotlinx-collections-immutable = "0.4.0"
+kotlinx-collections-immutable = "0.5.0"
 kotlinx-serialization-core = "1.11.0"
-telemetrydeck = "6.3.0"                          # https://github.com/TelemetryDeck/KotlinSDK/releases
+telemetrydeck = "7.0.0"                          # https://github.com/TelemetryDeck/KotlinSDK/releases
 topjohnwu-libsu-core = "6.0.0"                  # https://github.com/topjohnwu/libsu/releases
 
 junit = "4.13.2"
