@@ -88,11 +88,12 @@ object Analytics {
         )
     }
 
-    fun trackRootProvider(provider: String, version: String?) = track {
+    fun trackRootProvider(provider: String, manager: String?, version: String?) = track {
         TelemetryDeck.signal(
             "rootProviderDetected",
             mapOf(
                 "provider" to provider,
+                "manager" to (manager ?: provider),
                 "version" to (version ?: ""),
             ),
         )

@@ -75,6 +75,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
@@ -378,12 +379,27 @@ fun MainScreenContent(
                             uiState.rootStatus == RootStatus.NOT_GRANTED) &&
                             uiState.rootProvider != RootProvider.UNKNOWN
                     if (showProvider) {
-                        val providerName = when (uiState.rootProvider) {
-                            RootProvider.MAGISK -> stringResource(R.string.root_provider_magisk)
-                            RootProvider.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
-                            RootProvider.APATCH -> stringResource(R.string.root_provider_apatch)
-                            RootProvider.OTHER -> stringResource(R.string.root_provider_other)
-                            RootProvider.UNKNOWN -> ""
+                        // Prefer the specific installed manager; fall back to the family name when
+                        // only a mount/path/su signal identified it (no package).
+                        val providerName = when (uiState.rootManager) {
+                            RootManager.MAGISK -> stringResource(R.string.root_provider_magisk)
+                            RootManager.KITSUNE_MASK -> stringResource(R.string.root_manager_kitsune_mask)
+                            RootManager.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
+                            RootManager.KERNELSU_NEXT -> stringResource(R.string.root_manager_kernelsu_next)
+                            RootManager.SUKISU_ULTRA -> stringResource(R.string.root_manager_sukisu_ultra)
+                            RootManager.RESUKISU -> stringResource(R.string.root_manager_resukisu)
+                            RootManager.APATCH -> stringResource(R.string.root_provider_apatch)
+                            RootManager.SUPERSU -> stringResource(R.string.root_manager_supersu)
+                            RootManager.SUPERUSER -> stringResource(R.string.root_manager_superuser)
+                            RootManager.KINGROOT -> stringResource(R.string.root_manager_kingroot)
+                            RootManager.PHH -> stringResource(R.string.root_manager_phh)
+                            null -> when (uiState.rootProvider) {
+                                RootProvider.MAGISK -> stringResource(R.string.root_provider_magisk)
+                                RootProvider.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
+                                RootProvider.APATCH -> stringResource(R.string.root_provider_apatch)
+                                RootProvider.OTHER -> stringResource(R.string.root_provider_other)
+                                RootProvider.UNKNOWN -> ""
+                            }
                         }
                         val version = uiState.rootProviderVersion
                         val providerText = if (version != null) {
@@ -400,7 +416,19 @@ fun MainScreenContent(
                         )
                     }
 
-                    if (uiState.rootStatus == RootStatus.NOT_GRANTED) {
+                    if (uiState.rootStatus == RootStatus.NOT_ROOTED) {
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            text = stringResource(R.string.root_hidden_manager_hint),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+
+                    if (uiState.rootStatus == RootStatus.NOT_GRANTED ||
+                        uiState.rootStatus == RootStatus.NOT_ROOTED
+                    ) {
                         Spacer(Modifier.height(16.dp))
                         FilledTonalButton(onClick = onRequestRoot) {
                             Text(text = stringResource(R.string.action_request_root))
@@ -653,7 +681,8 @@ private fun MainScreenNotGrantedPreview() {
         MainScreenContent(
             uiState = MainUiState(
                 rootStatus = RootStatus.NOT_GRANTED,
-                rootProvider = RootProvider.MAGISK,
+                rootProvider = RootProvider.KERNELSU,
+                rootManager = RootManager.SUKISU_ULTRA,
                 deviceMarketingName = "Pixel 8 Pro",
                 deviceModelName = "husky",
                 androidVersion = "Android 16",

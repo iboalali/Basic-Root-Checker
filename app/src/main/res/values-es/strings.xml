@@ -9,6 +9,7 @@
     <string name="rootUnknown">No se pudo obtener el estado de root del dispositivo</string>
     <string name="rootNotAvailable">Tu dispositivo no tiene acceso root</string>
     <string name="rootNotGranted">Root está disponible, pero esta aplicación no tiene acceso concedido</string>
+    <string name="root_hidden_manager_hint">¿Usas un gestor de root oculto o renombrado (como Kitsune Mask)? Puede que no se detecte hasta que concedas acceso a esta aplicación.</string>
     <string name="action_request_root">Solicitar acceso root</string>
     <string name="root_provider_other">Otro</string>
     <string name="root_provider_via">vía %1$s</string>

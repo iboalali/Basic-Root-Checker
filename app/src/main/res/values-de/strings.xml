@@ -37,6 +37,7 @@ Kontaktiere mich:</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
     <string name="rootNotGranted">Root ist verfügbar, aber diese App hat keinen Zugriff darauf</string>
+    <string name="root_hidden_manager_hint">Verwendest du einen versteckten oder umbenannten Root-Manager (z. B. Kitsune Mask)? Er wird möglicherweise erst erkannt, wenn du dieser App Zugriff gewährst.</string>
     <string name="action_request_root">Root-Zugriff anfordern</string>
     <string name="root_provider_other">Andere</string>
     <string name="root_provider_via">über %1$s</string>

@@ -8,11 +8,21 @@
     <string name="rootUnknown">Couldn\'t get Root status of your device</string>
     <string name="rootNotAvailable">Your Device doesn\'t have Root access</string>
     <string name="rootNotGranted">Root is available but this app has not been granted access</string>
+    <string name="root_hidden_manager_hint">Using a hidden or renamed root manager (like Kitsune Mask)? It may not be detected until you grant this app access.</string>
     <string name="action_request_root">Request Root access</string>
     <string name="root_provider_magisk" translatable="false">Magisk</string>
     <string name="root_provider_kernelsu" translatable="false">KernelSU</string>
     <string name="root_provider_apatch" translatable="false">APatch</string>
     <string name="root_provider_other">Other</string>
+    <!-- Specific root-manager names (proper nouns, not translated) -->
+    <string name="root_manager_kitsune_mask" translatable="false">Kitsune Mask</string>
+    <string name="root_manager_kernelsu_next" translatable="false">KernelSU Next</string>
+    <string name="root_manager_sukisu_ultra" translatable="false">SukiSU Ultra</string>
+    <string name="root_manager_resukisu" translatable="false">ReSukiSU</string>
+    <string name="root_manager_supersu" translatable="false">SuperSU</string>
+    <string name="root_manager_superuser" translatable="false">Superuser</string>
+    <string name="root_manager_kingroot" translatable="false">KingRoot</string>
+    <string name="root_manager_phh" translatable="false">phh superuser</string>
     <string name="root_provider_via">via %1$s</string>
     <string name="root_provider_via_with_version">via %1$s v%2$s</string>
     <string name="action_licence">Licenses</string>

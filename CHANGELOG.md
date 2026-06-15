@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed a rare crash when navigating back: pressing back twice in quick succession on Settings, About, or Licences (or a fast back-swipe) could close the app with an error instead of returning to the main screen.
+- Detect more root managers that were previously reported as not rooted — Kitsune Mask, SukiSU Ultra, ReSukiSU, KernelSU Next, and legacy managers (SuperSU, KingRoot, Superuser, phh) — and show each by its own name instead of a generic "Magisk"/"KernelSU"/"Other" label.
+- On the "no root" result, the app now notes that hidden or renamed root managers may need access granted first, and offers a button to request it.
 
 ## [2.3] - 2026-06-08
 

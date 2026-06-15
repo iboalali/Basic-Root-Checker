@@ -9,6 +9,7 @@
     <string name="rootUnknown">Не удалось определить наличие root-доступа</string>
     <string name="rootNotAvailable">На устройстве нет root-доступа</string>
     <string name="rootNotGranted">Root-доступ доступен, но не предоставлен этому приложению</string>
+    <string name="root_hidden_manager_hint">Используете скрытый или переименованный root-менеджер (например, Kitsune Mask)? Он может не определяться, пока вы не предоставите приложению доступ.</string>
     <string name="action_request_root">Запросить root-доступ</string>
     <string name="root_provider_other">Другой</string>
     <string name="root_provider_via">через %1$s</string>
