@@ -9,8 +9,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
@@ -62,6 +66,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
             BasicRootCheckerTheme(darkTheme = darkTheme) {
+                // The window background comes from the XML theme, which follows the *system*
+                // day/night setting and ignores the in-app override — so it would peek through
+                // (in the wrong theme) during screen transitions. Drive it from the resolved
+                // color scheme so the activity background matches, and cross-fades, with the theme.
+                val backgroundColor = MaterialTheme.colorScheme.background
+                SideEffect {
+                    window.setBackgroundDrawable(backgroundColor.toArgb().toDrawable())
+                }
                 AppRoot(tipCleared = billingController.tipCleared)
             }
         }
