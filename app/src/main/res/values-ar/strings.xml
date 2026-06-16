@@ -20,6 +20,11 @@
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">مشاركة بيانات الاستخدام المجهولة</string>
     <string name="settings_telemetry_description">يساعد على تحسين التطبيق عبر TelemetryDeck. عند التفعيل، يسري المفعول عند إعادة تشغيل التطبيق.</string>
+    <string name="settings_reset_identity_title">إعادة تعيين هوية التحليلات</string>
+    <string name="settings_reset_identity_description">ابدأ بمعرّف مجهول جديد كي لا تُربط بيانات الاستخدام المستقبلية بما تمت مشاركته سابقًا.</string>
+    <string name="settings_reset_identity_dialog_message">سيتم إنشاء معرّف مجهول جديد. لن تُربط بيانات الاستخدام المستقبلية بأي شيء تمت مشاركته حتى الآن. لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="settings_reset_identity_confirm">إعادة التعيين</string>
+    <string name="settings_reset_identity_done">تمت إعادة تعيين هوية التحليلات</string>
     <string name="settings_haptics_title">الاهتزاز التفاعلي</string>
     <string name="settings_haptics_description">يهتز أثناء التحقق من الروت وعند ظهور النتيجة.</string>
     <string name="settings_privacy_policy_description">عرض سياسة الخصوصية على الإنترنت</string>

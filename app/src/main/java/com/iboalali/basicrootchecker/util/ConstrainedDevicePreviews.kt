@@ -108,6 +108,7 @@ private fun SettingsScreenConstrainedPreview() {
         SettingsScreenContent(
             telemetryEnabled = true,
             onTelemetryEnabledChange = {},
+            onResetIdentity = {},
             hapticsEnabled = true,
             onHapticsEnabledChange = {},
             currentLanguageTag = "en",

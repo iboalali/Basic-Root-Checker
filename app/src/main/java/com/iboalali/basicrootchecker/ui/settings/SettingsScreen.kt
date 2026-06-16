@@ -42,6 +42,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,6 +77,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 
 /** Outer (rounded) corner radius for the first/last item of the settings group. */
 private val SettingsGroupCornerRadius = 32.dp
@@ -112,6 +114,7 @@ fun SettingsScreen(
     SettingsScreenContent(
         telemetryEnabled = telemetryEnabled,
         onTelemetryEnabledChange = viewModel::setTelemetryEnabled,
+        onResetIdentity = viewModel::resetTelemetryIdentity,
         hapticsEnabled = hapticsEnabled,
         onHapticsEnabledChange = viewModel::setHapticsEnabled,
         currentLanguageTag = currentLanguageTag,
@@ -131,6 +134,7 @@ fun SettingsScreen(
 fun SettingsScreenContent(
     telemetryEnabled: Boolean,
     onTelemetryEnabledChange: (Boolean) -> Unit,
+    onResetIdentity: () -> Unit,
     hapticsEnabled: Boolean,
     onHapticsEnabledChange: (Boolean) -> Unit,
     currentLanguageTag: String?,
@@ -147,7 +151,10 @@ fun SettingsScreenContent(
     val context = LocalContext.current
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showTipDialog by remember { mutableStateOf(false) }
+    var showResetIdentityDialog by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val resetIdentityDoneMessage = stringResource(R.string.settings_reset_identity_done)
 
     val tipThanksMessage = stringResource(R.string.tip_jar_thanks)
     val tipPendingMessage = stringResource(R.string.tip_jar_pending)
@@ -275,6 +282,40 @@ fun SettingsScreenContent(
                         checked = telemetryEnabled,
                         onCheckedChange = onTelemetryEnabledChange,
                     )
+                }
+            }
+
+            if (telemetryEnabled) {
+                Spacer(Modifier.height(SettingsItemSpacing))
+
+                OutlinedCard(
+                    modifier = Modifier
+                        .widthIn(max = 600.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(),
+                    shape = settingsGroupShape(isFirst = false, isLast = false),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showResetIdentityDialog = true }
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.settings_reset_identity_title),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            Text(
+                                text = stringResource(R.string.settings_reset_identity_description),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
+                    }
                 }
             }
 
@@ -429,6 +470,30 @@ fun SettingsScreenContent(
             products = tipProducts,
             onSelect = onTipSelected,
             onDismiss = { showTipDialog = false },
+        )
+    }
+
+    if (showResetIdentityDialog) {
+        AlertDialog(
+            onDismissRequest = { showResetIdentityDialog = false },
+            title = { Text(stringResource(R.string.settings_reset_identity_title)) },
+            text = { Text(stringResource(R.string.settings_reset_identity_dialog_message)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showResetIdentityDialog = false
+                        onResetIdentity()
+                        scope.launch { snackbarHostState.showSnackbar(resetIdentityDoneMessage) }
+                    },
+                ) {
+                    Text(stringResource(R.string.settings_reset_identity_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showResetIdentityDialog = false }) {
+                    Text(stringResource(android.R.string.cancel))
+                }
+            },
         )
     }
 }
@@ -617,6 +682,7 @@ private fun SettingsScreenPreview() {
         SettingsScreenContent(
             telemetryEnabled = true,
             onTelemetryEnabledChange = {},
+            onResetIdentity = {},
             hapticsEnabled = true,
             onHapticsEnabledChange = {},
             currentLanguageTag = "de",
@@ -643,6 +709,7 @@ private fun SettingsScreenTelemetryOffPreview() {
         SettingsScreenContent(
             telemetryEnabled = false,
             onTelemetryEnabledChange = {},
+            onResetIdentity = {},
             hapticsEnabled = false,
             onHapticsEnabledChange = {},
             currentLanguageTag = null,

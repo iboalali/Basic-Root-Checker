@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- New **Reset analytics identity** option in Settings (under the anonymous-usage-data switch): generate a fresh anonymous ID so future usage data can't be linked to anything shared before. Shown only while sharing usage data is enabled.
+
 ### Changed
 - Redesigned the Settings screen so the options read as one connected group: the first and last items keep their rounded outer corners while the corners where items meet are squared off, and the items sit closer together.
 - Moved the tip jar (support development) to the top of Settings.

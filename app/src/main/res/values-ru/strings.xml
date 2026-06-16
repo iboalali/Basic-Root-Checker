@@ -22,6 +22,11 @@
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Отправлять анонимные данные об использовании</string>
     <string name="settings_telemetry_description">Помогает улучшать приложение через TelemetryDeck. Изменения вступают в силу при следующем запуске приложения.</string>
+    <string name="settings_reset_identity_title">Сбросить идентификатор аналитики</string>
+    <string name="settings_reset_identity_description">Создаёт новый анонимный идентификатор, чтобы будущие данные об использовании нельзя было связать с отправленными ранее.</string>
+    <string name="settings_reset_identity_dialog_message">Будет создан новый анонимный идентификатор. Будущие данные об использовании не будут связаны с тем, что отправлено ранее. Это действие нельзя отменить.</string>
+    <string name="settings_reset_identity_confirm">Сбросить</string>
+    <string name="settings_reset_identity_done">Идентификатор аналитики сброшен</string>
     <string name="settings_haptics_title">Тактильная отдача</string>
     <string name="settings_haptics_description">Вибрация во время проверки root и при появлении результата.</string>
     <string name="settings_privacy_policy_description">Открыть политику конфиденциальности в браузере</string>

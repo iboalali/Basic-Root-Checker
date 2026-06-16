@@ -33,6 +33,11 @@
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Share anonymous usage data</string>
     <string name="settings_telemetry_description">Helps improve the app via TelemetryDeck. When enabled, takes effect on next app launch.</string>
+    <string name="settings_reset_identity_title">Reset analytics identity</string>
+    <string name="settings_reset_identity_description">Start a fresh anonymous ID so future usage data can\'t be linked to what was shared before.</string>
+    <string name="settings_reset_identity_dialog_message">A new anonymous identifier will be generated. Future usage data won\'t be linked to anything shared before now. This can\'t be undone.</string>
+    <string name="settings_reset_identity_confirm">Reset</string>
+    <string name="settings_reset_identity_done">Analytics identity reset</string>
     <string name="settings_haptics_title">Haptic feedback</string>
     <string name="settings_haptics_description">Vibrate while checking for root and when the result appears.</string>
     <string name="settings_privacy_policy_description">View our privacy policy online</string>

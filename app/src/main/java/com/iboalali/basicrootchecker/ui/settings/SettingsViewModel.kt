@@ -12,6 +12,7 @@ import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +35,14 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             prefs.setTelemetryEnabled(enabled)
             Analytics.setEnabled(enabled)
+        }
+    }
+
+    /** Generates a fresh anonymous analytics identity, unlinking future data from the past. */
+    fun resetTelemetryIdentity() {
+        val context = getApplication<Application>()
+        viewModelScope.launch(Dispatchers.IO) {
+            Analytics.resetIdentity(context)
         }
     }
 

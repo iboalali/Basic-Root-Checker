@@ -17,6 +17,11 @@ Kontaktiere mich:</string>
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Anonyme Nutzungsdaten teilen</string>
     <string name="settings_telemetry_description">Hilft dabei, die App über TelemetryDeck zu verbessern. Wenn aktiviert, wird die Änderung beim nächsten App-Start wirksam.</string>
+    <string name="settings_reset_identity_title">Analyse-Identität zurücksetzen</string>
+    <string name="settings_reset_identity_description">Beginnt mit einer neuen anonymen ID, damit künftige Nutzungsdaten nicht mit den zuvor geteilten verknüpft werden können.</string>
+    <string name="settings_reset_identity_dialog_message">Es wird eine neue anonyme Kennung erzeugt. Künftige Nutzungsdaten werden nicht mit zuvor geteilten Daten verknüpft. Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="settings_reset_identity_confirm">Zurücksetzen</string>
+    <string name="settings_reset_identity_done">Analyse-Identität zurückgesetzt</string>
     <string name="settings_haptics_title">Haptisches Feedback</string>
     <string name="settings_haptics_description">Vibriert während der Root-Prüfung und wenn das Ergebnis erscheint.</string>
     <string name="settings_privacy_policy_description">Datenschutzerklärung online ansehen</string>

@@ -1,6 +1,9 @@
 package com.iboalali.basicrootchecker.analytics
 
+import android.content.Context
 import com.telemetrydeck.sdk.TelemetryDeck
+import com.telemetrydeck.sdk.providers.FileUserIdentityProvider
+import java.util.UUID
 
 const val ERROR_CATEGORY_THROWN_EXCEPTION = "thrown-exception"
 const val ERROR_CATEGORY_USER_INPUT = "user-input"
@@ -21,6 +24,29 @@ object Analytics {
      * Also used by the Settings toggle at runtime, where the queue is already empty.
      */
     fun setEnabled(enabled: Boolean) = gate.resolve(enabled)
+
+    /**
+     * Discard the persisted anonymous user identifier so future signals can't be linked to those
+     * sent before — a fresh random identity is generated on the next signal. Performs file I/O, so
+     * call off the main thread.
+     *
+     * When the SDK is running, this resets its active identity provider and rotates the session so
+     * the break takes effect immediately. When it isn't (telemetry off this run, or just re-enabled
+     * and pending the next launch), the persisted identifier is cleared on disk directly so the next
+     * start picks up a new one instead of resurrecting the old identity.
+     */
+    fun resetIdentity(context: Context) {
+        val instance = TelemetryDeck.getInstance()
+        if (instance != null) {
+            instance.identityProvider.resetIdentity()
+            instance.resetSession(UUID.randomUUID())
+        } else {
+            FileUserIdentityProvider().apply {
+                register(context.applicationContext, TelemetryDeck.Companion)
+                resetIdentity()
+            }
+        }
+    }
 
     /**
      * Run [action] now if telemetry is live, buffer it while the opt-out preference
