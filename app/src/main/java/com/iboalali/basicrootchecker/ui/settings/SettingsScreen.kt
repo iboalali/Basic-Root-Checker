@@ -68,6 +68,7 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
+import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -107,6 +108,7 @@ fun SettingsScreen(
 ) {
     val telemetryEnabled by viewModel.telemetryEnabled.collectAsStateWithLifecycle()
     val hapticsEnabled by viewModel.hapticsEnabled.collectAsStateWithLifecycle()
+    val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
     val currentLanguageTag = AppLanguage.currentTag(LocalContext.current)
     val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
     val supporterTiers by viewModel.supporterTiers.collectAsStateWithLifecycle()
@@ -117,6 +119,8 @@ fun SettingsScreen(
         onResetIdentity = viewModel::resetTelemetryIdentity,
         hapticsEnabled = hapticsEnabled,
         onHapticsEnabledChange = viewModel::setHapticsEnabled,
+        themeMode = themeMode,
+        onThemeModeChange = viewModel::setThemeMode,
         currentLanguageTag = currentLanguageTag,
         onLanguageSelected = viewModel::setLanguage,
         tipJarAvailable = viewModel.tipJarAvailable,
@@ -137,6 +141,8 @@ fun SettingsScreenContent(
     onResetIdentity: () -> Unit,
     hapticsEnabled: Boolean,
     onHapticsEnabledChange: (Boolean) -> Unit,
+    themeMode: ThemeMode,
+    onThemeModeChange: (ThemeMode) -> Unit,
     currentLanguageTag: String?,
     onLanguageSelected: (String?) -> Unit,
     tipJarAvailable: Boolean,
@@ -149,6 +155,7 @@ fun SettingsScreenContent(
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
+    var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showTipDialog by remember { mutableStateOf(false) }
     var showResetIdentityDialog by remember { mutableStateOf(false) }
@@ -355,6 +362,44 @@ fun SettingsScreenContent(
                 }
             }
 
+            Spacer(Modifier.height(SettingsItemSpacing))
+
+            OutlinedCard(
+                modifier = Modifier
+                    .widthIn(max = 600.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(),
+                shape = settingsGroupShape(isFirst = false, isLast = false),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showThemeDialog = true }
+                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.settings_theme_title),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                        Text(
+                            text = themeModeLabel(themeMode),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    Icon(
+                        painter = painterResource(R.drawable.chevron_right_24px),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
             if (AppLanguage.isSupported) {
                 Spacer(Modifier.height(SettingsItemSpacing))
 
@@ -452,6 +497,17 @@ fun SettingsScreenContent(
 
             Spacer(Modifier.height(16.dp))
         }
+    }
+
+    if (showThemeDialog) {
+        ThemePickerDialog(
+            current = themeMode,
+            onSelect = {
+                showThemeDialog = false
+                onThemeModeChange(it)
+            },
+            onDismiss = { showThemeDialog = false },
+        )
     }
 
     if (showLanguageDialog) {
@@ -630,13 +686,13 @@ private fun LanguagePickerDialog(
         title = { Text(stringResource(R.string.settings_language_title)) },
         text = {
             Column(modifier = Modifier.selectableGroup()) {
-                LanguageOptionRow(
+                SettingOptionRow(
                     label = stringResource(R.string.language_system_default),
                     selected = currentTag == null,
                     onClick = { onSelect(null) },
                 )
                 AppLanguage.SUPPORTED_TAGS.forEach { tag ->
-                    LanguageOptionRow(
+                    SettingOptionRow(
                         label = AppLanguage.displayName(tag),
                         selected = currentTag == tag,
                         onClick = { onSelect(tag) },
@@ -653,7 +709,44 @@ private fun LanguagePickerDialog(
 }
 
 @Composable
-private fun LanguageOptionRow(
+private fun themeModeLabel(mode: ThemeMode): String = stringResource(
+    when (mode) {
+        ThemeMode.SYSTEM -> R.string.theme_follow_system
+        ThemeMode.LIGHT -> R.string.theme_light
+        ThemeMode.DARK -> R.string.theme_dark
+    }
+)
+
+@Composable
+private fun ThemePickerDialog(
+    current: ThemeMode,
+    onSelect: (ThemeMode) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_theme_title)) },
+        text = {
+            Column(modifier = Modifier.selectableGroup()) {
+                ThemeMode.entries.forEach { mode ->
+                    SettingOptionRow(
+                        label = themeModeLabel(mode),
+                        selected = current == mode,
+                        onClick = { onSelect(mode) },
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(android.R.string.cancel))
+            }
+        },
+    )
+}
+
+@Composable
+private fun SettingOptionRow(
     label: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -685,6 +778,8 @@ private fun SettingsScreenPreview() {
             onResetIdentity = {},
             hapticsEnabled = true,
             onHapticsEnabledChange = {},
+            themeMode = ThemeMode.SYSTEM,
+            onThemeModeChange = {},
             currentLanguageTag = "de",
             onLanguageSelected = {},
             tipJarAvailable = true,
@@ -712,6 +807,8 @@ private fun SettingsScreenTelemetryOffPreview() {
             onResetIdentity = {},
             hapticsEnabled = false,
             onHapticsEnabledChange = {},
+            themeMode = ThemeMode.DARK,
+            onThemeModeChange = {},
             currentLanguageTag = null,
             onLanguageSelected = {},
             tipJarAvailable = false,

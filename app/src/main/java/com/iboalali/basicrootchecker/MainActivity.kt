@@ -3,18 +3,25 @@ package com.iboalali.basicrootchecker
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.color.DynamicColors
+import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.ui.AppRoot
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
 
@@ -32,13 +39,29 @@ class MainActivity : ComponentActivity() {
             app.billingController.attach(this)
         }
 
-        // Workaround: splash screen theme doesn't properly set light status bar
-        val isNight = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES) == Configuration.UI_MODE_NIGHT_YES
-        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = !isNight
+        val userPreferences = UserPreferences(this)
+        // Read once synchronously so the first frame already uses the persisted theme, avoiding a
+        // flash from the system default to the override. The splash screen masks this brief read.
+        val initialThemeMode = runBlocking { userPreferences.themeMode.first() }
 
         val billingController = (application as BasicRootCheckerApplication).billingController
         setContent {
-            BasicRootCheckerTheme {
+            val themeMode by userPreferences.themeMode
+                .collectAsStateWithLifecycle(initialValue = initialThemeMode)
+            val darkTheme = when (themeMode) {
+                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+            }
+            // Keep status- and nav-bar icon contrast in sync with the resolved theme. Also works
+            // around the splash screen theme not setting the light status bar on its own.
+            LaunchedEffect(darkTheme) {
+                WindowInsetsControllerCompat(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = !darkTheme
+                    isAppearanceLightNavigationBars = !darkTheme
+                }
+            }
+            BasicRootCheckerTheme(darkTheme = darkTheme) {
                 AppRoot(tipCleared = billingController.tipCleared)
             }
         }

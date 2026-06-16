@@ -28,6 +28,10 @@
     <string name="settings_haptics_title">الاهتزاز التفاعلي</string>
     <string name="settings_haptics_description">يهتز أثناء التحقق من الروت وعند ظهور النتيجة.</string>
     <string name="settings_privacy_policy_description">عرض سياسة الخصوصية على الإنترنت</string>
+    <string name="settings_theme_title">المظهر</string>
+    <string name="theme_follow_system">حسب النظام</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
     <string name="settings_language_title">اللغة</string>
     <string name="language_system_default">الإعداد التلقائي للنظام</string>
     <string name="settings_tip_jar_title">ادعم التطوير</string>

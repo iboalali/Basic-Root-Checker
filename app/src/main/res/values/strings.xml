@@ -41,6 +41,10 @@
     <string name="settings_haptics_title">Haptic feedback</string>
     <string name="settings_haptics_description">Vibrate while checking for root and when the result appears.</string>
     <string name="settings_privacy_policy_description">View our privacy policy online</string>
+    <string name="settings_theme_title">Theme</string>
+    <string name="theme_follow_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
     <string name="settings_language_title">Language</string>
     <string name="language_system_default">System default</string>
     <string name="settings_tip_jar_title">Support development</string>

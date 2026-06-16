@@ -2,6 +2,7 @@ package com.iboalali.basicrootchecker.util
 
 import androidx.compose.runtime.Composable
 import com.iboalali.basicrootchecker.data.RootProvider
+import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
@@ -111,6 +112,8 @@ private fun SettingsScreenConstrainedPreview() {
             onResetIdentity = {},
             hapticsEnabled = true,
             onHapticsEnabledChange = {},
+            themeMode = ThemeMode.SYSTEM,
+            onThemeModeChange = {},
             currentLanguageTag = "en",
             onLanguageSelected = {},
             tipJarAvailable = true,

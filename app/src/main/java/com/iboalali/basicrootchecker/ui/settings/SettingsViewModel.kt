@@ -8,6 +8,7 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
+import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.collections.immutable.ImmutableList
@@ -55,6 +56,18 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun setHapticsEnabled(enabled: Boolean) {
         viewModelScope.launch {
             prefs.setHapticsEnabled(enabled)
+        }
+    }
+
+    val themeMode: StateFlow<ThemeMode> = prefs.themeMode.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = ThemeMode.SYSTEM,
+    )
+
+    fun setThemeMode(mode: ThemeMode) {
+        viewModelScope.launch {
+            prefs.setThemeMode(mode)
         }
     }
 

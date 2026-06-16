@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +33,17 @@ class UserPreferences(private val context: Context) {
     suspend fun setHapticsEnabled(enabled: Boolean) {
         context.userSettingsDataStore.edit { preferences ->
             preferences[HAPTICS_ENABLED] = enabled
+        }
+    }
+
+    val themeMode: Flow<ThemeMode> =
+        context.userSettingsDataStore.data.map { preferences ->
+            ThemeMode.fromStorage(preferences[THEME_MODE])
+        }
+
+    suspend fun setThemeMode(mode: ThemeMode) {
+        context.userSettingsDataStore.edit { preferences ->
+            preferences[THEME_MODE] = mode.name
         }
     }
 
@@ -73,6 +85,7 @@ class UserPreferences(private val context: Context) {
     companion object {
         private val TELEMETRY_ENABLED = booleanPreferencesKey("telemetry_enabled")
         private val HAPTICS_ENABLED = booleanPreferencesKey("haptics_enabled")
+        private val THEME_MODE = stringPreferencesKey("theme_mode")
         private val LAST_SEEN_VERSION_CODE = intPreferencesKey("last_seen_version_code")
         private val PENDING_TIP_TOKENS = stringSetPreferencesKey("pending_tip_tokens")
     }
