@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Redesigned the Settings screen so the options read as one connected group: the first and last items keep their rounded outer corners while the corners where items meet are squared off, and the items sit closer together.
+- Moved the tip jar (support development) to the top of Settings.
+
 ### Fixed
 - Fixed a rare crash when navigating back: pressing back twice in quick succession on Settings, About, or Licences (or a fast back-swipe) could close the app with an error instead of returning to the main screen.
 - Detect more root managers that were previously reported as not rooted — Kitsune Mask, SukiSU Ultra, ReSukiSU, KernelSU Next, and legacy managers (SuperSU, KingRoot, Superuser, phh) — and show each by its own name instead of a generic "Magisk"/"KernelSU"/"Other" label.

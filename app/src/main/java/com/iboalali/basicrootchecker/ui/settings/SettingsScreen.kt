@@ -77,6 +77,27 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
+/** Outer (rounded) corner radius for the first/last item of the settings group. */
+private val SettingsGroupCornerRadius = 32.dp
+
+/** Inner corner radius where items connect within the settings group. */
+private val SettingsItemInnerRadius = 2.dp
+
+/** Gap between connected items in the settings group. */
+private val SettingsItemSpacing = 4.dp
+
+/**
+ * Builds the corner shape for one item in the settings group so the items read as a single
+ * connected list: rounded outer corners on the first/last item, near-square corners where
+ * items meet.
+ */
+internal fun settingsGroupShape(isFirst: Boolean, isLast: Boolean) = RoundedCornerShape(
+    topStart = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+    topEnd = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+    bottomStart = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+    bottomEnd = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+)
+
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit,
@@ -180,126 +201,13 @@ fun SettingsScreenContent(
         ) {
             Spacer(Modifier.height(16.dp))
 
-            OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(),
-                shape = RoundedCornerShape(32.dp),
-                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.settings_telemetry_title),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                        Text(
-                            text = stringResource(R.string.settings_telemetry_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 4.dp),
-                        )
-                    }
-                    Spacer(Modifier.width(16.dp))
-                    Switch(
-                        checked = telemetryEnabled,
-                        onCheckedChange = onTelemetryEnabledChange,
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(24.dp))
-
-            OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(),
-                shape = RoundedCornerShape(32.dp),
-                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.settings_haptics_title),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                        Text(
-                            text = stringResource(R.string.settings_haptics_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 4.dp),
-                        )
-                    }
-                    Spacer(Modifier.width(16.dp))
-                    Switch(
-                        checked = hapticsEnabled,
-                        onCheckedChange = onHapticsEnabledChange,
-                    )
-                }
-            }
-
-            if (AppLanguage.isSupported) {
-                Spacer(Modifier.height(24.dp))
-
-                OutlinedCard(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxWidth(),
-                    colors = CardDefaults.cardColors(),
-                    shape = RoundedCornerShape(32.dp),
-                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { showLanguageDialog = true }
-                            .padding(horizontal = 24.dp, vertical = 24.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = stringResource(R.string.settings_language_title),
-                                style = MaterialTheme.typography.bodyLarge,
-                            )
-                            Text(
-                                text = currentLanguageTag?.let { AppLanguage.displayName(it) }
-                                    ?: stringResource(R.string.language_system_default),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(top = 4.dp),
-                            )
-                        }
-                        Spacer(Modifier.width(16.dp))
-                        Icon(
-                            painter = painterResource(R.drawable.chevron_right_24px),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
-            }
-
             if (tipJarAvailable) {
-                Spacer(Modifier.height(24.dp))
-
                 OutlinedCard(
                     modifier = Modifier
                         .widthIn(max = 600.dp)
                         .fillMaxWidth(),
                     colors = CardDefaults.cardColors(),
-                    shape = RoundedCornerShape(32.dp),
+                    shape = settingsGroupShape(isFirst = true, isLast = false),
                     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
                 ) {
                     Row(
@@ -332,16 +240,129 @@ fun SettingsScreenContent(
                         )
                     }
                 }
-            }
 
-            Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(SettingsItemSpacing))
+            }
 
             OutlinedCard(
                 modifier = Modifier
                     .widthIn(max = 600.dp)
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
-                shape = RoundedCornerShape(32.dp),
+                shape = settingsGroupShape(isFirst = !tipJarAvailable, isLast = false),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.settings_telemetry_title),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                        Text(
+                            text = stringResource(R.string.settings_telemetry_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    Switch(
+                        checked = telemetryEnabled,
+                        onCheckedChange = onTelemetryEnabledChange,
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(SettingsItemSpacing))
+
+            OutlinedCard(
+                modifier = Modifier
+                    .widthIn(max = 600.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(),
+                shape = settingsGroupShape(isFirst = false, isLast = false),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.settings_haptics_title),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                        Text(
+                            text = stringResource(R.string.settings_haptics_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    Switch(
+                        checked = hapticsEnabled,
+                        onCheckedChange = onHapticsEnabledChange,
+                    )
+                }
+            }
+
+            if (AppLanguage.isSupported) {
+                Spacer(Modifier.height(SettingsItemSpacing))
+
+                OutlinedCard(
+                    modifier = Modifier
+                        .widthIn(max = 600.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(),
+                    shape = settingsGroupShape(isFirst = false, isLast = false),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showLanguageDialog = true }
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.settings_language_title),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            Text(
+                                text = currentLanguageTag?.let { AppLanguage.displayName(it) }
+                                    ?: stringResource(R.string.language_system_default),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
+                        Spacer(Modifier.width(16.dp))
+                        Icon(
+                            painter = painterResource(R.drawable.chevron_right_24px),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(SettingsItemSpacing))
+
+            OutlinedCard(
+                modifier = Modifier
+                    .widthIn(max = 600.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(),
+                shape = settingsGroupShape(isFirst = false, isLast = !BuildConfig.DEBUG),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
@@ -381,8 +402,11 @@ fun SettingsScreenContent(
             }
 
             if (BuildConfig.DEBUG) {
-                Spacer(Modifier.height(24.dp))
-                DebugTipJarCard(supporterTiers = supporterTiers)
+                Spacer(Modifier.height(SettingsItemSpacing))
+                DebugTipJarCard(
+                    supporterTiers = supporterTiers,
+                    shape = settingsGroupShape(isFirst = false, isLast = true),
+                )
             }
 
             Spacer(Modifier.height(16.dp))
