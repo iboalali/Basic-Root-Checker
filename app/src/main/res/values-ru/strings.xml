@@ -66,6 +66,8 @@
     <string name="content_description_marketing_name">Маркетинговое название</string>
     <string name="content_description_model_name">Название модели</string>
     <string name="content_description_android_version">Версия Android</string>
+    <string name="content_description_more_options">Другие параметры</string>
+    <string name="content_description_navigate_up">Перейти вверх</string>
 
     <!-- Device Info Labels -->
     <string name="label_device_name">Название устройства</string>

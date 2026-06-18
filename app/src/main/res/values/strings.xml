@@ -225,6 +225,8 @@
     <string name="content_description_marketing_name">Marketing Name</string>
     <string name="content_description_model_name">Model Name</string>
     <string name="content_description_android_version">Android Version</string>
+    <string name="content_description_more_options">More options</string>
+    <string name="content_description_navigate_up">Navigate up</string>
 
     <!-- Device Info Labels -->
     <string name="label_device_name">Device Name</string>

@@ -66,6 +66,8 @@
     <string name="content_description_marketing_name">Nombre comercial</string>
     <string name="content_description_model_name">Nombre del modelo</string>
     <string name="content_description_android_version">Versión de Android</string>
+    <string name="content_description_more_options">Más opciones</string>
+    <string name="content_description_navigate_up">Desplazarse hacia arriba</string>
 
     <!-- Device Info Labels -->
     <string name="label_device_name">Nombre del dispositivo</string>

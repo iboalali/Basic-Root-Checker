@@ -51,7 +51,7 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.content_description_navigate_up),
                         )
                     }
                 },

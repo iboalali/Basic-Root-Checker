@@ -163,7 +163,7 @@ fun MainScreenContent(
                     IconButton(onClick = { menuExpanded = true }) {
                         Icon(
                             painter = painterResource(R.drawable.more_vert_24px),
-                            contentDescription = null
+                            contentDescription = stringResource(R.string.content_description_more_options),
                         )
                     }
                     DropdownMenu(
