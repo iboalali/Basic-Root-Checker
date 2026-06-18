@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - On the "no root" result, the app now notes that hidden or renamed root managers may need access granted first, and offers a button to request it.
 - Accessibility: screen readers now announce the main-screen overflow (more options) button and the back buttons on Settings, About, and Licences, which were previously unlabeled.
 - Accessibility: screen readers now read out the root-check result automatically when it changes, instead of leaving it silent until the user navigates back to the status card.
+- Accessibility: copying a device-info row (device name, model, Android version) is now available to screen readers as a labelled "Copy" action, alongside the existing long-press for everyone.
 
 ## [2.3] - 2026-06-08
 

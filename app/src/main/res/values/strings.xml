@@ -227,6 +227,7 @@
     <string name="content_description_android_version">Android Version</string>
     <string name="content_description_more_options">More options</string>
     <string name="content_description_navigate_up">Navigate up</string>
+    <string name="action_copy">Copy</string>
 
     <!-- Device Info Labels -->
     <string name="label_device_name">Device Name</string>

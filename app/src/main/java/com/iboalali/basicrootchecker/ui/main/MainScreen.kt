@@ -13,9 +13,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,11 +57,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
@@ -119,7 +121,7 @@ fun MainScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenContent(
     uiState: MainUiState,
@@ -557,7 +559,6 @@ fun MainScreenContent(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DeviceInfoText(
     label: String,
@@ -566,18 +567,29 @@ private fun DeviceInfoText(
     onCopied: () -> Unit,
 ) {
     val context = LocalContext.current
+    val copyLabel = stringResource(R.string.action_copy)
+    val copy: () -> Unit = {
+        val clipboard =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(ClipData.newPlainText(contentDescription, text))
+        onCopied()
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .combinedClickable(
-                onClick = {},
-                onLongClick = {
-                    val clipboard =
-                        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    clipboard.setPrimaryClip(ClipData.newPlainText(contentDescription, text))
-                    onCopied()
-                },
-            )
+            // Long-press copies for sighted users; screen readers reach the same action
+            // through a labelled custom action, since the row has no primary click.
+            .pointerInput(text, contentDescription) {
+                detectTapGestures(onLongPress = { copy() })
+            }
+            .semantics {
+                customActions = listOf(
+                    CustomAccessibilityAction(copyLabel) {
+                        copy()
+                        true
+                    },
+                )
+            }
             .padding(vertical = 4.dp),
     ) {
         Text(
