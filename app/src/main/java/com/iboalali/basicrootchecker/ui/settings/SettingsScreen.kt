@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -269,6 +270,11 @@ fun SettingsScreenContent(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .toggleable(
+                            value = telemetryEnabled,
+                            onValueChange = onTelemetryEnabledChange,
+                            role = Role.Switch,
+                        )
                         .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -285,9 +291,11 @@ fun SettingsScreenContent(
                         )
                     }
                     Spacer(Modifier.width(16.dp))
+                    // The row owns the toggle (Role.Switch) so the control is labelled by
+                    // the title for screen readers; the Switch itself is non-interactive.
                     Switch(
                         checked = telemetryEnabled,
-                        onCheckedChange = onTelemetryEnabledChange,
+                        onCheckedChange = null,
                     )
                 }
             }
@@ -339,6 +347,11 @@ fun SettingsScreenContent(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .toggleable(
+                            value = hapticsEnabled,
+                            onValueChange = onHapticsEnabledChange,
+                            role = Role.Switch,
+                        )
                         .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -355,9 +368,11 @@ fun SettingsScreenContent(
                         )
                     }
                     Spacer(Modifier.width(16.dp))
+                    // The row owns the toggle (Role.Switch) so the control is labelled by
+                    // the title for screen readers; the Switch itself is non-interactive.
                     Switch(
                         checked = hapticsEnabled,
-                        onCheckedChange = onHapticsEnabledChange,
+                        onCheckedChange = null,
                     )
                 }
             }
