@@ -69,6 +69,18 @@ Five locales: English (`en`), German (`de`), Arabic (`ar`), Spanish (`es`), Russ
 
 Compose Material3 with dynamic colors (API 31+), fallback to custom light/dark color schemes defined in `ui/theme/Color.kt`. Splash screen theme chain in XML (`values-v21/v23/v27/v31` theme qualifiers).
 
+### Accessibility
+
+**Keep accessibility (TalkBack and large font scales) in mind for all UI code — treat it as part of "done," not a follow-up.** When adding or changing Compose UI, apply these conventions (all already used in the codebase):
+
+- **Label actionable icons.** Any `IconButton`/clickable icon that isn't accompanied by visible text needs a `contentDescription` on its `Icon` (e.g. the overflow and navigation-up buttons). Decorative icons whose meaning is already conveyed by adjacent text — chevrons, the status icon, trailing affordances inside a labelled row — take `contentDescription = null`.
+- **Localize accessibility strings.** `contentDescription`s and action labels are user-facing: add them to `res/values/strings.xml` **and all four locale files** (`de`, `ar`, `es`, `ru`), same as any other string. Prefer the wording Android's own AppCompat resources use (e.g. "Navigate up", "More options") so it matches what users hear elsewhere.
+- **Announce in-place changes with a live region.** When content updates without moving focus (the root-check result, the in-app update card), mark the changing `Text` with `Modifier.semantics { liveRegion = LiveRegionMode.Polite }` so screen readers read the new value. Don't merge a whole card as a live region if it contains a focusable button.
+- **Label controls via their row.** For a row that pairs a title with a `Switch`/`RadioButton`, make the row itself `toggleable(role = Role.Switch)` / `selectable(role = Role.RadioButton)` and pass `onCheckedChange = null` / `onClick = null` to the control. This labels the control with the title and makes the whole row the touch target.
+- **Expose non-tap gestures as custom actions.** A long-press (or other gesture) action must also be reachable by screen readers — add a `CustomAccessibilityAction` (with a localized label) via `Modifier.semantics`, and avoid empty `onClick = {}` handlers that advertise a do-nothing action. See `DeviceInfoText` (copy on long-press).
+- **Touch targets ≥ 48dp** and **respect font scale** (use `sp`/Material typography, never fixed `dp` text). Keep the `@PreviewFontScale` / `@PreviewLightDark` preview coverage when adding screens.
+- **Verify on a real device with TalkBack** for behavioral changes — the IDE previews don't catch announcement/focus issues.
+
 ## Changelog
 
 `CHANGELOG.md` at the repo root follows the [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) format with sections **Added / Changed / Deprecated / Removed / Fixed / Security**. In-flight work lives under `## [Unreleased]`; at release time that heading is renamed to `## [<version>] - <YYYY-MM-DD>` and a fresh empty `[Unreleased]` is added above it.
