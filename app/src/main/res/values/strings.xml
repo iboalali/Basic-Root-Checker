@@ -220,7 +220,6 @@
 
     <!-- Style Strings -->
     <string name="contentDescription_appIcon" translatable="false">App Icon</string>
-    <string name="string_root_status_description" translatable="false">Root Status</string>
     <string name="content_description_check_for_root">Check for Root</string>
     <string name="content_description_marketing_name">Marketing Name</string>
     <string name="content_description_model_name">Model Name</string>

@@ -343,8 +343,11 @@ fun MainScreenContent(
                                         }
                                     }
                                     Image(
+                                        // Decorative: the status text below (a live region)
+                                        // already conveys the result, so a generic icon
+                                        // description would just be announced redundantly.
                                         painter = painterResource(imageRes),
-                                        contentDescription = stringResource(R.string.string_root_status_description),
+                                        contentDescription = null,
                                         modifier = Modifier
                                             .size(96.dp)
                                             .graphicsLayer {
