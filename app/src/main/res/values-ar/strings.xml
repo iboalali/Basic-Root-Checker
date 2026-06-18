@@ -84,4 +84,6 @@
     <string name="update_failed">فشل التحديث. ستتم إعادة المحاولة تلقائيًا.</string>
     <string name="app_updated_snackbar">تم تحديث التطبيق</string>
 
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">يتيح للنظام وتطبيقات المساعد التحقق من حالة الروت لهذا الجهاز دون فتح التطبيق.</string>
 </resources>

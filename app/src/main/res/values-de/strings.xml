@@ -80,4 +80,6 @@ Kontaktiere mich:</string>
     <string name="update_action_install">Jetzt installieren</string>
     <string name="update_failed">Update fehlgeschlagen. Es wird automatisch erneut versucht.</string>
     <string name="app_updated_snackbar">App wurde aktualisiert</string>
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">Ermöglicht dem System und Assistenz-Apps, den Root-Status dieses Geräts zu prüfen, ohne die App zu öffnen.</string>
 </resources>

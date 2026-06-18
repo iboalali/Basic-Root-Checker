@@ -60,6 +60,12 @@
             android:name="com.telemetrydeck.sdk.TelemetryDeckInitProvider"
             android:authorities="${applicationId}.telemetrydeckinitprovider"
             tools:node="remove" />
+
+        <!-- Describes the app's AppFunctions to the system / on-device agents. The
+             AppFunctionService itself is merged in by the appfunctions-service library. -->
+        <property
+            android:name="android.app.appfunctions.app_metadata"
+            android:resource="@xml/app_metadata" />
     </application>
 
 </manifest>

@@ -1,9 +1,11 @@
 [versions]
 kotlin = "2.4.0"
 android-gradle-plugin = "9.2.1"
+ksp = "2.3.9"                                     # https://github.com/google/ksp/releases (paired with Kotlin 2.4.0)
 
 androidx-activity = "1.13.0"
 androidx-annotation = "1.10.0"
+androidx-appfunctions = "1.0.0-alpha09"          # https://developer.android.com/jetpack/androidx/releases/appfunctions
 androidx-compose-bom = "2026.05.01"
 androidx-core = "1.19.0"
 androidx-core-splashscreen = "1.2.0"
@@ -26,6 +28,9 @@ junit = "4.13.2"
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
+androidx-appfunctions = { module = "androidx.appfunctions:appfunctions", version.ref = "androidx-appfunctions" }
+androidx-appfunctions-service = { module = "androidx.appfunctions:appfunctions-service", version.ref = "androidx-appfunctions" }
+androidx-appfunctions-compiler = { module = "androidx.appfunctions:appfunctions-compiler", version.ref = "androidx-appfunctions" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
@@ -53,5 +58,6 @@ junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

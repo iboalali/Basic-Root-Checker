@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -55,6 +56,11 @@ android {
     }
 }
 
+ksp {
+    // Aggregate all @AppFunction metadata into a single schema so the system can discover them.
+    arg("appfunctions:aggregateAppFunctions", "true")
+}
+
 dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
@@ -76,6 +82,11 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)
+
+    // AppFunctions — expose root-check workflows to the system / on-device agents (both flavors)
+    implementation(libs.androidx.appfunctions)
+    implementation(libs.androidx.appfunctions.service)
+    ksp(libs.androidx.appfunctions.compiler)
 
     // Navigation 3
     implementation(libs.androidx.navigation3.runtime)

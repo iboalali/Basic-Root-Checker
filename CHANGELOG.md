@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Assistants and other apps can now check this device's root status without opening the app, via Android AppFunctions (Android 16+): run a fresh root check, see the last check and when it was taken, or request root access. Available in both Google Play and FOSS builds.
 - New **Theme** option in Settings (above **Language**): force light or dark mode, or follow the system (default). The choice persists across launches, and switching cross-fades the colors smoothly instead of snapping.
 - New **Reset analytics identity** option in Settings (under the anonymous-usage-data switch): generate a fresh anonymous ID so future usage data can't be linked to anything shared before. Shown only while sharing usage data is enabled.
 

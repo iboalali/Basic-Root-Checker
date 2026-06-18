@@ -155,19 +155,42 @@ object RootChecker {
         "/debug_ramdisk/.magisk",
     )
 
-    suspend fun check(context: Context): RootResult = withContext(Dispatchers.IO) {
+    /**
+     * Evaluate root passively. [applyUiDelay] adds a ~1s settle delay so the UI's "checking"
+     * animation has time to play; callers that want an immediate result (e.g. AppFunctions
+     * invoked by an agent) pass `false`.
+     */
+    suspend fun check(context: Context, applyUiDelay: Boolean = true): RootResult = withContext(Dispatchers.IO) {
         val result = classify(collectSignals(context))
-        delay(1000.milliseconds)
+        recordCheck(context, result)
+        if (applyUiDelay) delay(1000.milliseconds)
         result
     }
 
-    suspend fun requestRoot(context: Context): RootResult = withContext(Dispatchers.IO) {
+    suspend fun requestRoot(context: Context, applyUiDelay: Boolean = true): RootResult = withContext(Dispatchers.IO) {
         // Forces libsu to construct its main shell, which prompts the Magisk/KernelSU/APatch
         // allow dialog if the user has not yet made a decision.
         Shell.cmd("id").exec()
         val result = classify(collectSignals(context))
-        delay(1000.milliseconds)
+        recordCheck(context, result)
+        if (applyUiDelay) delay(1000.milliseconds)
         result
+    }
+
+    /** Persist [result] as the last root check so any caller (UI or AppFunction) shares it. */
+    private suspend fun recordCheck(context: Context, result: RootResult) {
+        UserPreferences(context).recordRootCheck(result.toRecord(System.currentTimeMillis()))
+    }
+
+    private fun RootResult.toRecord(checkedAtEpochMs: Long): LastRootCheck = when (this) {
+        is RootResult.Rooted ->
+            LastRootCheck(checkedAtEpochMs, RootCheckStatus.ROOTED, provider, manager, version)
+        is RootResult.RootedNotGranted ->
+            LastRootCheck(checkedAtEpochMs, RootCheckStatus.ROOTED_NOT_GRANTED, provider, manager, null)
+        RootResult.NotRooted ->
+            LastRootCheck(checkedAtEpochMs, RootCheckStatus.NOT_ROOTED, null, null, null)
+        RootResult.Unknown ->
+            LastRootCheck(checkedAtEpochMs, RootCheckStatus.UNKNOWN, null, null, null)
     }
 
     private fun collectSignals(context: Context): RootSignals {
