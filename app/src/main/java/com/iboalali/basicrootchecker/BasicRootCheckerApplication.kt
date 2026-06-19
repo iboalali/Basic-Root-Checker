@@ -7,6 +7,7 @@ import com.iboalali.basicrootchecker.billing.createBillingController
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.update.AppUpdateController
 import com.iboalali.basicrootchecker.update.createAppUpdateController
+import com.iboalali.basicrootchecker.util.RootHaptics
 import com.telemetrydeck.sdk.TelemetryDeck
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,9 @@ class BasicRootCheckerApplication : Application() {
     val appUpdateController: AppUpdateController by lazy { createAppUpdateController(this) }
 
     val billingController: BillingController by lazy { createBillingController(this) }
+
+    /** Single app-wide haptics engine, shared by the root-check flow and the UI tap feedback. */
+    val rootHaptics: RootHaptics by lazy { RootHaptics(this) }
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

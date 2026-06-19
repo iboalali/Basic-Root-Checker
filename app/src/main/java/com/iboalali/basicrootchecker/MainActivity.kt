@@ -24,6 +24,7 @@ import com.google.android.material.color.DynamicColors
 import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.ui.AppRoot
+import com.iboalali.basicrootchecker.ui.LocalAppHaptics
 import com.iboalali.basicrootchecker.ui.LocalHapticsEnabled
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import kotlinx.coroutines.flow.first
@@ -50,7 +51,8 @@ class MainActivity : ComponentActivity() {
         // flash from the system default to the override. The splash screen masks this brief read.
         val initialThemeMode = runBlocking { userPreferences.themeMode.first() }
 
-        val billingController = (application as BasicRootCheckerApplication).billingController
+        val app = application as BasicRootCheckerApplication
+        val billingController = app.billingController
         setContent {
             val themeMode by userPreferences.themeMode
                 .collectAsStateWithLifecycle(initialValue = initialThemeMode)
@@ -78,7 +80,10 @@ class MainActivity : ComponentActivity() {
                 SideEffect {
                     window.setBackgroundDrawable(backgroundColor.toArgb().toDrawable())
                 }
-                CompositionLocalProvider(LocalHapticsEnabled provides hapticsEnabled) {
+                CompositionLocalProvider(
+                    LocalHapticsEnabled provides hapticsEnabled,
+                    LocalAppHaptics provides app.rootHaptics,
+                ) {
                     AppRoot(tipCleared = billingController.tipCleared)
                 }
             }

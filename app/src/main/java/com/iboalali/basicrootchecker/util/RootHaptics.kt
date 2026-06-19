@@ -37,6 +37,9 @@ class RootHaptics(context: Context) {
         val hasVibrator = v?.hasVibrator() == true
         val amplitudeControl =
             v != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && v.hasAmplitudeControl()
+        val primitiveClick =
+            v != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                v.areAllPrimitivesSupported(VibrationEffect.Composition.PRIMITIVE_CLICK)
         var envelopeSupported = false
         var freqProfile = "n/a"
         if (v != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
@@ -49,7 +52,7 @@ class RootHaptics(context: Context) {
         Log.i(
             TAG,
             "capabilities: sdk=$sdk hasVibrator=$hasVibrator " +
-                "envelopeEffectsSupported=$envelopeSupported " +
+                "primitiveClick=$primitiveClick envelopeEffectsSupported=$envelopeSupported " +
                 "amplitudeControl=$amplitudeControl freqProfile=$freqProfile",
         )
         Analytics.trackHapticCapabilities(envelopeSupported, amplitudeControl, sdk)
@@ -126,6 +129,58 @@ class RootHaptics(context: Context) {
         NEUTRAL_AMPLITUDE_TIMINGS, NEUTRAL_AMPLITUDES, NO_REPEAT,
         NEUTRAL_PATTERN, NO_REPEAT,
     )
+
+    /** A subtle one-shot for ordinary taps and toggles. */
+    fun playTap() = playOneShot("haptic-tap", TAP_PRIMITIVE_SCALE, TAP_MS, TAP_AMPLITUDE)
+
+    /** A slightly firmer one-shot for long-press confirmations (e.g. copy on long-press). */
+    fun playLongPress() =
+        playOneShot("haptic-longpress", LONG_PRESS_PRIMITIVE_SCALE, LONG_PRESS_MS, LONG_PRESS_AMPLITUDE)
+
+    /**
+     * Plays a short one-shot for UI feedback (taps, long-press). Driven through the [Vibrator]
+     * directly (the same path the root-check buzz uses) rather than `View.performHapticFeedback`,
+     * because many OEMs (Samsung, OnePlus, Xiaomi, Vivo) silently drop the framework tap haptics;
+     * the Vibrator works regardless, gated only by the in-app toggle and the master vibration
+     * setting. Unlike [play] it does *not* cancel an in-flight vibration, so a tap can't cut off a
+     * root-check buzz.
+     *
+     * Two tiers only, both raw enough to actually fire across OEMs: a click primitive where the
+     * actuator genuinely supports it ([Vibrator.areAllPrimitivesSupported], API 30+ — the crispest,
+     * e.g. Pixel), otherwise a raw amplitude [VibrationEffect.createOneShot] (API 26+) / legacy
+     * duration vibrate (API 23-25). We deliberately skip `createPredefined` (`EFFECT_CLICK` etc.):
+     * like the framework constants, predefined effects are HAL-mapped and several OEMs (notably
+     * Samsung) silently drop them, whereas a raw amplitude pulse always reaches the motor.
+     */
+    private fun playOneShot(id: String, primitiveScale: Float, oneShotMs: Long, oneShotAmplitude: Int) {
+        val v = vibrator ?: return
+        if (!available) return
+        try {
+            when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                    v.areAllPrimitivesSupported(VibrationEffect.Composition.PRIMITIVE_CLICK) ->
+                    v.vibrate(
+                        VibrationEffect.startComposition()
+                            .addPrimitive(VibrationEffect.Composition.PRIMITIVE_CLICK, primitiveScale)
+                            .compose(),
+                    )
+
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+                    val amplitude =
+                        if (v.hasAmplitudeControl()) oneShotAmplitude else VibrationEffect.DEFAULT_AMPLITUDE
+                    v.vibrate(VibrationEffect.createOneShot(oneShotMs, amplitude))
+                }
+
+                else -> {
+                    @Suppress("DEPRECATION")
+                    v.vibrate(oneShotMs)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "playOneShot $id: ", e)
+            Analytics.trackError(e, id = id, category = ERROR_CATEGORY_APP_STATE)
+        }
+    }
 
     /** Stops any ongoing vibration. Safe to call when nothing is playing. */
     fun cancel() {
@@ -210,5 +265,16 @@ class RootHaptics(context: Context) {
         private val NEUTRAL_AMPLITUDE_TIMINGS = longArrayOf(90)
         private val NEUTRAL_AMPLITUDES = intArrayOf(120)
         private val NEUTRAL_PATTERN = longArrayOf(0, 90)
+
+        // Subtle UI one-shots. PRIMITIVE_CLICK scale (API 30+, e.g. Pixel) keeps the tap lighter
+        // than the long-press. The ms/amplitude pairs are the raw-amplitude fallback for devices
+        // without primitive support (e.g. Samsung) — short, but long/strong enough to actually be
+        // felt on a typical LRA; out of 255 amplitude.
+        private const val TAP_PRIMITIVE_SCALE = 0.6f
+        private const val LONG_PRESS_PRIMITIVE_SCALE = 1f
+        private const val TAP_MS = 25L
+        private const val TAP_AMPLITUDE = 120
+        private const val LONG_PRESS_MS = 45L
+        private const val LONG_PRESS_AMPLITUDE = 210
     }
 }

@@ -15,7 +15,6 @@ import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.DeviceInfo
-import com.iboalali.basicrootchecker.util.RootHaptics
 import de.boehrsi.devicemarketingnames.DeviceMarketingNames
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -54,7 +53,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val userPreferences = UserPreferences(application)
 
-    private val haptics = RootHaptics(application)
+    private val haptics = (application as BasicRootCheckerApplication).rootHaptics
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
