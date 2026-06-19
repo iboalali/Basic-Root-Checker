@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
 
 /**
  * Debug-only picker that lets a developer force any [RootResult] through the real check flow so the
@@ -51,7 +52,7 @@ fun DebugRootResultDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("Close") }
+            TextButton(onClick = rememberHapticClick(onDismiss)) { Text("Close") }
         },
     )
 }
@@ -63,7 +64,7 @@ private fun DemoRow(label: String, onClick: () -> Unit) {
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = rememberHapticClick(onClick))
             .padding(vertical = 14.dp),
     )
 }

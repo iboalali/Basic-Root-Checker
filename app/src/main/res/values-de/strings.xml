@@ -23,7 +23,7 @@ Kontaktiere mich:</string>
     <string name="settings_reset_identity_confirm">Zurücksetzen</string>
     <string name="settings_reset_identity_done">Analyse-Identität zurückgesetzt</string>
     <string name="settings_haptics_title">Haptisches Feedback</string>
-    <string name="settings_haptics_description">Vibriert während der Root-Prüfung und wenn das Ergebnis erscheint.</string>
+    <string name="settings_haptics_description">Vibriert beim Tippen, während der Root-Prüfung und wenn das Ergebnis erscheint.</string>
     <string name="settings_privacy_policy_description">Datenschutzerklärung online ansehen</string>
     <string name="settings_theme_title">Design</string>
     <string name="theme_follow_system">Systemstandard</string>

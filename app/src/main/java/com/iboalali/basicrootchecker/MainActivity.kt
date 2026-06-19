@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ import com.google.android.material.color.DynamicColors
 import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.ui.AppRoot
+import com.iboalali.basicrootchecker.ui.LocalHapticsEnabled
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -52,6 +54,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val themeMode by userPreferences.themeMode
                 .collectAsStateWithLifecycle(initialValue = initialThemeMode)
+            val hapticsEnabled by userPreferences.hapticsEnabled
+                .collectAsStateWithLifecycle(initialValue = true)
             val darkTheme = when (themeMode) {
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
                 ThemeMode.LIGHT -> false
@@ -74,7 +78,9 @@ class MainActivity : ComponentActivity() {
                 SideEffect {
                     window.setBackgroundDrawable(backgroundColor.toArgb().toDrawable())
                 }
-                AppRoot(tipCleared = billingController.tipCleared)
+                CompositionLocalProvider(LocalHapticsEnabled provides hapticsEnabled) {
+                    AppRoot(tipCleared = billingController.tipCleared)
+                }
             }
         }
     }

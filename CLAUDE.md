@@ -48,6 +48,7 @@ Android app that checks whether a device has root access, written in Kotlin with
 - **UserPreferences** (`data/`) — DataStore-Preferences store (telemetry, haptics, theme mode, last-seen version code, pending tip tokens, and the last root check — result + timestamp, exposed as `lastRootCheck`/`recordRootCheck` and shared by the UI and AppFunctions).
 - **Analytics** (`analytics/`) — Thin `Analytics` object over the TelemetryDeck SDK; every `trackX` call routes through a `SignalGate`. TelemetryDeck is initialized **asynchronously** in `BasicRootCheckerApplication.onCreate` so cold start isn't blocked: the opt-out preference is read off the main thread, and `TelemetryDeck.start()` is posted *back* to the main thread (it registers a lifecycle observer, so it must run there). While the preference is still being read, `SignalGate` is `PENDING` and buffers signals in a bounded queue; `Analytics.setEnabled(true)` — called **after** `start()` so flushed signals reach an initialized SDK — replays them, while `setEnabled(false)` discards them. The Settings telemetry toggle reuses the same `setEnabled` path.
 - **DeviceInfo** (`util/`) — Helpers for app version retrieval and Android version name lookup (maps API level to name via `version_names` string array resource).
+- **Haptics** (`util/` + `ui/`) — Two layers, both gated on the user's "Haptic feedback" setting (`UserPreferences.hapticsEnabled`). `RootHaptics` (`util/`) plays the rich root-check vibrations off `MainViewModel`'s instance: a rising-frequency "checking" ramp plus distinct success/error/neutral result patterns, with graceful fallback across the vibration APIs (PWLE envelopes on API 36+ → amplitude waveforms on API 26+ → legacy patterns on 23–25); it reads the preference before playing. `HapticClick` (`ui/`) covers ordinary tap feedback: the `rememberHapticClick` / `rememberHapticToggle` / `rememberHapticLongClick` composable helpers wrap a control's handler to fire a subtle `ContextClick` tick (or `LongPress` for long-press) via Compose's platform `LocalHapticFeedback`, gated on the `LocalHapticsEnabled` CompositionLocal that `MainActivity` provides once from the preference around `AppRoot`. (`performHapticFeedback` also respects the OS-level haptics setting.)
 - **Preview Utilities** (`util/`) — Custom preview annotations: `@PreviewLocales` (en, de, ar, es, ru) and `@PreviewPlayStoreListing` (Phone, 7" Tablet, 10" Tablet).
 
 ### Build Configuration
@@ -80,6 +81,16 @@ Compose Material3 with dynamic colors (API 31+), fallback to custom light/dark c
 - **Expose non-tap gestures as custom actions.** A long-press (or other gesture) action must also be reachable by screen readers — add a `CustomAccessibilityAction` (with a localized label) via `Modifier.semantics`, and avoid empty `onClick = {}` handlers that advertise a do-nothing action. See `DeviceInfoText` (copy on long-press).
 - **Touch targets ≥ 48dp** and **respect font scale** (use `sp`/Material typography, never fixed `dp` text). Keep the `@PreviewFontScale` / `@PreviewLightDark` preview coverage when adding screens.
 - **Verify on a real device with TalkBack** for behavioral changes — the IDE previews don't catch announcement/focus issues.
+
+### Haptics
+
+**Every tappable control gives a subtle tap tick, gated on the "Haptic feedback" setting — treat it as part of "done," like accessibility.** Don't call `LocalHapticFeedback`/`Vibrator` directly from a screen; wrap the control's handler with the helpers in `ui/HapticClick.kt`:
+
+- **Plain taps** (`Button`, `IconButton`, `FloatingActionButton`, `Card(onClick = …)`, `DropdownMenuItem`, `Modifier.clickable`, `selectable` rows, dialog buttons) → `onClick = rememberHapticClick(handler)`. For trailing-lambda `.clickable { … }`, rewrite as `.clickable(onClick = rememberHapticClick { … })`.
+- **`toggleable` rows** (a title paired with a `Switch`/`Checkbox`) → `onValueChange = rememberHapticToggle(handler)`. Leave the inner control's `onCheckedChange = null` / `onClick = null` (the row owns it, per the accessibility convention above).
+- **Long-press / other non-tap gestures** → `rememberHapticLongClick(handler)` (fires the standard `LongPress` buzz, which `detectTapGestures` doesn't add on its own). See `DeviceInfoText` (copy on long-press), which reuses the wrapped action for its `CustomAccessibilityAction` too.
+
+The helpers no-op when haptics are disabled and re-key correctly when the setting toggles, so nothing else is needed. The root-check ramp/result vibrations are a separate concern — they live in `RootHaptics` and play from `MainViewModel`, not the UI.
 
 ## Changelog
 

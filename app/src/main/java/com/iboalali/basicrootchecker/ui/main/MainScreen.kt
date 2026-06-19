@@ -84,6 +84,8 @@ import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
+import com.iboalali.basicrootchecker.ui.rememberHapticLongClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -165,7 +167,7 @@ fun MainScreenContent(
                     )
                 },
                 actions = {
-                    IconButton(onClick = { menuExpanded = true }) {
+                    IconButton(onClick = rememberHapticClick { menuExpanded = true }) {
                         Icon(
                             painter = painterResource(R.drawable.more_vert_24px),
                             contentDescription = stringResource(R.string.content_description_more_options),
@@ -183,7 +185,7 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick = {
+                            onClick = rememberHapticClick {
                                 menuExpanded = false
                                 onNavigateToLicence()
                             },
@@ -196,7 +198,7 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick = {
+                            onClick = rememberHapticClick {
                                 menuExpanded = false
                                 onNavigateToSettings()
                             },
@@ -209,7 +211,7 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick = {
+                            onClick = rememberHapticClick {
                                 menuExpanded = false
                                 onNavigateToAbout()
                             },
@@ -217,7 +219,7 @@ fun MainScreenContent(
                         if (BuildConfig.DEBUG) {
                             AppBarDropdownMenuItem(
                                 text = "Demo: in-app update",
-                                onClick = {
+                                onClick = rememberHapticClick {
                                     menuExpanded = false
                                     showUpdateDemoDialog = true
                                 },
@@ -230,7 +232,7 @@ fun MainScreenContent(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
+                onClick = rememberHapticClick {
                     if (BuildConfig.DEBUG) {
                         showDemoDialog = true
                     } else {
@@ -447,7 +449,7 @@ fun MainScreenContent(
                         uiState.rootStatus == RootStatus.NOT_ROOTED
                     ) {
                         Spacer(Modifier.height(16.dp))
-                        FilledTonalButton(onClick = onRequestRoot) {
+                        FilledTonalButton(onClick = rememberHapticClick(onRequestRoot)) {
                             Text(text = stringResource(R.string.action_request_root))
                         }
                     }
@@ -577,18 +579,21 @@ private fun DeviceInfoText(
         clipboard.setPrimaryClip(ClipData.newPlainText(contentDescription, text))
         onCopied()
     }
+    // A subtle long-press buzz confirms the copy (detectTapGestures doesn't vibrate on its
+    // own), gated on the user's haptics setting; reused for the accessibility action too.
+    val copyWithHaptic = rememberHapticLongClick(copy)
     Column(
         modifier = Modifier
             .fillMaxWidth()
             // Long-press copies for sighted users; screen readers reach the same action
             // through a labelled custom action, since the row has no primary click.
-            .pointerInput(text, contentDescription) {
-                detectTapGestures(onLongPress = { copy() })
+            .pointerInput(copyWithHaptic) {
+                detectTapGestures(onLongPress = { copyWithHaptic() })
             }
             .semantics {
                 customActions = listOf(
                     CustomAccessibilityAction(copyLabel) {
-                        copy()
+                        copyWithHaptic()
                         true
                     },
                 )

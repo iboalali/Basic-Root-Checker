@@ -70,6 +70,8 @@ import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
+import com.iboalali.basicrootchecker.ui.rememberHapticToggle
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -195,7 +197,7 @@ fun SettingsScreenContent(
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_settings)) },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back_24px),
                             contentDescription = stringResource(R.string.content_description_navigate_up),
@@ -228,10 +230,10 @@ fun SettingsScreenContent(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
+                            .clickable(onClick = rememberHapticClick {
                                 onTipJarOpened()
                                 showTipDialog = true
-                            }
+                            })
                             .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -272,7 +274,7 @@ fun SettingsScreenContent(
                         .fillMaxWidth()
                         .toggleable(
                             value = telemetryEnabled,
-                            onValueChange = onTelemetryEnabledChange,
+                            onValueChange = rememberHapticToggle(onTelemetryEnabledChange),
                             role = Role.Switch,
                         )
                         .padding(horizontal = 24.dp, vertical = 24.dp),
@@ -314,7 +316,7 @@ fun SettingsScreenContent(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { showResetIdentityDialog = true }
+                            .clickable(onClick = rememberHapticClick { showResetIdentityDialog = true })
                             .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -349,7 +351,7 @@ fun SettingsScreenContent(
                         .fillMaxWidth()
                         .toggleable(
                             value = hapticsEnabled,
-                            onValueChange = onHapticsEnabledChange,
+                            onValueChange = rememberHapticToggle(onHapticsEnabledChange),
                             role = Role.Switch,
                         )
                         .padding(horizontal = 24.dp, vertical = 24.dp),
@@ -390,7 +392,7 @@ fun SettingsScreenContent(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { showThemeDialog = true }
+                        .clickable(onClick = rememberHapticClick { showThemeDialog = true })
                         .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -429,7 +431,7 @@ fun SettingsScreenContent(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { showLanguageDialog = true }
+                            .clickable(onClick = rememberHapticClick { showLanguageDialog = true })
                             .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -469,7 +471,7 @@ fun SettingsScreenContent(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
+                        .clickable(onClick = rememberHapticClick {
                             Analytics.trackPrivacyPolicyClicked()
                             context.startActivity(
                                 Intent(
@@ -477,7 +479,7 @@ fun SettingsScreenContent(
                                     "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy".toUri(),
                                 )
                             )
-                        }
+                        })
                         .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -551,7 +553,7 @@ fun SettingsScreenContent(
             text = { Text(stringResource(R.string.settings_reset_identity_dialog_message)) },
             confirmButton = {
                 TextButton(
-                    onClick = {
+                    onClick = rememberHapticClick {
                         showResetIdentityDialog = false
                         onResetIdentity()
                         scope.launch { snackbarHostState.showSnackbar(resetIdentityDoneMessage) }
@@ -561,7 +563,7 @@ fun SettingsScreenContent(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showResetIdentityDialog = false }) {
+                TextButton(onClick = rememberHapticClick { showResetIdentityDialog = false }) {
                     Text(stringResource(android.R.string.cancel))
                 }
             },
@@ -580,7 +582,7 @@ private fun TipJarDialog(
         title = { Text(stringResource(R.string.tip_jar_dialog_title)) },
         text = { TipJarTiers(products = products, onSelect = onSelect) },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = rememberHapticClick(onDismiss)) {
                 Text(stringResource(android.R.string.cancel))
             }
         },
@@ -610,7 +612,7 @@ private fun TipJarTiers(
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             products.forEach { product ->
                 Card(
-                    onClick = { onSelect(product.tier) },
+                    onClick = rememberHapticClick { onSelect(product.tier) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -716,7 +718,7 @@ private fun LanguagePickerDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = rememberHapticClick(onDismiss)) {
                 Text(stringResource(android.R.string.cancel))
             }
         },
@@ -753,7 +755,7 @@ private fun ThemePickerDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = rememberHapticClick(onDismiss)) {
                 Text(stringResource(android.R.string.cancel))
             }
         },
@@ -769,7 +771,7 @@ private fun SettingOptionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
+            .selectable(selected = selected, onClick = rememberHapticClick(onClick), role = Role.RadioButton)
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

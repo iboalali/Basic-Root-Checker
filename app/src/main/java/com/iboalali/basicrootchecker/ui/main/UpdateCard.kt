@@ -21,6 +21,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -59,7 +60,7 @@ fun UpdateCard(
                         text = stringResource(R.string.update_available_body),
                         style = MaterialTheme.typography.bodyMedium,
                     )
-                    Button(modifier = Modifier.fillMaxWidth(), onClick = onUpdateClick) {
+                    Button(modifier = Modifier.fillMaxWidth(), onClick = rememberHapticClick(onUpdateClick)) {
                         Text(stringResource(R.string.update_action_update))
                     }
                 }
@@ -97,7 +98,7 @@ fun UpdateCard(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                     )
-                    Button(modifier = Modifier.fillMaxWidth(), onClick = onInstallClick) {
+                    Button(modifier = Modifier.fillMaxWidth(), onClick = rememberHapticClick(onInstallClick)) {
                         Text(stringResource(R.string.update_action_install))
                     }
                 }

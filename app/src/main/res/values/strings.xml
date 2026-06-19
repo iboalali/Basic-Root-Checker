@@ -39,7 +39,7 @@
     <string name="settings_reset_identity_confirm">Reset</string>
     <string name="settings_reset_identity_done">Analytics identity reset</string>
     <string name="settings_haptics_title">Haptic feedback</string>
-    <string name="settings_haptics_description">Vibrate while checking for root and when the result appears.</string>
+    <string name="settings_haptics_description">Vibrate on taps, while checking for root, and when the result appears.</string>
     <string name="settings_privacy_policy_description">View our privacy policy online</string>
     <string name="settings_theme_title">Theme</string>
     <string name="theme_follow_system">Follow system</string>
