@@ -1,0 +1,7 @@
+Version 2.4:
+➕ Dezentes haptisches Feedback — Tippen, Schalter und Auswahl geben einen sanften Impuls
+➕ Root-Status dieses Geräts aus Assistenten und anderen Apps prüfen, ohne sie zu öffnen (Android 16+)
+➕ Neue Design-Option: hell, dunkel oder System
+🛠️ Einstellungen neu gestaltet, Trinkgeld jetzt ganz oben
+🔨 Mehr Root-Manager erkannt (Kitsune Mask, SukiSU, KernelSU Next, SuperSU u. a.), jeweils mit Namen
+🔨 Verbesserungen bei Barrierefreiheit und Zurück-Navigation

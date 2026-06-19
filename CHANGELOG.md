@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4] - 2026-06-19
+
 ### Added
 - Subtle haptic feedback on buttons and other controls throughout the app — taps, switches, list selections, and the device-info copy long-press now give a gentle tick. Governed by the existing **Haptic feedback** setting, alongside the root-check vibrations, and tuned to fire reliably on Samsung and other devices that suppress the standard tap haptic.
 - Assistants and other apps can now check this device's root status without opening the app, via Android AppFunctions (Android 16+): run a fresh root check, see the last check and when it was taken, or request root access. Available in both Google Play and FOSS builds.

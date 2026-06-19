@@ -1,0 +1,45 @@
+<en-US>
+Version 2.4:
+➕ Subtle haptic feedback across the app — taps, switches, and selections give a gentle tick
+➕ Check this device's root status from assistants and other apps, without opening it (Android 16+)
+➕ New Theme option in Settings: light, dark, or system
+🛠️ Redesigned Settings, with the tip jar moved to the top
+🔨 Detect more root managers (Kitsune Mask, SukiSU, KernelSU Next, SuperSU and more), each shown by name
+🔨 Accessibility and back-navigation fixes
+</en-US>
+<de-DE>
+Version 2.4:
+➕ Dezentes haptisches Feedback — Tippen, Schalter und Auswahl geben einen sanften Impuls
+➕ Root-Status dieses Geräts aus Assistenten und anderen Apps prüfen, ohne sie zu öffnen (Android 16+)
+➕ Neue Design-Option: hell, dunkel oder System
+🛠️ Einstellungen neu gestaltet, Trinkgeld jetzt ganz oben
+🔨 Mehr Root-Manager erkannt (Kitsune Mask, SukiSU, KernelSU Next, SuperSU u. a.), jeweils mit Namen
+🔨 Verbesserungen bei Barrierefreiheit und Zurück-Navigation
+</de-DE>
+<ar>
+اصدار 2.4:
+➕ ردود لمسية خفيفة في كل أنحاء التطبيق — النقر والمفاتيح والاختيارات تعطي نبضة لطيفة
+➕ تحقّق من حالة روت هذا الجهاز من المساعدين والتطبيقات الأخرى دون فتح التطبيق (أندرويد 16+)
+➕ خيار مظهر جديد في الإعدادات: فاتح أو داكن أو حسب النظام
+🛠️ إعادة تصميم الإعدادات، مع نقل صندوق الإكراميات إلى الأعلى
+🔨 اكتشاف مزيد من مديري الروت (Kitsune Mask وSukiSU وKernelSU Next وSuperSU وغيرها) وعرض كلٍّ باسمه
+🔨 تحسينات في إمكانية الوصول والتنقّل للخلف
+</ar>
+<es-ES>
+Versión 2.4:
+➕ Vibración háptica sutil en la app — toques, interruptores y selecciones dan un leve toque
+➕ Consulta el estado de root del dispositivo desde asistentes y otras apps, sin abrirla (Android 16+)
+➕ Nueva opción de Tema: claro, oscuro o sistema
+🛠️ Ajustes rediseñados, con el bote de propinas arriba
+🔨 Se detectan más gestores de root (Kitsune Mask, SukiSU, KernelSU Next, SuperSU y más), cada uno por su nombre
+🔨 Mejoras de accesibilidad y navegación atrás
+</es-ES>
+<ru-RU>
+Версия 2.4:
+➕ Лёгкая виброотдача в приложении — нажатия, переключатели и выбор дают мягкий отклик
+➕ Проверяйте статус root этого устройства из ассистентов и других приложений, не открывая его (Android 16+)
+➕ Новая опция Тема: светлая, тёмная или как в системе
+🛠️ Переработанные настройки, чаевые перемещены наверх
+🔨 Распознаётся больше root-менеджеров (Kitsune Mask, SukiSU, KernelSU Next, SuperSU и др.), каждый под своим именем
+🔨 Улучшения доступности и навигации назад
+</ru-RU>

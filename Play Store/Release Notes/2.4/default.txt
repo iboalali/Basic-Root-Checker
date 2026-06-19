@@ -1,0 +1,7 @@
+Version 2.4:
+➕ Subtle haptic feedback across the app — taps, switches, and selections give a gentle tick
+➕ Check this device's root status from assistants and other apps, without opening it (Android 16+)
+➕ New Theme option in Settings: light, dark, or system
+🛠️ Redesigned Settings, with the tip jar moved to the top
+🔨 Detect more root managers (Kitsune Mask, SukiSU, KernelSU Next, SuperSU and more), each shown by name
+🔨 Accessibility and back-navigation fixes
