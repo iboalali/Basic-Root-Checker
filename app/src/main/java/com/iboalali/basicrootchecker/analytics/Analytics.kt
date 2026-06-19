@@ -198,6 +198,8 @@ object Analytics {
     }
 
     fun trackHapticCapabilities(
+        hasVibrator: Boolean,
+        primitiveClick: Boolean,
         envelopeEffectsSupported: Boolean,
         amplitudeControl: Boolean,
         sdkInt: Int,
@@ -205,6 +207,9 @@ object Analytics {
         TelemetryDeck.signal(
             "hapticCapabilities",
             mapOf(
+                "hasVibrator" to hasVibrator.toString(),
+                // Whether UI taps get the crisp click primitive (else a raw amplitude one-shot).
+                "primitiveClick" to primitiveClick.toString(),
                 "envelopeEffectsSupported" to envelopeEffectsSupported.toString(),
                 "amplitudeControl" to amplitudeControl.toString(),
                 "sdkInt" to sdkInt.toString(),

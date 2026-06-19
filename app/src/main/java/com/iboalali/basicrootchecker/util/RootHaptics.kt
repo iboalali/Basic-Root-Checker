@@ -55,7 +55,7 @@ class RootHaptics(context: Context) {
                 "primitiveClick=$primitiveClick envelopeEffectsSupported=$envelopeSupported " +
                 "amplitudeControl=$amplitudeControl freqProfile=$freqProfile",
         )
-        Analytics.trackHapticCapabilities(envelopeSupported, amplitudeControl, sdk)
+        Analytics.trackHapticCapabilities(hasVibrator, primitiveClick, envelopeSupported, amplitudeControl, sdk)
     }
 
     /**
