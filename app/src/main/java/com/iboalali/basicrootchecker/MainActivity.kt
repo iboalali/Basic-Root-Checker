@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
         (application as BasicRootCheckerApplication).let { app ->
             app.appUpdateController.attach(this)
             app.billingController.attach(this)
+            app.reviewController.attach(this)
         }
 
         val userPreferences = UserPreferences(this)

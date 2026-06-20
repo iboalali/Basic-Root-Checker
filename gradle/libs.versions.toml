@@ -18,6 +18,7 @@ desugar-jdk-libs = "2.1.5"                       # https://github.com/google/des
 google-material = "1.14.0"
 google-play-app-update = "2.1.0"                 # https://developer.android.com/reference/com/google/android/play/core/release-notes-in_app_updates
 google-play-billing = "9.0.0"                    # https://developer.android.com/google/play/billing/release-notes
+google-play-review = "2.0.2"                      # https://developer.android.com/guide/playcore/in-app-review
 kotlinx-collections-immutable = "0.5.0"
 kotlinx-serialization-core = "1.11.0"
 telemetrydeck = "7.0.0"                          # https://github.com/TelemetryDeck/KotlinSDK/releases
@@ -49,6 +50,7 @@ desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref 
 google-material = { module = "com.google.android.material:material", version.ref = "google-material" }
 google-play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "google-play-app-update" }
 google-play-billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "google-play-billing" }
+google-play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "google-play-review" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization-core" }
 telemetrydeck-sdk = { module = "com.telemetrydeck:kotlin-sdk", version.ref = "telemetrydeck" }

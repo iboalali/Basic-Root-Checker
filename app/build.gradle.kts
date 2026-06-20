@@ -108,6 +108,9 @@ dependencies {
     // Tip jar / in-app billing (gplay flavor only)
     "gplayImplementation"(libs.google.play.billing.ktx)
 
+    // In-app review / rating (gplay flavor only)
+    "gplayImplementation"(libs.google.play.review.ktx)
+
     // Unit tests
     testImplementation(libs.junit)
 }

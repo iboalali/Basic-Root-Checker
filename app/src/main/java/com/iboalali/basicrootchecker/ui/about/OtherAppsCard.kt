@@ -1,8 +1,5 @@
 package com.iboalali.basicrootchecker.ui.about
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -35,7 +32,7 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.PreviewLocales
-import androidx.core.net.toUri
+import com.iboalali.basicrootchecker.util.openPlayStoreListing
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -78,7 +75,7 @@ fun OtherAppsCard(
                     app = app,
                     onClick = {
                         Analytics.trackOtherAppClicked(app.packageName)
-                        openPlayStoreListing(context, app.packageName)
+                        context.openPlayStoreListing(app.packageName)
                     },
                 )
             }
@@ -130,21 +127,6 @@ private fun OtherAppItem(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 52.dp, top = 4.dp),
-        )
-    }
-}
-
-private fun openPlayStoreListing(context: Context, packageName: String) {
-    try {
-        context.startActivity(
-            Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri())
-        )
-    } catch (_: ActivityNotFoundException) {
-        context.startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                "https://play.google.com/store/apps/details?id=$packageName".toUri()
-            )
         )
     }
 }

@@ -72,6 +72,8 @@
     <string name="about_link_mastodon" translatable="false">Mastodon</string>
     <string name="about_link_bluesky" translatable="false">Bluesky</string>
     <string name="about_link_website">Website</string>
+    <string name="about_link_rate_this_app">Rate this app</string>
+    <string name="about_link_rate_subtitle" translatable="false">Google Play</string>
     <string name="about_not_affiliated">This app is not endorsed by or affiliated with topjohnwu or libsu</string>
 
     <!-- License Strings -->

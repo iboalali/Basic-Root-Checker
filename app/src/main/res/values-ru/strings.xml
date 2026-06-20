@@ -59,6 +59,7 @@
         Связаться со мной:</string>
     <string name="about_link_email">Эл. почта</string>
     <string name="about_link_website">Сайт</string>
+    <string name="about_link_rate_this_app">Оценить приложение</string>
     <string name="about_not_affiliated">Это приложение не связано с topjohnwu и libsu и не одобрено ими</string>
 
     <!-- Style Strings -->

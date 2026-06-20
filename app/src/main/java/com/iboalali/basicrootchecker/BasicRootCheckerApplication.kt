@@ -5,6 +5,8 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.BillingController
 import com.iboalali.basicrootchecker.billing.createBillingController
 import com.iboalali.basicrootchecker.data.UserPreferences
+import com.iboalali.basicrootchecker.review.ReviewController
+import com.iboalali.basicrootchecker.review.createReviewController
 import com.iboalali.basicrootchecker.update.AppUpdateController
 import com.iboalali.basicrootchecker.update.createAppUpdateController
 import com.iboalali.basicrootchecker.util.RootHaptics
@@ -21,6 +23,8 @@ class BasicRootCheckerApplication : Application() {
     val appUpdateController: AppUpdateController by lazy { createAppUpdateController(this) }
 
     val billingController: BillingController by lazy { createBillingController(this) }
+
+    val reviewController: ReviewController by lazy { createReviewController(this) }
 
     /** Single app-wide haptics engine, shared by the root-check flow and the UI tap feedback. */
     val rootHaptics: RootHaptics by lazy { RootHaptics(this) }

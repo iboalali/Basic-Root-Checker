@@ -119,6 +119,34 @@ class UserPreferences(private val context: Context) {
         }
     }
 
+    /** Running count of checks that found root, used to gate the in-app review prompt. */
+    val rootedCheckCount: Flow<Int> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[ROOTED_CHECK_COUNT] ?: 0
+        }
+
+    /** Increments [rootedCheckCount] atomically and returns the new total. */
+    suspend fun incrementRootedCheckCount(): Int {
+        var newCount = 0
+        context.userSettingsDataStore.edit { preferences ->
+            newCount = (preferences[ROOTED_CHECK_COUNT] ?: 0) + 1
+            preferences[ROOTED_CHECK_COUNT] = newCount
+        }
+        return newCount
+    }
+
+    /** Version code at which the in-app review prompt last fired (0 if never), to cap it to once per version. */
+    val lastReviewPromptVersionCode: Flow<Int> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[LAST_REVIEW_PROMPT_VERSION_CODE] ?: 0
+        }
+
+    suspend fun setLastReviewPromptVersionCode(code: Int) {
+        context.userSettingsDataStore.edit { preferences ->
+            preferences[LAST_REVIEW_PROMPT_VERSION_CODE] = code
+        }
+    }
+
     companion object {
         private val TELEMETRY_ENABLED = booleanPreferencesKey("telemetry_enabled")
         private val HAPTICS_ENABLED = booleanPreferencesKey("haptics_enabled")
@@ -130,5 +158,7 @@ class UserPreferences(private val context: Context) {
         private val LAST_ROOT_CHECK_PROVIDER = stringPreferencesKey("last_root_check_provider")
         private val LAST_ROOT_CHECK_MANAGER = stringPreferencesKey("last_root_check_manager")
         private val LAST_ROOT_CHECK_VERSION = stringPreferencesKey("last_root_check_version")
+        private val ROOTED_CHECK_COUNT = intPreferencesKey("rooted_check_count")
+        private val LAST_REVIEW_PROMPT_VERSION_CODE = intPreferencesKey("last_review_prompt_version_code")
     }
 }

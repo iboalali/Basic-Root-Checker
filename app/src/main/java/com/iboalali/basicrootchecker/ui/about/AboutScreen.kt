@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -43,12 +44,14 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.basicrootchecker.util.openPlayStoreListing
 import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,6 +63,12 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
     val openUri: (String, String) -> Unit = { platform, uri ->
         Analytics.trackSocialLinkClicked(platform)
         context.startActivity(Intent(Intent.ACTION_VIEW, uri.toUri()))
+    }
+
+    // True on Google Play builds (false on FOSS, where there's no Play Store to rate on). Safe cast
+    // so Compose previews — whose context isn't the app's Application — fall back to hidden.
+    val rateAvailable = remember {
+        (context.applicationContext as? BasicRootCheckerApplication)?.reviewController?.isAvailable == true
     }
 
     Scaffold(
@@ -172,6 +181,18 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                                 )
                             },
                         )
+                        if (rateAvailable) {
+                            SocialLinkDivider()
+                            SocialLinkRow(
+                                iconRes = R.drawable.star_24px,
+                                label = stringResource(R.string.about_link_rate_this_app),
+                                handle = stringResource(R.string.about_link_rate_subtitle),
+                                onClick = {
+                                    Analytics.trackRateLinkClicked()
+                                    context.openPlayStoreListing()
+                                },
+                            )
+                        }
                     }
 
                     Spacer(Modifier.height(16.dp))

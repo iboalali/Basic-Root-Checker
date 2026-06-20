@@ -55,6 +55,7 @@
     <string name="about_not_affiliated">هذا البرنامج ليست تابع ولا مأيّد من Chainfire أو SuperSU</string>
     <string name="about_link_email">البريد الإلكتروني</string>
     <string name="about_link_website">الموقع الإلكتروني</string>
+    <string name="about_link_rate_this_app">قيّم التطبيق</string>
     <string name="textView_checkForRoot">المس على الزر المستدير في أسفل اليمين للتحقق من حالة من خاصية الـ Root</string>
     <string name="textViewAndroidVersion">اندرود</string>
     <string name="string_your_device">جهازك</string>

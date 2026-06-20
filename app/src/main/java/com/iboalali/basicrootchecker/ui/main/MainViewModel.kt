@@ -2,6 +2,7 @@ package com.iboalali.basicrootchecker.ui.main
 
 import android.app.Application
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.iboalali.basicrootchecker.BasicRootCheckerApplication
@@ -24,6 +25,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+private const val REVIEW_GATE_TAG = "ReviewGate"
 
 enum class RootStatus {
     NOT_CHECKED,
@@ -54,6 +57,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val userPreferences = UserPreferences(application)
 
     private val haptics = (application as BasicRootCheckerApplication).rootHaptics
+
+    private val reviewController = (application as BasicRootCheckerApplication).reviewController
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -105,6 +110,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val result = RootChecker.check(getApplication())
             applyResult(result)
             if (hapticsOn) playResultHaptic(result)
+            maybeRequestReview(result)
         }
     }
 
@@ -117,6 +123,33 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val result = RootChecker.requestRoot(getApplication())
             applyResult(result)
             if (hapticsOn) playResultHaptic(result)
+            maybeRequestReview(result)
+        }
+    }
+
+    /**
+     * After a root-found result, ask for an in-app rating once the gate opens (see [ReviewGate]).
+     * Only [RootResult.Rooted] counts — confirming a device is rooted is the app's "win" moment.
+     * The Play card is quota-limited and may not actually appear; we record that we asked regardless.
+     */
+    private suspend fun maybeRequestReview(result: RootResult) {
+        if (result !is RootResult.Rooted) return
+        val rootedCount = userPreferences.incrementRootedCheckCount()
+        val lastPromptedVersion = userPreferences.lastReviewPromptVersionCode.first()
+        val currentVersion = BuildConfig.VERSION_CODE
+        val shouldRequest = ReviewGate.shouldRequest(rootedCount, lastPromptedVersion, currentVersion)
+        if (BuildConfig.DEBUG) {
+            Log.d(
+                REVIEW_GATE_TAG,
+                "rootedCount=$rootedCount (need ${ReviewGate.MIN_ROOTED_CHECKS}), " +
+                    "lastPromptedVersion=$lastPromptedVersion, currentVersion=$currentVersion " +
+                    "-> shouldRequest=$shouldRequest",
+            )
+        }
+        if (shouldRequest) {
+            reviewController.requestReview()
+            userPreferences.setLastReviewPromptVersionCode(currentVersion)
+            Analytics.trackReviewRequested()
         }
     }
 

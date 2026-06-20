@@ -138,6 +138,20 @@ object Analytics {
         )
     }
 
+    /** The in-app review gate opened and the Play-managed flow was requested (it may not actually show). */
+    fun trackReviewRequested() = track { TelemetryDeck.signal("reviewRequested") }
+
+    /** The in-app review flow could not be launched (request/launch error from Play). */
+    fun trackReviewFlowFailed(error: String) = track {
+        TelemetryDeck.signal(
+            "reviewFlowFailed",
+            mapOf("error" to error),
+        )
+    }
+
+    /** The explicit "Rate this app" link on the About screen was tapped. */
+    fun trackRateLinkClicked() = track { TelemetryDeck.signal("rateLinkClicked") }
+
     fun trackTipJarOpened() = track { TelemetryDeck.signal("tipJarOpened") }
 
     fun trackTipSelected(tier: String) = track {
