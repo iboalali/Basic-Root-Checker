@@ -66,7 +66,7 @@
     <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
         This app does NOT root your phone.\n
         This app requires ROOT, use it at your own risk.\n
-        This app does NOT collect any data or personal information.\n\n\n
+        This app does NOT collect any personal information.\n\n\n
         Contact me at:</string>
     <string name="about_link_email">Email</string>
     <string name="about_link_mastodon" translatable="false">Mastodon</string>

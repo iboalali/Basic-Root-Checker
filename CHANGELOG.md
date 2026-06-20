@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Corrected the About screen's privacy line to say the app collects no personal information (it previously claimed no data at all, which overstated it given the optional anonymous usage analytics).
+
 ## [2.4] - 2026-06-19
 
 ### Added
