@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rate this app: after the app has confirmed root a few times, it may show Google Play's in-app rating card so you can rate without leaving the app, and a new **Rate this app** link on the About screen opens the Play Store listing on demand (Google Play builds only).
 
 ### Changed
+- Faster cold start and smoother first scroll: the app now ships a baseline profile, so Android ahead-of-time compiles the hot startup and scrolling code paths when the app is installed instead of warming them up on the first few launches.
 - Corrected the About screen's privacy line to say the app collects no personal information (it previously claimed no data at all, which overstated it given the optional anonymous usage analytics).
 
 ## [2.4] - 2026-06-19

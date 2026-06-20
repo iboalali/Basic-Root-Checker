@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
@@ -111,6 +112,12 @@ dependencies {
     // In-app review / rating (gplay flavor only)
     "gplayImplementation"(libs.google.play.review.ktx)
 
+    // Installs the shipped baseline profile (assets/dexopt/baseline.prof) at runtime
+    implementation(libs.androidx.profileinstaller)
+
     // Unit tests
     testImplementation(libs.junit)
+
+    // Generated Baseline Profile, produced by the :baselineprofile module
+    baselineProfile(project(":baselineprofile"))
 }

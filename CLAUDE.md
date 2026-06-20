@@ -22,6 +22,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # Run unit tests
 ./gradlew :app:testGplayDebugUnitTest
+
+# Generate the baseline profile (both flavors) on a connected device
+./gradlew :app:generateBaselineProfile
+
+# Prove the profile moved the numbers (A/B startup + scroll macrobenchmark)
+./gradlew :baselineprofile:connectedGplayBenchmarkReleaseAndroidTest
 ```
 
 Unit tests live in `app/src/test/` and cover the app's pure decision logic — e.g. `RootChecker.classify`/`parseMagiskVersionCode` and the analytics `SignalGate` startup buffering. The hardware-dependent probes are not unit-tested; verify them on a real rooted device. AppFunctions are verified on a connected device with `adb shell cmd app_function list-app-functions --package <id>` and `... execute-app-function --function '<class>#<fn>' --parameters '{}'`.
@@ -53,14 +59,15 @@ Android app that checks whether a device has root access, written in Kotlin with
 
 ### Build Configuration
 
-- **Gradle:** Kotlin DSL with version catalog (`gradle/libs.versions.toml`), AGP 9.1.0
+- **Gradle:** Kotlin DSL with version catalog (`gradle/libs.versions.toml`), AGP 9.2.1
 - **SDK:** compile/target 37 (Android 17), min 23
-- **Kotlin:** 2.4.0, JVM target 17
+- **Kotlin:** 2.4.0, JVM target 17 — AGP 9's **built-in Kotlin** compiles the modules; the app applies the Compose/serialization plugins but no separate `org.jetbrains.kotlin.android`, and the `:baselineprofile` module applies none.
 - **Build variants:** debug (appId suffix `.debug`, version suffix `-debug`) and release (minification + resource shrinking enabled)
 - **Product flavors:** `gplay` (Google Play services — the in-app-billing tip jar and in-app updates) and `foss` (no Google services — no-op billing/update implementations). Flavor-specific code lives under `app/src/gplay/` and `app/src/foss/`; unit tests run on the `gplay` variant (`:app:testGplayDebugUnitTest`).
 - **Compose** enabled with Compose BOM for dependency management
 - **Navigation 3** (`androidx.navigation3`) with Kotlin Serialization for route keys
 - **AppFunctions** (`androidx.appfunctions`) with the KSP `appfunctions-compiler` (`com.google.devtools.ksp` plugin, version paired to Kotlin); generated in both flavors
+- **Baseline Profiles:** a separate `:baselineprofile` module (`com.android.test`) generates the AOT profile shipped in both flavors; the `androidx.baselineprofile` plugin also adds synthetic `nonMinifiedRelease`/`benchmarkRelease` build types to `:app`. See the **Performance / Baseline Profiles** section.
 
 ### Localization
 
@@ -91,6 +98,19 @@ Compose Material3 with dynamic colors (API 31+), fallback to custom light/dark c
 - **Long-press / other non-tap gestures** → `rememberHapticLongClick(handler)` (fires the standard `LongPress` buzz, which `detectTapGestures` doesn't add on its own). See `DeviceInfoText` (copy on long-press), which reuses the wrapped action for its `CustomAccessibilityAction` too.
 
 The helpers no-op when haptics are disabled and re-key correctly when the setting toggles, so nothing else is needed. They deliberately drive the `Vibrator` (via `RootHaptics`) rather than `View.performHapticFeedback` — don't "simplify" that to `performHapticFeedback(ContextClick)`, or taps go silent on Samsung/OnePlus/Xiaomi/Vivo (the call returns success but nothing fires, and there's no API to detect it). The root-check ramp/result vibrations are a separate concern — same shared `RootHaptics`, but played from `MainViewModel`, not the UI.
+
+### Performance / Baseline Profiles
+
+The app ships a **Baseline Profile** (ART AOT-compilation hints) so cold start and first-scroll are pre-compiled on install — measured ~19% faster cold start on a mid-range device. **When you add or rework a screen or a hot user journey, update the generator journey and regenerate — treat it as part of "done," like accessibility and haptics.**
+
+- **`:baselineprofile` module** (`com.android.test`, `androidx.baselineprofile` plugin) mirrors the app's `gplay`/`foss` flavors and targets `:app`. It holds two test classes (tests live in `src/main`, per `com.android.test` convention):
+  - `BaselineProfileGenerator` — the `BaselineProfileRule` journey: cold start, then navigate to and scroll Settings / About / Licence. `Journeys.kt` has the shared UI Automator helpers.
+  - `StartupBenchmarks` — A/B `MacrobenchmarkRule` tests: each metric has a `*BaselineProfile` test (`CompilationMode.Partial(BaselineProfileMode.Require)` — fails loudly if the profile is missing) paired with a `*NoCompilation` test (`CompilationMode.None`). Compare **medians**. Startup uses `StartupTimingMetric` (cold, ≥10 iters); the Licence scroll uses `FrameTimingMetric` (no `startupMode` — it `killProcess()`s and re-navigates in `setupBlock`, else the measured scroll finds an empty screen).
+- **Generated profiles are committed and shipped.** `generateBaselineProfile` writes per-flavor `baseline-prof.txt`/`startup-prof.txt` under `app/src/<flavor>Release/generated/baselineProfiles/`; release builds merge them into `assets/dexopt/baseline.prof[m]` (verify with Analyze APK). Both flavors get a profile (gplay's is larger — it includes the Play/billing paths).
+- **`testTagsAsResourceId` is mandatory for the journeys** — UI Automator finds elements via `By.res(<testTag>)`, locale-independently (the app ships 5 locales, so text matchers won't do). It's enabled on the `AppRoot` Box (the main window) **and must be re-enabled on every `Popup`/`DropdownMenu`/dialog**, which render in their own window outside that scope — see the overflow `DropdownMenu` in `MainScreen` (forgetting this silently breaks navigation: the menu items aren't found, so the secondary screens never get profiled). Any nav control or scroll container a journey touches needs a `Modifier.testTag(...)`; any new popup needs its own `Modifier.semantics { testTagsAsResourceId = true }`. Note: tags surface in release-based builds (`nonMinifiedRelease`/`benchmarkRelease`), not in `debug` — don't try to verify them with a debug build.
+- **TTFD:** `MainScreen` calls `ReportDrawnWhen { … }` so `timeToFullDisplay` marks the first meaningful frame (device info loads synchronously in the ViewModel's `init`, so it ≈ `timeToInitialDisplay`).
+- **Device requirements:** generation runs the journey on a connected device and needs API 33+ or root (works on the API 36 test device); measurement needs `<profileable android:shell="true">` (already in the manifest) on API 29+.
+- **Versions:** `benchmark`/`androidx.baselineprofile` are on `1.5.0-alpha` — required for AGP 9 (stable 1.4.x predates it). This build emits `frameCount` but not `frameOverrunMs` for the app's non-lazy `verticalScroll` screens, so startup is the headline metric and the scroll test mainly guards the journey. The plugin debug-signs its synthetic build types automatically (`release` has no signing config in `build.gradle.kts`).
 
 ## Changelog
 

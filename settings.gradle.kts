@@ -21,3 +21,4 @@ plugins {
 
 rootProject.name = "Basic-Root-Checker"
 include(":app")
+include(":baselineprofile")

@@ -3,6 +3,7 @@ package com.iboalali.basicrootchecker.ui.main
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -54,12 +55,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -67,6 +70,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
@@ -100,6 +104,11 @@ fun MainScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    // Report the meaningful first frame for accurate time-to-fully-drawn (TTFD): the device-info
+    // is populated synchronously in the ViewModel's init, so this fires as soon as the main screen
+    // has real content rather than at the first (empty) frame.
+    ReportDrawnWhen { uiState.deviceMarketingName.isNotEmpty() }
+
     MainScreenContent(
         uiState = uiState,
         onCheckRoot = viewModel::checkRoot,
@@ -123,7 +132,7 @@ fun MainScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MainScreenContent(
     uiState: MainUiState,
@@ -167,7 +176,10 @@ fun MainScreenContent(
                     )
                 },
                 actions = {
-                    IconButton(onClick = rememberHapticClick { menuExpanded = true }) {
+                    IconButton(
+                        onClick = rememberHapticClick { menuExpanded = true },
+                        modifier = Modifier.testTag("overflow_menu"),
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.more_vert_24px),
                             contentDescription = stringResource(R.string.content_description_more_options),
@@ -176,9 +188,15 @@ fun MainScreenContent(
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false },
+                        // The menu renders in its own Popup window, outside AppRoot's
+                        // testTagsAsResourceId scope, so re-enable it here too — otherwise the
+                        // menu items' test tags aren't visible to UI Automator (By.res), and the
+                        // benchmark/profile journeys can't navigate to the secondary screens.
+                        modifier = Modifier.semantics { testTagsAsResourceId = true },
                     ) {
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_licence),
+                            modifier = Modifier.testTag("menu_licence"),
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_baseline_text_snippet_24),
@@ -192,6 +210,7 @@ fun MainScreenContent(
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_settings),
+                            modifier = Modifier.testTag("menu_settings"),
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(R.drawable.settings_24px),
@@ -205,6 +224,7 @@ fun MainScreenContent(
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_about),
+                            modifier = Modifier.testTag("menu_about"),
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_baseline_android_24),
@@ -268,6 +288,7 @@ fun MainScreenContent(
             PaddingValues(top = topPadding, start = leftPadding, end = rightPadding)
         Column(
             modifier = Modifier
+                .testTag("main_list")
                 .fillMaxSize()
                 .padding(contentPadding)
                 .verticalScroll(rememberScrollState())

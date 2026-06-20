@@ -13,8 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -29,6 +32,7 @@ import kotlinx.coroutines.flow.Flow
  * still owns its own Scaffold/snackbars; this is a thin overlay (a [Box], not a nested
  * Scaffold) reserved for signals that aren't tied to any one screen.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppRoot(tipCleared: Flow<TipTier>) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -43,6 +47,10 @@ fun AppRoot(tipCleared: Flow<TipTier>) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            // Surfaces every descendant Modifier.testTag as a resource-id so the Macrobenchmark /
+            // Baseline Profile UI Automator journeys can target elements via By.res(...) regardless
+            // of the active locale.
+            .semantics { testTagsAsResourceId = true }
             .background(MaterialTheme.colorScheme.background),
     ) {
         AppNavigation()

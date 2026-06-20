@@ -38,6 +38,12 @@
         android:theme="@style/Theme.iboalali.Main"
         tools:targetApi="33">
 
+        <!-- Lets Macrobenchmark/simpleperf profile the release build on non-rooted API 29+
+             devices. Ignored below API 29; has no effect on normal user builds. -->
+        <profileable
+            android:shell="true"
+            tools:targetApi="29" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
