@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +46,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
@@ -56,11 +59,24 @@ import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import com.iboalali.basicrootchecker.util.openPlayStoreListing
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+
+@Composable
+fun AboutScreen(onNavigateBack: () -> Unit) {
+    // Read-only: the catalog fetch is owned by MainActivity (kicked off at app start). This screen
+    // just observes the already-loaded "Other apps" list.
+    val viewModel: AboutViewModel = viewModel()
+    val otherApps by viewModel.otherApps.collectAsStateWithLifecycle()
+    AboutScreenContent(otherApps = otherApps, onNavigateBack = onNavigateBack)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen(onNavigateBack: () -> Unit) {
+private fun AboutScreenContent(
+    otherApps: ImmutableList<OtherAppUi>,
+    onNavigateBack: () -> Unit,
+) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
 
@@ -223,20 +239,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
             Spacer(Modifier.height(16.dp))
 
             OtherAppsCard(
-                apps = persistentListOf(
-                    OtherApp(
-                        name = "Billboard",
-                        descriptionRes = R.string.other_apps_billboard_description,
-                        iconRes = R.mipmap.billboard_app_icon,
-                        packageName = "com.iboalali.billboard",
-                    ),
-                    OtherApp(
-                        name = "Hide Persistent Notifications",
-                        descriptionRes = R.string.other_apps_hide_notifications_description,
-                        iconRes = R.mipmap.hide_persistent_notification_app_icon,
-                        packageName = "com.iboalali.hidepersistentnotifications",
-                    ),
-                ),
+                apps = otherApps,
                 modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
             )
 
@@ -296,6 +299,26 @@ private fun SocialLinkDivider() {
 @Composable
 private fun AboutScreenPreview() {
     BasicRootCheckerTheme {
-        AboutScreen(onNavigateBack = {})
+        AboutScreenContent(
+            otherApps = persistentListOf(
+                OtherAppUi(
+                    name = "Billboard",
+                    description = "Show large text on screen, as big as possible without cutting it off.",
+                    iconUrl = null,
+                    website = "https://iboalali.com/app/billboard/",
+                    packageName = "com.iboalali.billboard",
+                    whatsNew = persistentListOf("New **dark theme** and bigger text scaling"),
+                ),
+                OtherAppUi(
+                    name = "Icon Recomposer",
+                    description = "Light vector icons with a movable 3D emboss, then export to PNG, SVG, or VectorDrawable.",
+                    iconUrl = null,
+                    website = "https://iboalali.com/Icon-Recomposer/",
+                    packageName = null,
+                    whatsNew = persistentListOf("Your work is **saved automatically** and restored when you return"),
+                ),
+            ),
+            onNavigateBack = {},
+        )
     }
 }

@@ -91,8 +91,10 @@
 
     <!-- Other Apps -->
     <string name="other_apps_title">Otras aplicaciones</string>
-    <string name="other_apps_billboard_description">Esta aplicación te ayuda a mostrar texto grande en la pantalla, ajustándolo al máximo tamaño posible sin recortarlo.\n\nÚtil en reuniones para votar sobre un tema con un número o un texto.</string>
-    <string name="other_apps_hide_notifications_description">Elige una notificación persistente que quieras ocultar, y permanecerá oculta mientras esta aplicación esté instalada.</string>
+    <string name="about_other_app_open">Abrir</string>
+    <string name="about_other_app_install">Instalar</string>
+    <string name="about_other_app_website">Sitio web</string>
+    <string name="about_other_app_whats_new">Novedades</string>
 
     <!-- AppFunctions -->
     <string name="appfunctions_description">Permite que el sistema y las apps de asistente comprueben el estado de root de este dispositivo sin abrir la aplicación.</string>

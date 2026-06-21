@@ -98,6 +98,12 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.serialization.core)
 
+    // Remote "Other apps" catalog: JSON parsing for the apps.json feed + Coil image loading for
+    // the remote app icons (coil-network-okhttp pulls OkHttp transitively, used only by Coil).
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
     // Material (for DynamicColors)
     implementation(libs.google.material)
 

@@ -1,0 +1,528 @@
+{
+  "locale": "en",
+  "apps": [
+    {
+      "name": "Basic Root Checker",
+      "packageName": "com.iboalali.basicrootchecker",
+      "description": "Check whether your device has root access - quick, simple, no-frills.",
+      "icon": "https://iboalali.com/media/basic+root+checker+icon.png",
+      "website": "https://iboalali.com/app/basic_root_checker/",
+      "whatsNew": [
+        "New Theme option in Settings: light, dark, or system",
+        "Detect more root managers (Kitsune Mask, SukiSU, KernelSU Next, SuperSU and more), each shown by name"
+      ],
+      "changelog": [
+        {
+          "version": "2.4",
+          "changes": [
+            "➕ Subtle haptic feedback across the app: taps, switches, and selections give a gentle tick",
+            "➕ Check this device's root status from assistants and other apps, without opening it (Android 16+)",
+            "➕ New Theme option in Settings: light, dark, or system",
+            "🛠️ Redesigned Settings, with the tip jar moved to the top",
+            "🔨 Detect more root managers (Kitsune Mask, SukiSU, KernelSU Next, SuperSU and more), each shown by name",
+            "🔨 Accessibility and back-navigation fixes"
+          ]
+        },
+        {
+          "version": "2.3",
+          "changes": [
+            "➕ Tip jar in Settings to support development with an optional tip, and tip again any time",
+            "➕ In-app language picker in Settings: switch languages without leaving the app (Android 13+)",
+            "🛠️ Faster app startup, especially on slower devices",
+            "🛠️ The back-swipe animation now follows the edge you swipe from",
+            "🔨 The current screen is kept when the app is recreated (e.g. after rotating or switching language)",
+            "🔨 Fixed a startup crash on Android 7.x and older"
+          ]
+        },
+        {
+          "version": "2.2",
+          "changes": [
+            "➕ Haptic feedback for the root check, with a new toggle in Settings",
+            "➕ Now available in Russian and Spanish",
+            "➕ Email, Mastodon, and Bluesky links on the About screen",
+            "🛠️ App settings now included in Android's automatic backup, so they're restored when you reinstall",
+            "🛠️ Refreshed About screen contact links and overflow menu icons",
+            "🔨 Fixed untranslated toast and accessibility labels in German and Arabic"
+          ]
+        },
+        {
+          "version": "2.1",
+          "changes": [
+            "➕ Root provider detection: Magisk (with version), KernelSU, or APatch",
+            "➕ \"Request Root access\" button when a provider is present but not yet granted",
+            "➕ Support for Android 17",
+            "🛠️ New \"Not granted\" state when a root provider is detected but access isn't given yet",
+            "🔨 Fixed rooted devices being reported as not rooted on the first check"
+          ]
+        },
+        {
+          "version": "2.0",
+          "changes": [
+            "➕ Complete rewrite with Jetpack Compose, Material 3, and dynamic colors",
+            "➕ TelemetryDeck analytics with an opt-out toggle in settings",
+            "➕ In-app update flow on the Google Play build",
+            "🛠️ Split into Google Play and FOSS flavors",
+            "🛠️ Minimum version raised to Android 6.0"
+          ]
+        },
+        {
+          "version": "1.13",
+          "changes": [
+            "➕ Android 16 support"
+          ]
+        },
+        {
+          "version": "1.11",
+          "changes": [
+            "➕ Android 15 support",
+            "🛠️ Dependency updates",
+            "🛠️ Dropped support for Android 4.4"
+          ]
+        },
+        {
+          "version": "1.10",
+          "changes": [
+            "🛠️ Dependency updates"
+          ]
+        },
+        {
+          "version": "1.9",
+          "changes": [
+            "➕ Support for Android 14"
+          ]
+        },
+        {
+          "version": "1.7",
+          "changes": [
+            "➕ Support for Android 12",
+            "✨ Full redesign of the app"
+          ]
+        },
+        {
+          "version": "1.6",
+          "changes": [
+            "➕ Support for Android 10 and 11"
+          ]
+        },
+        {
+          "version": "1.5",
+          "changes": [
+            "➕ Support for Android 9.0 Pie",
+            "➕ A new UI",
+            "➕ Added Adaptive icon",
+            "✨ Removed ads"
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "changes": [
+            "➕ Support for Android 8.0 Oreo"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🛠️ Fixed version name for Android O Beta"
+          ]
+        },
+        {
+          "version": "1.2",
+          "changes": [
+            "➕ Support for Android 7.1 Nougat",
+            "🛠️ Updated list of Android version names",
+            "🛠️ Updated list of device models and vendors, it's OVER 9000",
+            "✨ Small layout changes"
+          ]
+        },
+        {
+          "version": "1.1",
+          "changes": [
+            "➕ Added support for Android 4.1 Jelly Bean and up",
+            "✨ Redesign of the app"
+          ]
+        },
+        {
+          "version": "1.0",
+          "changes": [
+            "➕ Basic Root Checker comes in 3 languages: English, German and Arabic"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Billboard",
+      "packageName": "com.iboalali.billboard",
+      "description": "Show large text on screen, sized to fit without ever cutting off.",
+      "icon": "https://iboalali.com/media/billboard+icon.png",
+      "website": "https://iboalali.com/app/billboard/",
+      "whatsNew": [],
+      "changelog": [
+        {
+          "version": "2.1.1",
+          "changes": [
+            "➕ Support for Android 16",
+            "➖ Remove support for Android 5 and 5.1"
+          ]
+        },
+        {
+          "version": "2.0.3",
+          "changes": [
+            "➕ Support for Android 15"
+          ]
+        },
+        {
+          "version": "2.0.1",
+          "changes": [
+            "➕ Support for Android 14"
+          ]
+        },
+        {
+          "version": "2.0",
+          "changes": [
+            "🔨 Redid the whole app from scratch with a new design",
+            "➕ List of previously used entries",
+            "➕ Support for Android 12 and 13",
+            "➕ Tablet and foldable support"
+          ]
+        },
+        {
+          "version": "1.4.1",
+          "changes": [
+            "🔨 Fixed landscape layout for high density devices"
+          ]
+        },
+        {
+          "version": "1.4",
+          "changes": [
+            "➕ Initial support for tablet layout",
+            "🔨 Fixed creator screen not scrolling in landscape."
+          ]
+        },
+        {
+          "version": "1.3",
+          "changes": [
+            "➕ Initial Android 11 support",
+            "➕ Support for Fullscreen on devices with cutouts in the display"
+          ]
+        },
+        {
+          "version": "1.2.5",
+          "changes": [
+            "🔨 Fixed the ability to input more text into the input then the width of it.",
+            "➖ Removed the workaround to render emoji correctly, because it could handle edge cases."
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "changes": [
+            "🔨 Fixed number keyboard not allowing fraction or signed numbers",
+            "➕ Added going full screen on pressing enter on the keyboard"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🔨 Fixed emoji rendering, if only one emoji is used",
+            "➕ Added keyboard type options",
+            "➕ Added saving orientation and keyboard options."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hide Persistent Notification",
+      "packageName": "com.iboalali.hidepersistentnotifications",
+      "description": "Pick a persistent notification and keep it hidden for as long as the app is installed.",
+      "icon": "https://iboalali.com/media/hide+persistent+notification+icon.png",
+      "website": "https://iboalali.com/app/hide_persistent_notification/",
+      "whatsNew": [
+        "**Heads up: the app is going free with an optional in-app purchase.** If you already bought it, open the Settings screen and sign in so your purchase carries over and you keep every premium feature for free, no second purchase needed.",
+        "Completely rewritten with modern technologies",
+        "In-app updates: install the latest version right from the app",
+        "Support for Android 17"
+      ],
+      "changelog": [
+        {
+          "version": "2.0",
+          "changes": [
+            "✨ Completely rewritten with modern technologies",
+            "➕ In-app updates: install the latest version right from the app",
+            "➕ Privacy setting to opt out of anonymous analytics",
+            "➕ Better layouts for tablets and large screens",
+            "➕ Support for Android 17",
+            "🔨 Fixed a startup crash",
+            "🔨 Fixed permission status not refreshing after leaving settings"
+          ]
+        },
+        {
+          "version": "1.8.1",
+          "changes": [
+            "➕ Support for Android 16",
+            "➕ Added German translation",
+            "🔨 Fixed spelling"
+          ]
+        },
+        {
+          "version": "1.7",
+          "changes": [
+            "➕ Support for Android 15"
+          ]
+        },
+        {
+          "version": "1.6",
+          "changes": [
+            "➕ Support for Android 13",
+            "➕ Option to include all data from the notification in the logs, even if it might be sensitive",
+            "🔨 Fixed a bug were a Notification will not be hidden after selecting it",
+            "✨ Reduced app download size in half"
+          ]
+        },
+        {
+          "version": "1.5",
+          "changes": [
+            "✨ More update to the design, closer to Material You, but no dynamic colors (yet 😉)",
+            "➕ Better handling of showing hidden notification, no restart needed",
+            "➕ History of hiding notification has been added, accessible via Settings"
+          ]
+        },
+        {
+          "version": "1.4",
+          "changes": [
+            "✨ Updated the design of the app to be more modern",
+            "🔧 Updated logic to better handle the notification",
+            "🔨 Fixed not being able to load apps name and icons on Android 11",
+            "🔨 Various bug fixes"
+          ]
+        },
+        {
+          "version": "1.3.1",
+          "changes": [
+            "🔧 Added a way to go to the \"Battery Optimization\" settings screen to remove this app from it. This will help keep the notification hidden, and may reduce battery drain"
+          ]
+        },
+        {
+          "version": "1.3",
+          "changes": [
+            "🔨 Fixed crashing bug",
+            "🔧 Added the ability to send the developer the currently available notification for analysis, to help improve the app"
+          ]
+        },
+        {
+          "version": "1.2",
+          "changes": [
+            "🔧 Added support for Android 10 and 11"
+          ]
+        },
+        {
+          "version": "1.1.4",
+          "changes": [
+            "✨ Added support for edge-to-edge gesture navigation",
+            "🔧 Updated dependencies"
+          ]
+        },
+        {
+          "version": "1.1.3",
+          "changes": [
+            "🔨 Fixed hiding notification reliability"
+          ]
+        },
+        {
+          "version": "1.1.2",
+          "changes": [
+            "🔧 Migrated to a database system for the saved data",
+            "🔨 Fixed a few bugs",
+            "🔧 Improved performance"
+          ]
+        },
+        {
+          "version": "1.0.3",
+          "changes": [
+            "🔧Added better detection for persistent notification"
+          ]
+        },
+        {
+          "version": "1.0.2",
+          "changes": [
+            "🔨Fixed scrolling repeatedly down if a notification(s) update in a high frequency"
+          ]
+        },
+        {
+          "version": "1.0.1",
+          "changes": [
+            "🔧Added some clarification text",
+            "🔨Changed the wording of some dialogs",
+            "🔨Removed unnecessary code"
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "changes": [
+            "✨ Initial Release"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Icon Recomposer",
+      "packageName": null,
+      "description": "Light vector icons with a movable 3D emboss, then export to PNG, SVG, or Android VectorDrawable.",
+      "icon": "https://iboalali.com/media/icon_recomposer.png",
+      "website": "https://iboalali.com/Icon-Recomposer/",
+      "whatsNew": [
+        "Your work is saved automatically and restored when you return",
+        "Installable and works offline, now on Android too"
+      ],
+      "changelog": [
+        {
+          "version": "1.7.2",
+          "changes": [
+            "🛠️ The Install button now appears on Android phones too (Chrome and Edge) and installs the app on tap, with the browser's own install banner suppressed so there is a single, consistent button. On iPhone and iPad, install is still via Safari's Share menu and \"Add to Home Screen\""
+          ]
+        },
+        {
+          "version": "1.7.1",
+          "changes": [
+            "🛠️ Anonymous usage analytics now record the app version so I can tell which versions are in use. No new personal data; the version is already shown in the app"
+          ]
+        },
+        {
+          "version": "1.7.0",
+          "changes": [
+            "➕ Your work is saved automatically: the current project is stored in your browser and restored when you reopen the page, so you pick up where you left off. Opening a shared link still shows that shared design"
+          ]
+        },
+        {
+          "version": "1.6.1",
+          "changes": [
+            "➕ An Install button in the top bar: on desktop browsers that support it, an Install button appears to the right of Export and installs the app on click, with no automatic prompt or banner",
+            "🛠️ When running as an installed desktop app, the redundant app icon and name are dropped from the top bar (the window title bar already shows them); the version stays",
+            "🔨 All top-bar buttons now share a uniform height (the \"⋯\" overflow button was slightly shorter)"
+          ]
+        },
+        {
+          "version": "1.6.0",
+          "changes": [
+            "➕ Installable and works offline (PWA): add Icon Recomposer to your home screen or desktop and it runs fully offline. Once loaded, the whole app and your last-used default are cached, so it opens with no network, and new versions offer a one-tap reload"
+          ]
+        },
+        {
+          "version": "1.5.8",
+          "changes": [
+            "🛠️ When the window is narrow, the top bar now stays on one line and moves the items that do not fit into a \"⋯\" overflow menu (Privacy and Changelog first, then Import, and so on) instead of wrapping into a jumble",
+            "🔨 The whole canvas is always visible: on short or wide windows it now scales to fit the stage in both dimensions, so the top and bottom are no longer clipped"
+          ]
+        },
+        {
+          "version": "1.5.7",
+          "changes": [
+            "🔨 Phone layout no longer hides the canvas: the phone view is now a normally-scrolling page with the canvas pinned at the top (always visible) and Layers and the inspector below, plus a sticky toolbar whose buttons wrap"
+          ]
+        },
+        {
+          "version": "1.5.6",
+          "changes": [
+            "➕ Keyboard shortcuts for Save and Open: Ctrl+S / ⌘S saves the project, and Ctrl+O / ⌘O opens a project or imports a vector",
+            "🛠️ Wider side panels (Layers 240 to 280px, inspector 300 to 360px) for more breathing room"
+          ]
+        },
+        {
+          "version": "1.5.5",
+          "changes": [
+            "➕ Zoom and pan the canvas: zoom with the mouse wheel or a two-finger pinch (toward the pointer, up to 8×, never below the fit size), and pan by dragging empty canvas when zoomed in, with a two-finger drag, or with a middle-mouse drag. It is view-only, so every export and the project file are unaffected"
+          ]
+        },
+        {
+          "version": "1.5.4",
+          "changes": [
+            "➕ Press Esc to clear the layer selection. If a control is focused, the first Esc leaves the field and a second clears the selection; an open color picker or dialog closes on Esc first",
+            "🛠️ The \"Start a new document?\" prompt is now an in-app dialog that matches the dark theme instead of the browser's native confirm box (Esc cancels, Enter confirms)"
+          ]
+        },
+        {
+          "version": "1.5.3",
+          "changes": [
+            "➕ A Changelog link in the top bar (next to Privacy) that opens the app's \"What's new\" page"
+          ]
+        },
+        {
+          "version": "1.5.2",
+          "changes": [
+            "➕ A simpler way to make gradients: choosing the Gradient fill now leads with one-click Quick looks (Top light, Glow, Sheen, Diagonal, Fade out), a From/To color pair with a Fade toggle, and a direction pad (arrows set a linear direction, the center dot makes it radial). The full multi-stop editor (offsets, per-stop alpha, exact coordinates) moves under an Advanced disclosure and stays in sync. The simple controls restyle every selected gradient layer at once",
+            "🔨 The Gradient fill option is now always visible: the Solid / Embossed / Gradient control moved onto its own full-width line, so \"Gradient\" is no longer clipped off the right edge of the inspector"
+          ]
+        },
+        {
+          "version": "1.5.1",
+          "changes": [
+            "🛠️ Point (radial) light: Intensity now controls how far the shadow reaches, with a softer falloff. Turning it up pulls the shadow inward (at the maximum it passes the canvas center, darkening the center and far side); lower intensity keeps the center lit",
+            "🔨 Distant (directional) light now embosses as strongly as the point light, and its Intensity slider has a clear effect. The bevel is built per shape along the light direction and concentrated in the shape interior, so distant-light icons read as 3D and look noticeably more embossed than before"
+          ]
+        },
+        {
+          "version": "1.5.0",
+          "changes": [
+            "➕ True per-layer gradient fills: a new Gradient fill mode (alongside Solid and Embossed) with a linear or radial type, an editable multi-stop list (color, per-stop alpha, and offset), and numeric geometry. Gradients import from SVG and Android VectorDrawable instead of being flattened to one color, round-trip in the project file, and track the layer's move, scale, and flip. A \"duplicate as gradient overlay\" action stacks an embossed base and a gradient layer so one shape can have both",
+            "➕ Link previews and search metadata: sharing the live URL now shows a title, summary, and the app icon (Open Graph and Twitter card tags) instead of a bare link",
+            "🛠️ Emboss is now opt-in: new layers and imported art arrive as flat Solid fills in the source color rather than auto-embossed. Apply Embossed per layer for the 3D look, and the built-in sample stays embossed to show it off",
+            "🔨 Stroke width now scales with the layer, so scaling a stroked shape keeps its outline proportional across the preview, PNG, and VectorDrawable export"
+          ]
+        },
+        {
+          "version": "1.4.0",
+          "changes": [
+            "➕ Per-layer scale: a Scale control resizes the selected layer(s) by a percentage (100 = original). One layer scales about its own center; several selected layers scale together about their common center. Non-destructive (stored as a layer transform), with a link toggle for independent X and Y scaling",
+            "➕ Flip layers: Flip H and Flip V mirror the selected layer(s); multiple layers flip together about their common center, and the flip is non-destructive",
+            "➕ More anonymous usage and error events sent to TelemetryDeck (export, open, import, new, save, undo, redo, and errors), alongside the existing pageview (see the privacy policy)",
+            "➕ A Privacy link in the app's top bar that opens its privacy policy",
+            "🔨 Imported gradient fills now seed a representative base color from the gradient's stops instead of a flat gray",
+            "🔨 Fixed duplicate layer ids when importing into a loaded project, which could make selecting one layer also select another; ids now de-duplicate on load"
+          ]
+        },
+        {
+          "version": "1.3.0",
+          "changes": [
+            "➕ Per-layer shadow distance: a Distance control in the Cast shadow section sets how far each layer throws its shadow (its apparent height above the surface). It multiplies the automatic length from the light, so 1× keeps the previous look and higher values lift the layer further off the surface",
+            "➕ The app now opens on a bundled default project (the app icon) instead of the built-in sample, and shows that icon next to the title in the top bar and as the browser favicon",
+            "➕ Anonymous usage analytics via the privacy-friendly TelemetryDeck Web SDK: one pageview per load, no cookies (see the privacy policy)",
+            "🔨 Clicking the canvas now switches the selection between overlapping layers; it hit-tests the actual layer geometry, so a layer's invisible drag target no longer intercepts clicks meant for a shape above or below it"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🔨 With Link W/H on, editing one canvas dimension now updates the other field's value too (the canvas already resized correctly; only the displayed value lagged)"
+          ]
+        },
+        {
+          "version": "1.2.0",
+          "changes": [
+            "➕ Move layers: drag a selected layer (or several at once) on the canvas, or set an exact position with the layer's X/Y fields",
+            "➕ Click a layer's shape on the canvas to select it. Ctrl/⌘ and Shift-click extend the selection, and clicking an empty area deselects",
+            "➕ Numeric Position X/Y fields for precise point-light placement, alongside the draggable handle",
+            "🛠️ The light now moves only by dragging its handle; clicking elsewhere on the canvas no longer repositions it",
+            "🔨 Fixed canvas size presets that could render partially off-screen in the inspector",
+            "🔨 Fixed number inputs (canvas size, light position, PNG size, stroke width) overflowing the right edge of their panel"
+          ]
+        },
+        {
+          "version": "1.1.0",
+          "changes": [
+            "➕ Duplicate layer: a per-row button and Ctrl/⌘+D copy the selected layer(s), placing each copy directly above its original",
+            "➕ Resize the project canvas via Width/Height fields or presets (24, 108, 512, 1024), with a linked aspect ratio and an optional \"Scale contents\""
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "changes": [
+            "➕ Import SVG and Android VectorDrawable artwork as editable layers",
+            "➕ Emboss engine: one shared movable light drives the shading (point light becomes a radial gradient, distant light a linear one) with OKLab color mixing",
+            "➕ Per-layer materials (color, opacity, solid or embossed, emboss intensity, sheen, fill rule) and cast shadows that clip to the layers below",
+            "➕ Live preview with a draggable light handle and multi-select editing",
+            "➕ Export to PNG (transparent or with a background), Android VectorDrawable XML, SVG, and re-editable project JSON",
+            "➕ Open and save projects, share by link, and undo/redo (Ctrl/⌘+Z)"
+          ]
+        }
+      ]
+    }
+  ]
+}

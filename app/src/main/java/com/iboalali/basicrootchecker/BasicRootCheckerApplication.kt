@@ -5,6 +5,7 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.BillingController
 import com.iboalali.basicrootchecker.billing.createBillingController
 import com.iboalali.basicrootchecker.data.UserPreferences
+import com.iboalali.basicrootchecker.data.catalog.AppCatalogRepository
 import com.iboalali.basicrootchecker.review.ReviewController
 import com.iboalali.basicrootchecker.review.createReviewController
 import com.iboalali.basicrootchecker.update.AppUpdateController
@@ -28,6 +29,13 @@ class BasicRootCheckerApplication : Application() {
 
     /** Single app-wide haptics engine, shared by the root-check flow and the UI tap feedback. */
     val rootHaptics: RootHaptics by lazy { RootHaptics(this) }
+
+    /**
+     * Source of truth for the About screen's "Other apps" list. Seeds from cache/bundled snapshot on
+     * first access; `MainActivity` calls [AppCatalogRepository.refresh] once at app start to
+     * revalidate it in the background.
+     */
+    val appCatalogRepository: AppCatalogRepository by lazy { AppCatalogRepository(this) }
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

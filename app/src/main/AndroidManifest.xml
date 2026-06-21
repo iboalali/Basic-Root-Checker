@@ -23,6 +23,18 @@
         <package android:name="com.kingroot.kinguser" />
         <package android:name="com.kingouser.com" />
         <package android:name="me.phh.superuser" />
+
+        <!-- Lets us resolve launch intents for the About → "Other apps" list (Open vs Install). -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+        <!-- Lets us see which app handles a web URL, to detect a site installed as a PWA (WebAPK)
+             for a web-only entry in the "Other apps" list. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
     </queries>
 
     <application

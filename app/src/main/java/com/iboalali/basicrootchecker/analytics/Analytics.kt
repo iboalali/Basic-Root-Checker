@@ -9,6 +9,16 @@ const val ERROR_CATEGORY_THROWN_EXCEPTION = "thrown-exception"
 const val ERROR_CATEGORY_USER_INPUT = "user-input"
 const val ERROR_CATEGORY_APP_STATE = "app-state"
 
+// How the user opened an entry in About → "Other apps".
+const val OTHER_APP_ACTION_PLAY_STORE = "play_store" // opened its Play Store listing
+const val OTHER_APP_ACTION_LAUNCH = "launch"         // launched the installed app (or its PWA)
+const val OTHER_APP_ACTION_WEBSITE = "website"       // opened its website (web-only app)
+
+// Outcome of the background "Other apps" catalog fetch.
+const val CATALOG_REFRESH_UPDATED = "updated"           // 200: a new catalog was fetched and applied
+const val CATALOG_REFRESH_NOT_MODIFIED = "not_modified" // 304: unchanged since last fetch, nothing downloaded
+const val CATALOG_REFRESH_FAILURE = "failure"
+
 object Analytics {
 
     private val gate = SignalGate()
@@ -100,11 +110,33 @@ object Analytics {
         )
     }
 
-    fun trackOtherAppClicked(packageName: String) = track {
+    /**
+     * The user acted on an entry in About → "Other apps". [action] is how they opened it:
+     * [OTHER_APP_ACTION_PLAY_STORE], [OTHER_APP_ACTION_LAUNCH], or [OTHER_APP_ACTION_WEBSITE].
+     * [packageName] is the app's package, or its website/name for entries without one (web apps).
+     */
+    fun trackOtherAppClicked(packageName: String, action: String) = track {
         TelemetryDeck.signal(
             "otherAppClicked",
-            mapOf("packageName" to packageName),
+            mapOf(
+                "packageName" to packageName,
+                "action" to action,
+            ),
         )
+    }
+
+    /**
+     * Outcome of the background "Other apps" catalog fetch run at launch. [result] is
+     * [CATALOG_REFRESH_UPDATED], [CATALOG_REFRESH_NOT_MODIFIED], or [CATALOG_REFRESH_FAILURE]; on
+     * failure [error] is the exception's simple name (e.g. connectivity vs. parse), so offline
+     * launches can be told from real errors.
+     */
+    fun trackAppCatalogRefresh(result: String, error: String? = null) = track {
+        val params = buildMap {
+            put("result", result)
+            if (!error.isNullOrEmpty()) put("error", error)
+        }
+        TelemetryDeck.signal("appCatalogRefresh", params)
     }
 
     fun trackRootCheckResult(result: String) = track {

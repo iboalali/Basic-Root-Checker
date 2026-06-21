@@ -250,8 +250,10 @@
 
     <!-- Other Apps -->
     <string name="other_apps_title">Other Apps</string>
-    <string name="other_apps_billboard_description">This app will help you to show large text on the screen, and makes it as big as possible without cutting off the text.\n\nCan be used in meetings to vote on a subject with a number or a text.</string>
-    <string name="other_apps_hide_notifications_description">Choose a persistent notification to hide, and keep it hidden as long as this app is installed.</string>
+    <string name="about_other_app_open">Open</string>
+    <string name="about_other_app_install">Install</string>
+    <string name="about_other_app_website">Website</string>
+    <string name="about_other_app_whats_new">What\'s new</string>
 
     <!-- AppFunctions -->
     <string name="appfunctions_description">Lets the system and assistant apps check this device\'s root status without opening the app.</string>

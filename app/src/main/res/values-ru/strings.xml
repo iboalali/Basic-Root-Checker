@@ -91,8 +91,10 @@
 
     <!-- Other Apps -->
     <string name="other_apps_title">Другие приложения</string>
-    <string name="other_apps_billboard_description">Это приложение помогает выводить крупный текст на экран и автоматически подбирает максимально возможный размер шрифта без обрезания текста.\n\nПодходит для совещаний — для голосования по теме числом или словом.</string>
-    <string name="other_apps_hide_notifications_description">Выберите постоянное уведомление, которое нужно скрыть, и оно будет оставаться скрытым, пока установлено это приложение.</string>
+    <string name="about_other_app_open">Открыть</string>
+    <string name="about_other_app_install">Установить</string>
+    <string name="about_other_app_website">Веб-сайт</string>
+    <string name="about_other_app_whats_new">Что нового</string>
 
     <!-- AppFunctions -->
     <string name="appfunctions_description">Позволяет системе и приложениям-ассистентам проверять наличие root-доступа на устройстве, не открывая приложение.</string>
