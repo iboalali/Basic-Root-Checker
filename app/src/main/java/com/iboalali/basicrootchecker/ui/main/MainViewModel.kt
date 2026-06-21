@@ -9,12 +9,12 @@ import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.data.RootChecker
+import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.DeviceInfo
-import com.iboalali.basicrootchecker.util.RootHaptics
 import de.boehrsi.devicemarketingnames.DeviceMarketingNames
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -37,6 +37,7 @@ enum class RootStatus {
 data class MainUiState(
     val rootStatus: RootStatus = RootStatus.NOT_CHECKED,
     val rootProvider: RootProvider = RootProvider.UNKNOWN,
+    val rootManager: RootManager? = null,
     val rootProviderVersion: String? = null,
     val deviceMarketingName: String = "",
     val deviceModelName: String = "",
@@ -52,7 +53,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val userPreferences = UserPreferences(application)
 
-    private val haptics = RootHaptics(application)
+    private val haptics = (application as BasicRootCheckerApplication).rootHaptics
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -146,6 +147,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             it.copy(
                 rootStatus = RootStatus.CHECKING,
                 rootProvider = RootProvider.UNKNOWN,
+                rootManager = null,
                 rootProviderVersion = null,
             )
         }
@@ -154,27 +156,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private data class ResolvedRoot(
         val status: RootStatus,
         val provider: RootProvider,
+        val manager: RootManager?,
         val version: String?,
     )
 
     private fun applyResult(result: RootResult) {
         val resolved = when (result) {
-            is RootResult.Rooted -> ResolvedRoot(RootStatus.ROOTED, result.provider, result.version)
-            RootResult.NotRooted -> ResolvedRoot(RootStatus.NOT_ROOTED, RootProvider.UNKNOWN, null)
-            RootResult.Unknown -> ResolvedRoot(RootStatus.UNKNOWN, RootProvider.UNKNOWN, null)
+            is RootResult.Rooted ->
+                ResolvedRoot(RootStatus.ROOTED, result.provider, result.manager, result.version)
+            RootResult.NotRooted -> ResolvedRoot(RootStatus.NOT_ROOTED, RootProvider.UNKNOWN, null, null)
+            RootResult.Unknown -> ResolvedRoot(RootStatus.UNKNOWN, RootProvider.UNKNOWN, null, null)
             is RootResult.RootedNotGranted ->
-                ResolvedRoot(RootStatus.NOT_GRANTED, result.provider, null)
+                ResolvedRoot(RootStatus.NOT_GRANTED, result.provider, result.manager, null)
         }
         _uiState.update {
             it.copy(
                 rootStatus = resolved.status,
                 rootProvider = resolved.provider,
+                rootManager = resolved.manager,
                 rootProviderVersion = resolved.version,
             )
         }
         Analytics.trackRootCheckResult(resolved.status.name)
         if (resolved.status == RootStatus.ROOTED) {
-            Analytics.trackRootProvider(resolved.provider.name, resolved.version)
+            Analytics.trackRootProvider(resolved.provider.name, resolved.manager?.name, resolved.version)
         }
     }
 

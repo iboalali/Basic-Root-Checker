@@ -16,8 +16,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
 
 /**
  * Debug-only picker that lets a developer force any [RootResult] through the real check flow so the
@@ -50,7 +52,7 @@ fun DebugRootResultDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("Close") }
+            TextButton(onClick = rememberHapticClick(onDismiss)) { Text("Close") }
         },
     )
 }
@@ -62,7 +64,7 @@ private fun DemoRow(label: String, onClick: () -> Unit) {
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = rememberHapticClick(onClick))
             .padding(vertical = 14.dp),
     )
 }
@@ -70,14 +72,17 @@ private fun DemoRow(label: String, onClick: () -> Unit) {
 private data class DemoResultOption(val label: String, val result: RootResult)
 
 private val demoResultOptions = listOf(
-    DemoResultOption("Rooted · Magisk v29.0", RootResult.Rooted(RootProvider.MAGISK, "29.0")),
-    DemoResultOption("Rooted · KernelSU", RootResult.Rooted(RootProvider.KERNELSU, null)),
-    DemoResultOption("Rooted · APatch", RootResult.Rooted(RootProvider.APATCH, null)),
-    DemoResultOption("Rooted · Other", RootResult.Rooted(RootProvider.OTHER, null)),
-    DemoResultOption("Not granted · Magisk", RootResult.RootedNotGranted(RootProvider.MAGISK)),
-    DemoResultOption("Not granted · KernelSU", RootResult.RootedNotGranted(RootProvider.KERNELSU)),
-    DemoResultOption("Not granted · APatch", RootResult.RootedNotGranted(RootProvider.APATCH)),
-    DemoResultOption("Not granted · Other", RootResult.RootedNotGranted(RootProvider.OTHER)),
+    DemoResultOption("Rooted · Magisk v29.0", RootResult.Rooted(RootProvider.MAGISK, RootManager.MAGISK, "29.0")),
+    DemoResultOption("Rooted · Kitsune Mask v29.0", RootResult.Rooted(RootProvider.MAGISK, RootManager.KITSUNE_MASK, "29.0")),
+    DemoResultOption("Rooted · KernelSU", RootResult.Rooted(RootProvider.KERNELSU, RootManager.KERNELSU, null)),
+    DemoResultOption("Rooted · SukiSU Ultra", RootResult.Rooted(RootProvider.KERNELSU, RootManager.SUKISU_ULTRA, null)),
+    DemoResultOption("Rooted · APatch", RootResult.Rooted(RootProvider.APATCH, RootManager.APATCH, null)),
+    DemoResultOption("Rooted · SuperSU", RootResult.Rooted(RootProvider.OTHER, RootManager.SUPERSU, null)),
+    DemoResultOption("Rooted · Other (no package)", RootResult.Rooted(RootProvider.OTHER, null, null)),
+    DemoResultOption("Not granted · Magisk", RootResult.RootedNotGranted(RootProvider.MAGISK, RootManager.MAGISK)),
+    DemoResultOption("Not granted · Kitsune Mask", RootResult.RootedNotGranted(RootProvider.MAGISK, RootManager.KITSUNE_MASK)),
+    DemoResultOption("Not granted · SukiSU Ultra", RootResult.RootedNotGranted(RootProvider.KERNELSU, RootManager.SUKISU_ULTRA)),
+    DemoResultOption("Not granted · Other (no package)", RootResult.RootedNotGranted(RootProvider.OTHER, null)),
     DemoResultOption("Not rooted", RootResult.NotRooted),
     DemoResultOption("Unknown", RootResult.Unknown),
 )

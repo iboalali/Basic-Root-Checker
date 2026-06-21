@@ -8,11 +8,21 @@
     <string name="rootUnknown">Couldn\'t get Root status of your device</string>
     <string name="rootNotAvailable">Your Device doesn\'t have Root access</string>
     <string name="rootNotGranted">Root is available but this app has not been granted access</string>
+    <string name="root_hidden_manager_hint">Using a hidden or renamed root manager (like Kitsune Mask)? It may not be detected until you grant this app access.</string>
     <string name="action_request_root">Request Root access</string>
     <string name="root_provider_magisk" translatable="false">Magisk</string>
     <string name="root_provider_kernelsu" translatable="false">KernelSU</string>
     <string name="root_provider_apatch" translatable="false">APatch</string>
     <string name="root_provider_other">Other</string>
+    <!-- Specific root-manager names (proper nouns, not translated) -->
+    <string name="root_manager_kitsune_mask" translatable="false">Kitsune Mask</string>
+    <string name="root_manager_kernelsu_next" translatable="false">KernelSU Next</string>
+    <string name="root_manager_sukisu_ultra" translatable="false">SukiSU Ultra</string>
+    <string name="root_manager_resukisu" translatable="false">ReSukiSU</string>
+    <string name="root_manager_supersu" translatable="false">SuperSU</string>
+    <string name="root_manager_superuser" translatable="false">Superuser</string>
+    <string name="root_manager_kingroot" translatable="false">KingRoot</string>
+    <string name="root_manager_phh" translatable="false">phh superuser</string>
     <string name="root_provider_via">via %1$s</string>
     <string name="root_provider_via_with_version">via %1$s v%2$s</string>
     <string name="action_licence">Licenses</string>
@@ -23,9 +33,18 @@
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Share anonymous usage data</string>
     <string name="settings_telemetry_description">Helps improve the app via TelemetryDeck. When enabled, takes effect on next app launch.</string>
+    <string name="settings_reset_identity_title">Reset analytics identity</string>
+    <string name="settings_reset_identity_description">Start a fresh anonymous ID so future usage data can\'t be linked to what was shared before.</string>
+    <string name="settings_reset_identity_dialog_message">A new anonymous identifier will be generated. Future usage data won\'t be linked to anything shared before now. This can\'t be undone.</string>
+    <string name="settings_reset_identity_confirm">Reset</string>
+    <string name="settings_reset_identity_done">Analytics identity reset</string>
     <string name="settings_haptics_title">Haptic feedback</string>
-    <string name="settings_haptics_description">Vibrate while checking for root and when the result appears.</string>
+    <string name="settings_haptics_description">Vibrate on taps, while checking for root, and when the result appears.</string>
     <string name="settings_privacy_policy_description">View our privacy policy online</string>
+    <string name="settings_theme_title">Theme</string>
+    <string name="theme_follow_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
     <string name="settings_language_title">Language</string>
     <string name="language_system_default">System default</string>
     <string name="settings_tip_jar_title">Support development</string>
@@ -201,11 +220,13 @@
 
     <!-- Style Strings -->
     <string name="contentDescription_appIcon" translatable="false">App Icon</string>
-    <string name="string_root_status_description" translatable="false">Root Status</string>
     <string name="content_description_check_for_root">Check for Root</string>
     <string name="content_description_marketing_name">Marketing Name</string>
     <string name="content_description_model_name">Model Name</string>
     <string name="content_description_android_version">Android Version</string>
+    <string name="content_description_more_options">More options</string>
+    <string name="content_description_navigate_up">Navigate up</string>
+    <string name="action_copy">Copy</string>
 
     <!-- Device Info Labels -->
     <string name="label_device_name">Device Name</string>
@@ -228,5 +249,8 @@
     <string name="other_apps_title">Other Apps</string>
     <string name="other_apps_billboard_description">This app will help you to show large text on the screen, and makes it as big as possible without cutting off the text.\n\nCan be used in meetings to vote on a subject with a number or a text.</string>
     <string name="other_apps_hide_notifications_description">Choose a persistent notification to hide, and keep it hidden as long as this app is installed.</string>
+
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">Lets the system and assistant apps check this device\'s root status without opening the app.</string>
 
 </resources>

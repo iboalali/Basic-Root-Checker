@@ -7,6 +7,7 @@
     <string name="rootUnknown">تعذر الحصول على وجود Root لجهازك</string>
     <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
     <string name="rootNotGranted">صلاحية الـ Root متوفرة ولكن لم يتم منحها لهذا التطبيق</string>
+    <string name="root_hidden_manager_hint">هل تستخدم مدير روت مخفيًا أو معاد تسميته (مثل Kitsune Mask)؟ قد لا يتم اكتشافه حتى تمنح هذا التطبيق صلاحية الوصول.</string>
     <string name="action_request_root">طلب صلاحية الـ Root</string>
     <string name="root_provider_other">أخرى</string>
     <string name="root_provider_via">عبر %1$s</string>
@@ -19,9 +20,18 @@
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">مشاركة بيانات الاستخدام المجهولة</string>
     <string name="settings_telemetry_description">يساعد على تحسين التطبيق عبر TelemetryDeck. عند التفعيل، يسري المفعول عند إعادة تشغيل التطبيق.</string>
+    <string name="settings_reset_identity_title">إعادة تعيين هوية التحليلات</string>
+    <string name="settings_reset_identity_description">ابدأ بمعرّف مجهول جديد كي لا تُربط بيانات الاستخدام المستقبلية بما تمت مشاركته سابقًا.</string>
+    <string name="settings_reset_identity_dialog_message">سيتم إنشاء معرّف مجهول جديد. لن تُربط بيانات الاستخدام المستقبلية بأي شيء تمت مشاركته حتى الآن. لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="settings_reset_identity_confirm">إعادة التعيين</string>
+    <string name="settings_reset_identity_done">تمت إعادة تعيين هوية التحليلات</string>
     <string name="settings_haptics_title">الاهتزاز التفاعلي</string>
-    <string name="settings_haptics_description">يهتز أثناء التحقق من الروت وعند ظهور النتيجة.</string>
+    <string name="settings_haptics_description">يهتز عند النقر وأثناء التحقق من الروت وعند ظهور النتيجة.</string>
     <string name="settings_privacy_policy_description">عرض سياسة الخصوصية على الإنترنت</string>
+    <string name="settings_theme_title">المظهر</string>
+    <string name="theme_follow_system">حسب النظام</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
     <string name="settings_language_title">اللغة</string>
     <string name="language_system_default">الإعداد التلقائي للنظام</string>
     <string name="settings_tip_jar_title">ادعم التطوير</string>
@@ -53,6 +63,9 @@
     <string name="content_description_marketing_name">الاسم التسويقي</string>
     <string name="content_description_model_name">اسم الطراز</string>
     <string name="content_description_android_version">إصدار أندرويد</string>
+    <string name="content_description_more_options">خيارات إضافية</string>
+    <string name="content_description_navigate_up">التنقل إلى أعلى</string>
+    <string name="action_copy">نسخ</string>
     <string name="toast_content_copied">تم نسخ المحتوى</string>
 
     <!-- Device Info Labels -->
@@ -74,4 +87,6 @@
     <string name="update_failed">فشل التحديث. ستتم إعادة المحاولة تلقائيًا.</string>
     <string name="app_updated_snackbar">تم تحديث التطبيق</string>
 
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">يتيح للنظام وتطبيقات المساعد التحقق من حالة الروت لهذا الجهاز دون فتح التطبيق.</string>
 </resources>

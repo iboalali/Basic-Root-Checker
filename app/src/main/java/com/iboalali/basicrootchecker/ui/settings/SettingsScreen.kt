@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -42,6 +43,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,6 +69,9 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
+import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
+import com.iboalali.basicrootchecker.ui.rememberHapticToggle
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -76,6 +81,28 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
+
+/** Outer (rounded) corner radius for the first/last item of the settings group. */
+private val SettingsGroupCornerRadius = 32.dp
+
+/** Inner corner radius where items connect within the settings group. */
+private val SettingsItemInnerRadius = 2.dp
+
+/** Gap between connected items in the settings group. */
+private val SettingsItemSpacing = 4.dp
+
+/**
+ * Builds the corner shape for one item in the settings group so the items read as a single
+ * connected list: rounded outer corners on the first/last item, near-square corners where
+ * items meet.
+ */
+internal fun settingsGroupShape(isFirst: Boolean, isLast: Boolean) = RoundedCornerShape(
+    topStart = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+    topEnd = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+    bottomStart = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+    bottomEnd = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+)
 
 @Composable
 fun SettingsScreen(
@@ -84,6 +111,7 @@ fun SettingsScreen(
 ) {
     val telemetryEnabled by viewModel.telemetryEnabled.collectAsStateWithLifecycle()
     val hapticsEnabled by viewModel.hapticsEnabled.collectAsStateWithLifecycle()
+    val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
     val currentLanguageTag = AppLanguage.currentTag(LocalContext.current)
     val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
     val supporterTiers by viewModel.supporterTiers.collectAsStateWithLifecycle()
@@ -91,8 +119,11 @@ fun SettingsScreen(
     SettingsScreenContent(
         telemetryEnabled = telemetryEnabled,
         onTelemetryEnabledChange = viewModel::setTelemetryEnabled,
+        onResetIdentity = viewModel::resetTelemetryIdentity,
         hapticsEnabled = hapticsEnabled,
         onHapticsEnabledChange = viewModel::setHapticsEnabled,
+        themeMode = themeMode,
+        onThemeModeChange = viewModel::setThemeMode,
         currentLanguageTag = currentLanguageTag,
         onLanguageSelected = viewModel::setLanguage,
         tipJarAvailable = viewModel.tipJarAvailable,
@@ -110,8 +141,11 @@ fun SettingsScreen(
 fun SettingsScreenContent(
     telemetryEnabled: Boolean,
     onTelemetryEnabledChange: (Boolean) -> Unit,
+    onResetIdentity: () -> Unit,
     hapticsEnabled: Boolean,
     onHapticsEnabledChange: (Boolean) -> Unit,
+    themeMode: ThemeMode,
+    onThemeModeChange: (ThemeMode) -> Unit,
     currentLanguageTag: String?,
     onLanguageSelected: (String?) -> Unit,
     tipJarAvailable: Boolean,
@@ -124,9 +158,13 @@ fun SettingsScreenContent(
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
+    var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showTipDialog by remember { mutableStateOf(false) }
+    var showResetIdentityDialog by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val resetIdentityDoneMessage = stringResource(R.string.settings_reset_identity_done)
 
     val tipThanksMessage = stringResource(R.string.tip_jar_thanks)
     val tipPendingMessage = stringResource(R.string.tip_jar_pending)
@@ -159,10 +197,10 @@ fun SettingsScreenContent(
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_settings)) },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.content_description_navigate_up),
                         )
                     }
                 },
@@ -180,17 +218,65 @@ fun SettingsScreenContent(
         ) {
             Spacer(Modifier.height(16.dp))
 
+            if (tipJarAvailable) {
+                OutlinedCard(
+                    modifier = Modifier
+                        .widthIn(max = 600.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(),
+                    shape = settingsGroupShape(isFirst = true, isLast = false),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(onClick = rememberHapticClick {
+                                onTipJarOpened()
+                                showTipDialog = true
+                            })
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.settings_tip_jar_title),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            Text(
+                                text = stringResource(R.string.settings_tip_jar_description),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
+                        Spacer(Modifier.width(16.dp))
+                        Icon(
+                            painter = painterResource(R.drawable.chevron_right_24px),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(SettingsItemSpacing))
+            }
+
             OutlinedCard(
                 modifier = Modifier
                     .widthIn(max = 600.dp)
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
-                shape = RoundedCornerShape(32.dp),
+                shape = settingsGroupShape(isFirst = !tipJarAvailable, isLast = false),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .toggleable(
+                            value = telemetryEnabled,
+                            onValueChange = rememberHapticToggle(onTelemetryEnabledChange),
+                            role = Role.Switch,
+                        )
                         .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -207,26 +293,67 @@ fun SettingsScreenContent(
                         )
                     }
                     Spacer(Modifier.width(16.dp))
+                    // The row owns the toggle (Role.Switch) so the control is labelled by
+                    // the title for screen readers; the Switch itself is non-interactive.
                     Switch(
                         checked = telemetryEnabled,
-                        onCheckedChange = onTelemetryEnabledChange,
+                        onCheckedChange = null,
                     )
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
+            if (telemetryEnabled) {
+                Spacer(Modifier.height(SettingsItemSpacing))
+
+                OutlinedCard(
+                    modifier = Modifier
+                        .widthIn(max = 600.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(),
+                    shape = settingsGroupShape(isFirst = false, isLast = false),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(onClick = rememberHapticClick { showResetIdentityDialog = true })
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.settings_reset_identity_title),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            Text(
+                                text = stringResource(R.string.settings_reset_identity_description),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(SettingsItemSpacing))
 
             OutlinedCard(
                 modifier = Modifier
                     .widthIn(max = 600.dp)
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
-                shape = RoundedCornerShape(32.dp),
+                shape = settingsGroupShape(isFirst = false, isLast = false),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .toggleable(
+                            value = hapticsEnabled,
+                            onValueChange = rememberHapticToggle(onHapticsEnabledChange),
+                            role = Role.Switch,
+                        )
                         .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -243,28 +370,68 @@ fun SettingsScreenContent(
                         )
                     }
                     Spacer(Modifier.width(16.dp))
+                    // The row owns the toggle (Role.Switch) so the control is labelled by
+                    // the title for screen readers; the Switch itself is non-interactive.
                     Switch(
                         checked = hapticsEnabled,
-                        onCheckedChange = onHapticsEnabledChange,
+                        onCheckedChange = null,
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(SettingsItemSpacing))
+
+            OutlinedCard(
+                modifier = Modifier
+                    .widthIn(max = 600.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(),
+                shape = settingsGroupShape(isFirst = false, isLast = false),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = rememberHapticClick { showThemeDialog = true })
+                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.settings_theme_title),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                        Text(
+                            text = themeModeLabel(themeMode),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    Icon(
+                        painter = painterResource(R.drawable.chevron_right_24px),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
 
             if (AppLanguage.isSupported) {
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(SettingsItemSpacing))
 
                 OutlinedCard(
                     modifier = Modifier
                         .widthIn(max = 600.dp)
                         .fillMaxWidth(),
                     colors = CardDefaults.cardColors(),
-                    shape = RoundedCornerShape(32.dp),
+                    shape = settingsGroupShape(isFirst = false, isLast = false),
                     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { showLanguageDialog = true }
+                            .clickable(onClick = rememberHapticClick { showLanguageDialog = true })
                             .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -291,63 +458,20 @@ fun SettingsScreenContent(
                 }
             }
 
-            if (tipJarAvailable) {
-                Spacer(Modifier.height(24.dp))
-
-                OutlinedCard(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxWidth(),
-                    colors = CardDefaults.cardColors(),
-                    shape = RoundedCornerShape(32.dp),
-                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onTipJarOpened()
-                                showTipDialog = true
-                            }
-                            .padding(horizontal = 24.dp, vertical = 24.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = stringResource(R.string.settings_tip_jar_title),
-                                style = MaterialTheme.typography.bodyLarge,
-                            )
-                            Text(
-                                text = stringResource(R.string.settings_tip_jar_description),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(top = 4.dp),
-                            )
-                        }
-                        Spacer(Modifier.width(16.dp))
-                        Icon(
-                            painter = painterResource(R.drawable.chevron_right_24px),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(SettingsItemSpacing))
 
             OutlinedCard(
                 modifier = Modifier
                     .widthIn(max = 600.dp)
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
-                shape = RoundedCornerShape(32.dp),
+                shape = settingsGroupShape(isFirst = false, isLast = !BuildConfig.DEBUG),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
+                        .clickable(onClick = rememberHapticClick {
                             Analytics.trackPrivacyPolicyClicked()
                             context.startActivity(
                                 Intent(
@@ -355,7 +479,7 @@ fun SettingsScreenContent(
                                     "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy".toUri(),
                                 )
                             )
-                        }
+                        })
                         .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -381,12 +505,26 @@ fun SettingsScreenContent(
             }
 
             if (BuildConfig.DEBUG) {
-                Spacer(Modifier.height(24.dp))
-                DebugTipJarCard(supporterTiers = supporterTiers)
+                Spacer(Modifier.height(SettingsItemSpacing))
+                DebugTipJarCard(
+                    supporterTiers = supporterTiers,
+                    shape = settingsGroupShape(isFirst = false, isLast = true),
+                )
             }
 
             Spacer(Modifier.height(16.dp))
         }
+    }
+
+    if (showThemeDialog) {
+        ThemePickerDialog(
+            current = themeMode,
+            onSelect = {
+                showThemeDialog = false
+                onThemeModeChange(it)
+            },
+            onDismiss = { showThemeDialog = false },
+        )
     }
 
     if (showLanguageDialog) {
@@ -407,6 +545,30 @@ fun SettingsScreenContent(
             onDismiss = { showTipDialog = false },
         )
     }
+
+    if (showResetIdentityDialog) {
+        AlertDialog(
+            onDismissRequest = { showResetIdentityDialog = false },
+            title = { Text(stringResource(R.string.settings_reset_identity_title)) },
+            text = { Text(stringResource(R.string.settings_reset_identity_dialog_message)) },
+            confirmButton = {
+                TextButton(
+                    onClick = rememberHapticClick {
+                        showResetIdentityDialog = false
+                        onResetIdentity()
+                        scope.launch { snackbarHostState.showSnackbar(resetIdentityDoneMessage) }
+                    },
+                ) {
+                    Text(stringResource(R.string.settings_reset_identity_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = rememberHapticClick { showResetIdentityDialog = false }) {
+                    Text(stringResource(android.R.string.cancel))
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -420,7 +582,7 @@ private fun TipJarDialog(
         title = { Text(stringResource(R.string.tip_jar_dialog_title)) },
         text = { TipJarTiers(products = products, onSelect = onSelect) },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = rememberHapticClick(onDismiss)) {
                 Text(stringResource(android.R.string.cancel))
             }
         },
@@ -450,7 +612,7 @@ private fun TipJarTiers(
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             products.forEach { product ->
                 Card(
-                    onClick = { onSelect(product.tier) },
+                    onClick = rememberHapticClick { onSelect(product.tier) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -541,13 +703,13 @@ private fun LanguagePickerDialog(
         title = { Text(stringResource(R.string.settings_language_title)) },
         text = {
             Column(modifier = Modifier.selectableGroup()) {
-                LanguageOptionRow(
+                SettingOptionRow(
                     label = stringResource(R.string.language_system_default),
                     selected = currentTag == null,
                     onClick = { onSelect(null) },
                 )
                 AppLanguage.SUPPORTED_TAGS.forEach { tag ->
-                    LanguageOptionRow(
+                    SettingOptionRow(
                         label = AppLanguage.displayName(tag),
                         selected = currentTag == tag,
                         onClick = { onSelect(tag) },
@@ -556,7 +718,7 @@ private fun LanguagePickerDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = rememberHapticClick(onDismiss)) {
                 Text(stringResource(android.R.string.cancel))
             }
         },
@@ -564,7 +726,44 @@ private fun LanguagePickerDialog(
 }
 
 @Composable
-private fun LanguageOptionRow(
+private fun themeModeLabel(mode: ThemeMode): String = stringResource(
+    when (mode) {
+        ThemeMode.SYSTEM -> R.string.theme_follow_system
+        ThemeMode.LIGHT -> R.string.theme_light
+        ThemeMode.DARK -> R.string.theme_dark
+    }
+)
+
+@Composable
+private fun ThemePickerDialog(
+    current: ThemeMode,
+    onSelect: (ThemeMode) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_theme_title)) },
+        text = {
+            Column(modifier = Modifier.selectableGroup()) {
+                ThemeMode.entries.forEach { mode ->
+                    SettingOptionRow(
+                        label = themeModeLabel(mode),
+                        selected = current == mode,
+                        onClick = { onSelect(mode) },
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = rememberHapticClick(onDismiss)) {
+                Text(stringResource(android.R.string.cancel))
+            }
+        },
+    )
+}
+
+@Composable
+private fun SettingOptionRow(
     label: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -572,7 +771,7 @@ private fun LanguageOptionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
+            .selectable(selected = selected, onClick = rememberHapticClick(onClick), role = Role.RadioButton)
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -593,8 +792,11 @@ private fun SettingsScreenPreview() {
         SettingsScreenContent(
             telemetryEnabled = true,
             onTelemetryEnabledChange = {},
+            onResetIdentity = {},
             hapticsEnabled = true,
             onHapticsEnabledChange = {},
+            themeMode = ThemeMode.SYSTEM,
+            onThemeModeChange = {},
             currentLanguageTag = "de",
             onLanguageSelected = {},
             tipJarAvailable = true,
@@ -619,8 +821,11 @@ private fun SettingsScreenTelemetryOffPreview() {
         SettingsScreenContent(
             telemetryEnabled = false,
             onTelemetryEnabledChange = {},
+            onResetIdentity = {},
             hapticsEnabled = false,
             onHapticsEnabledChange = {},
+            themeMode = ThemeMode.DARK,
+            onThemeModeChange = {},
             currentLanguageTag = null,
             onLanguageSelected = {},
             tipJarAvailable = false,

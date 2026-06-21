@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AppFunctionAppMetadata xmlns:appfn="http://schemas.android.com/apk/androidx.appfunctions"
+    appfn:description="This app reports whether the device has root access (is rooted) and which root solution is present.
+    Operational patterns:
+    - Use 'checkRootStatus' to run a fresh root check and read the current state.
+    - Use 'getLastRootCheck' to read the most recent check and its 'checkedAt' time without re-probing the device; prefer this to answer 'when was the last check?'.
+    - Use 'requestRootAccess' only when the user wants to grant this app root access; it surfaces the superuser allow dialog and requires an on-device tap, so it is not fully hands-free.
+    Constraints:
+    - All functions are read-only with respect to the device's root state; none install, modify, or remove root."
+    appfn:displayDescription="@string/appfunctions_description" />

@@ -10,9 +10,19 @@
         <package android:name="com.topjohnwu.magisk.debug" />
         <package android:name="com.topjohnwu.magisk.canary" />
         <package android:name="com.topjohnwu.magisk.alpha" />
+        <package android:name="io.github.huskydg.magisk" />
         <package android:name="me.weishu.kernelsu" />
         <package android:name="com.rifsxd.ksunext" />
+        <package android:name="com.sukisu.ultra" />
+        <package android:name="com.resukisu.resukisu" />
         <package android:name="me.bmax.apatch" />
+        <package android:name="eu.chainfire.supersu" />
+        <package android:name="com.koushikdutta.superuser" />
+        <package android:name="com.noshufou.android.su" />
+        <package android:name="com.noshufou.android.su.elite" />
+        <package android:name="com.kingroot.kinguser" />
+        <package android:name="com.kingouser.com" />
+        <package android:name="me.phh.superuser" />
     </queries>
 
     <application
@@ -50,6 +60,12 @@
             android:name="com.telemetrydeck.sdk.TelemetryDeckInitProvider"
             android:authorities="${applicationId}.telemetrydeckinitprovider"
             tools:node="remove" />
+
+        <!-- Describes the app's AppFunctions to the system / on-device agents. The
+             AppFunctionService itself is merged in by the appfunctions-service library. -->
+        <property
+            android:name="android.app.appfunctions.app_metadata"
+            android:resource="@xml/app_metadata" />
     </application>
 
 </manifest>

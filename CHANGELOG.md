@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4] - 2026-06-19
+
+### Added
+- Subtle haptic feedback on buttons and other controls throughout the app — taps, switches, list selections, and the device-info copy long-press now give a gentle tick. Governed by the existing **Haptic feedback** setting, alongside the root-check vibrations, and tuned to fire reliably on Samsung and other devices that suppress the standard tap haptic.
+- Assistants and other apps can now check this device's root status without opening the app, via Android AppFunctions (Android 16+): run a fresh root check, see the last check and when it was taken, or request root access. Available in both Google Play and FOSS builds.
+- New **Theme** option in Settings (above **Language**): force light or dark mode, or follow the system (default). The choice persists across launches, and switching cross-fades the colors smoothly instead of snapping.
+- New **Reset analytics identity** option in Settings (under the anonymous-usage-data switch): generate a fresh anonymous ID so future usage data can't be linked to anything shared before. Shown only while sharing usage data is enabled.
+
+### Changed
+- Redesigned the Settings screen so the options read as one connected group: the first and last items keep their rounded outer corners while the corners where items meet are squared off, and the items sit closer together.
+- Moved the tip jar (support development) to the top of Settings.
+
+### Fixed
+- Fixed a rare crash when navigating back: pressing back twice in quick succession on Settings, About, or Licences (or a fast back-swipe) could close the app with an error instead of returning to the main screen.
+- Detect more root managers that were previously reported as not rooted — Kitsune Mask, SukiSU Ultra, ReSukiSU, KernelSU Next, and legacy managers (SuperSU, KingRoot, Superuser, phh) — and show each by its own name instead of a generic "Magisk"/"KernelSU"/"Other" label.
+- On the "no root" result, the app now notes that hidden or renamed root managers may need access granted first, and offers a button to request it.
+- Accessibility: screen readers now announce the main-screen overflow (more options) button and the back buttons on Settings, About, and Licences, which were previously unlabeled.
+- Accessibility: screen readers now read out the root-check result automatically when it changes, instead of leaving it silent until the user navigates back to the status card.
+- Accessibility: copying a device-info row (device name, model, Android version) is now available to screen readers as a labelled "Copy" action, alongside the existing long-press for everyone.
+- Accessibility: the "anonymous usage data" and "haptic feedback" switches in Settings are now labelled by their row title for screen readers, and the whole row toggles them, giving a larger touch target.
+- Accessibility: the in-app update card now announces its state changes (available, downloading, downloaded, failed) to screen readers, and the result icon no longer produces a redundant generic announcement.
+
 ## [2.3] - 2026-06-08
 
 ### Added

@@ -17,9 +17,18 @@ Kontaktiere mich:</string>
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Anonyme Nutzungsdaten teilen</string>
     <string name="settings_telemetry_description">Hilft dabei, die App über TelemetryDeck zu verbessern. Wenn aktiviert, wird die Änderung beim nächsten App-Start wirksam.</string>
+    <string name="settings_reset_identity_title">Analyse-Identität zurücksetzen</string>
+    <string name="settings_reset_identity_description">Beginnt mit einer neuen anonymen ID, damit künftige Nutzungsdaten nicht mit den zuvor geteilten verknüpft werden können.</string>
+    <string name="settings_reset_identity_dialog_message">Es wird eine neue anonyme Kennung erzeugt. Künftige Nutzungsdaten werden nicht mit zuvor geteilten Daten verknüpft. Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="settings_reset_identity_confirm">Zurücksetzen</string>
+    <string name="settings_reset_identity_done">Analyse-Identität zurückgesetzt</string>
     <string name="settings_haptics_title">Haptisches Feedback</string>
-    <string name="settings_haptics_description">Vibriert während der Root-Prüfung und wenn das Ergebnis erscheint.</string>
+    <string name="settings_haptics_description">Vibriert beim Tippen, während der Root-Prüfung und wenn das Ergebnis erscheint.</string>
     <string name="settings_privacy_policy_description">Datenschutzerklärung online ansehen</string>
+    <string name="settings_theme_title">Design</string>
+    <string name="theme_follow_system">Systemstandard</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_dark">Dunkel</string>
     <string name="settings_language_title">Sprache</string>
     <string name="language_system_default">Systemstandard</string>
     <string name="settings_tip_jar_title">Entwicklung unterstützen</string>
@@ -37,6 +46,7 @@ Kontaktiere mich:</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
     <string name="rootNotGranted">Root ist verfügbar, aber diese App hat keinen Zugriff darauf</string>
+    <string name="root_hidden_manager_hint">Verwendest du einen versteckten oder umbenannten Root-Manager (z. B. Kitsune Mask)? Er wird möglicherweise erst erkannt, wenn du dieser App Zugriff gewährst.</string>
     <string name="action_request_root">Root-Zugriff anfordern</string>
     <string name="root_provider_other">Andere</string>
     <string name="root_provider_via">über %1$s</string>
@@ -50,6 +60,9 @@ Kontaktiere mich:</string>
     <string name="content_description_marketing_name">Marketingname</string>
     <string name="content_description_model_name">Modellname</string>
     <string name="content_description_android_version">Android-Version</string>
+    <string name="content_description_more_options">Weitere Optionen</string>
+    <string name="content_description_navigate_up">Nach oben navigieren</string>
+    <string name="action_copy">Kopieren</string>
     <string name="toast_content_copied">Inhalt kopiert</string>
 
     <!-- Device Info Labels -->
@@ -70,4 +83,6 @@ Kontaktiere mich:</string>
     <string name="update_action_install">Jetzt installieren</string>
     <string name="update_failed">Update fehlgeschlagen. Es wird automatisch erneut versucht.</string>
     <string name="app_updated_snackbar">App wurde aktualisiert</string>
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">Ermöglicht dem System und Assistenz-Apps, den Root-Status dieses Geräts zu prüfen, ohne die App zu öffnen.</string>
 </resources>

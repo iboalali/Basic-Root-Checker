@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,10 +49,10 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_licence)) },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.content_description_navigate_up),
                         )
                     }
                 },

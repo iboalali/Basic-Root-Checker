@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -15,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.billing.TipTier
 import kotlinx.collections.immutable.ImmutableSet
@@ -25,13 +25,16 @@ import kotlinx.collections.immutable.ImmutableSet
  * Labels are hardcoded English on purpose — developer tool.
  */
 @Composable
-fun DebugTipJarCard(supporterTiers: ImmutableSet<TipTier>) {
+fun DebugTipJarCard(
+    supporterTiers: ImmutableSet<TipTier>,
+    shape: Shape = settingsGroupShape(isFirst = false, isLast = true),
+) {
     OutlinedCard(
         modifier = Modifier
             .widthIn(max = 600.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(),
-        shape = RoundedCornerShape(32.dp),
+        shape = shape,
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
     ) {
         Column(

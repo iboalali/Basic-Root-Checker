@@ -1,0 +1,7 @@
+Versión 2.4:
+➕ Vibración háptica sutil en la app — toques, interruptores y selecciones dan un leve toque
+➕ Consulta el estado de root del dispositivo desde asistentes y otras apps, sin abrirla (Android 16+)
+➕ Nueva opción de Tema: claro, oscuro o sistema
+🛠️ Ajustes rediseñados, con el bote de propinas arriba
+🔨 Se detectan más gestores de root (Kitsune Mask, SukiSU, KernelSU Next, SuperSU y más), cada uno por su nombre
+🔨 Mejoras de accesibilidad y navegación atrás

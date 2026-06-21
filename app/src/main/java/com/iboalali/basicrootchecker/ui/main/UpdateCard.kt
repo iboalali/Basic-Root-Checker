@@ -15,9 +15,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -50,12 +54,13 @@ fun UpdateCard(
                     Text(
                         text = stringResource(R.string.update_available_title),
                         style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                     )
                     Text(
                         text = stringResource(R.string.update_available_body),
                         style = MaterialTheme.typography.bodyMedium,
                     )
-                    Button(modifier = Modifier.fillMaxWidth(), onClick = onUpdateClick) {
+                    Button(modifier = Modifier.fillMaxWidth(), onClick = rememberHapticClick(onUpdateClick)) {
                         Text(stringResource(R.string.update_action_update))
                     }
                 }
@@ -64,6 +69,7 @@ fun UpdateCard(
                     Text(
                         text = stringResource(R.string.update_downloading),
                         style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                     )
                     val total = updateStatus.totalBytes
                     val downloaded = updateStatus.bytesDownloaded
@@ -90,8 +96,9 @@ fun UpdateCard(
                     Text(
                         text = stringResource(R.string.update_downloaded_title),
                         style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                     )
-                    Button(modifier = Modifier.fillMaxWidth(), onClick = onInstallClick) {
+                    Button(modifier = Modifier.fillMaxWidth(), onClick = rememberHapticClick(onInstallClick)) {
                         Text(stringResource(R.string.update_action_install))
                     }
                 }
@@ -100,6 +107,7 @@ fun UpdateCard(
                     Text(
                         text = stringResource(R.string.update_failed),
                         style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                     )
                 }
             }

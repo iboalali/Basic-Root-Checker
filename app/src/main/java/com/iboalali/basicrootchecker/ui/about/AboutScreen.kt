@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -67,10 +68,10 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_about)) },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.content_description_navigate_up),
                         )
                     }
                 },
@@ -217,7 +218,7 @@ private fun SocialLinkRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = rememberHapticClick(onClick))
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

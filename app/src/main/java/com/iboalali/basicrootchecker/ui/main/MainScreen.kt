@@ -13,9 +13,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,10 +57,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
@@ -75,9 +80,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
+import com.iboalali.basicrootchecker.ui.rememberHapticLongClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
@@ -115,7 +123,7 @@ fun MainScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenContent(
     uiState: MainUiState,
@@ -159,10 +167,10 @@ fun MainScreenContent(
                     )
                 },
                 actions = {
-                    IconButton(onClick = { menuExpanded = true }) {
+                    IconButton(onClick = rememberHapticClick { menuExpanded = true }) {
                         Icon(
                             painter = painterResource(R.drawable.more_vert_24px),
-                            contentDescription = null
+                            contentDescription = stringResource(R.string.content_description_more_options),
                         )
                     }
                     DropdownMenu(
@@ -177,7 +185,7 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick = {
+                            onClick = rememberHapticClick {
                                 menuExpanded = false
                                 onNavigateToLicence()
                             },
@@ -190,7 +198,7 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick = {
+                            onClick = rememberHapticClick {
                                 menuExpanded = false
                                 onNavigateToSettings()
                             },
@@ -203,7 +211,7 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick = {
+                            onClick = rememberHapticClick {
                                 menuExpanded = false
                                 onNavigateToAbout()
                             },
@@ -211,7 +219,7 @@ fun MainScreenContent(
                         if (BuildConfig.DEBUG) {
                             AppBarDropdownMenuItem(
                                 text = "Demo: in-app update",
-                                onClick = {
+                                onClick = rememberHapticClick {
                                     menuExpanded = false
                                     showUpdateDemoDialog = true
                                 },
@@ -224,7 +232,7 @@ fun MainScreenContent(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
+                onClick = rememberHapticClick {
                     if (BuildConfig.DEBUG) {
                         showDemoDialog = true
                     } else {
@@ -337,8 +345,11 @@ fun MainScreenContent(
                                         }
                                     }
                                     Image(
+                                        // Decorative: the status text below (a live region)
+                                        // already conveys the result, so a generic icon
+                                        // description would just be announced redundantly.
                                         painter = painterResource(imageRes),
-                                        contentDescription = stringResource(R.string.string_root_status_description),
+                                        contentDescription = null,
                                         modifier = Modifier
                                             .size(96.dp)
                                             .graphicsLayer {
@@ -371,19 +382,43 @@ fun MainScreenContent(
                             },
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Center,
+                            // Announce the result to screen readers when the status changes,
+                            // since the FAB check updates this text without moving focus.
+                            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                         )
                     }
 
+                    // A bare "Other" (root present but no recognized manager) tells the user
+                    // nothing, so suppress the line; a named OTHER-family manager (e.g. SuperSU)
+                    // still shows.
+                    val isGenericOther = uiState.rootManager == null &&
+                            uiState.rootProvider == RootProvider.OTHER
                     val showProvider = (uiState.rootStatus == RootStatus.ROOTED ||
                             uiState.rootStatus == RootStatus.NOT_GRANTED) &&
-                            uiState.rootProvider != RootProvider.UNKNOWN
+                            uiState.rootProvider != RootProvider.UNKNOWN &&
+                            !isGenericOther
                     if (showProvider) {
-                        val providerName = when (uiState.rootProvider) {
-                            RootProvider.MAGISK -> stringResource(R.string.root_provider_magisk)
-                            RootProvider.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
-                            RootProvider.APATCH -> stringResource(R.string.root_provider_apatch)
-                            RootProvider.OTHER -> stringResource(R.string.root_provider_other)
-                            RootProvider.UNKNOWN -> ""
+                        // Prefer the specific installed manager; fall back to the family name when
+                        // only a mount/path/su signal identified it (no package).
+                        val providerName = when (uiState.rootManager) {
+                            RootManager.MAGISK -> stringResource(R.string.root_provider_magisk)
+                            RootManager.KITSUNE_MASK -> stringResource(R.string.root_manager_kitsune_mask)
+                            RootManager.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
+                            RootManager.KERNELSU_NEXT -> stringResource(R.string.root_manager_kernelsu_next)
+                            RootManager.SUKISU_ULTRA -> stringResource(R.string.root_manager_sukisu_ultra)
+                            RootManager.RESUKISU -> stringResource(R.string.root_manager_resukisu)
+                            RootManager.APATCH -> stringResource(R.string.root_provider_apatch)
+                            RootManager.SUPERSU -> stringResource(R.string.root_manager_supersu)
+                            RootManager.SUPERUSER -> stringResource(R.string.root_manager_superuser)
+                            RootManager.KINGROOT -> stringResource(R.string.root_manager_kingroot)
+                            RootManager.PHH -> stringResource(R.string.root_manager_phh)
+                            null -> when (uiState.rootProvider) {
+                                RootProvider.MAGISK -> stringResource(R.string.root_provider_magisk)
+                                RootProvider.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
+                                RootProvider.APATCH -> stringResource(R.string.root_provider_apatch)
+                                RootProvider.OTHER -> stringResource(R.string.root_provider_other)
+                                RootProvider.UNKNOWN -> ""
+                            }
                         }
                         val version = uiState.rootProviderVersion
                         val providerText = if (version != null) {
@@ -400,9 +435,21 @@ fun MainScreenContent(
                         )
                     }
 
-                    if (uiState.rootStatus == RootStatus.NOT_GRANTED) {
+                    if (uiState.rootStatus == RootStatus.NOT_ROOTED) {
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            text = stringResource(R.string.root_hidden_manager_hint),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+
+                    if (uiState.rootStatus == RootStatus.NOT_GRANTED ||
+                        uiState.rootStatus == RootStatus.NOT_ROOTED
+                    ) {
                         Spacer(Modifier.height(16.dp))
-                        FilledTonalButton(onClick = onRequestRoot) {
+                        FilledTonalButton(onClick = rememberHapticClick(onRequestRoot)) {
                             Text(text = stringResource(R.string.action_request_root))
                         }
                     }
@@ -517,7 +564,6 @@ fun MainScreenContent(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DeviceInfoText(
     label: String,
@@ -526,18 +572,32 @@ private fun DeviceInfoText(
     onCopied: () -> Unit,
 ) {
     val context = LocalContext.current
+    val copyLabel = stringResource(R.string.action_copy)
+    val copy: () -> Unit = {
+        val clipboard =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(ClipData.newPlainText(contentDescription, text))
+        onCopied()
+    }
+    // A subtle long-press buzz confirms the copy (detectTapGestures doesn't vibrate on its
+    // own), gated on the user's haptics setting; reused for the accessibility action too.
+    val copyWithHaptic = rememberHapticLongClick(copy)
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .combinedClickable(
-                onClick = {},
-                onLongClick = {
-                    val clipboard =
-                        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    clipboard.setPrimaryClip(ClipData.newPlainText(contentDescription, text))
-                    onCopied()
-                },
-            )
+            // Long-press copies for sighted users; screen readers reach the same action
+            // through a labelled custom action, since the row has no primary click.
+            .pointerInput(copyWithHaptic) {
+                detectTapGestures(onLongPress = { copyWithHaptic() })
+            }
+            .semantics {
+                customActions = listOf(
+                    CustomAccessibilityAction(copyLabel) {
+                        copyWithHaptic()
+                        true
+                    },
+                )
+            }
             .padding(vertical = 4.dp),
     ) {
         Text(
@@ -653,7 +713,8 @@ private fun MainScreenNotGrantedPreview() {
         MainScreenContent(
             uiState = MainUiState(
                 rootStatus = RootStatus.NOT_GRANTED,
-                rootProvider = RootProvider.MAGISK,
+                rootProvider = RootProvider.KERNELSU,
+                rootManager = RootManager.SUKISU_ULTRA,
                 deviceMarketingName = "Pixel 8 Pro",
                 deviceModelName = "husky",
                 androidVersion = "Android 16",

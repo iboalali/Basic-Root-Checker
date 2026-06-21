@@ -9,6 +9,7 @@
     <string name="rootUnknown">Не удалось определить наличие root-доступа</string>
     <string name="rootNotAvailable">На устройстве нет root-доступа</string>
     <string name="rootNotGranted">Root-доступ доступен, но не предоставлен этому приложению</string>
+    <string name="root_hidden_manager_hint">Используете скрытый или переименованный root-менеджер (например, Kitsune Mask)? Он может не определяться, пока вы не предоставите приложению доступ.</string>
     <string name="action_request_root">Запросить root-доступ</string>
     <string name="root_provider_other">Другой</string>
     <string name="root_provider_via">через %1$s</string>
@@ -21,9 +22,18 @@
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Отправлять анонимные данные об использовании</string>
     <string name="settings_telemetry_description">Помогает улучшать приложение через TelemetryDeck. Изменения вступают в силу при следующем запуске приложения.</string>
+    <string name="settings_reset_identity_title">Сбросить идентификатор аналитики</string>
+    <string name="settings_reset_identity_description">Создаёт новый анонимный идентификатор, чтобы будущие данные об использовании нельзя было связать с отправленными ранее.</string>
+    <string name="settings_reset_identity_dialog_message">Будет создан новый анонимный идентификатор. Будущие данные об использовании не будут связаны с тем, что отправлено ранее. Это действие нельзя отменить.</string>
+    <string name="settings_reset_identity_confirm">Сбросить</string>
+    <string name="settings_reset_identity_done">Идентификатор аналитики сброшен</string>
     <string name="settings_haptics_title">Тактильная отдача</string>
-    <string name="settings_haptics_description">Вибрация во время проверки root и при появлении результата.</string>
+    <string name="settings_haptics_description">Вибрация при нажатиях, во время проверки root и при появлении результата.</string>
     <string name="settings_privacy_policy_description">Открыть политику конфиденциальности в браузере</string>
+    <string name="settings_theme_title">Тема</string>
+    <string name="theme_follow_system">Как в системе</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
     <string name="settings_language_title">Язык</string>
     <string name="language_system_default">Язык системы</string>
     <string name="settings_tip_jar_title">Поддержать разработку</string>
@@ -56,6 +66,9 @@
     <string name="content_description_marketing_name">Маркетинговое название</string>
     <string name="content_description_model_name">Название модели</string>
     <string name="content_description_android_version">Версия Android</string>
+    <string name="content_description_more_options">Другие параметры</string>
+    <string name="content_description_navigate_up">Перейти вверх</string>
+    <string name="action_copy">Копировать</string>
 
     <!-- Device Info Labels -->
     <string name="label_device_name">Название устройства</string>
@@ -79,4 +92,6 @@
     <string name="other_apps_billboard_description">Это приложение помогает выводить крупный текст на экран и автоматически подбирает максимально возможный размер шрифта без обрезания текста.\n\nПодходит для совещаний — для голосования по теме числом или словом.</string>
     <string name="other_apps_hide_notifications_description">Выберите постоянное уведомление, которое нужно скрыть, и оно будет оставаться скрытым, пока установлено это приложение.</string>
 
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">Позволяет системе и приложениям-ассистентам проверять наличие root-доступа на устройстве, не открывая приложение.</string>
 </resources>

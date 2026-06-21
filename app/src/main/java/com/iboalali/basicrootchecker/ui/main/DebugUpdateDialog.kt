@@ -15,6 +15,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
 
 enum class DebugUpdateChoice { AVAILABLE, DOWNLOADING, DOWNLOADED, FAILED, RESET }
 
@@ -46,7 +47,7 @@ fun DebugUpdateDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("Close") }
+            TextButton(onClick = rememberHapticClick(onDismiss)) { Text("Close") }
         },
     )
 }
@@ -58,7 +59,7 @@ private fun DebugUpdateRow(label: String, onClick: () -> Unit) {
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = rememberHapticClick(onClick))
             .padding(vertical = 14.dp),
     )
 }
