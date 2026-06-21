@@ -71,6 +71,9 @@ import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.basicrootchecker.navigation.DetailNavIcon
+import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
+import com.iboalali.basicrootchecker.navigation.detailDialogShape
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.rememberHapticToggle
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
@@ -192,16 +195,27 @@ fun SettingsScreenContent(
     }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .detailDialogShape()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_settings)) },
                 navigationIcon = {
+                    // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over
+                    // the main screen on large screens (see LocalDetailNavIcon).
+                    val navIcon = LocalDetailNavIcon.current
                     IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
-                            painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = stringResource(R.string.content_description_navigate_up),
+                            painter = painterResource(
+                                if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
+                                else R.drawable.arrow_back_24px,
+                            ),
+                            contentDescription = stringResource(
+                                if (navIcon == DetailNavIcon.CLOSE) R.string.content_description_close
+                                else R.string.content_description_navigate_up,
+                            ),
                         )
                     }
                 },

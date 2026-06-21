@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- On large screens (tablets, unfolded foldables, desktop windows, and XR panels), opening Settings, About, or Licences now shows it as a dialog over the main screen instead of replacing the whole screen — dismiss it with the close button, by tapping outside, or with Back. Phones are unchanged.
 - Rate this app: after the app has confirmed root a few times, it may show Google Play's in-app rating card so you can rate without leaving the app, and a new **Rate this app** link on the About screen opens the Play Store listing on demand (Google Play builds only).
 
 ### Changed

@@ -66,6 +66,7 @@
     <string name="content_description_android_version">إصدار أندرويد</string>
     <string name="content_description_more_options">خيارات إضافية</string>
     <string name="content_description_navigate_up">التنقل إلى أعلى</string>
+    <string name="content_description_close">إغلاق</string>
     <string name="action_copy">نسخ</string>
     <string name="toast_content_copied">تم نسخ المحتوى</string>
 

@@ -75,6 +75,9 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    // Adaptive: window size class (currentWindowAdaptiveInfoV2; brings androidx.window:window-core)
+    // used to switch the secondary screens to a dialog on large screens.
+    implementation(libs.androidx.compose.material3.adaptive)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     // Lifecycle

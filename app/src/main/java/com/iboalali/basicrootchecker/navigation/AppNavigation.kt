@@ -6,12 +6,18 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEvent
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXPANDED_LOWER_BOUND
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
@@ -52,9 +58,29 @@ private fun popTransition(towardRight: Boolean): ContentTransform = ContentTrans
 )
 
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun AppNavigation() {
     val backStack = rememberNavBackStack(MainRoute)
+
+    // At the expanded width breakpoint (≥840dp: tablets, unfolded foldables in landscape, desktop
+    // windows, XR panels) the secondary screens (Settings/About/Licence) open as a dialog over the
+    // dimmed main screen instead of replacing it. Below it (phones, medium widths) they push
+    // full-screen with the transitions defined above.
+    val isExpanded = currentWindowAdaptiveInfoV2().windowSizeClass
+        .isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND)
+    val dialogStrategy = remember { DialogSceneStrategy<NavKey>() }
+
+    // Tag the secondary screens as dialogs only when expanded, so DialogSceneStrategy turns them
+    // into a dismissable modal (scrim-tap / back / the close button all dismiss). With no metadata
+    // they fall through to the single-pane push flow. entryProvider re-runs on width changes
+    // (e.g. fold/unfold, window resize), so the presentation follows the current size live.
+    val detailMetadata: Map<String, Any> =
+        if (isExpanded) DialogSceneStrategy.dialog() else emptyMap()
+
+    // The secondary screens show a back-arrow when pushed full-screen, and a close (X) when shown
+    // as a dialog beside the still-visible main screen. The Dialog content inherits this local.
+    val detailNavIcon = if (isExpanded) DetailNavIcon.CLOSE else DetailNavIcon.BACK
 
     // NavDisplay requires a non-empty back stack. Guard every pop so a double-back — a fast
     // system back-gesture, or tapping Up again while the exit animation still has the screen
@@ -63,58 +89,69 @@ fun AppNavigation() {
         if (backStack.size > 1) backStack.removeLastOrNull()
     }
 
-    NavDisplay(
-        backStack = backStack,
-        onBack = { popBackStack() },
-        transitionSpec = { animation },
-        popTransitionSpec = { popTransition(towardRight = true) },
-        predictivePopTransitionSpec = { edge ->
-            popTransition(towardRight = edge != NavigationEvent.EDGE_RIGHT)
-        },
-        entryProvider = entryProvider {
-            entry<MainRoute> {
-                MainScreen(
-                    onNavigateToAbout = {
-                        Analytics.trackNavigation("/main", "/about")
-                        backStack.add(AboutRoute)
-                    },
-                    onNavigateToLicence = {
-                        Analytics.trackNavigation("/main", "/licence")
-                        backStack.add(LicenceRoute)
-                    },
-                    onNavigateToSettings = {
-                        Analytics.trackNavigation("/main", "/settings")
-                        backStack.add(SettingsRoute)
-                    },
-                )
-            }
+    // Open a secondary screen, keeping the stack at [Main, oneDetail] (the three are interchangeable
+    // siblings reached only from the main screen). On phones this is a no-op; it just guards against
+    // ever stacking two secondary screens.
+    val navigateToDetail: (NavKey) -> Unit = { route ->
+        if (backStack.lastOrNull() != MainRoute) backStack.removeLastOrNull()
+        backStack.add(route)
+    }
 
-            entry<SettingsRoute> {
-                SettingsScreen(
-                    onNavigateBack = {
-                        Analytics.trackNavigation("/settings", "/main")
-                        popBackStack()
-                    },
-                )
-            }
+    CompositionLocalProvider(LocalDetailNavIcon provides detailNavIcon) {
+        NavDisplay(
+            backStack = backStack,
+            onBack = { popBackStack() },
+            sceneStrategies = listOf(dialogStrategy),
+            transitionSpec = { animation },
+            popTransitionSpec = { popTransition(towardRight = true) },
+            predictivePopTransitionSpec = { edge ->
+                popTransition(towardRight = edge != NavigationEvent.EDGE_RIGHT)
+            },
+            entryProvider = entryProvider {
+                entry<MainRoute> {
+                    MainScreen(
+                        onNavigateToAbout = {
+                            Analytics.trackNavigation("/main", "/about")
+                            navigateToDetail(AboutRoute)
+                        },
+                        onNavigateToLicence = {
+                            Analytics.trackNavigation("/main", "/licence")
+                            navigateToDetail(LicenceRoute)
+                        },
+                        onNavigateToSettings = {
+                            Analytics.trackNavigation("/main", "/settings")
+                            navigateToDetail(SettingsRoute)
+                        },
+                    )
+                }
 
-            entry<AboutRoute> {
-                AboutScreen(
-                    onNavigateBack = {
-                        Analytics.trackNavigation("/about", "/main")
-                        popBackStack()
-                    },
-                )
-            }
+                entry<SettingsRoute>(metadata = detailMetadata) {
+                    SettingsScreen(
+                        onNavigateBack = {
+                            Analytics.trackNavigation("/settings", "/main")
+                            popBackStack()
+                        },
+                    )
+                }
 
-            entry<LicenceRoute> {
-                LicenceScreen(
-                    onNavigateBack = {
-                        Analytics.trackNavigation("/licence", "/main")
-                        popBackStack()
-                    },
-                )
-            }
-        },
-    )
+                entry<AboutRoute>(metadata = detailMetadata) {
+                    AboutScreen(
+                        onNavigateBack = {
+                            Analytics.trackNavigation("/about", "/main")
+                            popBackStack()
+                        },
+                    )
+                }
+
+                entry<LicenceRoute>(metadata = detailMetadata) {
+                    LicenceScreen(
+                        onNavigateBack = {
+                            Analytics.trackNavigation("/licence", "/main")
+                            popBackStack()
+                        },
+                    )
+                }
+            },
+        )
+    }
 }

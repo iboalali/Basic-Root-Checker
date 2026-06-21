@@ -34,6 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.navigation.DetailNavIcon
+import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
+import com.iboalali.basicrootchecker.navigation.detailDialogShape
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 
@@ -45,15 +48,26 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
     val textColor = MaterialTheme.colorScheme.onSurface.toArgb()
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .detailDialogShape()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_licence)) },
                 navigationIcon = {
+                    // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over
+                    // the main screen on large screens (see LocalDetailNavIcon).
+                    val navIcon = LocalDetailNavIcon.current
                     IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
-                            painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = stringResource(R.string.content_description_navigate_up),
+                            painter = painterResource(
+                                if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
+                                else R.drawable.arrow_back_24px,
+                            ),
+                            contentDescription = stringResource(
+                                if (navIcon == DetailNavIcon.CLOSE) R.string.content_description_close
+                                else R.string.content_description_navigate_up,
+                            ),
                         )
                     }
                 },
