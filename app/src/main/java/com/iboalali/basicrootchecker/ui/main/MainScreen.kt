@@ -188,6 +188,9 @@ fun MainScreenContent(
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false },
+                        // Rounded corners to match the app's cards/FAB (Material3's default menu
+                        // corner is much tighter).
+                        shape = RoundedCornerShape(16.dp),
                         // The menu renders in its own Popup window, outside AppRoot's
                         // testTagsAsResourceId scope, so re-enable it here too — otherwise the
                         // menu items' test tags aren't visible to UI Automator (By.res), and the

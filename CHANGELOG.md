@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Faster cold start and smoother first scroll: the app now ships a baseline profile, so Android ahead-of-time compiles the hot startup and scrolling code paths when the app is installed instead of warming them up on the first few launches.
 - Corrected the About screen's privacy line to say the app collects no personal information (it previously claimed no data at all, which overstated it given the optional anonymous usage analytics).
+- The overflow (more options) menu now has rounded corners to match the rest of the app.
 
 ### Fixed
 - The in-app update download bar now fills smoothly as the download progresses, instead of jumping between values.
