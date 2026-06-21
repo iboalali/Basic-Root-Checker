@@ -1,5 +1,6 @@
 package com.iboalali.basicrootchecker.ui.main
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +12,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -74,7 +77,14 @@ fun UpdateCard(
                     val total = updateStatus.totalBytes
                     val downloaded = updateStatus.bytesDownloaded
                     if (total > 0L) {
-                        val progress = (downloaded.toFloat() / total.toFloat()).coerceIn(0f, 1f)
+                        val targetProgress = (downloaded.toFloat() / total.toFloat()).coerceIn(0f, 1f)
+                        // LinearProgressIndicator snaps to each value; Play reports bytes in
+                        // sporadic chunks, so animate between them for a smooth-moving bar.
+                        val progress by animateFloatAsState(
+                            targetValue = targetProgress,
+                            animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                            label = "updateDownloadProgress",
+                        )
                         LinearProgressIndicator(
                             progress = { progress },
                             modifier = Modifier.fillMaxWidth(),
