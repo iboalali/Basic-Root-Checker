@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - On large screens (tablets, unfolded foldables, desktop windows, and XR panels), opening Settings, About, or Licences now shows it as a dialog over the main screen instead of replacing the whole screen — dismiss it with the close button, by tapping outside, or with Back. Phones are unchanged.
 - Rate this app: after the app has confirmed root a few times, it may show Google Play's in-app rating card so you can rate without leaving the app, and a new **Rate this app** link on the About screen opens the Play Store listing on demand (Google Play builds only).
+- Anonymous usage analytics now notes whether the app is running on a phone or a larger screen (tablet or unfolded foldable) and the current window size, so phone and tablet support can be prioritized by real usage. It collects no personal information and follows the existing **anonymous usage data** opt-out in Settings.
 
 ### Changed
 - The About screen's **Other Apps** list now updates itself from the web instead of being fixed in the app: it shows each app's current description and latest highlights in your language, includes web apps, and adds Open / Install / Website buttons (Open launches the app if it's already installed). It works offline from a bundled copy and refreshes quietly in the background.
