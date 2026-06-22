@@ -23,6 +23,11 @@ object Analytics {
 
     private val gate = SignalGate()
 
+    // Set once the device form factor has been reported, so config changes within a process
+    // (rotation, fold/unfold, resize) don't emit the signal again — see [trackDeviceType].
+    @Volatile
+    private var deviceTypeReported = false
+
     /**
      * Resolve the telemetry opt-out preference, read asynchronously at startup.
      *
@@ -261,5 +266,30 @@ object Analytics {
                 "sdkInt" to sdkInt.toString(),
             ),
         )
+    }
+
+    /**
+     * One-shot per cold start: the device form factor, so the tablet / large-screen audience can be
+     * sized (e.g. to decide whether the Baseline Profile should also cover the expanded-width dialog
+     * path). Idempotent within a process — only the first call emits, so a rotation, fold/unfold, or
+     * resize after launch can't inflate the count.
+     *
+     * - [formFactor]: "phone" or "tablet", from the device's stable smallest width (≥600dp = tablet).
+     * - [widthSizeClass]: the launch-time window width class — "compact", "medium", or "expanded".
+     *   "expanded" (≥840dp) is exactly when the secondary screens open as a dialog; a foldable
+     *   registers by its posture at launch (folded ≈ compact, unfolded ≈ expanded).
+     */
+    fun trackDeviceType(formFactor: String, widthSizeClass: String) {
+        if (deviceTypeReported) return
+        deviceTypeReported = true
+        track {
+            TelemetryDeck.signal(
+                "deviceType",
+                mapOf(
+                    "formFactor" to formFactor,
+                    "widthSizeClass" to widthSizeClass,
+                ),
+            )
+        }
     }
 }

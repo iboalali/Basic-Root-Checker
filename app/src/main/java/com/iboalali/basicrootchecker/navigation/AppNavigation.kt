@@ -10,7 +10,9 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -18,6 +20,7 @@ import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEvent
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXPANDED_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
@@ -36,6 +39,9 @@ data object LicenceRoute : NavKey
 
 @Serializable
 data object SettingsRoute : NavKey
+
+// Android's canonical phone/tablet split: sw600dp (the smallest-width bucket tablets fall into).
+private const val TABLET_SMALLEST_WIDTH_DP = 600
 
 private val animation: ContentTransform = ContentTransform(
     targetContentEnter = slideInHorizontally(tween(300)) { it } +
@@ -67,8 +73,26 @@ fun AppNavigation() {
     // windows, XR panels) the secondary screens (Settings/About/Licence) open as a dialog over the
     // dimmed main screen instead of replacing it. Below it (phones, medium widths) they push
     // full-screen with the transitions defined above.
-    val isExpanded = currentWindowAdaptiveInfoV2().windowSizeClass
-        .isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND)
+    val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
+    val isExpanded = windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND)
+
+    // One-shot per cold start: report phone-vs-tablet and the launch-time window width class so the
+    // large-screen audience can be sized. Analytics dedups within the process, so the recompositions
+    // this is read through on resize/fold/unfold don't re-send it.
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        Analytics.trackDeviceType(
+            formFactor = if (
+                context.resources.configuration.smallestScreenWidthDp >= TABLET_SMALLEST_WIDTH_DP
+            ) "tablet" else "phone",
+            widthSizeClass = when {
+                isExpanded -> "expanded"
+                windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) -> "medium"
+                else -> "compact"
+            },
+        )
+    }
+
     val dialogStrategy = remember { DialogSceneStrategy<NavKey>() }
 
     // Tag the secondary screens as dialogs only when expanded, so DialogSceneStrategy turns them
