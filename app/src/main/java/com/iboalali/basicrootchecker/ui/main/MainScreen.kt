@@ -61,6 +61,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -356,7 +357,13 @@ fun MainScreenContent(
                                             status == RootStatus.NOT_ROOTED ||
                                             status == RootStatus.UNKNOWN ||
                                             status == RootStatus.NOT_GRANTED
-                                    val scale = remember { Animatable(if (isResult) 0f else 1f) }
+                                    // Start at full scale when rendered by a preview/screenshot tool
+                                    // (LaunchedEffect-driven enter animations don't advance there, so
+                                    // the icon would otherwise stay scaled to 0 and be invisible).
+                                    val inInspection = LocalInspectionMode.current
+                                    val scale = remember {
+                                        Animatable(if (isResult && !inInspection) 0f else 1f)
+                                    }
                                     LaunchedEffect(Unit) {
                                         if (isResult) {
                                             scale.animateTo(

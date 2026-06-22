@@ -13,7 +13,9 @@ object DeviceInfo {
         return try {
             context.packageManager
                 .getPackageInfo(context.packageName, 0)
-                .versionName ?: ""
+                // Layoutlib's PackageManager returns null here (no real package), so guard against
+                // it — otherwise Compose previews/screenshot tests of this screen crash with an NPE.
+                ?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e("DeviceInfo", "getAppVersionName: ", e)
             Analytics.trackError(e, id = "getAppVersionName", category = ERROR_CATEGORY_APP_STATE)

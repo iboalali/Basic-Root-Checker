@@ -336,11 +336,18 @@ private fun findInstalledPwaPackage(context: Context, url: String): String? {
     val intent = Intent(Intent.ACTION_VIEW, url.toUri())
         .addCategory(Intent.CATEGORY_BROWSABLE)
     val pm = context.packageManager
-    val resolvers = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        pm.queryIntentActivities(intent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
-    } else {
-        @Suppress("DEPRECATION")
-        pm.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+    // Best-effort: querying the package manager isn't supported in every context (e.g. Layoutlib,
+    // which backs Compose previews/screenshot tests, doesn't implement queryIntentActivities). Treat
+    // any failure as "no PWA installed" so the website button still renders.
+    val resolvers = try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            pm.queryIntentActivities(intent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
+        } else {
+            @Suppress("DEPRECATION")
+            pm.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+        }
+    } catch (e: Exception) {
+        return null
     }
     return resolvers
         .firstOrNull { it.activityInfo?.name?.startsWith(WEBAPK_SHELL_ACTIVITY_PREFIX) == true }

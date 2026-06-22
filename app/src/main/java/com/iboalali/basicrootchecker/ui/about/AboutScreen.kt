@@ -73,7 +73,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AboutScreenContent(
+internal fun AboutScreenContent(
     otherApps: ImmutableList<OtherAppUi>,
     onNavigateBack: () -> Unit,
 ) {

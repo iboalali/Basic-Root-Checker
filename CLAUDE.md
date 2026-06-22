@@ -28,6 +28,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # Prove the profile moved the numbers (A/B startup + scroll macrobenchmark)
 ./gradlew :baselineprofile:connectedGplayBenchmarkReleaseAndroidTest
+
+# Update the screenshot-test reference images (regression baseline; no device — JVM/Layoutlib)
+./gradlew :app:updateGplayDebugScreenshotTest
+
+# Check the UI against the committed reference images (fails on any visual diff)
+./gradlew :app:validateGplayDebugScreenshotTest
+
+# Export clean, upload-ready Play Store screenshots (all screens × all locales × store devices)
+./scripts/generate-store-screenshots.sh [output-subfolder]
 ```
 
 Unit tests live in `app/src/test/` and cover the app's pure decision logic — e.g. `RootChecker.classify`/`parseMagiskVersionCode` and the analytics `SignalGate` startup buffering. The hardware-dependent probes are not unit-tested; verify them on a real rooted device. AppFunctions are verified on a connected device with `adb shell cmd app_function list-app-functions --package <id>` and `... execute-app-function --function '<class>#<fn>' --parameters '{}'`.
@@ -113,6 +122,16 @@ The app ships a **Baseline Profile** (ART AOT-compilation hints) so cold start a
 - **TTFD:** `MainScreen` calls `ReportDrawnWhen { … }` so `timeToFullDisplay` marks the first meaningful frame (device info loads synchronously in the ViewModel's `init`, so it ≈ `timeToInitialDisplay`).
 - **Device requirements:** generation runs the journey on a connected device and needs API 33+ or root (works on the API 36 test device); measurement needs `<profileable android:shell="true">` (already in the manifest) on API 29+.
 - **Versions:** `benchmark`/`androidx.baselineprofile` are on `1.5.0-alpha` — required for AGP 9 (stable 1.4.x predates it). This build emits `frameCount` but not `frameOverrunMs` for the app's non-lazy `verticalScroll` screens, so startup is the headline metric and the scroll test mainly guards the journey. The plugin debug-signs its synthetic build types automatically (`release` has no signing config in `build.gradle.kts`).
+
+### Screenshot Tests (Compose Preview)
+
+The app uses the **official AndroidX Compose Preview Screenshot Testing** plugin (`com.android.compose.screenshot`) to render `@Preview`-style composables to PNGs **on the JVM via Layoutlib — no device/emulator**. It serves two goals at once: a **visual-regression baseline** (committed reference images, checked in CI) and **Play Store listing assets** (all screens, all locales, native device resolution). **When you add or rework a screen, add/refresh its `@PreviewTest` and regenerate — treat it as part of "done," like accessibility, haptics, and baseline profiles.**
+
+- **Where it lives:** `@PreviewTest` functions are in the **`screenshotTest` source set** (`app/src/screenshotTest/`), one per screen/state — they render the stateless `*Content` composables (e.g. `MainScreenContent`, `SettingsScreenContent`, `AboutScreenContent`, `LicenceScreen`) with fixed sample state. *The source set can only see `public`/`internal` members of `main`* — so a composable a screenshot needs must be at least `internal` (this is why `AboutScreenContent` is `internal`, not `private`). Enabled by the plugin + `screenshotTestImplementation(libs.screenshot.validation.api)` + `screenshotTestImplementation(libs.androidx.compose.ui.tooling)`, plus **both** `android.experimental.enableScreenshotTest=true` in `gradle.properties` **and** `experimentalProperties["android.experimental.enableScreenshotTest"] = true` in the `android {}` block (AGP 9 requires both, or the plugin fails to apply).
+- **Native-resolution device matrix:** `util/PreviewPlayStoreNative.kt` (the companion to `PreviewPlayStoreListing`) is the multipreview applied to each screen — **3 store devices × 5 locales = 15 PNGs per screen**. The tool sizes each PNG **purely from the `@Preview` device spec** (`output px == spec px`; there is no scale knob), so the devices use **pixel-based** specs (`spec:width=1080px,…,dpi=420`) to get high-resolution, native-size output. Each entry's `name` is kept free of special characters (no quotes) so the tool **embeds it in the reference filename** (`MainRootedShot_Phone_ar_<hash>_0.png`), making the PNGs sortable by screen/device/locale. Bare `@Preview(showBackground = true)` would render at small wrap-content size — always use a px device spec.
+- **Generate / validate:** `./gradlew :app:updateGplayDebugScreenshotTest` writes references under `app/src/screenshotTestGplayDebug/reference/…`; `:app:validateGplayDebugScreenshotTest` fails on any diff. The CLI tasks operate at the **variant level** (no per-preview filter) — to regenerate just one preview, use the **Android Studio gutter icon** on its `@PreviewTest` function. Run on the `gplayDebug` variant (these screens are flavor-independent; flavor-specific bits like the tip jar are passed in as plain args).
+- **Layoutlib preview-safety:** Layoutlib's `Context`/`PackageManager` is a stub — `getPackageInfo` returns null, `queryIntentActivities` is unimplemented, and `LaunchedEffect`-driven enter animations never advance. Code reached by a screenshot must degrade gracefully: guard package-manager calls (see `DeviceInfo.getAppVersionName`, `OtherAppsCard.findInstalledPwaPackage`) and gate entrance animations on `LocalInspectionMode.current` so the resting state renders (see the result-icon scale in `MainScreen`). A crash in any rendered composable fails the whole screenshot.
+- **Play Store export:** `scripts/generate-store-screenshots.sh [subfolder]` produces clean, upload-ready PNGs in `Play Store/Generated Screenshots/<subfolder>/`. The screenshot tool only renders the **debug** variant, whose `src/debug/res` renames the app to "… (Debug)"; the script temporarily neutralizes that override (the `screenshotTest` source set **cannot** override the app-under-test's resources), renders, copies the clean PNGs out with their `_<hash>_0` suffix stripped, then **restores both the debug strings and the committed regression baseline** — so a plain `validate` still passes and nothing is left modified. The committed `reference/` images therefore intentionally show "(Debug)"; the clean store assets are a separate export.
 
 ## Changelog
 

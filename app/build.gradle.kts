@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.baselineprofile)
+    alias(libs.plugins.screenshot)
 }
 
 android {
@@ -47,6 +48,12 @@ android {
         compose = true
         buildConfig = true
     }
+
+    // Compose Preview Screenshot Testing — renders @PreviewTest composables to PNGs on the JVM
+    // (no device). Required alongside the gradle.properties flag of the same name to apply the
+    // com.android.compose.screenshot plugin and enable the screenshotTest source set.
+    @Suppress("UnstableApiUsage")
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
 
     compileOptions {
         // Required so java.time.* (used transitively by TelemetryDeck via kotlinx-datetime)
@@ -126,6 +133,10 @@ dependencies {
 
     // Unit tests
     testImplementation(libs.junit)
+
+    // Compose Preview Screenshot Testing — @PreviewTest marker + the tooling that renders previews
+    screenshotTestImplementation(libs.screenshot.validation.api)
+    screenshotTestImplementation(libs.androidx.compose.ui.tooling)
 
     // Generated Baseline Profile, produced by the :baselineprofile module
     baselineProfile(project(":baselineprofile"))
