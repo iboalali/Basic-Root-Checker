@@ -15,8 +15,8 @@ android {
         applicationId = "com.iboalali.basicrootchecker"
         minSdk = 23
         targetSdk = 37
-        versionCode = 70
-        versionName = "v2.4.0vc$versionCode"
+        versionCode = 80
+        versionName = "v2.5.0vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf("en", "ar", "de", "es", "ru")
         buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")
