@@ -56,6 +56,11 @@ private val DismissFlingVelocity = 125.dp
 // swipe doesn't fling the card across the screen.
 private const val PredictiveBackMaxTravelFraction = 0.12f
 
+// When a gesture that was scrolling the list over-pulls past the top edge, the card only peeks down
+// by this much (then stops and springs back) — it never dismisses from the same motion that was
+// scrolling. Dismissing requires a fresh swipe-down that starts with the list already at the top.
+private val ScrollEdgeHintTravel = 48.dp
+
 /** The two resting positions of the detail card: fully open, or slid off the bottom (dismissed). */
 internal enum class DragAnchor {
     Expanded,
@@ -133,24 +138,37 @@ private fun targetForFling(
 }
 
 /**
- * Connects the hosted screen's vertical scroll to the card's dismiss drag, so dismiss only engages
- * once the inner scroll is exhausted at the top and the user keeps pulling down. Inverted-direction
- * twin of Material's `ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection`: our card is
+ * Connects the hosted screen's vertical scroll to the card's dismiss drag. Inverted-direction twin
+ * of Material's `ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection`: our card is
  * top-anchored (Expanded = min = 0, Dismissed = max), which mirrors the sheet's geometry, so the
- * consumption logic is identical.
+ * consumption logic is identical — with one deliberate difference (the `scrolled` gate below).
+ *
+ * **A gesture that was scrolling the list never dismisses.** Otherwise a single swipe-up-to-scroll
+ * followed by swipe-down-to-scroll would slide straight into a dismiss the moment the list hit its
+ * top edge. We track whether the *current* gesture moved the list ([scrolled]); if it did, an
+ * over-pull past the top only peeks the card down by [hintCapPx] and then springs back — never
+ * dismisses, regardless of velocity. Dismissing requires a *fresh* swipe-down that starts with the
+ * list already at the top (so the list consumes nothing and [scrolled] stays false). [scrolled]
+ * resets at the end of each gesture (the fling callbacks, which fire on every drag end).
  *
  * - [onPreScroll] grabs upward drag first, to pull a partly-dragged card back up before the list
  *   scrolls. (At Expanded, [AnchoredDraggableState.dispatchRawDelta] clamps to 0, so nothing is
  *   stolen and the list scrolls normally.)
  * - [onPostScroll] consumes leftover downward drag — only present once the list is pinned at the
- *   top and the collapsing toolbar is fully expanded — to drag the card toward Dismissed.
- * - [onPreFling]/[onPostFling] route the fling velocity to [onFling] to settle.
+ *   top and the collapsing toolbar is fully expanded — to drag the card down (capped to a hint
+ *   while [scrolled]).
+ * - [onPreFling]/[onPostFling] route the fling velocity to [onSettle], passing [scrolled] so a
+ *   scroll gesture springs back instead of dismissing.
  */
 private fun detailDismissNestedScroll(
     state: AnchoredDraggableState<DragAnchor>,
-    onFling: (velocity: Float) -> Unit,
+    hintCapPx: Float,
+    onSettle: (velocity: Float, scrolledThisGesture: Boolean) -> Unit,
 ): NestedScrollConnection =
     object : NestedScrollConnection {
+        // True once the list has consumed any scroll during the current gesture.
+        private var scrolled = false
+
         override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
             val delta = available.y
             return if (delta < 0f && source == NestedScrollSource.UserInput) {
@@ -165,11 +183,19 @@ private fun detailDismissNestedScroll(
             available: Offset,
             source: NestedScrollSource,
         ): Offset {
-            return if (source == NestedScrollSource.UserInput) {
-                Offset(0f, state.dispatchRawDelta(available.y))
-            } else {
-                Offset.Zero
-            }
+            if (source != NestedScrollSource.UserInput) return Offset.Zero
+            if (consumed.y != 0f) scrolled = true
+            val delta = available.y
+            if (delta <= 0f) return Offset.Zero // only downward over-pull drags the card
+            val capped =
+                if (scrolled) {
+                    // Hint only: let the card peek to hintCapPx, then consume nothing more.
+                    val current = state.offset.let { if (it.isNaN()) 0f else it }
+                    delta.coerceAtMost((hintCapPx - current).coerceAtLeast(0f))
+                } else {
+                    delta // fresh swipe-down from the top: full dismiss drag
+                }
+            return Offset(0f, state.dispatchRawDelta(capped))
         }
 
         override suspend fun onPreFling(available: Velocity): Velocity {
@@ -177,7 +203,7 @@ private fun detailDismissNestedScroll(
             val offset = state.offset
             val minPosition = state.anchors.minPosition()
             return if (velocity < 0f && !offset.isNaN() && offset > minPosition) {
-                onFling(velocity)
+                onSettle(velocity, scrolled)
                 available
             } else {
                 Velocity.Zero
@@ -185,7 +211,8 @@ private fun detailDismissNestedScroll(
         }
 
         override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-            onFling(available.y)
+            onSettle(available.y, scrolled)
+            scrolled = false
             return available
         }
     }
@@ -206,6 +233,7 @@ internal fun DetailOverlayContent(
     val density = LocalDensity.current
     val dismissThresholdPx = with(density) { DismissDragThreshold.toPx() }
     val minFlingVelocityPx = with(density) { DismissFlingVelocity.toPx() }
+    val scrollEdgeHintPx = with(density) { ScrollEdgeHintTravel.toPx() }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(state) {
@@ -243,17 +271,21 @@ internal fun DetailOverlayContent(
     }
 
     val dismissConnection =
-        remember(state, dismissThresholdPx, minFlingVelocityPx) {
-            detailDismissNestedScroll(state.draggable) { velocity ->
+        remember(state, dismissThresholdPx, minFlingVelocityPx, scrollEdgeHintPx) {
+            detailDismissNestedScroll(state.draggable, scrollEdgeHintPx) { velocity, scrolled ->
                 scope.launch {
-                    state.draggable.animateTo(
-                        targetForFling(
-                            state.draggable,
-                            velocity,
-                            dismissThresholdPx,
-                            minFlingVelocityPx,
-                        )
-                    )
+                    // A gesture that was scrolling the list springs back; only a fresh swipe-down
+                    // from the top is allowed to settle to Dismissed.
+                    val target =
+                        if (scrolled) DragAnchor.Expanded
+                        else
+                            targetForFling(
+                                state.draggable,
+                                velocity,
+                                dismissThresholdPx,
+                                minFlingVelocityPx,
+                            )
+                    state.draggable.animateTo(target)
                 }
             }
         }
