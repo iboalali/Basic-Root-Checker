@@ -10,6 +10,11 @@
 # (the reference/ images stay on the normal "(Debug)" render, so `validateGplayDebugScreenshotTest`
 # keeps passing on a plain checkout). Nothing is left modified.
 #
+# Output is grouped into per-language subfolders (matching the `Play Store/Listing/` convention:
+# default/german/arabic/spanish/russian), then a per-device subfolder (Phone/Tablet7/Tablet10),
+# e.g. ".../v2.5/arabic/Tablet10/AboutDialogShot.png". Mirrors the Play Console upload flow: pick a
+# language, then drop each device folder into its slot.
+#
 # Usage:  scripts/generate-store-screenshots.sh [output-subfolder]
 #         (default output: "Play Store/Generated Screenshots/")
 set -euo pipefail
@@ -50,16 +55,37 @@ done
 echo "==> Rendering store screenshots…"
 ./gradlew :app:updateGplayDebugScreenshotTest --rerun-tasks
 
-echo "==> Exporting clean PNGs to: $OUT_DIR"
+# Locale code -> language subfolder, matching the `Play Store/Listing/` convention (English is
+# "default"). An unmapped locale falls back to its raw code so nothing is silently dropped.
+lang_dir_for() {
+  case "$1" in
+    en) echo default ;;
+    de) echo german ;;
+    ar) echo arabic ;;
+    es) echo spanish ;;
+    ru) echo russian ;;
+    *)  echo "$1" ;;
+  esac
+}
+
+echo "==> Exporting clean PNGs to: $OUT_DIR (grouped by language, then device)"
 mkdir -p "$OUT_DIR"
-# Copy each reference PNG, dropping the trailing _<hash>_0 so names are upload-friendly:
-#   MainRootedShot_Phone_ar_7f8b2b52_0.png  ->  MainRootedShot_Phone_ar.png
+# Group each reference PNG into a <language>/<device>/ subfolder, dropping the trailing _<hash>_0 and
+# the now-redundant locale + device tokens (the folders convey them):
+#   AboutDialogShot_Tablet10_ar_7f8b2b52_0.png  ->  arabic/Tablet10/AboutDialogShot.png
 for f in "$REF_DIR"/*.png; do
   base="$(basename "$f")"
-  clean="$(echo "$base" | sed -E 's/_[0-9a-f]{8}_[0-9]+\.png$/.png/')"
-  cp "$f" "$OUT_DIR/$clean"
+  # Strip the _<hash>_<index>.png tail, leaving {Screen}_{Device}_{locale}.
+  stem="$(echo "$base" | sed -E 's/_[0-9a-f]{8}_[0-9]+\.png$//')"
+  locale="${stem##*_}"   # last token
+  rest="${stem%_*}"      # {Screen}_{Device}
+  device="${rest##*_}"   # second-to-last token (Phone / Tablet7 / Tablet10)
+  screen="${rest%_*}"    # {Screen}
+  dest="$OUT_DIR/$(lang_dir_for "$locale")/$device"
+  mkdir -p "$dest"
+  cp "$f" "$dest/$screen.png"
 done
-echo "    Exported $(ls -1 "$OUT_DIR"/*.png | wc -l | tr -d ' ') screenshots."
+echo "    Exported $(find "$OUT_DIR" -name '*.png' | wc -l | tr -d ' ') screenshots across $(find "$OUT_DIR" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ') languages."
 
 echo "==> Restoring debug app name and the regression baseline…"
 restore_strings

@@ -50,8 +50,3 @@ app/src/main/res/values/publickey.xml
 
 # Claude Code per-project state
 .claude/
-
-# Regenerable Play Store screenshot export (produced by scripts/generate-store-screenshots.sh).
-# The committed screenshotTest reference/ images are the source of truth; this is just the
-# clean, upload-ready copy and can be regenerated on demand.
-/Play Store/Generated Screenshots/
