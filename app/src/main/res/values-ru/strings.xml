@@ -71,6 +71,7 @@
     <string name="content_description_navigate_up">Перейти вверх</string>
     <string name="content_description_close">Закрыть</string>
     <string name="content_description_dismiss_dialog">Закрыть диалоговое окно</string>
+    <string name="detail_release_to_close">Отпустите, чтобы закрыть</string>
     <string name="action_copy">Копировать</string>
 
     <!-- Device Info Labels -->

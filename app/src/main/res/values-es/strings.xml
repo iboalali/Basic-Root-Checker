@@ -71,6 +71,7 @@
     <string name="content_description_navigate_up">Desplazarse hacia arriba</string>
     <string name="content_description_close">Cerrar</string>
     <string name="content_description_dismiss_dialog">Cerrar diálogo</string>
+    <string name="detail_release_to_close">Suelta para cerrar</string>
     <string name="action_copy">Copiar</string>
 
     <!-- Device Info Labels -->

@@ -230,6 +230,7 @@
     <string name="content_description_navigate_up">Navigate up</string>
     <string name="content_description_close">Close</string>
     <string name="content_description_dismiss_dialog">Dismiss dialog</string>
+    <string name="detail_release_to_close">Release to close</string>
     <string name="action_copy">Copy</string>
 
     <!-- Device Info Labels -->

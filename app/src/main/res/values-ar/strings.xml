@@ -68,6 +68,7 @@
     <string name="content_description_navigate_up">التنقل إلى أعلى</string>
     <string name="content_description_close">إغلاق</string>
     <string name="content_description_dismiss_dialog">إغلاق مربع الحوار</string>
+    <string name="detail_release_to_close">حرّر للإغلاق</string>
     <string name="action_copy">نسخ</string>
     <string name="toast_content_copied">تم نسخ المحتوى</string>
 
