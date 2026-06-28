@@ -1,0 +1,302 @@
+package com.iboalali.basicrootchecker.navigation
+
+import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.animateTo
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.offset
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.NavMetadataKey
+import androidx.navigation3.runtime.get
+import androidx.navigation3.runtime.metadata
+import androidx.navigation3.scene.OverlayScene
+import androidx.navigation3.scene.Scene
+import androidx.navigation3.scene.SceneStrategy
+import androidx.navigation3.scene.SceneStrategyScope
+import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.ui.rememberHapticClick
+import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
+
+// How far the card must be dragged down (or flung past) before release dismisses it instead of
+// springing back. A fixed distance reads better than a fraction here, because the dismiss travel
+// (the full viewport) is large.
+private val DismissDragThreshold = 120.dp
+
+// Minimum fling speed that dismisses regardless of distance, mirroring the foundation default
+// (AnchoredDraggableMinFlingVelocity, 125 dp/s).
+private val DismissFlingVelocity = 125.dp
+
+/** The two resting positions of the detail card: fully open, or slid off the bottom (dismissed). */
+internal enum class DragAnchor {
+    Expanded,
+    Dismissed,
+}
+
+/**
+ * Drag/animation state for the detail card. Wraps a foundation [AnchoredDraggableState] whose
+ * offset is the card's downward translation in px: 0 at [DragAnchor.Expanded], the viewport height
+ * at [DragAnchor.Dismissed] (so the card clears the screen). The same offset drives both the card
+ * position and the scrim alpha, so there is a single source of truth for the motion.
+ */
+@Stable
+internal class DetailDismissState(val draggable: AnchoredDraggableState<DragAnchor>) {
+
+    /** 0 fully open … 1 fully dismissed. Read inside draw/layout lambdas only (deferred). */
+    val dismissProgress: Float
+        get() {
+            val offset = draggable.offset
+            val dismissed = draggable.anchors.positionOf(DragAnchor.Dismissed)
+            return if (offset.isNaN() || dismissed <= 0f) 0f
+            else (offset / dismissed).coerceIn(0f, 1f)
+        }
+
+    /** Card's vertical translation in px; 0 until the anchors are measured. */
+    fun cardOffsetY(): Int {
+        val offset = draggable.offset
+        return if (offset.isNaN()) 0 else offset.roundToInt()
+    }
+
+    /**
+     * Set anchors from the measured viewport height; Dismissed = a full viewport-height slide down.
+     */
+    fun updateViewport(heightPx: Int) {
+        if (heightPx <= 0) return
+        draggable.updateAnchors(
+            DraggableAnchors {
+                DragAnchor.Expanded at 0f
+                DragAnchor.Dismissed at heightPx.toFloat()
+            }
+        )
+    }
+
+    suspend fun animateToDismissed() = draggable.animateTo(DragAnchor.Dismissed)
+}
+
+@Composable
+internal fun rememberDetailDismissState(): DetailDismissState {
+    // Expanded initial value ⇒ instant appearance (offset snaps to 0 once anchors land). Switching
+    // this to Dismissed + a show() animation in the content is all a future open animation needs.
+    val draggable = remember { AnchoredDraggableState(initialValue = DragAnchor.Expanded) }
+    return remember(draggable) { DetailDismissState(draggable) }
+}
+
+/**
+ * Decide where a fling lands: dismiss if the fling is fast enough downward, or if the card is
+ * already dragged past [DismissDragThreshold]; otherwise spring back open. Upward flings always
+ * spring back. Mirrors the foundation fling behavior used for direct drags on the card.
+ */
+private fun targetForFling(
+    draggable: AnchoredDraggableState<DragAnchor>,
+    velocity: Float,
+    dismissThresholdPx: Float,
+    minFlingVelocityPx: Float,
+): DragAnchor {
+    val offset = draggable.offset
+    if (offset.isNaN()) return DragAnchor.Expanded
+    val expanded = draggable.anchors.positionOf(DragAnchor.Expanded)
+    return when {
+        velocity >= minFlingVelocityPx -> DragAnchor.Dismissed
+        velocity <= -minFlingVelocityPx -> DragAnchor.Expanded
+        offset - expanded >= dismissThresholdPx -> DragAnchor.Dismissed
+        else -> DragAnchor.Expanded
+    }
+}
+
+/**
+ * Connects the hosted screen's vertical scroll to the card's dismiss drag, so dismiss only engages
+ * once the inner scroll is exhausted at the top and the user keeps pulling down. Inverted-direction
+ * twin of Material's `ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection`: our card is
+ * top-anchored (Expanded = min = 0, Dismissed = max), which mirrors the sheet's geometry, so the
+ * consumption logic is identical.
+ *
+ * - [onPreScroll] grabs upward drag first, to pull a partly-dragged card back up before the list
+ *   scrolls. (At Expanded, [AnchoredDraggableState.dispatchRawDelta] clamps to 0, so nothing is
+ *   stolen and the list scrolls normally.)
+ * - [onPostScroll] consumes leftover downward drag — only present once the list is pinned at the
+ *   top and the collapsing toolbar is fully expanded — to drag the card toward Dismissed.
+ * - [onPreFling]/[onPostFling] route the fling velocity to [onFling] to settle.
+ */
+private fun detailDismissNestedScroll(
+    state: AnchoredDraggableState<DragAnchor>,
+    onFling: (velocity: Float) -> Unit,
+): NestedScrollConnection =
+    object : NestedScrollConnection {
+        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+            val delta = available.y
+            return if (delta < 0f && source == NestedScrollSource.UserInput) {
+                Offset(0f, state.dispatchRawDelta(delta))
+            } else {
+                Offset.Zero
+            }
+        }
+
+        override fun onPostScroll(
+            consumed: Offset,
+            available: Offset,
+            source: NestedScrollSource,
+        ): Offset {
+            return if (source == NestedScrollSource.UserInput) {
+                Offset(0f, state.dispatchRawDelta(available.y))
+            } else {
+                Offset.Zero
+            }
+        }
+
+        override suspend fun onPreFling(available: Velocity): Velocity {
+            val velocity = available.y
+            val offset = state.offset
+            val minPosition = state.anchors.minPosition()
+            return if (velocity < 0f && !offset.isNaN() && offset > minPosition) {
+                onFling(velocity)
+                available
+            } else {
+                Velocity.Zero
+            }
+        }
+
+        override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+            onFling(available.y)
+            return available
+        }
+    }
+
+/**
+ * The overlay's content: the scrim + card from [DetailCard], wired for swipe-down-to-dismiss. The
+ * card follows the finger (the offset is read in a deferred layout lambda), the scrim fades with
+ * the drag, and any settle onto [DragAnchor.Dismissed] — from a direct drag, a nested-scroll
+ * over-pull, a scrim tap, or [DetailDismissState.animateToDismissed] in `onRemove()` — funnels
+ * through one [snapshotFlow] observer that calls [onDismissRequested] exactly once.
+ */
+@Composable
+internal fun DetailOverlayContent(
+    state: DetailDismissState,
+    onDismissRequested: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    val density = LocalDensity.current
+    val dismissThresholdPx = with(density) { DismissDragThreshold.toPx() }
+    val minFlingVelocityPx = with(density) { DismissFlingVelocity.toPx() }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(state) {
+        snapshotFlow { state.draggable.settledValue }
+            .collect { if (it == DragAnchor.Dismissed) onDismissRequested() }
+    }
+
+    val dismissConnection =
+        remember(state, dismissThresholdPx, minFlingVelocityPx) {
+            detailDismissNestedScroll(state.draggable) { velocity ->
+                scope.launch {
+                    state.draggable.animateTo(
+                        targetForFling(
+                            state.draggable,
+                            velocity,
+                            dismissThresholdPx,
+                            minFlingVelocityPx,
+                        )
+                    )
+                }
+            }
+        }
+
+    val flingBehavior =
+        AnchoredDraggableDefaults.flingBehavior(
+            state = state.draggable,
+            positionalThreshold = { dismissThresholdPx },
+        )
+
+    DetailCard(
+        modifier = Modifier.onSizeChanged { state.updateViewport(it.height) },
+        scrimAlpha = { DetailCardDefaults.MaxScrimAlpha * (1f - state.dismissProgress) },
+        onScrimClick = rememberHapticClick(onDismissRequested),
+        scrimClickLabel = stringResource(R.string.content_description_dismiss_dialog),
+        cardModifier =
+            Modifier.fillMaxHeight()
+                .offset { IntOffset(0, state.cardOffsetY()) }
+                .nestedScroll(dismissConnection)
+                .anchoredDraggable(
+                    state = state.draggable,
+                    orientation = Orientation.Vertical,
+                    flingBehavior = flingBehavior,
+                ),
+        content = content,
+    )
+}
+
+/**
+ * Metadata flag: tag a [NavEntry] with [detailOverlay] to present it via
+ * [DetailOverlaySceneStrategy].
+ */
+internal object DetailOverlayKey : NavMetadataKey<Unit>
+
+/** Entry metadata that opts a secondary screen into the custom dismissable overlay presentation. */
+internal fun detailOverlay(): Map<String, Any> = metadata { put(DetailOverlayKey, Unit) }
+
+/**
+ * Presents the top entry as an in-composition dismissable card over the dimmed main screen, when
+ * (and only when) it carries [detailOverlay] metadata — `AppNavigation` adds that only at expanded
+ * width, so below the breakpoint this returns null and the entry falls through to the single-pane
+ * push flow. Replaces the built-in `DialogSceneStrategy` (a separate platform `Dialog` window) so
+ * the card can be swipe-dismissed, render inside the app's `testTagsAsResourceId` scope, and own
+ * its exit animation via [OverlayScene.onRemove].
+ */
+internal class DetailOverlaySceneStrategy : SceneStrategy<NavKey> {
+    override fun SceneStrategyScope<NavKey>.calculateScene(
+        entries: List<NavEntry<NavKey>>
+    ): Scene<NavKey>? {
+        val entry = entries.lastOrNull() ?: return null
+        entry.metadata[DetailOverlayKey] ?: return null
+        val onBack = onBack
+        return object : OverlayScene<NavKey> {
+            override val key: Any = entry.contentKey
+            override val entries: List<NavEntry<NavKey>> = listOf(entry)
+            override val previousEntries: List<NavEntry<NavKey>> = entries.dropLast(1)
+            // The main screen, rendered live and dimmed beneath the card.
+            override val overlaidEntries: List<NavEntry<NavKey>> = previousEntries.takeLast(1)
+
+            // Assigned during content composition; read in onRemove() to run the exit animation.
+            // The
+            // scene instance is remembered by NavDisplay and kept composed until onRemove()
+            // finishes
+            // (see NavDisplay's currentOverlayScenes), so the field is valid when onRemove() runs.
+            private lateinit var dismissState: DetailDismissState
+
+            override val content: @Composable () -> Unit = {
+                val state = rememberDetailDismissState()
+                dismissState = state
+                DetailOverlayContent(state = state, onDismissRequested = onBack) { entry.Content() }
+            }
+
+            override suspend fun onRemove() {
+                if (
+                    ::dismissState.isInitialized &&
+                        dismissState.draggable.currentValue != DragAnchor.Dismissed
+                ) {
+                    dismissState.animateToDismissed()
+                }
+            }
+        }
+    }
+}

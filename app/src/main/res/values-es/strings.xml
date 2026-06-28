@@ -70,6 +70,7 @@
     <string name="content_description_more_options">Más opciones</string>
     <string name="content_description_navigate_up">Desplazarse hacia arriba</string>
     <string name="content_description_close">Cerrar</string>
+    <string name="content_description_dismiss_dialog">Cerrar diálogo</string>
     <string name="action_copy">Copiar</string>
 
     <!-- Device Info Labels -->

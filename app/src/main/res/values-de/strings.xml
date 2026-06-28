@@ -64,6 +64,7 @@ Kontaktiere mich:</string>
     <string name="content_description_more_options">Weitere Optionen</string>
     <string name="content_description_navigate_up">Nach oben navigieren</string>
     <string name="content_description_close">Schließen</string>
+    <string name="content_description_dismiss_dialog">Dialog schließen</string>
     <string name="action_copy">Kopieren</string>
     <string name="toast_content_copied">Inhalt kopiert</string>
 
