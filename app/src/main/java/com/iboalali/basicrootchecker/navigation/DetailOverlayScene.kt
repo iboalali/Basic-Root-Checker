@@ -1,5 +1,6 @@
 package com.iboalali.basicrootchecker.navigation
 
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -36,6 +37,7 @@ import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
@@ -203,6 +205,31 @@ internal fun DetailOverlayContent(
     LaunchedEffect(state) {
         snapshotFlow { state.draggable.settledValue }
             .collect { if (it == DragAnchor.Dismissed) onDismissRequested() }
+    }
+
+    // Predictive back: track the card down with the back gesture and dismiss on commit. The custom
+    // overlay isn't a platform Dialog window, so without this the back gesture isn't intercepted
+    // for
+    // the card and falls through to finishing the Activity. Registered inside the overlay content
+    // so
+    // it takes precedence (composed last) only while the card is shown. The settle animations run
+    // in
+    // `scope`, not the gesture's own coroutine — a cancelled gesture cancels that coroutine, so a
+    // suspend spring-back must run independently.
+    PredictiveBackHandler(enabled = true) { backEvents ->
+        try {
+            backEvents.collect { event ->
+                val dismissed = state.draggable.anchors.positionOf(DragAnchor.Dismissed)
+                val current = state.draggable.offset
+                if (!dismissed.isNaN() && !current.isNaN()) {
+                    state.draggable.dispatchRawDelta(dismissed * event.progress - current)
+                }
+            }
+            scope.launch { state.animateToDismissed() }
+        } catch (e: CancellationException) {
+            scope.launch { state.draggable.animateTo(DragAnchor.Expanded) }
+            throw e
+        }
     }
 
     val dismissConnection =
