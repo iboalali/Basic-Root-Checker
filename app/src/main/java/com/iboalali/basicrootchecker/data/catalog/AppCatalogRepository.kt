@@ -26,7 +26,8 @@ import java.util.zip.GZIPInputStream
  * The list is shown from the best data available, in priority order:
  *  1. the latest successful download from the website,
  *  2. the cached copy of a previous download (offline),
- *  3. the snapshot bundled in `assets/apps.json` (first run, offline).
+ *  3. the per-locale snapshot bundled in `assets/apps.<locale>.json`, with English `apps.json` as
+ *     the final fallback (first run, offline).
  *
  * **Localization.** The feed is published one file per locale — `apps.json` (English default),
  * `apps.de.json`, `apps.ar.json`, `apps.es.json`, `apps.ru.json`. We request the file for the
@@ -78,11 +79,22 @@ class AppCatalogRepository(private val context: Context) {
         val cache = cacheFile(key)
         runCatching { if (cache.exists()) return parse(cache.readText()) }
             .onFailure { Log.w(TAG, "Failed to read cached app catalog ($key)", it) }
-        // The bundled snapshot is English; it's the offline fallback for any locale on first run.
-        return runCatching { parse(context.assets.open(ASSET_FILE).bufferedReader().use { it.readText() }) }
-            .onFailure { Log.w(TAG, "Failed to read bundled app catalog", it) }
+        // Bundled offline fallback (first run / offline): prefer this locale's snapshot, then English
+        // (`apps.json`). A localized snapshot may be absent for a key, so a failure there falls
+        // through to English.
+        val localized = assetFileForKey(key)
+        return runCatching { parse(readAsset(localized)) }
+            .recoverCatching { if (localized != ASSET_FILE) parse(readAsset(ASSET_FILE)) else throw it }
+            .onFailure { Log.w(TAG, "Failed to read bundled app catalog ($key)", it) }
             .getOrDefault(emptyList())
     }
+
+    private fun readAsset(name: String): String =
+        context.assets.open(name).bufferedReader().use { it.readText() }
+
+    /** Bundled asset for [key]: the locale's snapshot when published, else the English default. */
+    private fun assetFileForKey(key: String): String =
+        if (key in LOCALIZED_LOCALES) "apps.$key.json" else ASSET_FILE
 
     private fun parse(text: String): List<CatalogApp> = json.decodeFromString<AppCatalog>(text).apps
 

@@ -253,7 +253,7 @@
     <string name="about_other_app_open">Open</string>
     <string name="about_other_app_install">Install</string>
     <string name="about_other_app_website">Website</string>
-    <string name="about_other_app_whats_new">What\'s new</string>
+    <string name="about_other_app_highlights">Highlights</string>
 
     <!-- AppFunctions -->
     <string name="appfunctions_description">Lets the system and assistant apps check this device\'s root status without opening the app.</string>

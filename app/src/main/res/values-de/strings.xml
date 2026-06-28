@@ -75,7 +75,7 @@ Kontaktiere mich:</string>
     <string name="about_other_app_open">Öffnen</string>
     <string name="about_other_app_install">Installieren</string>
     <string name="about_other_app_website">Website</string>
-    <string name="about_other_app_whats_new">Neuigkeiten</string>
+    <string name="about_other_app_highlights">Highlights</string>
 
     <!-- In-app updates -->
     <string name="update_available_title">Update verfügbar</string>

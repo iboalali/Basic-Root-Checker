@@ -1,0 +1,528 @@
+{
+  "locale": "de",
+  "apps": [
+    {
+      "name": "Basic Root Checker",
+      "packageName": "com.iboalali.basicrootchecker",
+      "description": "Ist Ihr Gerät gerootet? Finden Sie es sofort heraus!",
+      "icon": "https://iboalali.com/media/basic+root+checker+icon.png",
+      "website": "https://iboalali.com/app/basic_root_checker/",
+      "highlights": [
+        "Neue Design-Option: hell, dunkel oder System",
+        "Mehr Root-Manager erkannt (Kitsune Mask, SukiSU, KernelSU Next, SuperSU u. a.), jeweils mit Namen"
+      ],
+      "changelog": [
+        {
+          "version": "2.4",
+          "changes": [
+            "➕ Dezentes haptisches Feedback: Tippen, Schalter und Auswahl geben einen sanften Impuls",
+            "➕ Root-Status dieses Geräts aus Assistenten und anderen Apps prüfen, ohne sie zu öffnen (Android 16+)",
+            "➕ Neue Design-Option: hell, dunkel oder System",
+            "🛠️ Einstellungen neu gestaltet, Trinkgeld jetzt ganz oben",
+            "🔨 Mehr Root-Manager erkannt (Kitsune Mask, SukiSU, KernelSU Next, SuperSU u. a.), jeweils mit Namen",
+            "🔨 Verbesserungen bei Barrierefreiheit und Zurück-Navigation"
+          ]
+        },
+        {
+          "version": "2.3",
+          "changes": [
+            "➕ Trinkgeld in den Einstellungen: unterstütze die Entwicklung mit einem optionalen, wiederholbaren Trinkgeld",
+            "➕ Sprachauswahl in den Einstellungen: Sprache wechseln, ohne die App zu verlassen (Android 13+)",
+            "🛠️ Schnellerer App-Start, besonders auf langsameren Geräten",
+            "🛠️ Die Wisch-zurück-Animation folgt der Kante, von der du wischst",
+            "🔨 Der Bildschirm bleibt beim Neuerstellen der App erhalten (z. B. bei Drehung oder Sprachwechsel)",
+            "🔨 Absturz beim Start unter Android 7.x und älter behoben"
+          ]
+        },
+        {
+          "version": "2.2",
+          "changes": [
+            "➕ Haptisches Feedback bei der Root-Prüfung: Ergebnis spürbar, mit neuem Schalter in den Einstellungen",
+            "➕ App jetzt auf Russisch und Spanisch verfügbar",
+            "➕ E-Mail-, Mastodon- und Bluesky-Links im Info-Bildschirm",
+            "🛠️ App-Einstellungen werden jetzt über Androids automatische Sicherung wiederhergestellt",
+            "🛠️ Überarbeitete Kontaktlinks und Menüsymbole im Info-Bildschirm",
+            "🔨 Fehlende deutsche und arabische Übersetzungen für Toast und Bedienungshilfen behoben"
+          ]
+        },
+        {
+          "version": "2.1",
+          "changes": [
+            "➕ Erkennung des Root-Anbieters: Magisk (mit Version), KernelSU oder APatch",
+            "➕ Schaltfläche „Root-Zugriff anfordern“, wenn ein Anbieter vorhanden, aber noch nicht freigegeben ist",
+            "➕ Unterstützung für Android 17",
+            "🛠️ Neuer Status „Nicht gewährt“, wenn ein Root-Anbieter erkannt, der Zugriff aber noch nicht erteilt wurde",
+            "🔨 Behoben, dass gerootete Geräte bei der ersten Prüfung als nicht gerootet gemeldet wurden"
+          ]
+        },
+        {
+          "version": "2.0",
+          "changes": [
+            "➕ Komplette Neuentwicklung mit Jetpack Compose, Material 3 und dynamischen Farben",
+            "➕ TelemetryDeck-Analyse mit Opt-out-Schalter in den Einstellungen",
+            "➕ In-App-Update-Ablauf in der Google-Play-Version",
+            "🛠️ Aufteilung in Google-Play- und FOSS-Varianten",
+            "🛠️ Mindestversion auf Android 6.0 angehoben"
+          ]
+        },
+        {
+          "version": "1.13",
+          "changes": [
+            "➕ Unterstützung für Android 16"
+          ]
+        },
+        {
+          "version": "1.11",
+          "changes": [
+            "➕ Unterstützung für Android 15",
+            "🛠️ Abhängigkeiten aktualisiert",
+            "🛠️ Unterstützung für Android 4.4 entfernt"
+          ]
+        },
+        {
+          "version": "1.10",
+          "changes": [
+            "🛠️ Abhängigkeiten aktualisiert"
+          ]
+        },
+        {
+          "version": "1.9",
+          "changes": [
+            "➕ Unterstützung für Android 14"
+          ]
+        },
+        {
+          "version": "1.7",
+          "changes": [
+            "➕ Unterstützung für Android 12",
+            "✨ Komplett überarbeitetes Design der App"
+          ]
+        },
+        {
+          "version": "1.6",
+          "changes": [
+            "➕ Unterstützung für Android 10 und 11"
+          ]
+        },
+        {
+          "version": "1.5",
+          "changes": [
+            "➕ Unterstützung für Android 9.0 Pie",
+            "➕ Neue Benutzeroberfläche",
+            "➕ Adaptives Symbol hinzugefügt",
+            "✨ Werbung entfernt"
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "changes": [
+            "➕ Unterstützung für Android 8.0 Oreo"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🛠️ Versionsname für Android O Beta korrigiert"
+          ]
+        },
+        {
+          "version": "1.2",
+          "changes": [
+            "➕ Unterstützung für Android 7.1 Nougat",
+            "🛠️ Liste der Android-Versionsnamen aktualisiert",
+            "🛠️ Liste der Gerätemodelle und Hersteller aktualisiert, es sind ÜBER 9000",
+            "✨ Kleine Layout-Änderungen"
+          ]
+        },
+        {
+          "version": "1.1",
+          "changes": [
+            "➕ Unterstützung für Android 4.1 Jelly Bean und höher hinzugefügt",
+            "✨ Neugestaltung der App"
+          ]
+        },
+        {
+          "version": "1.0",
+          "changes": [
+            "➕ Basic Root Checker in 3 Sprachen: Englisch, Deutsch und Arabisch"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Billboard",
+      "packageName": "com.iboalali.billboard",
+      "description": "Großen Text auf dem Bildschirm anzeigen, passend skaliert und nie abgeschnitten.",
+      "icon": "https://iboalali.com/media/billboard+icon.png",
+      "website": "https://iboalali.com/app/billboard/",
+      "highlights": [],
+      "changelog": [
+        {
+          "version": "2.1.1",
+          "changes": [
+            "➕ Unterstützung für Android 16",
+            "➖ Unterstützung für Android 5 und 5.1 entfernt"
+          ]
+        },
+        {
+          "version": "2.0.3",
+          "changes": [
+            "➕ Unterstützung für Android 15"
+          ]
+        },
+        {
+          "version": "2.0.1",
+          "changes": [
+            "➕ Unterstützung für Android 14"
+          ]
+        },
+        {
+          "version": "2.0",
+          "changes": [
+            "🔨 Die gesamte App von Grund auf mit neuem Design überarbeitet",
+            "➕ Liste der zuvor verwendeten Einträge",
+            "➕ Unterstützung für Android 12 und 13",
+            "➕ Unterstützung für Tablets und Foldables"
+          ]
+        },
+        {
+          "version": "1.4.1",
+          "changes": [
+            "🔨 Querformat-Layout für Geräte mit hoher Pixeldichte korrigiert"
+          ]
+        },
+        {
+          "version": "1.4",
+          "changes": [
+            "➕ Erste Unterstützung für das Tablet-Layout",
+            "🔨 Behoben, dass der Erstellungsbildschirm im Querformat nicht scrollte."
+          ]
+        },
+        {
+          "version": "1.3",
+          "changes": [
+            "➕ Erste Unterstützung für Android 11",
+            "➕ Vollbild-Unterstützung auf Geräten mit Display-Aussparungen"
+          ]
+        },
+        {
+          "version": "1.2.5",
+          "changes": [
+            "🔨 Behoben, dass mehr Text eingegeben werden konnte, als das Eingabefeld breit ist.",
+            "➖ Behelfslösung zur korrekten Emoji-Darstellung entfernt, da sie Sonderfälle bewältigen konnte."
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "changes": [
+            "🔨 Behoben, dass die Zifferntastatur keine Dezimal- oder Vorzeichenzahlen zuließ",
+            "➕ Vollbild beim Drücken der Eingabetaste hinzugefügt"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🔨 Emoji-Darstellung korrigiert, wenn nur ein Emoji verwendet wird",
+            "➕ Optionen für den Tastaturtyp hinzugefügt",
+            "➕ Speichern von Ausrichtungs- und Tastaturoptionen hinzugefügt."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hide Persistent Notification",
+      "packageName": "com.iboalali.hidepersistentnotifications",
+      "description": "Eine dauerhafte Benachrichtigung auswählen und verborgen halten, solange die App installiert ist.",
+      "icon": "https://iboalali.com/media/hide+persistent+notification+icon.png",
+      "website": "https://iboalali.com/app/hide_persistent_notification/",
+      "highlights": [
+        "**Hinweis: Die App wird mit einem optionalen In-App-Kauf kostenlos.** Wenn Sie sie bereits gekauft haben, öffnen Sie die Einstellungen und melden Sie sich an, damit Ihr Kauf übernommen wird und Sie alle Premium-Funktionen kostenlos behalten, kein zweiter Kauf nötig.",
+        "Komplett mit modernen Technologien neu geschrieben",
+        "In-App-Updates: die neueste Version direkt aus der App installieren",
+        "Unterstützung für Android 17"
+      ],
+      "changelog": [
+        {
+          "version": "2.0",
+          "changes": [
+            "✨ Komplett mit modernen Technologien neu geschrieben",
+            "➕ In-App-Updates: neueste Version direkt in der App installieren",
+            "➕ Datenschutz-Option zum Deaktivieren anonymer Analysen",
+            "➕ Bessere Darstellung auf Tablets und großen Bildschirmen",
+            "➕ Unterstützung für Android 17",
+            "🔨 Absturz beim Start behoben",
+            "🔨 Berechtigungsstatus wird nach Verlassen der Einstellungen korrekt aktualisiert"
+          ]
+        },
+        {
+          "version": "1.8.1",
+          "changes": [
+            "➕ Unterstützung für Android 16",
+            "➕ Deutsche Übersetzung hinzugefügt",
+            "🔨 Rechtschreibung korrigiert"
+          ]
+        },
+        {
+          "version": "1.7",
+          "changes": [
+            "➕ Unterstützung für Android 15"
+          ]
+        },
+        {
+          "version": "1.6",
+          "changes": [
+            "➕ Unterstützung für Android 13",
+            "➕ Option, alle Daten der Benachrichtigung in die Protokolle aufzunehmen, auch wenn sie sensibel sein könnten",
+            "🔨 Fehler behoben, bei dem eine Benachrichtigung nach der Auswahl nicht ausgeblendet wurde",
+            "✨ App-Downloadgröße halbiert"
+          ]
+        },
+        {
+          "version": "1.5",
+          "changes": [
+            "✨ Weitere Design-Aktualisierung, näher an Material You, aber noch keine dynamischen Farben (noch nicht 😉)",
+            "➕ Bessere Handhabung beim Anzeigen ausgeblendeter Benachrichtigungen, kein Neustart nötig",
+            "➕ Verlauf der ausgeblendeten Benachrichtigungen hinzugefügt, über die Einstellungen erreichbar"
+          ]
+        },
+        {
+          "version": "1.4",
+          "changes": [
+            "✨ Design der App moderner gestaltet",
+            "🔧 Logik zur besseren Handhabung der Benachrichtigung aktualisiert",
+            "🔨 Behoben, dass App-Namen und -Symbole unter Android 11 nicht geladen werden konnten",
+            "🔨 Verschiedene Fehlerbehebungen"
+          ]
+        },
+        {
+          "version": "1.3.1",
+          "changes": [
+            "🔧 Möglichkeit hinzugefügt, zum Einstellungsbildschirm „Akkuoptimierung“ zu gelangen, um diese App davon auszunehmen. Das hilft, die Benachrichtigung ausgeblendet zu halten, und kann den Akkuverbrauch verringern"
+          ]
+        },
+        {
+          "version": "1.3",
+          "changes": [
+            "🔨 Absturzfehler behoben",
+            "🔧 Möglichkeit hinzugefügt, dem Entwickler die aktuell verfügbare Benachrichtigung zur Analyse zu senden, um die App zu verbessern"
+          ]
+        },
+        {
+          "version": "1.2",
+          "changes": [
+            "🔧 Unterstützung für Android 10 und 11 hinzugefügt"
+          ]
+        },
+        {
+          "version": "1.1.4",
+          "changes": [
+            "✨ Unterstützung für randlose Gestennavigation hinzugefügt",
+            "🔧 Abhängigkeiten aktualisiert"
+          ]
+        },
+        {
+          "version": "1.1.3",
+          "changes": [
+            "🔨 Zuverlässigkeit beim Ausblenden von Benachrichtigungen verbessert"
+          ]
+        },
+        {
+          "version": "1.1.2",
+          "changes": [
+            "🔧 Auf ein Datenbanksystem für die gespeicherten Daten umgestellt",
+            "🔨 Einige Fehler behoben",
+            "🔧 Leistung verbessert"
+          ]
+        },
+        {
+          "version": "1.0.3",
+          "changes": [
+            "🔧 Bessere Erkennung dauerhafter Benachrichtigungen hinzugefügt"
+          ]
+        },
+        {
+          "version": "1.0.2",
+          "changes": [
+            "🔨 Behoben, dass die Ansicht wiederholt nach unten sprang, wenn Benachrichtigungen sehr häufig aktualisiert wurden"
+          ]
+        },
+        {
+          "version": "1.0.1",
+          "changes": [
+            "🔧 Erläuternden Text hinzugefügt",
+            "🔨 Formulierung einiger Dialoge geändert",
+            "🔨 Unnötigen Code entfernt"
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "changes": [
+            "✨ Erste Veröffentlichung"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Icon Recomposer",
+      "packageName": null,
+      "description": "Vektor-Icons mit beweglichem 3D-Relief beleuchten und als PNG, SVG oder Android-VectorDrawable exportieren.",
+      "icon": "https://iboalali.com/media/icon_recomposer.png",
+      "website": "https://iboalali.com/Icon-Recomposer/",
+      "highlights": [
+        "Ihre Arbeit wird automatisch gespeichert und bei der Rückkehr wiederhergestellt",
+        "Installierbar und offline nutzbar, jetzt auch unter Android"
+      ],
+      "changelog": [
+        {
+          "version": "1.7.2",
+          "changes": [
+            "🛠️ Die Schaltfläche «Installieren» erscheint jetzt auch auf Android-Smartphones (Chrome und Edge) und installiert die App per Tippen; das eigene Installations-Banner des Browsers wird unterdrückt, sodass es eine einzige, einheitliche Schaltfläche gibt. Auf iPhone und iPad erfolgt die Installation weiterhin über das Teilen-Menü von Safari und «Zum Home-Bildschirm»"
+          ]
+        },
+        {
+          "version": "1.7.1",
+          "changes": [
+            "🛠️ Die anonyme Nutzungsanalyse erfasst jetzt die App-Version, damit ich erkennen kann, welche Versionen im Einsatz sind. Keine neuen personenbezogenen Daten; die Version wird bereits in der App angezeigt"
+          ]
+        },
+        {
+          "version": "1.7.0",
+          "changes": [
+            "➕ Ihre Arbeit wird automatisch gespeichert: Das aktuelle Projekt wird in Ihrem Browser gespeichert und beim erneuten Öffnen der Seite wiederhergestellt, sodass Sie dort weitermachen, wo Sie aufgehört haben. Beim Öffnen eines geteilten Links wird weiterhin das geteilte Design angezeigt"
+          ]
+        },
+        {
+          "version": "1.6.1",
+          "changes": [
+            "➕ Eine Schaltfläche «Installieren» in der oberen Leiste: In Desktop-Browsern, die das unterstützen, erscheint rechts neben «Export» eine Schaltfläche «Installieren», die die App per Klick installiert, ohne automatische Aufforderung oder Banner",
+            "🛠️ Wenn die App als installierte Desktop-App läuft, werden das überflüssige App-Symbol und der Name aus der oberen Leiste entfernt (die Fenstertitelleiste zeigt sie bereits); die Version bleibt",
+            "🔨 Alle Schaltflächen der oberen Leiste haben jetzt eine einheitliche Höhe (die Überlauf-Schaltfläche «⋯» war etwas niedriger)"
+          ]
+        },
+        {
+          "version": "1.6.0",
+          "changes": [
+            "➕ Installierbar und offline nutzbar (PWA): Fügen Sie Icon Recomposer zu Ihrem Home-Bildschirm oder Desktop hinzu, und es läuft vollständig offline. Einmal geladen, werden die gesamte App und Ihr zuletzt verwendeter Standard zwischengespeichert, sodass es ohne Netzwerk öffnet; neue Versionen bieten ein Neuladen mit einem Tippen"
+          ]
+        },
+        {
+          "version": "1.5.8",
+          "changes": [
+            "🛠️ Bei schmalem Fenster bleibt die obere Leiste jetzt in einer Zeile und verschiebt die nicht passenden Elemente in ein Überlaufmenü «⋯» (zuerst Privacy und Changelog, dann Import usw.), statt unübersichtlich umzubrechen",
+            "🔨 Die gesamte Leinwand ist immer sichtbar: Bei kurzen oder breiten Fenstern wird sie jetzt in beiden Dimensionen passend skaliert, sodass oben und unten nicht mehr abgeschnitten werden"
+          ]
+        },
+        {
+          "version": "1.5.7",
+          "changes": [
+            "🔨 Das Smartphone-Layout verdeckt die Leinwand nicht mehr: Die Smartphone-Ansicht ist jetzt eine normal scrollende Seite mit oben fixierter Leinwand (immer sichtbar) und Layers sowie dem Inspector darunter, plus einer fixierten Symbolleiste mit umbrechenden Schaltflächen"
+          ]
+        },
+        {
+          "version": "1.5.6",
+          "changes": [
+            "➕ Tastenkürzel für Speichern und Öffnen: Strg+S / ⌘S speichert das Projekt, und Strg+O / ⌘O öffnet ein Projekt oder importiert eine Vektorgrafik",
+            "🛠️ Breitere Seitenleisten (Layers 240 auf 280 px, Inspector 300 auf 360 px) für mehr Platz"
+          ]
+        },
+        {
+          "version": "1.5.5",
+          "changes": [
+            "➕ Leinwand zoomen und verschieben: Zoomen mit dem Mausrad oder einer Zwei-Finger-Geste (zum Zeiger hin, bis 8×, nie unter die Einpassgröße), und Verschieben durch Ziehen der leeren Leinwand im gezoomten Zustand, mit einer Zwei-Finger-Geste oder mit gedrückter mittlerer Maustaste. Nur zur Ansicht, daher bleiben alle Exporte und die Projektdatei unverändert"
+          ]
+        },
+        {
+          "version": "1.5.4",
+          "changes": [
+            "➕ Mit Esc die Ebenenauswahl aufheben. Wenn ein Steuerelement fokussiert ist, verlässt das erste Esc das Feld und ein zweites hebt die Auswahl auf; eine offene Farbauswahl oder ein Dialog schließt zuerst mit Esc",
+            "🛠️ Die Abfrage «Neues Dokument starten?» ist jetzt ein In-App-Dialog im dunklen Design statt des nativen Bestätigungsfensters des Browsers (Esc bricht ab, Enter bestätigt)"
+          ]
+        },
+        {
+          "version": "1.5.3",
+          "changes": [
+            "➕ Ein Changelog-Link in der oberen Leiste (neben Privacy), der die Seite «Neuigkeiten» der App öffnet"
+          ]
+        },
+        {
+          "version": "1.5.2",
+          "changes": [
+            "➕ Eine einfachere Art, Verläufe zu erstellen: Bei Auswahl der Verlaufsfüllung erscheinen zuerst Quick looks mit einem Klick (Top light, Glow, Sheen, Diagonal, Fade out), ein Von/Bis-Farbpaar mit einem Fade-Schalter und ein Richtungs-Pad (Pfeile legen eine lineare Richtung fest, der Mittelpunkt macht ihn radial). Der vollständige Mehrstopp-Editor (Offsets, Alpha pro Stopp, exakte Koordinaten) wandert unter eine erweiterte Ansicht und bleibt synchron. Die einfachen Steuerungen stylen alle ausgewählten Verlaufsebenen auf einmal um",
+            "🔨 Die Option Verlaufsfüllung ist jetzt immer sichtbar: Die Steuerung Solid / Embossed / Gradient wurde in eine eigene Zeile über die volle Breite verschoben, sodass «Gradient» nicht mehr am rechten Rand des Inspectors abgeschnitten wird"
+          ]
+        },
+        {
+          "version": "1.5.1",
+          "changes": [
+            "🛠️ Punktförmiges (radiales) Licht: Die Intensität steuert jetzt, wie weit der Schatten reicht, mit weicherem Abfall. Höher gedreht zieht sie den Schatten nach innen (am Maximum überschreitet er die Leinwandmitte und verdunkelt Mitte und gegenüberliegende Seite); geringere Intensität hält die Mitte hell",
+            "🔨 Fernes (gerichtetes) Licht prägt jetzt so stark wie das Punktlicht, und sein Intensitäts-Regler hat eine klare Wirkung. Die Fase wird pro Form entlang der Lichtrichtung aufgebaut und im Forminneren konzentriert, sodass mit fernem Licht beleuchtete Icons dreidimensional wirken und deutlich stärker geprägt aussehen als zuvor"
+          ]
+        },
+        {
+          "version": "1.5.0",
+          "changes": [
+            "➕ Echte Verlaufsfüllungen pro Ebene: ein neuer Modus Gradient (neben Solid und Embossed) mit linearem oder radialem Typ, einer bearbeitbaren Mehrstopp-Liste (Farbe, Alpha pro Stopp und Offset) und numerischer Geometrie. Verläufe werden aus SVG und Android VectorDrawable importiert, statt auf eine Farbe reduziert zu werden, bleiben in der Projektdatei erhalten und folgen dem Verschieben, Skalieren und Spiegeln der Ebene. Eine Aktion «als Verlaufs-Overlay duplizieren» stapelt eine geprägte Basis und eine Verlaufsebene, sodass eine Form beides haben kann",
+            "➕ Linkvorschauen und Suchmetadaten: Das Teilen der Live-URL zeigt jetzt einen Titel, eine Zusammenfassung und das App-Symbol (Open-Graph- und Twitter-Card-Tags) statt eines nackten Links",
+            "🛠️ Prägung ist jetzt optional: Neue Ebenen und importierte Grafiken kommen als flache Solid-Füllungen in der Ausgangsfarbe an, statt automatisch geprägt zu werden. Wenden Sie Embossed pro Ebene für den 3D-Look an; das integrierte Beispiel bleibt geprägt, um ihn zu zeigen",
+            "🔨 Die Strichbreite skaliert jetzt mit der Ebene, sodass eine skalierte Form mit Kontur ihre Umrisslinie über Vorschau, PNG- und VectorDrawable-Export hinweg proportional behält"
+          ]
+        },
+        {
+          "version": "1.4.0",
+          "changes": [
+            "➕ Skalierung pro Ebene: Ein Scale-Regler ändert die Größe der ausgewählten Ebene(n) in Prozent (100 = Original). Eine Ebene skaliert um ihre eigene Mitte; mehrere ausgewählte Ebenen skalieren gemeinsam um ihre gemeinsame Mitte. Nicht-destruktiv (als Ebenentransformation gespeichert), mit einem Verknüpfungsschalter für unabhängige X- und Y-Skalierung",
+            "➕ Ebenen spiegeln: Flip H und Flip V spiegeln die ausgewählte(n) Ebene(n); mehrere Ebenen spiegeln gemeinsam um ihre gemeinsame Mitte, und die Spiegelung ist nicht-destruktiv",
+            "➕ Mehr anonyme Nutzungs- und Fehlerereignisse an TelemetryDeck (Export, Öffnen, Import, Neu, Speichern, Rückgängig, Wiederholen und Fehler), neben dem bestehenden Seitenaufruf (siehe Datenschutzerklärung)",
+            "➕ Ein Privacy-Link in der oberen Leiste der App, der ihre Datenschutzerklärung öffnet",
+            "🔨 Importierte Verlaufsfüllungen leiten jetzt eine repräsentative Grundfarbe aus den Stopps des Verlaufs ab statt aus einem flachen Grau",
+            "🔨 Doppelte Ebenen-IDs beim Import in ein geladenes Projekt behoben, die dazu führen konnten, dass mit einer Ebene auch eine andere ausgewählt wurde; IDs werden beim Laden jetzt entdoppelt"
+          ]
+        },
+        {
+          "version": "1.3.0",
+          "changes": [
+            "➕ Schattenabstand pro Ebene: Ein Distance-Regler im Bereich Cast shadow legt fest, wie weit jede Ebene ihren Schatten wirft (ihre scheinbare Höhe über der Oberfläche). Er multipliziert die automatische Länge aus dem Licht, sodass 1× den bisherigen Look beibehält und höhere Werte die Ebene weiter von der Oberfläche abheben",
+            "➕ Die App öffnet jetzt mit einem mitgelieferten Standardprojekt (dem App-Symbol) statt des integrierten Beispiels und zeigt dieses Symbol neben dem Titel in der oberen Leiste und als Browser-Favicon",
+            "➕ Anonyme Nutzungsanalyse über das datenschutzfreundliche TelemetryDeck Web SDK: ein Seitenaufruf pro Laden, keine Cookies (siehe Datenschutzerklärung)",
+            "🔨 Ein Klick auf die Leinwand wechselt jetzt die Auswahl zwischen überlappenden Ebenen; es wird die tatsächliche Ebenengeometrie getroffen, sodass das unsichtbare Ziehziel einer Ebene keine Klicks mehr abfängt, die einer Form darüber oder darunter gelten"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🔨 Bei aktiviertem Link W/H aktualisiert das Bearbeiten einer Leinwanddimension jetzt auch den Wert des anderen Feldes (die Leinwand wurde bereits korrekt skaliert; nur der angezeigte Wert hinkte hinterher)"
+          ]
+        },
+        {
+          "version": "1.2.0",
+          "changes": [
+            "➕ Ebenen verschieben: Ziehen Sie eine ausgewählte Ebene (oder mehrere auf einmal) auf der Leinwand, oder legen Sie eine genaue Position über die X/Y-Felder der Ebene fest",
+            "➕ Klicken Sie auf die Form einer Ebene auf der Leinwand, um sie auszuwählen. Strg/⌘ und Umschalt-Klick erweitern die Auswahl, und ein Klick auf einen leeren Bereich hebt sie auf",
+            "➕ Numerische Position-X/Y-Felder für eine präzise Platzierung des Punktlichts, neben dem ziehbaren Griff",
+            "🛠️ Das Licht bewegt sich jetzt nur durch Ziehen seines Griffs; ein Klick anderswo auf der Leinwand verschiebt es nicht mehr",
+            "🔨 Leinwandgrößen-Vorgaben behoben, die im Inspector teilweise außerhalb des Bildschirms angezeigt werden konnten",
+            "🔨 Zahleneingaben (Leinwandgröße, Lichtposition, PNG-Größe, Strichbreite) behoben, die über den rechten Rand ihres Panels hinausragten"
+          ]
+        },
+        {
+          "version": "1.1.0",
+          "changes": [
+            "➕ Ebene duplizieren: Eine Schaltfläche pro Zeile und Strg/⌘+D kopieren die ausgewählte(n) Ebene(n) und platzieren jede Kopie direkt über ihrem Original",
+            "➕ Die Projektleinwand über Breite/Höhe-Felder oder Vorgaben (24, 108, 512, 1024) anpassen, mit verknüpftem Seitenverhältnis und einer optionalen Funktion «Inhalte skalieren»"
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "changes": [
+            "➕ SVG- und Android-VectorDrawable-Grafiken als bearbeitbare Ebenen importieren",
+            "➕ Prägungs-Engine: Ein einziges gemeinsames bewegliches Licht steuert die Schattierung (Punktlicht wird zu einem radialen Verlauf, fernes Licht zu einem linearen) mit OKLab-Farbmischung",
+            "➕ Materialien pro Ebene (Farbe, Deckkraft, solid oder geprägt, Prägeintensität, Glanz, Füllregel) und Schlagschatten, die an den darunterliegenden Ebenen abschneiden",
+            "➕ Live-Vorschau mit einem ziehbaren Lichtgriff und Mehrfachauswahl-Bearbeitung",
+            "➕ Export als PNG (transparent oder mit Hintergrund), Android VectorDrawable XML, SVG und erneut bearbeitbares Projekt-JSON",
+            "➕ Projekte öffnen und speichern, per Link teilen und rückgängig machen/wiederholen (Strg/⌘+Z)"
+          ]
+        }
+      ]
+    }
+  ]
+}

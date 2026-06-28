@@ -94,7 +94,7 @@
     <string name="about_other_app_open">Открыть</string>
     <string name="about_other_app_install">Установить</string>
     <string name="about_other_app_website">Веб-сайт</string>
-    <string name="about_other_app_whats_new">Что нового</string>
+    <string name="about_other_app_highlights">Главное</string>
 
     <!-- AppFunctions -->
     <string name="appfunctions_description">Позволяет системе и приложениям-ассистентам проверять наличие root-доступа на устройстве, не открывая приложение.</string>

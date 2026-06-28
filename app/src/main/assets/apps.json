@@ -7,7 +7,7 @@
       "description": "Check whether your device has root access - quick, simple, no-frills.",
       "icon": "https://iboalali.com/media/basic+root+checker+icon.png",
       "website": "https://iboalali.com/app/basic_root_checker/",
-      "whatsNew": [
+      "highlights": [
         "New Theme option in Settings: light, dark, or system",
         "Detect more root managers (Kitsune Mask, SukiSU, KernelSU Next, SuperSU and more), each shown by name"
       ],
@@ -155,7 +155,7 @@
       "description": "Show large text on screen, sized to fit without ever cutting off.",
       "icon": "https://iboalali.com/media/billboard+icon.png",
       "website": "https://iboalali.com/app/billboard/",
-      "whatsNew": [],
+      "highlights": [],
       "changelog": [
         {
           "version": "2.1.1",
@@ -235,7 +235,7 @@
       "description": "Pick a persistent notification and keep it hidden for as long as the app is installed.",
       "icon": "https://iboalali.com/media/hide+persistent+notification+icon.png",
       "website": "https://iboalali.com/app/hide_persistent_notification/",
-      "whatsNew": [
+      "highlights": [
         "**Heads up: the app is going free with an optional in-app purchase.** If you already bought it, open the Settings screen and sign in so your purchase carries over and you keep every premium feature for free, no second purchase needed.",
         "Completely rewritten with modern technologies",
         "In-app updates: install the latest version right from the app",
@@ -368,7 +368,7 @@
       "description": "Light vector icons with a movable 3D emboss, then export to PNG, SVG, or Android VectorDrawable.",
       "icon": "https://iboalali.com/media/icon_recomposer.png",
       "website": "https://iboalali.com/Icon-Recomposer/",
-      "whatsNew": [
+      "highlights": [
         "Your work is saved automatically and restored when you return",
         "Installable and works offline, now on Android too"
       ],

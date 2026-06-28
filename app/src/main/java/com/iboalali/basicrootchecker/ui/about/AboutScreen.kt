@@ -307,7 +307,7 @@ private fun AboutScreenPreview() {
                     iconUrl = null,
                     website = "https://iboalali.com/app/billboard/",
                     packageName = "com.iboalali.billboard",
-                    whatsNew = persistentListOf("New **dark theme** and bigger text scaling"),
+                    highlights = persistentListOf("New **dark theme** and bigger text scaling"),
                 ),
                 OtherAppUi(
                     name = "Icon Recomposer",
@@ -315,7 +315,7 @@ private fun AboutScreenPreview() {
                     iconUrl = null,
                     website = "https://iboalali.com/Icon-Recomposer/",
                     packageName = null,
-                    whatsNew = persistentListOf("Your work is **saved automatically** and restored when you return"),
+                    highlights = persistentListOf("Your work is **saved automatically** and restored when you return"),
                 ),
             ),
             onNavigateBack = {},

@@ -1,6 +1,8 @@
 package com.iboalali.basicrootchecker.data.catalog
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /**
  * The app catalog published at the website and bundled as the offline default (`assets/apps.json`).
@@ -19,6 +21,7 @@ data class AppCatalog(
     val apps: List<CatalogApp> = emptyList(),
 )
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class CatalogApp(
     val name: String = "",
@@ -26,7 +29,9 @@ data class CatalogApp(
     val description: String = "",
     val icon: String? = null,
     val website: String? = null,
-    val whatsNew: List<String> = emptyList(),
+    // Renamed from `whatsNew` in the feed; the alias keeps binding old payloads (a still-`whatsNew`
+    // live feed during the rollout, or a stale on-device cache) — see the lenient-parsing note above.
+    @JsonNames("whatsNew") val highlights: List<String> = emptyList(),
     val changelog: List<ChangelogEntry> = emptyList(),
 )
 

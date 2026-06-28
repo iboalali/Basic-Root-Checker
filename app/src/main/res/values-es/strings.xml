@@ -94,7 +94,7 @@
     <string name="about_other_app_open">Abrir</string>
     <string name="about_other_app_install">Instalar</string>
     <string name="about_other_app_website">Sitio web</string>
-    <string name="about_other_app_whats_new">Novedades</string>
+    <string name="about_other_app_highlights">Destacados</string>
 
     <!-- AppFunctions -->
     <string name="appfunctions_description">Permite que el sistema y las apps de asistente comprueben el estado de root de este dispositivo sin abrir la aplicación.</string>

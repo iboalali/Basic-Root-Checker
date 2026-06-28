@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 
 /**
- * Renders the limited inline Markdown the app catalog's "What's new" bullets use — `**bold**` and
+ * Renders the limited inline Markdown the app catalog's highlights bullets use — `**bold**` and
  * `*italic*` — into an [AnnotatedString] for a Compose `Text`. Non-nested; an unbalanced or unknown
  * marker is left as literal text. This deliberately avoids a Markdown dependency: the feed emits no
  * links, headings, lists, or code spans (see the `apps.json` feed contract).

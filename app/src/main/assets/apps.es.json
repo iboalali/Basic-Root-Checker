@@ -1,0 +1,528 @@
+{
+  "locale": "es",
+  "apps": [
+    {
+      "name": "Basic Root Checker",
+      "packageName": "com.iboalali.basicrootchecker",
+      "description": "¿Su dispositivo tiene acceso root? ¡Descúbralo al instante!",
+      "icon": "https://iboalali.com/media/basic+root+checker+icon.png",
+      "website": "https://iboalali.com/app/basic_root_checker/",
+      "highlights": [
+        "Nueva opción de Tema: claro, oscuro o sistema",
+        "Se detectan más gestores de root (Kitsune Mask, SukiSU, KernelSU Next, SuperSU y más), cada uno por su nombre"
+      ],
+      "changelog": [
+        {
+          "version": "2.4",
+          "changes": [
+            "➕ Vibración háptica sutil en la app: toques, interruptores y selecciones dan un leve toque",
+            "➕ Consulta el estado de root del dispositivo desde asistentes y otras apps, sin abrirla (Android 16+)",
+            "➕ Nueva opción de Tema: claro, oscuro o sistema",
+            "🛠️ Ajustes rediseñados, con el bote de propinas arriba",
+            "🔨 Se detectan más gestores de root (Kitsune Mask, SukiSU, KernelSU Next, SuperSU y más), cada uno por su nombre",
+            "🔨 Mejoras de accesibilidad y navegación atrás"
+          ]
+        },
+        {
+          "version": "2.3",
+          "changes": [
+            "➕ Bote de propinas en Ajustes: apoya el desarrollo con una propina opcional, repetible cuando quieras",
+            "➕ Selector de idioma en Ajustes: cambia de idioma sin salir de la app (Android 13+)",
+            "🛠️ Inicio más rápido, sobre todo en dispositivos lentos",
+            "🛠️ La animación de deslizar para volver ahora sigue el borde desde el que deslizas",
+            "🔨 La pantalla se conserva al recrear la app (por ejemplo, al girar o cambiar de idioma)",
+            "🔨 Se corrigió un fallo al iniciar en Android 7.x y anteriores"
+          ]
+        },
+        {
+          "version": "2.2",
+          "changes": [
+            "➕ Respuesta háptica al comprobar el root: siente el resultado, con un nuevo interruptor en Ajustes",
+            "➕ La aplicación ya está disponible en ruso y español",
+            "➕ Enlaces de correo, Mastodon y Bluesky en la pantalla Acerca de",
+            "🛠️ Los ajustes ahora se incluyen en la copia de seguridad de Android y se restauran al reinstalar",
+            "🛠️ Enlaces de contacto e iconos de menú renovados en Acerca de",
+            "🔨 Se corrigieron etiquetas de accesibilidad y el aviso «Contenido copiado» que seguían en inglés"
+          ]
+        },
+        {
+          "version": "2.1",
+          "changes": [
+            "➕ Detección del proveedor de root: Magisk (con versión), KernelSU o APatch",
+            "➕ Botón «Solicitar acceso root» cuando hay un proveedor presente pero aún no concedido",
+            "➕ Compatibilidad con Android 17",
+            "🛠️ Nuevo estado «No concedido» cuando se detecta un proveedor de root pero aún no se da acceso",
+            "🔨 Se corrigió que los dispositivos con root aparecieran como sin root en la primera comprobación"
+          ]
+        },
+        {
+          "version": "2.0",
+          "changes": [
+            "➕ Reescritura completa con Jetpack Compose, Material 3 y colores dinámicos",
+            "➕ Analíticas de TelemetryDeck con un interruptor para desactivarlas en ajustes",
+            "➕ Flujo de actualización dentro de la app en la versión de Google Play",
+            "🛠️ Separación en variantes de Google Play y FOSS",
+            "🛠️ Versión mínima elevada a Android 6.0"
+          ]
+        },
+        {
+          "version": "1.13",
+          "changes": [
+            "➕ Compatibilidad con Android 16"
+          ]
+        },
+        {
+          "version": "1.11",
+          "changes": [
+            "➕ Compatibilidad con Android 15",
+            "🛠️ Dependencias actualizadas",
+            "🛠️ Se retiró la compatibilidad con Android 4.4"
+          ]
+        },
+        {
+          "version": "1.10",
+          "changes": [
+            "🛠️ Dependencias actualizadas"
+          ]
+        },
+        {
+          "version": "1.9",
+          "changes": [
+            "➕ Compatibilidad con Android 14"
+          ]
+        },
+        {
+          "version": "1.7",
+          "changes": [
+            "➕ Compatibilidad con Android 12",
+            "✨ Rediseño completo de la app"
+          ]
+        },
+        {
+          "version": "1.6",
+          "changes": [
+            "➕ Compatibilidad con Android 10 y 11"
+          ]
+        },
+        {
+          "version": "1.5",
+          "changes": [
+            "➕ Compatibilidad con Android 9.0 Pie",
+            "➕ Nueva interfaz",
+            "➕ Se añadió icono adaptable",
+            "✨ Se eliminó la publicidad"
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "changes": [
+            "➕ Compatibilidad con Android 8.0 Oreo"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🛠️ Se corrigió el nombre de versión para Android O Beta"
+          ]
+        },
+        {
+          "version": "1.2",
+          "changes": [
+            "➕ Compatibilidad con Android 7.1 Nougat",
+            "🛠️ Lista de nombres de versiones de Android actualizada",
+            "🛠️ Lista de modelos y fabricantes actualizada, ¡son MÁS DE 9000!",
+            "✨ Pequeños cambios de diseño"
+          ]
+        },
+        {
+          "version": "1.1",
+          "changes": [
+            "➕ Se añadió compatibilidad con Android 4.1 Jelly Bean y posteriores",
+            "✨ Rediseño de la app"
+          ]
+        },
+        {
+          "version": "1.0",
+          "changes": [
+            "➕ Basic Root Checker está disponible en 3 idiomas: inglés, alemán y árabe"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Billboard",
+      "packageName": "com.iboalali.billboard",
+      "description": "Muestre texto grande en la pantalla, ajustado para caber sin cortarse nunca.",
+      "icon": "https://iboalali.com/media/billboard+icon.png",
+      "website": "https://iboalali.com/app/billboard/",
+      "highlights": [],
+      "changelog": [
+        {
+          "version": "2.1.1",
+          "changes": [
+            "➕ Compatibilidad con Android 16",
+            "➖ Se retiró la compatibilidad con Android 5 y 5.1"
+          ]
+        },
+        {
+          "version": "2.0.3",
+          "changes": [
+            "➕ Compatibilidad con Android 15"
+          ]
+        },
+        {
+          "version": "2.0.1",
+          "changes": [
+            "➕ Compatibilidad con Android 14"
+          ]
+        },
+        {
+          "version": "2.0",
+          "changes": [
+            "🔨 Se rehízo toda la app desde cero con un nuevo diseño",
+            "➕ Lista de entradas usadas anteriormente",
+            "➕ Compatibilidad con Android 12 y 13",
+            "➕ Compatibilidad con tabletas y plegables"
+          ]
+        },
+        {
+          "version": "1.4.1",
+          "changes": [
+            "🔨 Se corrigió el diseño horizontal en dispositivos de alta densidad"
+          ]
+        },
+        {
+          "version": "1.4",
+          "changes": [
+            "➕ Compatibilidad inicial con el diseño para tabletas",
+            "🔨 Se corrigió que la pantalla de creación no se desplazara en horizontal."
+          ]
+        },
+        {
+          "version": "1.3",
+          "changes": [
+            "➕ Compatibilidad inicial con Android 11",
+            "➕ Compatibilidad con pantalla completa en dispositivos con muescas"
+          ]
+        },
+        {
+          "version": "1.2.5",
+          "changes": [
+            "🔨 Se corrigió poder introducir más texto del que cabe en el ancho del campo.",
+            "➖ Se eliminó el truco para mostrar emojis correctamente, porque podía manejar los casos límite."
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "changes": [
+            "🔨 Se corrigió que el teclado numérico no permitiera decimales ni números con signo",
+            "➕ Se añadió pasar a pantalla completa al pulsar Intro en el teclado"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🔨 Se corrigió el renderizado de emojis cuando solo se usa uno",
+            "➕ Se añadieron opciones de tipo de teclado",
+            "➕ Se añadió guardar las opciones de orientación y teclado."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hide Persistent Notification",
+      "packageName": "com.iboalali.hidepersistentnotifications",
+      "description": "Elija una notificación persistente y manténgala oculta mientras la app esté instalada.",
+      "icon": "https://iboalali.com/media/hide+persistent+notification+icon.png",
+      "website": "https://iboalali.com/app/hide_persistent_notification/",
+      "highlights": [
+        "**Aviso: la app pasará a ser gratuita con una compra opcional dentro de la app.** Si ya la compró, abra la pantalla de Ajustes e inicie sesión para que su compra se conserve y mantenga todas las funciones premium gratis, sin necesidad de comprar otra vez.",
+        "Completamente reescrita con tecnologías modernas",
+        "Actualizaciones dentro de la app: instale la última versión directamente desde la app",
+        "Compatibilidad con Android 17"
+      ],
+      "changelog": [
+        {
+          "version": "2.0",
+          "changes": [
+            "✨ Completamente reescrita con tecnologías modernas",
+            "➕ Actualizaciones dentro de la app: instala la última versión directamente desde la app",
+            "➕ Ajuste de privacidad para desactivar las analíticas anónimas",
+            "➕ Mejores diseños para tabletas y pantallas grandes",
+            "➕ Compatibilidad con Android 17",
+            "🔨 Se corrigió un fallo al iniciar",
+            "🔨 Se corrigió que el estado de los permisos no se actualizara al salir de ajustes"
+          ]
+        },
+        {
+          "version": "1.8.1",
+          "changes": [
+            "➕ Compatibilidad con Android 16",
+            "➕ Se añadió la traducción al alemán",
+            "🔨 Se corrigió la ortografía"
+          ]
+        },
+        {
+          "version": "1.7",
+          "changes": [
+            "➕ Compatibilidad con Android 15"
+          ]
+        },
+        {
+          "version": "1.6",
+          "changes": [
+            "➕ Compatibilidad con Android 13",
+            "➕ Opción para incluir todos los datos de la notificación en los registros, aunque puedan ser sensibles",
+            "🔨 Se corrigió un error por el que una notificación no se ocultaba tras seleccionarla",
+            "✨ Se redujo a la mitad el tamaño de descarga de la app"
+          ]
+        },
+        {
+          "version": "1.5",
+          "changes": [
+            "✨ Más mejoras en el diseño, más cerca de Material You, pero aún sin colores dinámicos (de momento 😉)",
+            "➕ Mejor gestión al mostrar notificaciones ocultas, sin necesidad de reiniciar",
+            "➕ Se añadió un historial de ocultación de notificaciones, accesible desde Ajustes"
+          ]
+        },
+        {
+          "version": "1.4",
+          "changes": [
+            "✨ Se actualizó el diseño de la app para que sea más moderno",
+            "🔧 Se actualizó la lógica para gestionar mejor la notificación",
+            "🔨 Se corrigió no poder cargar nombres e iconos de apps en Android 11",
+            "🔨 Varias correcciones de errores"
+          ]
+        },
+        {
+          "version": "1.3.1",
+          "changes": [
+            "🔧 Se añadió una forma de ir a la pantalla de ajustes de «Optimización de batería» para excluir esta app. Esto ayuda a mantener la notificación oculta y puede reducir el consumo de batería"
+          ]
+        },
+        {
+          "version": "1.3",
+          "changes": [
+            "🔨 Se corrigió un error de cierre inesperado",
+            "🔧 Se añadió la posibilidad de enviar al desarrollador la notificación disponible actualmente para analizarla y mejorar la app"
+          ]
+        },
+        {
+          "version": "1.2",
+          "changes": [
+            "🔧 Se añadió compatibilidad con Android 10 y 11"
+          ]
+        },
+        {
+          "version": "1.1.4",
+          "changes": [
+            "✨ Se añadió compatibilidad con la navegación por gestos de borde a borde",
+            "🔧 Dependencias actualizadas"
+          ]
+        },
+        {
+          "version": "1.1.3",
+          "changes": [
+            "🔨 Se mejoró la fiabilidad al ocultar notificaciones"
+          ]
+        },
+        {
+          "version": "1.1.2",
+          "changes": [
+            "🔧 Se migró a un sistema de base de datos para los datos guardados",
+            "🔨 Se corrigieron algunos errores",
+            "🔧 Se mejoró el rendimiento"
+          ]
+        },
+        {
+          "version": "1.0.3",
+          "changes": [
+            "🔧 Se añadió una mejor detección de notificaciones persistentes"
+          ]
+        },
+        {
+          "version": "1.0.2",
+          "changes": [
+            "🔨 Se corrigió el desplazamiento repetido hacia abajo cuando las notificaciones se actualizan con mucha frecuencia"
+          ]
+        },
+        {
+          "version": "1.0.1",
+          "changes": [
+            "🔧 Se añadió texto aclaratorio",
+            "🔨 Se cambió la redacción de algunos diálogos",
+            "🔨 Se eliminó código innecesario"
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "changes": [
+            "✨ Lanzamiento inicial"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Icon Recomposer",
+      "packageName": null,
+      "description": "Ilumine iconos vectoriales con un relieve 3D movible y expórtelos a PNG, SVG o Android VectorDrawable.",
+      "icon": "https://iboalali.com/media/icon_recomposer.png",
+      "website": "https://iboalali.com/Icon-Recomposer/",
+      "highlights": [
+        "Su trabajo se guarda automáticamente y se restaura cuando vuelve",
+        "Instalable y funciona sin conexión, ahora también en Android"
+      ],
+      "changelog": [
+        {
+          "version": "1.7.2",
+          "changes": [
+            "🛠️ El botón «Instalar» ahora también aparece en teléfonos Android (Chrome y Edge) e instala la app al tocarlo, con el banner de instalación del propio navegador suprimido para que haya un único botón coherente. En iPhone y iPad, la instalación sigue siendo desde el menú Compartir de Safari y «Añadir a pantalla de inicio»"
+          ]
+        },
+        {
+          "version": "1.7.1",
+          "changes": [
+            "🛠️ Las analíticas de uso anónimas ahora registran la versión de la app para saber qué versiones están en uso. Sin nuevos datos personales; la versión ya se muestra en la app"
+          ]
+        },
+        {
+          "version": "1.7.0",
+          "changes": [
+            "➕ Tu trabajo se guarda automáticamente: el proyecto actual se almacena en tu navegador y se restaura al reabrir la página, así continúas donde lo dejaste. Al abrir un enlace compartido se sigue mostrando ese diseño compartido"
+          ]
+        },
+        {
+          "version": "1.6.1",
+          "changes": [
+            "➕ Un botón «Instalar» en la barra superior: en navegadores de escritorio compatibles, aparece a la derecha de «Export» e instala la app al hacer clic, sin aviso ni banner automáticos",
+            "🛠️ Al ejecutarse como app de escritorio instalada, se quitan de la barra superior el icono y el nombre redundantes (la barra de título de la ventana ya los muestra); la versión permanece",
+            "🔨 Todos los botones de la barra superior comparten ahora la misma altura (el botón de desbordamiento «⋯» era algo más bajo)"
+          ]
+        },
+        {
+          "version": "1.6.0",
+          "changes": [
+            "➕ Instalable y funciona sin conexión (PWA): añade Icon Recomposer a tu pantalla de inicio o escritorio y funciona totalmente sin conexión. Una vez cargado, se almacenan en caché toda la app y tu predeterminado más reciente, así que abre sin red, y las versiones nuevas ofrecen recargar con un toque"
+          ]
+        },
+        {
+          "version": "1.5.8",
+          "changes": [
+            "🛠️ Con la ventana estrecha, la barra superior ahora se mantiene en una línea y mueve los elementos que no caben a un menú de desbordamiento «⋯» (primero Privacy y Changelog, luego Import, etc.) en lugar de amontonarse",
+            "🔨 Todo el lienzo siempre es visible: en ventanas cortas o anchas ahora se escala para encajar en ambas dimensiones, así que la parte superior e inferior ya no se recortan"
+          ]
+        },
+        {
+          "version": "1.5.7",
+          "changes": [
+            "🔨 El diseño para teléfono ya no oculta el lienzo: la vista de teléfono es ahora una página con desplazamiento normal, con el lienzo fijado arriba (siempre visible) y Layers y el inspector debajo, más una barra de herramientas fija cuyos botones se ajustan"
+          ]
+        },
+        {
+          "version": "1.5.6",
+          "changes": [
+            "➕ Atajos de teclado para Guardar y Abrir: Ctrl+S / ⌘S guarda el proyecto, y Ctrl+O / ⌘O abre un proyecto o importa un vector",
+            "🛠️ Paneles laterales más anchos (Layers de 240 a 280 px, inspector de 300 a 360 px) para más espacio"
+          ]
+        },
+        {
+          "version": "1.5.5",
+          "changes": [
+            "➕ Haz zoom y desplaza el lienzo: zoom con la rueda del ratón o pellizco con dos dedos (hacia el puntero, hasta 8×, nunca por debajo del tamaño de ajuste), y desplázate arrastrando el lienzo vacío con zoom, con dos dedos o con el botón central del ratón. Es solo de vista, así que las exportaciones y el archivo de proyecto no se ven afectados"
+          ]
+        },
+        {
+          "version": "1.5.4",
+          "changes": [
+            "➕ Pulsa Esc para borrar la selección de capas. Si un control tiene el foco, el primer Esc sale del campo y el segundo borra la selección; un selector de color o diálogo abierto se cierra primero con Esc",
+            "🛠️ El aviso «¿Empezar un documento nuevo?» es ahora un diálogo dentro de la app acorde al tema oscuro, en lugar del cuadro de confirmación nativo del navegador (Esc cancela, Intro confirma)"
+          ]
+        },
+        {
+          "version": "1.5.3",
+          "changes": [
+            "➕ Un enlace Changelog en la barra superior (junto a Privacy) que abre la página de «Novedades» de la app"
+          ]
+        },
+        {
+          "version": "1.5.2",
+          "changes": [
+            "➕ Una forma más sencilla de crear degradados: al elegir el relleno Gradient ahora se empieza con Quick looks de un clic (Top light, Glow, Sheen, Diagonal, Fade out), un par de colores De/A con un interruptor Fade y un panel de dirección (las flechas fijan una dirección lineal, el punto central lo hace radial). El editor completo de varias paradas (offsets, alfa por parada, coordenadas exactas) pasa a una sección Avanzado y se mantiene sincronizado. Los controles sencillos reestilizan todas las capas de degradado seleccionadas a la vez",
+            "🔨 La opción de relleno Gradient ahora siempre está visible: el control Solid / Embossed / Gradient se movió a su propia línea de ancho completo, así que «Gradient» ya no se recorta en el borde derecho del inspector"
+          ]
+        },
+        {
+          "version": "1.5.1",
+          "changes": [
+            "🛠️ Luz puntual (radial): la Intensidad ahora controla cuánto llega la sombra, con una caída más suave. Al subirla, la sombra se desplaza hacia dentro (al máximo pasa el centro del lienzo, oscureciendo el centro y el lado opuesto); menos intensidad mantiene el centro iluminado",
+            "🔨 La luz distante (direccional) ahora resalta tanto como la puntual, y su control de Intensidad tiene un efecto claro. El biselado se construye por forma a lo largo de la dirección de la luz y se concentra en el interior de la forma, así que los iconos con luz distante se ven en 3D y notablemente más resaltados que antes"
+          ]
+        },
+        {
+          "version": "1.5.0",
+          "changes": [
+            "➕ Rellenos de degradado reales por capa: un nuevo modo Gradient (junto a Solid y Embossed) con tipo lineal o radial, una lista editable de varias paradas (color, alfa por parada y offset) y geometría numérica. Los degradados se importan desde SVG y Android VectorDrawable en lugar de aplanarse a un solo color, se conservan en el archivo de proyecto y siguen el movimiento, escala y volteo de la capa. Una acción «duplicar como superposición de degradado» apila una base con relieve y una capa de degradado para que una forma pueda tener ambas",
+            "➕ Vistas previas de enlaces y metadatos de búsqueda: compartir la URL en vivo ahora muestra un título, un resumen y el icono de la app (etiquetas Open Graph y Twitter card) en vez de un enlace simple",
+            "🛠️ El relieve ahora es opcional: las capas nuevas y el arte importado llegan como rellenos Solid planos en el color de origen en lugar de resaltarse automáticamente. Aplica Embossed por capa para el aspecto 3D; el ejemplo integrado sigue con relieve para mostrarlo",
+            "🔨 El ancho de trazo ahora escala con la capa, así que al escalar una forma con trazo su contorno se mantiene proporcional en la vista previa y en la exportación a PNG y VectorDrawable"
+          ]
+        },
+        {
+          "version": "1.4.0",
+          "changes": [
+            "➕ Escala por capa: un control Scale cambia el tamaño de la(s) capa(s) seleccionada(s) en porcentaje (100 = original). Una capa escala respecto a su propio centro; varias capas seleccionadas escalan juntas respecto a su centro común. No destructivo (guardado como transformación de capa), con un interruptor de enlace para escalar X e Y de forma independiente",
+            "➕ Voltear capas: Flip H y Flip V reflejan la(s) capa(s) seleccionada(s); varias capas se voltean juntas respecto a su centro común, y el volteo no es destructivo",
+            "➕ Más eventos anónimos de uso y errores enviados a TelemetryDeck (export, abrir, importar, nuevo, guardar, deshacer, rehacer y errores), junto a la vista de página existente (consulta la política de privacidad)",
+            "➕ Un enlace Privacy en la barra superior de la app que abre su política de privacidad",
+            "🔨 Los rellenos de degradado importados ahora toman un color base representativo de las paradas del degradado en lugar de un gris plano",
+            "🔨 Se corrigieron IDs de capa duplicados al importar a un proyecto cargado, que podían hacer que seleccionar una capa seleccionara otra; los IDs ahora se desduplican al cargar"
+          ]
+        },
+        {
+          "version": "1.3.0",
+          "changes": [
+            "➕ Distancia de sombra por capa: un control Distance en la sección Cast shadow fija cuánto proyecta cada capa su sombra (su altura aparente sobre la superficie). Multiplica la longitud automática de la luz, así que 1× mantiene el aspecto anterior y valores mayores elevan más la capa sobre la superficie",
+            "➕ La app ahora abre con un proyecto predeterminado incluido (el icono de la app) en lugar del ejemplo integrado, y muestra ese icono junto al título en la barra superior y como favicon del navegador",
+            "➕ Analíticas de uso anónimas mediante el SDK web de TelemetryDeck, respetuoso con la privacidad: una vista de página por carga, sin cookies (consulta la política de privacidad)",
+            "🔨 Hacer clic en el lienzo ahora alterna la selección entre capas superpuestas; comprueba la geometría real de la capa, así que el objetivo de arrastre invisible de una capa ya no intercepta clics destinados a una forma por encima o por debajo"
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "changes": [
+            "🔨 Con Link W/H activado, editar una dimensión del lienzo ahora también actualiza el valor del otro campo (el lienzo ya se redimensionaba correctamente; solo el valor mostrado se retrasaba)"
+          ]
+        },
+        {
+          "version": "1.2.0",
+          "changes": [
+            "➕ Mover capas: arrastra una capa seleccionada (o varias a la vez) en el lienzo, o fija una posición exacta con los campos X/Y de la capa",
+            "➕ Haz clic en la forma de una capa en el lienzo para seleccionarla. Ctrl/⌘ y Mayús+clic amplían la selección, y hacer clic en un área vacía deselecciona",
+            "➕ Campos numéricos de Posición X/Y para colocar con precisión la luz puntual, junto al control arrastrable",
+            "🛠️ La luz ahora se mueve solo arrastrando su control; hacer clic en otra parte del lienzo ya no la reposiciona",
+            "🔨 Se corrigieron los ajustes de tamaño de lienzo que podían mostrarse parcialmente fuera de pantalla en el inspector",
+            "🔨 Se corrigieron las entradas numéricas (tamaño de lienzo, posición de luz, tamaño PNG, ancho de trazo) que se salían por el borde derecho de su panel"
+          ]
+        },
+        {
+          "version": "1.1.0",
+          "changes": [
+            "➕ Duplicar capa: un botón por fila y Ctrl/⌘+D copian la(s) capa(s) seleccionada(s), colocando cada copia justo encima de su original",
+            "➕ Redimensiona el lienzo del proyecto con los campos Ancho/Alto o ajustes (24, 108, 512, 1024), con relación de aspecto enlazada y un «Escalar contenido» opcional"
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "changes": [
+            "➕ Importa gráficos SVG y Android VectorDrawable como capas editables",
+            "➕ Motor de relieve: una única luz móvil compartida controla el sombreado (la luz puntual se vuelve un degradado radial; la distante, uno lineal) con mezcla de color OKLab",
+            "➕ Materiales por capa (color, opacidad, solid o con relieve, intensidad de relieve, brillo, regla de relleno) y sombras proyectadas que se recortan con las capas inferiores",
+            "➕ Vista previa en vivo con un control de luz arrastrable y edición de selección múltiple",
+            "➕ Exporta a PNG (transparente o con fondo), Android VectorDrawable XML, SVG y JSON de proyecto reeditable",
+            "➕ Abre y guarda proyectos, comparte por enlace y deshaz/rehaz (Ctrl/⌘+Z)"
+          ]
+        }
+      ]
+    }
+  ]
+}

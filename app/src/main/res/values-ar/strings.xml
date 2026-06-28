@@ -78,7 +78,7 @@
     <string name="about_other_app_open">فتح</string>
     <string name="about_other_app_install">تثبيت</string>
     <string name="about_other_app_website">الموقع الإلكتروني</string>
-    <string name="about_other_app_whats_new">ما الجديد</string>
+    <string name="about_other_app_highlights">أبرز التحديثات</string>
 
     <!-- In-app updates -->
     <string name="update_available_title">تحديث متاح</string>

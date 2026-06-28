@@ -19,8 +19,8 @@ data class OtherAppUi(
     val iconUrl: String?,
     val website: String?,
     val packageName: String?,
-    /** Latest "What's new" highlights (localized, may be empty); bullets can contain inline Markdown. */
-    val whatsNew: ImmutableList<String>,
+    /** Latest highlights (localized, may be empty); bullets can contain inline Markdown. */
+    val highlights: ImmutableList<String>,
 )
 
 /**
@@ -48,7 +48,7 @@ class AboutViewModel(application: Application) : AndroidViewModel(application) {
                         iconUrl = it.icon,
                         website = it.website,
                         packageName = it.packageName,
-                        whatsNew = it.whatsNew.toImmutableList(),
+                        highlights = it.highlights.toImmutableList(),
                     )
                 }
                 .toList()

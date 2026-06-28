@@ -65,7 +65,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * The About screen's "Other apps" card, driven by the (remote/cached) app catalog. Each row shows
  * the app's icon (loaded remotely via Coil, with a bundled fallback), name, localized description,
- * and latest "What's new" highlights, plus the actions:
+ * and latest highlights, plus the actions:
  *
  * An installable app gets a Play Store–style button — "Open" (launches it) when installed, or
  * "Install" (opens the listing) when not — and any app with a website also gets a "Website" button.
@@ -150,9 +150,9 @@ private fun OtherAppRow(app: OtherAppUi) {
             }
         }
 
-        if (app.whatsNew.isNotEmpty()) {
+        if (app.highlights.isNotEmpty()) {
             Spacer(Modifier.height(8.dp))
-            WhatsNewHighlights(highlights = app.whatsNew)
+            Highlights(highlights = app.highlights)
         }
 
         Spacer(Modifier.height(12.dp))
@@ -240,15 +240,15 @@ private fun OtherAppRow(app: OtherAppUi) {
 }
 
 /**
- * The catalog's "What's new" highlights for an app, as a small bulleted list aligned under the row's
- * text (past the icon + its 16dp gap). Bullets may carry inline Markdown (`**bold**`/`*italic*`),
- * rendered via [parseInlineMarkdown].
+ * The catalog's highlights for an app, as a small bulleted list aligned under the row's text (past
+ * the icon + its 16dp gap). Bullets may carry inline Markdown (`**bold**`/`*italic*`), rendered via
+ * [parseInlineMarkdown].
  */
 @Composable
-private fun WhatsNewHighlights(highlights: ImmutableList<String>) {
+private fun Highlights(highlights: ImmutableList<String>) {
     Column(modifier = Modifier.padding(start = 56.dp)) {
         AnimatedGradientText(
-            text = stringResource(R.string.about_other_app_whats_new),
+            text = stringResource(R.string.about_other_app_highlights),
             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
             colors = listOf(
                 MaterialTheme.colorScheme.primary,
@@ -292,7 +292,7 @@ private fun AnimatedGradientText(
     colors: List<Color>,
     modifier: Modifier = Modifier,
 ) {
-    val transition = rememberInfiniteTransition(label = "whatsNewShimmer")
+    val transition = rememberInfiniteTransition(label = "highlightsShimmer")
     val translate by transition.animateFloat(
         initialValue = 0f,
         targetValue = 2 * SHIMMER_SPAN_PX,
@@ -300,7 +300,7 @@ private fun AnimatedGradientText(
             animation = tween(durationMillis = 2400, easing = LinearEasing),
             repeatMode = RepeatMode.Restart,
         ),
-        label = "whatsNewShimmerTranslate",
+        label = "highlightsShimmerTranslate",
     )
     val brush = Brush.linearGradient(
         colors = colors,
@@ -366,7 +366,7 @@ private fun OtherAppsCardPreview() {
                     iconUrl = null,
                     website = "https://iboalali.com/app/billboard/",
                     packageName = "com.iboalali.billboard",
-                    whatsNew = persistentListOf("New **dark theme** and bigger text scaling"),
+                    highlights = persistentListOf("New **dark theme** and bigger text scaling"),
                 ),
                 OtherAppUi(
                     name = "Icon Recomposer",
@@ -374,7 +374,7 @@ private fun OtherAppsCardPreview() {
                     iconUrl = null,
                     website = "https://iboalali.com/Icon-Recomposer/",
                     packageName = null,
-                    whatsNew = persistentListOf("Your work is **saved automatically** and restored when you return"),
+                    highlights = persistentListOf("Your work is **saved automatically** and restored when you return"),
                 ),
             ),
             modifier = Modifier
