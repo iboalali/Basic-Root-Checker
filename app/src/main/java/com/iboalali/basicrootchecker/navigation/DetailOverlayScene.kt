@@ -1,6 +1,7 @@
 package com.iboalali.basicrootchecker.navigation
 
 import androidx.activity.compose.PredictiveBackHandler
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -49,6 +50,11 @@ private val DismissDragThreshold = 120.dp
 // Minimum fling speed that dismisses regardless of distance, mirroring the foundation default
 // (AnchoredDraggableMinFlingVelocity, 125 dp/s).
 private val DismissFlingVelocity = 125.dp
+
+// Predictive back is a restrained "peek": the card tracks down to at most this fraction of the
+// dismiss distance (with a decelerating ease); the commit animation finishes the rest, so a back
+// swipe doesn't fling the card across the screen.
+private const val PredictiveBackMaxTravelFraction = 0.12f
 
 /** The two resting positions of the detail card: fully open, or slid off the bottom (dismissed). */
 internal enum class DragAnchor {
@@ -222,7 +228,11 @@ internal fun DetailOverlayContent(
                 val dismissed = state.draggable.anchors.positionOf(DragAnchor.Dismissed)
                 val current = state.draggable.offset
                 if (!dismissed.isNaN() && !current.isNaN()) {
-                    state.draggable.dispatchRawDelta(dismissed * event.progress - current)
+                    val target =
+                        dismissed *
+                            PredictiveBackMaxTravelFraction *
+                            LinearOutSlowInEasing.transform(event.progress)
+                    state.draggable.dispatchRawDelta(target - current)
                 }
             }
             scope.launch { state.animateToDismissed() }
