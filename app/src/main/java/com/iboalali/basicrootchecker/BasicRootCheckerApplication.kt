@@ -11,6 +11,7 @@ import com.iboalali.basicrootchecker.review.createReviewController
 import com.iboalali.basicrootchecker.update.AppUpdateController
 import com.iboalali.basicrootchecker.update.createAppUpdateController
 import com.iboalali.basicrootchecker.util.RootHaptics
+import com.iboalali.basicrootchecker.util.TestEnvironment
 import com.telemetrydeck.sdk.TelemetryDeck
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +32,8 @@ class BasicRootCheckerApplication : Application() {
     val rootHaptics: RootHaptics by lazy { RootHaptics(this) }
 
     /**
-     * Source of truth for the About screen's "Other apps" list. Seeds from cache/bundled snapshot on
-     * first access; `MainActivity` calls [AppCatalogRepository.refresh] once at app start to
+     * Source of truth for the About screen's "Other apps" list. Seeds from cache/bundled snapshot
+     * on first access; `MainActivity` calls [AppCatalogRepository.refresh] once at app start to
      * revalidate it in the background.
      */
     val appCatalogRepository: AppCatalogRepository by lazy { AppCatalogRepository(this) }
@@ -57,15 +58,23 @@ class BasicRootCheckerApplication : Application() {
         // fired in the meantime are buffered by Analytics; setEnabled() then flushes them
         // (enabled, after start()) or discards them (disabled).
         applicationScope.launch {
-            val enabled = runCatching {
-                UserPreferences(this@BasicRootCheckerApplication).telemetryEnabled.first()
-            }.getOrDefault(false)
+            val enabled =
+                runCatching {
+                        UserPreferences(this@BasicRootCheckerApplication).telemetryEnabled.first()
+                    }
+                    .getOrDefault(false)
             if (enabled) {
                 withContext(Dispatchers.Main) {
-                    val builder = TelemetryDeck.Builder()
-                        .appID(BuildConfig.TELEMETRY_DECK_APP_ID)
-                        .showDebugLogs(BuildConfig.DEBUG)
-                        .testMode(BuildConfig.DEBUG)
+                    val builder =
+                        TelemetryDeck.Builder()
+                            .appID(BuildConfig.TELEMETRY_DECK_APP_ID)
+                            .showDebugLogs(BuildConfig.DEBUG)
+                            // Keep non-user runs out of production telemetry. See
+                            // [TestEnvironment.isFirebaseTestLab].
+                            .testMode(
+                                BuildConfig.DEBUG ||
+                                    TestEnvironment.isFirebaseTestLab(applicationContext)
+                            )
                     TelemetryDeck.start(applicationContext, builder)
                 }
             }
