@@ -56,13 +56,13 @@ fun MacrobenchmarkScope.visitAndScroll(menuItemTag: String, listTag: String) {
 }
 
 /**
- * Launch the app and navigate to the Licence screen (the longest scrollable content), leaving it
+ * Launch the app and navigate to the License screen (the longest scrollable content), leaving it
  * on screen and ready to scroll. Intended for a FrameTiming benchmark's `setupBlock` after a
  * `killProcess()`, so the measured block only times the scroll, not the launch or navigation.
  */
-fun MacrobenchmarkScope.openLicenceScreen() {
+fun MacrobenchmarkScope.openLicenseScreen() {
     startActivityAndWait()
     waitForMainScreen()
-    openMenuItem("menu_licence")
-    device.wait(Until.hasObject(By.res("licence_list")), TIMEOUT)
+    openMenuItem("menu_license")
+    device.wait(Until.hasObject(By.res("license_list")), TIMEOUT)
 }

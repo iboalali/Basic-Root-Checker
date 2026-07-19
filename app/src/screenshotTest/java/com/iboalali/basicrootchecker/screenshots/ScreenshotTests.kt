@@ -13,7 +13,7 @@ import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.navigation.DetailCard
 import com.iboalali.basicrootchecker.ui.about.AboutScreenContent
 import com.iboalali.basicrootchecker.ui.about.OtherAppUi
-import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
+import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
 import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
@@ -63,7 +63,7 @@ private fun MainNotChecked() {
         onInstallRequested = {},
         onAppUpdatedSnackbarShown = {},
         onNavigateToAbout = {},
-        onNavigateToLicence = {},
+        onNavigateToLicense = {},
         onNavigateToSettings = {},
     )
 }
@@ -86,7 +86,7 @@ private fun MainRooted() {
         onInstallRequested = {},
         onAppUpdatedSnackbarShown = {},
         onNavigateToAbout = {},
-        onNavigateToLicence = {},
+        onNavigateToLicense = {},
         onNavigateToSettings = {},
     )
 }
@@ -150,8 +150,8 @@ private fun About() {
 }
 
 @Composable
-private fun Licence() {
-    LicenceScreen(onNavigateBack = {})
+private fun License() {
+    LicenseScreen(onNavigateBack = {})
 }
 
 /**
@@ -213,8 +213,8 @@ fun AboutShot() {
 @PreviewPlayStorePhone
 @PreviewPlayStoreTablet7
 @Composable
-fun LicenceShot() {
-    BasicRootCheckerTheme { Licence() }
+fun LicenseShot() {
+    BasicRootCheckerTheme { License() }
 }
 
 // ---- Secondary screens on the 10-inch tablet (≥840dp) — dialog over the dimmed main screen
@@ -237,6 +237,6 @@ fun AboutDialogShot() {
 @PreviewTest
 @PreviewPlayStoreTablet10
 @Composable
-fun LicenceDialogShot() {
-    BasicRootCheckerTheme { DialogOverMain { Licence() } }
+fun LicenseDialogShot() {
+    BasicRootCheckerTheme { DialogOverMain { License() } }
 }

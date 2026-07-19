@@ -8,7 +8,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 /**
- * Which leading navigation icon a secondary screen (Settings / About / Licence) should draw,
+ * Which leading navigation icon a secondary screen (Settings / About / License) should draw,
  * depending on how it's currently presented:
  *
  * - [BACK] — pushed full-screen (phones / medium widths): the up-arrow returns to the main screen.

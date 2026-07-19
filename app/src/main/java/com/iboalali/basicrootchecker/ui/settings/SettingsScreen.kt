@@ -309,7 +309,7 @@ fun SettingsScreenContent(
                         )
                     }
                     Spacer(Modifier.width(16.dp))
-                    // The row owns the toggle (Role.Switch) so the control is labelled by
+                    // The row owns the toggle (Role.Switch) so the control is labeled by
                     // the title for screen readers; the Switch itself is non-interactive.
                     Switch(
                         checked = telemetryEnabled,
@@ -386,7 +386,7 @@ fun SettingsScreenContent(
                         )
                     }
                     Spacer(Modifier.width(16.dp))
-                    // The row owns the toggle (Role.Switch) so the control is labelled by
+                    // The row owns the toggle (Role.Switch) so the control is labeled by
                     // the title for screen readers; the Switch itself is non-interactive.
                     Switch(
                         checked = hapticsEnabled,

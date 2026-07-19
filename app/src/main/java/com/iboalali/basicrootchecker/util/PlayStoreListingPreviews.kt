@@ -2,7 +2,7 @@ package com.iboalali.basicrootchecker.util
 
 import androidx.compose.runtime.Composable
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
-import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
+import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
 import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
@@ -25,7 +25,7 @@ private fun MainScreenPlayStoreListing() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -41,8 +41,8 @@ private fun AboutScreenPlayStoreListing() {
 
 @PreviewPlayStoreListing
 @Composable
-private fun LicenceScreenPlayStoreListing() {
+private fun LicenseScreenPlayStoreListing() {
     BasicRootCheckerTheme {
-        LicenceScreen(onNavigateBack = {})
+        LicenseScreen(onNavigateBack = {})
     }
 }

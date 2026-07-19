@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
  * Three matrices, one per Play Console slot, because the app's navigation is adaptive at the 840dp
  * width breakpoint (see `AppNavigation`):
  * - [PreviewPlayStorePhone] and [PreviewPlayStoreTablet7] are both **portrait and < 840dp wide**, so
- *   the secondary screens (Settings/About/Licence) render **single-pane / full-screen** (the 7-inch
+ *   the secondary screens (Settings/About/License) render **single-pane / full-screen** (the 7-inch
  *   is just a wider canvas, not a stretched phone). Stack both on each single-pane `@PreviewTest`.
  * - [PreviewPlayStoreTablet10] is **landscape, 1280dp wide (≥840dp)**, where the secondary screens
  *   open as a **dialog card over the dimmed main screen** instead of replacing it — so its shots

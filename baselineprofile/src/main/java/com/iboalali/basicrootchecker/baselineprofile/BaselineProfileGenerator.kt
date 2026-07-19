@@ -38,6 +38,6 @@ class BaselineProfileGenerator {
         // Each secondary screen, reached through the overflow menu, then scrolled.
         visitAndScroll("menu_settings", "settings_list")
         visitAndScroll("menu_about", "about_list")
-        visitAndScroll("menu_licence", "licence_list")
+        visitAndScroll("menu_license", "license_list")
     }
 }

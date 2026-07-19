@@ -8,12 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- On large screens (tablets, unfolded foldables, desktop windows, and XR panels), opening Settings, About, or Licences now shows it as a dialog over the main screen instead of replacing the whole screen — dismiss it with the close button, by tapping outside, with Back, or by swiping the card down. Phones are unchanged.
+- On large screens (tablets, unfolded foldables, desktop windows, and XR panels), opening Settings, About, or Licenses now shows it as a dialog over the main screen instead of replacing the whole screen — dismiss it with the close button, by tapping outside, with Back, or by swiping the card down. Phones are unchanged.
 - Rate this app: after the app has confirmed root a few times, it may show Google Play's in-app rating card so you can rate without leaving the app, and a new **Rate this app** link on the About screen opens the Play Store listing on demand (Google Play builds only).
 - Anonymous usage analytics now notes whether the app is running on a phone or a larger screen (tablet or unfolded foldable) and the current window size, so phone and tablet support can be prioritized by real usage. It collects no personal information and follows the existing **anonymous usage data** opt-out in Settings.
 
 ### Changed
-- On large screens, the Settings/About/Licences dialog now animates: it grows out of the menu item you tapped and, when dismissed, collapses back into the overflow (more options) button. Swiping the card down resists and shows a "Release to close" hint before it closes, and the Back gesture previews the close as you swipe and finishes it when you let go.
+- On large screens, the Settings/About/Licenses dialog now animates: it grows out of the menu item you tapped and, when dismissed, collapses back into the overflow (more options) button. Swiping the card down resists and shows a "Release to close" hint before it closes, and the Back gesture previews the close as you swipe and finishes it when you let go.
 - The About screen's **Other Apps** list now updates itself from the web instead of being fixed in the app: it shows each app's current description and latest highlights in your language, includes web apps, and adds Open / Install / Website buttons (Open launches the app if it's already installed). It works offline from a bundled copy and refreshes quietly in the background.
 - Faster cold start and smoother first scroll: the app now ships a baseline profile, so Android ahead-of-time compiles the hot startup and scrolling code paths when the app is installed instead of warming them up on the first few launches.
 - Corrected the About screen's privacy line to say the app collects no personal information (it previously claimed no data at all, which overstated it given the optional anonymous usage analytics).
@@ -35,13 +35,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved the tip jar (support development) to the top of Settings.
 
 ### Fixed
-- Fixed a rare crash when navigating back: pressing back twice in quick succession on Settings, About, or Licences (or a fast back-swipe) could close the app with an error instead of returning to the main screen.
+- Fixed a rare crash when navigating back: pressing back twice in quick succession on Settings, About, or Licenses (or a fast back-swipe) could close the app with an error instead of returning to the main screen.
 - Detect more root managers that were previously reported as not rooted — Kitsune Mask, SukiSU Ultra, ReSukiSU, KernelSU Next, and legacy managers (SuperSU, KingRoot, Superuser, phh) — and show each by its own name instead of a generic "Magisk"/"KernelSU"/"Other" label.
 - On the "no root" result, the app now notes that hidden or renamed root managers may need access granted first, and offers a button to request it.
-- Accessibility: screen readers now announce the main-screen overflow (more options) button and the back buttons on Settings, About, and Licences, which were previously unlabeled.
+- Accessibility: screen readers now announce the main-screen overflow (more options) button and the back buttons on Settings, About, and Licenses, which were previously unlabeled.
 - Accessibility: screen readers now read out the root-check result automatically when it changes, instead of leaving it silent until the user navigates back to the status card.
-- Accessibility: copying a device-info row (device name, model, Android version) is now available to screen readers as a labelled "Copy" action, alongside the existing long-press for everyone.
-- Accessibility: the "anonymous usage data" and "haptic feedback" switches in Settings are now labelled by their row title for screen readers, and the whole row toggles them, giving a larger touch target.
+- Accessibility: copying a device-info row (device name, model, Android version) is now available to screen readers as a labeled "Copy" action, alongside the existing long-press for everyone.
+- Accessibility: the "anonymous usage data" and "haptic feedback" switches in Settings are now labeled by their row title for screen readers, and the whole row toggles them, giving a larger touch target.
 - Accessibility: the in-app update card now announces its state changes (available, downloading, downloaded, failed) to screen readers, and the result icon no longer produces a redundant generic announcement.
 
 ## [2.3] - 2026-06-08
@@ -70,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Privacy policy link now points to the dedicated `iboalali.com/app/basic_root_checker/privacy` page instead of the in-page section on the product page.
-- Main screen overflow menu items now show leading icons next to Licences, Settings, and About.
+- Main screen overflow menu items now show leading icons next to Licenses, Settings, and About.
 - About screen contact section has been redesigned as a grouped icon-led list instead of plain auto-linked text.
 
 ### Fixed
@@ -91,7 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Root probes (installed-package query, `/proc/self/mounts`, `su` binary check) now run regardless of whether libsu reports the app as already granted, closing a detection gap where rooted devices were reported as not rooted on the first check.
 - Dependencies updated.
 - Debug-build telemetry signals are now marked as test data so they no longer mix into production statistics.
-- About and Licence screens now extend behind the navigation bar for a true edge-to-edge appearance, with the bottom system inset added as breathing room below the last item.
+- About and License screens now extend behind the navigation bar for a true edge-to-edge appearance, with the bottom system inset added as breathing room below the last item.
 
 ### Fixed
 - Magisk version detection now recognizes the modern `/debug_ramdisk/.magisk` path and falls back from `magisk -v` to decoding `magisk -V` when only the numeric version code is available.
@@ -187,7 +187,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Compiled against Android 11 (API 30); main launcher activity declared explicitly for Android 12 compatibility.
-- About and Licence screens redesigned with toolbars and a single layout that scales across screen sizes.
+- About and License screens redesigned with toolbars and a single layout that scales across screen sizes.
 - Main screen layout is now scrollable.
 - Switched to the Noto font.
 
@@ -234,7 +234,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2] - 2017-05-17
 
 ### Added
-- Licence screen now lists the AndroidDeviceLibrary licence.
+- License screen now lists the AndroidDeviceLibrary license.
 - Round launcher icon resources for Android 7.1+.
 
 ### Changed
@@ -244,4 +244,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1] - 2016-11-05
 
 ### Added
-- Initial public release: detects root access via SuperSU, shows device model, marketing name, and Android version, includes an About/Licence screen.
+- Initial public release: detects root access via SuperSU, shows device model, marketing name, and Android version, includes an About/License screen.

@@ -368,7 +368,7 @@ internal fun DetailOverlayContent(
     // on
     // cancel. The custom overlay isn't a platform Dialog, so without this the gesture would fall
     // through and finish the Activity. The settle animations run in `scope` (not the gesture's own
-    // coroutine), so a cancelled gesture can still finish its spring-back.
+    // coroutine), so a canceled gesture can still finish its spring-back.
     PredictiveBackHandler(enabled = true) { backEvents ->
         state.renderMorphIcon = true
         try {

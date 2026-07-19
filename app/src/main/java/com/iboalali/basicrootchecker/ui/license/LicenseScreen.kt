@@ -1,4 +1,4 @@
-package com.iboalali.basicrootchecker.ui.licence
+package com.iboalali.basicrootchecker.ui.license
 
 import android.text.util.Linkify
 import android.widget.TextView
@@ -42,7 +42,7 @@ import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicenceScreen(onNavigateBack: () -> Unit) {
+fun LicenseScreen(onNavigateBack: () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val linkColor = MaterialTheme.colorScheme.primary.toArgb()
     val textColor = MaterialTheme.colorScheme.onSurface.toArgb()
@@ -53,7 +53,7 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
-                title = { Text(stringResource(R.string.action_licence)) },
+                title = { Text(stringResource(R.string.action_license)) },
                 navigationIcon = {
                     // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over
                     // the main screen on large screens (see LocalDetailNavIcon).
@@ -85,7 +85,7 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
 
         Column(
             modifier = Modifier
-                .testTag("licence_list")
+                .testTag("license_list")
                 .fillMaxSize()
                 .padding(contentPadding)
                 .verticalScroll(rememberScrollState()),
@@ -100,7 +100,7 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
                 Spacer(Modifier.height(5.dp))
 
                 Text(
-                    text = stringResource(R.string.licence_libsu),
+                    text = stringResource(R.string.license_libsu),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
@@ -110,7 +110,7 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
                 Spacer(Modifier.height(20.dp))
 
                 Text(
-                    text = stringResource(R.string.licence_android_device_names),
+                    text = stringResource(R.string.license_android_device_names),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
@@ -120,7 +120,7 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
                 AndroidView(
                     factory = { ctx ->
                         TextView(ctx).apply {
-                            text = ctx.getString(R.string.licence_apache_title)
+                            text = ctx.getString(R.string.license_apache_title)
                             autoLinkMask = Linkify.WEB_URLS
                             setTextColor(textColor)
                             setLinkTextColor(linkColor)
@@ -136,7 +136,7 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
                 Spacer(Modifier.height(20.dp))
 
                 Text(
-                    text = stringResource(R.string.licence_apache_licence),
+                    text = stringResource(R.string.license_apache_license),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
@@ -149,8 +149,8 @@ fun LicenceScreen(onNavigateBack: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-private fun LicenceScreenPreview() {
+private fun LicenseScreenPreview() {
     BasicRootCheckerTheme {
-        LicenceScreen(onNavigateBack = {})
+        LicenseScreen(onNavigateBack = {})
     }
 }

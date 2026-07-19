@@ -103,7 +103,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     onNavigateToAbout: () -> Unit,
-    onNavigateToLicence: () -> Unit,
+    onNavigateToLicense: () -> Unit,
     onNavigateToSettings: () -> Unit,
     viewModel: MainViewModel = viewModel(),
 ) {
@@ -132,7 +132,7 @@ fun MainScreen(
         onInstallRequested = viewModel::onInstallRequested,
         onAppUpdatedSnackbarShown = viewModel::onAppUpdatedSnackbarShown,
         onNavigateToAbout = onNavigateToAbout,
-        onNavigateToLicence = onNavigateToLicence,
+        onNavigateToLicense = onNavigateToLicense,
         onNavigateToSettings = onNavigateToSettings,
     )
 }
@@ -147,7 +147,7 @@ fun MainScreenContent(
     onInstallRequested: () -> Unit,
     onAppUpdatedSnackbarShown: () -> Unit,
     onNavigateToAbout: () -> Unit,
-    onNavigateToLicence: () -> Unit,
+    onNavigateToLicense: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onCheckRootDemo: (RootResult) -> Unit = {},
     onDemoUpdateChoice: (DebugUpdateChoice) -> Unit = {},
@@ -158,7 +158,7 @@ fun MainScreenContent(
     // Shared anchors for the large-screen detail container transform: the overflow button reports
     // where to collapse into, and a tapped menu item reports where the dialog should grow from.
     val detailAnchors = LocalDetailAnchors.current
-    var licenceItemRect by remember { mutableStateOf<Rect?>(null) }
+    var licenseItemRect by remember { mutableStateOf<Rect?>(null) }
     var settingsItemRect by remember { mutableStateOf<Rect?>(null) }
     var aboutItemRect by remember { mutableStateOf<Rect?>(null) }
     var showDemoDialog by remember { mutableStateOf(false) }
@@ -219,10 +219,10 @@ fun MainScreenContent(
                         modifier = Modifier.semantics { testTagsAsResourceId = true },
                     ) {
                         AppBarDropdownMenuItem(
-                            text = stringResource(R.string.action_licence),
+                            text = stringResource(R.string.action_license),
                             modifier =
-                                Modifier.testTag("menu_licence").onGloballyPositioned {
-                                    licenceItemRect = it.screenRect()
+                                Modifier.testTag("menu_license").onGloballyPositioned {
+                                    licenseItemRect = it.screenRect()
                                 },
                             leadingIcon = {
                                 Icon(
@@ -233,9 +233,9 @@ fun MainScreenContent(
                             },
                             onClick =
                                 rememberHapticClick {
-                                    detailAnchors.openOriginScreenRect = licenceItemRect
+                                    detailAnchors.openOriginScreenRect = licenseItemRect
                                     menuExpanded = false
-                                    onNavigateToLicence()
+                                    onNavigateToLicense()
                                 },
                         )
                         AppBarDropdownMenuItem(
@@ -689,7 +689,7 @@ private fun DeviceInfoText(
         modifier =
             Modifier.fillMaxWidth()
                 // Long-press copies for sighted users; screen readers reach the same action
-                // through a labelled custom action, since the row has no primary click.
+                // through a labeled custom action, since the row has no primary click.
                 .pointerInput(copyWithHaptic) {
                     detectTapGestures(onLongPress = { copyWithHaptic() })
                 }
@@ -734,7 +734,7 @@ private fun MainScreenNotCheckedPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -758,7 +758,7 @@ private fun MainScreenCheckingPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -784,7 +784,7 @@ private fun MainScreenRootedPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -808,7 +808,7 @@ private fun MainScreenLocalesPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -834,7 +834,7 @@ private fun MainScreenNotGrantedPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -861,7 +861,7 @@ private fun MainScreenNotRootedPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }

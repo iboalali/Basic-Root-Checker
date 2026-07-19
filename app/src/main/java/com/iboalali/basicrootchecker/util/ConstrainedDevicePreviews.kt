@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
-import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
+import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
 import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
@@ -31,7 +31,7 @@ private fun MainScreenConstrainedPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -56,7 +56,7 @@ private fun MainScreenRootedConstrainedPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -80,7 +80,7 @@ private fun MainScreenNotGrantedConstrainedPreview() {
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -96,9 +96,9 @@ private fun AboutScreenConstrainedPreview() {
 
 @PreviewConstrainedDevices
 @Composable
-private fun LicenceScreenConstrainedPreview() {
+private fun LicenseScreenConstrainedPreview() {
     BasicRootCheckerTheme {
-        LicenceScreen(onNavigateBack = {})
+        LicenseScreen(onNavigateBack = {})
     }
 }
 

@@ -53,7 +53,7 @@ class StartupBenchmarks {
         scroll(CompilationMode.Partial(BaselineProfileMode.Require))
 
     /**
-     * Scroll the Licence screen — the longest scrollable content in the app — so FrameTimingMetric
+     * Scroll the License screen — the longest scrollable content in the app — so FrameTimingMetric
      * has real frames to measure.
      *
      * No [StartupMode] here: with a startup mode set, the process is killed *after* `setupBlock`, so
@@ -68,9 +68,9 @@ class StartupBenchmarks {
         compilationMode = compilationMode,
         setupBlock = {
             killProcess()
-            openLicenceScreen()
+            openLicenseScreen()
         },
     ) {
-        scrollList("licence_list")
+        scrollList("license_list")
     }
 }

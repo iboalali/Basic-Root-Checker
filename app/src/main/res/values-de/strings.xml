@@ -12,7 +12,7 @@ Diese app sammelt keine persönlichen informationen.\n\n\n
 Kontaktiere mich:</string>
     <string name="action_about">Über</string>
     <string name="action_privacy_policy">Datenschutzerklärung</string>
-    <string name="action_licence">Lizenzen</string>
+    <string name="action_license">Lizenzen</string>
     <string name="action_settings">Einstellungen</string>
 
     <!-- Settings Strings -->

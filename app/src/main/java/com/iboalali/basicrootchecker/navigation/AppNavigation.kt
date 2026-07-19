@@ -22,7 +22,7 @@ import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXPANDED_L
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
-import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
+import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreen
 import com.iboalali.basicrootchecker.ui.settings.SettingsScreen
 import kotlinx.serialization.Serializable
@@ -31,7 +31,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable data object AboutRoute : NavKey
 
-@Serializable data object LicenceRoute : NavKey
+@Serializable data object LicenseRoute : NavKey
 
 @Serializable data object SettingsRoute : NavKey
 
@@ -67,7 +67,7 @@ fun AppNavigation() {
     val backStack = rememberNavBackStack(MainRoute)
 
     // At the expanded width breakpoint (≥840dp: tablets, unfolded foldables in landscape, desktop
-    // windows, XR panels) the secondary screens (Settings/About/Licence) open as a dialog over the
+    // windows, XR panels) the secondary screens (Settings/About/License) open as a dialog over the
     // dimmed main screen instead of replacing it. Below it (phones, medium widths) they push
     // full-screen with the transitions defined above.
     val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
@@ -145,9 +145,9 @@ fun AppNavigation() {
                                 Analytics.trackNavigation("/main", "/about")
                                 navigateToDetail(AboutRoute)
                             },
-                            onNavigateToLicence = {
+                            onNavigateToLicense = {
                                 Analytics.trackNavigation("/main", "/licence")
-                                navigateToDetail(LicenceRoute)
+                                navigateToDetail(LicenseRoute)
                             },
                             onNavigateToSettings = {
                                 Analytics.trackNavigation("/main", "/settings")
@@ -174,8 +174,8 @@ fun AppNavigation() {
                         )
                     }
 
-                    entry<LicenceRoute>(metadata = detailMetadata) {
-                        LicenceScreen(
+                    entry<LicenseRoute>(metadata = detailMetadata) {
+                        LicenseScreen(
                             onNavigateBack = {
                                 Analytics.trackNavigation("/licence", "/main")
                                 popBackStack()
