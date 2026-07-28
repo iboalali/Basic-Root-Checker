@@ -144,6 +144,9 @@ fun AppNavigation() {
                                 navigateToDetail(AboutRoute)
                             },
                             onNavigateToLicense = {
+                                // "/licence" keeps the pre-rename British spelling on purpose: it is
+                                // a TelemetryDeck path, and renaming it would split this screen's
+                                // history into two series. Same for the "/licence" -> "/main" pop.
                                 Analytics.trackNavigation("/main", "/licence")
                                 navigateToDetail(LicenseRoute)
                             },
