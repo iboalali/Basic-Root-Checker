@@ -73,7 +73,6 @@ import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.navigation.DetailNavIcon
 import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
-import com.iboalali.basicrootchecker.navigation.detailDialogShape
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.rememberHapticToggle
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
@@ -195,9 +194,7 @@ fun SettingsScreenContent(
     }
 
     Scaffold(
-        modifier = Modifier
-            .detailDialogShape()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             LargeTopAppBar(

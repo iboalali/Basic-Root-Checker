@@ -53,7 +53,6 @@ import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.navigation.DetailNavIcon
 import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
-import com.iboalali.basicrootchecker.navigation.detailDialogShape
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.DeviceInfo
@@ -92,9 +91,7 @@ internal fun AboutScreenContent(
     }
 
     Scaffold(
-        modifier = Modifier
-            .detailDialogShape()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_about)) },

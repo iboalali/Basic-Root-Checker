@@ -36,7 +36,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.navigation.DetailNavIcon
 import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
-import com.iboalali.basicrootchecker.navigation.detailDialogShape
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 
@@ -48,9 +47,7 @@ fun LicenseScreen(onNavigateBack: () -> Unit) {
     val textColor = MaterialTheme.colorScheme.onSurface.toArgb()
 
     Scaffold(
-        modifier = Modifier
-            .detailDialogShape()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_license)) },

@@ -1,11 +1,6 @@
 package com.iboalali.basicrootchecker.navigation
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 
 /**
  * Which leading navigation icon a secondary screen (Settings / About / License) should draw,
@@ -21,19 +16,10 @@ enum class DetailNavIcon { BACK, CLOSE }
 /** Defaults to [DetailNavIcon.BACK]; `AppNavigation` provides [DetailNavIcon.CLOSE] at expanded width. */
 val LocalDetailNavIcon = compositionLocalOf { DetailNavIcon.BACK }
 
-/** Corner radius for a secondary screen shown as a dialog — matches the app's cards. */
-private val DetailDialogCornerRadius = 32.dp
-
-/**
- * Rounds a secondary screen's corners when it's presented as a dialog over the main screen
- * ([DetailNavIcon.CLOSE]) so it reads as a card like the app's other dialogs, since the built-in
- * `DialogSceneStrategy` renders the screen's `Scaffold` directly (which is otherwise square). No-op
- * when the screen is pushed full-screen.
- */
-@Composable
-fun Modifier.detailDialogShape(): Modifier =
-    if (LocalDetailNavIcon.current == DetailNavIcon.CLOSE) {
-        clip(RoundedCornerShape(DetailDialogCornerRadius))
-    } else {
-        this
-    }
+// There used to be a `Modifier.detailDialogShape()` here that rounded a secondary screen's corners
+// when it was shown as a dialog. It existed because the built-in `DialogSceneStrategy` rendered the
+// screen's `Scaffold` directly, with square corners. The custom overlay replaced that: the screen is
+// now hosted inside `DetailCard`'s `Surface(shape = RoundedCornerShape(DetailCardDefaults.CornerRadius))`,
+// which already clips it — so the modifier was a third redundant clip at the same radius, and a
+// second place the 32.dp had to be kept in sync. `DetailCardDefaults.CornerRadius` is the only
+// source of that radius now.
