@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -77,15 +77,13 @@ fun AppNavigation() {
     // large-screen audience can be sized. Analytics dedups within the process, so the
     // recompositions
     // this is read through on resize/fold/unfold don't re-send it.
-    val context = LocalContext.current
+    // Read via LocalConfiguration, not LocalContext.current.resources.configuration: a Configuration
+    // change doesn't invalidate LocalContext reads, so that route can hand back a stale value.
+    val configuration = LocalConfiguration.current
     LaunchedEffect(Unit) {
         Analytics.trackDeviceType(
             formFactor =
-                if (
-                    context.resources.configuration.smallestScreenWidthDp >=
-                        TABLET_SMALLEST_WIDTH_DP
-                )
-                    "tablet"
+                if (configuration.smallestScreenWidthDp >= TABLET_SMALLEST_WIDTH_DP) "tablet"
                 else "phone",
             widthSizeClass =
                 when {
