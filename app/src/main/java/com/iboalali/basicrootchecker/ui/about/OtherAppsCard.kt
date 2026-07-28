@@ -31,8 +31,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +51,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import coil3.compose.AsyncImage
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
@@ -114,9 +120,13 @@ private fun OtherAppRow(app: OtherAppUi) {
     val context = LocalContext.current
     val packageName = app.packageName
     val website = app.website
+    // Tapping "Install" leaves for the Play Store, so by the time the user comes back the app may be
+    // installed (or gone). Re-resolving on every foreground return keeps the buttons honest instead of
+    // showing "Install" for an app that is now installed until the screen is left and reopened.
+    val foregroundTick = rememberForegroundTick()
     // Non-null only when an installable app is actually installed (apps with a launcher activity are
     // visible via the <queries> MAIN intent in the manifest); reused as the intent to launch it.
-    val launchIntent = remember(packageName) {
+    val launchIntent = remember(packageName, foregroundTick) {
         packageName?.let { context.packageManager.getLaunchIntentForPackage(it) }
     }
     // Crisp local art for apps we ship icons for, used while the remote icon loads / when offline.
@@ -202,7 +212,7 @@ private fun OtherAppRow(app: OtherAppUi) {
                 // package directly. We don't rely on ACTION_VIEW link routing because an *unverified*
                 // WebAPK (e.g. some Samsung Internet installs) isn't picked up by it — Android would
                 // fall back to the browser. With no PWA installed, the button just opens the website.
-                val pwaLaunchIntent = remember(packageName, website) {
+                val pwaLaunchIntent = remember(packageName, website, foregroundTick) {
                     if (packageName != null) null
                     else findInstalledPwaPackage(context, website)
                         ?.let { context.packageManager.getLaunchIntentForPackage(it) }
@@ -266,13 +276,33 @@ private fun Highlights(highlights: ImmutableList<String>) {
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    text = parseInlineMarkdown(highlight),
+                    text = remember(highlight) { parseInlineMarkdown(highlight) },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
     }
+}
+
+/**
+ * A counter that increments each time the screen comes back to the foreground, for use as a
+ * `remember` key so state derived from things that can change while the app is away gets recomputed.
+ *
+ * The first RESUMED deliberately doesn't count: composition has just read the fresh value anyway, and
+ * bumping it would only force a redundant recompute on the very first frame.
+ */
+@Composable
+private fun rememberForegroundTick(): Int {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var tick by remember { mutableIntStateOf(0) }
+    LaunchedEffect(lifecycleOwner) {
+        var isFirst = true
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            if (isFirst) isFirst = false else tick++
+        }
+    }
+    return tick
 }
 
 /** One mirror period of the shimmer gradient, in px; the brush translates by this much per loop. */
