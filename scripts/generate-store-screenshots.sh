@@ -69,6 +69,14 @@ lang_dir_for() {
 }
 
 echo "==> Exporting clean PNGs to: $OUT_DIR (grouped by language, then device)"
+# Clear the target first: the loop below only *copies*, so a screen renamed or dropped since the last
+# export (e.g. LicenceShot -> LicenseShot) would otherwise linger beside its replacement and get
+# uploaded. Only safe when an explicit subfolder was named — with no argument $OUT_DIR is the shared
+# parent holding every version's export, which must not be touched.
+if [ -n "${1:-}" ] && [ -d "$OUT_DIR" ]; then
+  echo "    Clearing the previous export in $OUT_DIR"
+  rm -rf "${OUT_DIR:?}"
+fi
 mkdir -p "$OUT_DIR"
 # Group each reference PNG into a <language>/<device>/ subfolder, dropping the trailing _<hash>_0 and
 # the now-redundant locale + device tokens (the folders convey them):
