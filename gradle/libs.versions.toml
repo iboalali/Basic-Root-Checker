@@ -1,11 +1,11 @@
 [versions]
 kotlin = "2.4.10"
-android-gradle-plugin = "9.3.0"
+android-gradle-plugin = "9.3.1"
 ksp = "2.3.10"                                     # https://github.com/google/ksp/releases
 
 androidx-activity = "1.13.0"
 androidx-annotation = "1.10.0"
-androidx-appfunctions = "1.0.0-alpha09"          # https://developer.android.com/jetpack/androidx/releases/appfunctions
+androidx-appfunctions = "1.0.0-alpha10"          # https://developer.android.com/jetpack/androidx/releases/appfunctions (alpha10 merged appfunctions-service into appfunctions — there is no appfunctions-service alpha10 — and moved its classes from androidx.appfunctions.service.* to androidx.appfunctions.*)
 androidx-compose-bom = "2026.06.01"
 androidx-compose-material3-adaptive = "1.3.0-rc01"   # https://developer.android.com/jetpack/androidx/releases/compose-material3-adaptive (separate from the Compose BOM)
 androidx-core = "1.19.0"
@@ -15,7 +15,7 @@ androidx-lifecycle = "2.11.0"
 androidx-navigation3 = "1.1.4"
 androidx-benchmark = "1.5.0-alpha07"             # https://developer.android.com/jetpack/androidx/releases/benchmark (paired with the androidx.baselineprofile plugin; alpha required for AGP 9)
 androidx-profileinstaller = "1.4.1"              # installs the shipped baseline profile at runtime
-screenshot = "0.0.1-alpha15"                     # https://developer.android.com/studio/preview/compose-screenshot-testing (com.android.compose.screenshot; alpha12+ targets AGP 9)
+screenshot = "0.0.1-alpha16"                     # https://developer.android.com/studio/preview/compose-screenshot-testing (com.android.compose.screenshot; alpha12+ targets AGP 9)
 androidx-test-espresso = "3.7.0"
 androidx-test-ext-junit = "1.3.0"
 androidx-test-uiautomator = "2.4.0"
@@ -38,7 +38,6 @@ junit = "4.13.2"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
 androidx-appfunctions = { module = "androidx.appfunctions:appfunctions", version.ref = "androidx-appfunctions" }
-androidx-appfunctions-service = { module = "androidx.appfunctions:appfunctions-service", version.ref = "androidx-appfunctions" }
 androidx-appfunctions-compiler = { module = "androidx.appfunctions:appfunctions-compiler", version.ref = "androidx-appfunctions" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }

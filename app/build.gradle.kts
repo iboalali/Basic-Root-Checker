@@ -64,10 +64,11 @@ android {
     }
 }
 
-ksp {
-    // Aggregate all @AppFunction metadata into a single schema so the system can discover them.
-    arg("appfunctions:aggregateAppFunctions", "true")
-}
+// AppFunctions (androidx.appfunctions alpha10): the @AppFunctionServiceEntryPoint compiler generates
+// the concrete RootAppFunctionService plus its assets/root_app_function_service.xml from the
+// @AppFunction methods on BaseRootAppFunctionService. The entry-point path needs no aggregate ksp
+// arg (alpha09's "appfunctions:aggregateAppFunctions" is gone); the generated service is declared in
+// AndroidManifest.xml.
 
 dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -95,8 +96,9 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     // AppFunctions — expose root-check workflows to the system / on-device agents (both flavors)
+    // via an @AppFunctionServiceEntryPoint service. alpha10 consolidated the old -service artifact
+    // into this one; -compiler (KSP) generates the service class + its function XML.
     implementation(libs.androidx.appfunctions)
-    implementation(libs.androidx.appfunctions.service)
     ksp(libs.androidx.appfunctions.compiler)
 
     // Navigation 3

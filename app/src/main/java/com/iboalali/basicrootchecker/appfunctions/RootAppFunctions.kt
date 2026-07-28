@@ -1,7 +1,6 @@
 package com.iboalali.basicrootchecker.appfunctions
 
 import androidx.appfunctions.AppFunctionContext
-import androidx.appfunctions.service.AppFunction
 import com.iboalali.basicrootchecker.data.LastRootCheck
 import com.iboalali.basicrootchecker.data.RootCheckStatus
 import com.iboalali.basicrootchecker.data.RootChecker
@@ -11,52 +10,30 @@ import kotlinx.coroutines.flow.first
 import java.time.Instant
 
 /**
- * Basic Root Checker's [AppFunction]s — the app's root-check workflows exposed to the Android
- * system and to on-device agents, so a device's root state can be queried hands-free without
- * opening the app.
+ * The implementation behind Basic Root Checker's AppFunctions — the app's root-check workflows
+ * exposed to the Android system and to on-device agents, so a device's root state can be queried
+ * hands-free without opening the app.
  *
- * Instantiated by the AppFunctions framework via its no-arg constructor; each function obtains
- * the Android [android.content.Context] it needs from [AppFunctionContext.context].
+ * The `@AppFunction` annotations and the agent-facing KDoc live on [BaseRootAppFunctionService],
+ * which delegates here; this class stays plain (no service lifecycle, no framework annotations) so
+ * it can be exercised directly. Each function obtains the Android [android.content.Context] it
+ * needs from [AppFunctionContext.context].
  */
 class RootAppFunctions {
 
-    /**
-     * Run a fresh root check on this device and return its current root status. Re-probes the
-     * device on every call. To read the previous check and the time it ran without re-probing,
-     * use getLastRootCheck.
-     *
-     * @param appFunctionContext The execution context.
-     * @return The current root status of the device.
-     */
-    @AppFunction(isDescribedByKDoc = true)
+    /** Runs a fresh passive root check and maps it to the agent-facing [RootStatus]. */
     suspend fun checkRootStatus(appFunctionContext: AppFunctionContext): RootStatus {
         val result = RootChecker.check(appFunctionContext.context, applyUiDelay = false)
         return result.toRootStatus(Instant.now())
     }
 
-    /**
-     * Request root access for this app, then return the resulting root status. If root is
-     * installed but not yet allowed for this app, the device's superuser dialog (Magisk, KernelSU,
-     * or APatch) appears and the user must approve it on the device, so this is not fully
-     * hands-free. To read the current state without prompting, use checkRootStatus.
-     *
-     * @param appFunctionContext The execution context.
-     * @return The root status after the access request.
-     */
-    @AppFunction(isDescribedByKDoc = true)
+    /** Forces the superuser prompt, then maps the resulting state to a [RootStatus]. */
     suspend fun requestRootAccess(appFunctionContext: AppFunctionContext): RootStatus {
         val result = RootChecker.requestRoot(appFunctionContext.context, applyUiDelay = false)
         return result.toRootStatus(Instant.now())
     }
 
-    /**
-     * Return the most recent root check — its result and the time it ran — without re-probing the
-     * device. Read the checkedAt field to report when the last check happened.
-     *
-     * @param appFunctionContext The execution context.
-     * @return The last root status, or null if no check has ever run on this device.
-     */
-    @AppFunction(isDescribedByKDoc = true)
+    /** Reads the last recorded check from [UserPreferences] without re-probing the device. */
     suspend fun getLastRootCheck(appFunctionContext: AppFunctionContext): RootStatus? {
         return UserPreferences(appFunctionContext.context).lastRootCheck.first()?.toRootStatus()
     }
