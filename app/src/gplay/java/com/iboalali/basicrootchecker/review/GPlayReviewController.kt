@@ -38,8 +38,10 @@ class GPlayReviewController(context: Context) : ReviewController {
         activity = null
     }
 
-    override fun requestReview() {
-        val activity = activity ?: return
+    override fun requestReview(): Boolean {
+        // No activity bound (e.g. mid-recreation): report it so the caller keeps its prompt slot
+        // instead of marking this version as already asked.
+        val activity = activity ?: return false
         reviewManager.requestReviewFlow()
             .addOnSuccessListener { reviewInfo ->
                 reviewManager.launchReviewFlow(activity, reviewInfo)
@@ -52,6 +54,9 @@ class GPlayReviewController(context: Context) : ReviewController {
                 Log.w(TAG, "requestReviewFlow failed", e)
                 Analytics.trackReviewFlowFailed(e.formatReviewError())
             }
+        // The flow is now Play's to run: it resolves asynchronously and gives no "was it shown"
+        // callback, so this only reports that the request was made, not that a card appeared.
+        return true
     }
 
     private fun Exception.formatReviewError(): String =

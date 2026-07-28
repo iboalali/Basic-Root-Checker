@@ -6,5 +6,7 @@ object NoOpReviewController : ReviewController {
     override val isAvailable: Boolean = false
 
     override fun attach(activity: ComponentActivity) = Unit
-    override fun requestReview() = Unit
+
+    /** Never requests anything, so callers keep their prompt slot unspent. */
+    override fun requestReview(): Boolean = false
 }

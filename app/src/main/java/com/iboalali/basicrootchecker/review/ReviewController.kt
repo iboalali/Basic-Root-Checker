@@ -21,6 +21,14 @@ interface ReviewController {
     /** Binds to [activity] so the review flow can be launched; cleared automatically on destroy. */
     fun attach(activity: ComponentActivity)
 
-    /** Requests the Play-managed in-app review flow. No-op if unattached or unavailable. */
-    fun requestReview()
+    /**
+     * Requests the Play-managed in-app review flow.
+     *
+     * @return `true` when the request was actually handed to Play, `false` when it could not be —
+     *   [isAvailable] is false, or no activity is attached (e.g. a root check that finished while
+     *   the activity was being recreated). Callers use this to avoid spending their
+     *   once-per-version prompt slot on a flow that never ran; a `true` return still says nothing
+     *   about whether Play went on to *show* the card.
+     */
+    fun requestReview(): Boolean
 }

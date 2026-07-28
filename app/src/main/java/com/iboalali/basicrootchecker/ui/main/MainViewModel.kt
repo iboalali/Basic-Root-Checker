@@ -130,10 +130,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * After a root-found result, ask for an in-app rating once the gate opens (see [ReviewGate]).
      * Only [RootResult.Rooted] counts — confirming a device is rooted is the app's "win" moment.
-     * The Play card is quota-limited and may not actually appear; we record that we asked regardless.
+     *
+     * The version code is recorded — spending this release's single prompt — only once the request
+     * actually reached Play, because Play's card is quota-limited and gives no "was it shown"
+     * callback. A build without in-app review (FOSS) returns early, and a controller with no
+     * attached activity reports `false`, so neither burns the slot or reports a prompt that never
+     * happened.
      */
     private suspend fun maybeRequestReview(result: RootResult) {
         if (result !is RootResult.Rooted) return
+        // Nothing to rate on without a Play Store, so don't even count toward the gate: the slot
+        // stays unspent (and the counter untouched) if this install is ever replaced by a Play build.
+        if (!reviewController.isAvailable) return
         val rootedCount = userPreferences.incrementRootedCheckCount()
         val lastPromptedVersion = userPreferences.lastReviewPromptVersionCode.first()
         val currentVersion = BuildConfig.VERSION_CODE
@@ -146,8 +154,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     "-> shouldRequest=$shouldRequest",
             )
         }
-        if (shouldRequest) {
-            reviewController.requestReview()
+        if (shouldRequest && reviewController.requestReview()) {
             userPreferences.setLastReviewPromptVersionCode(currentVersion)
             Analytics.trackReviewRequested()
         }
