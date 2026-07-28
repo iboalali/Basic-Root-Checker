@@ -17,10 +17,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.Locale
-import java.util.zip.GZIPInputStream
 
 /**
  * Source of truth for the "Other apps" catalog.
@@ -38,14 +35,19 @@ import java.util.zip.GZIPInputStream
  * own UI languages. Each locale is cached separately (`apps_catalog_<key>.json`), so switching
  * language shows that language's cached list right away and offline use is correct per language.
  *
- * [refresh] revalidates the catalog in the background using a conditional GET: it sends the stored
- * `ETag`/`Last-Modified` from the previous download as `If-None-Match`/`If-Modified-Since`, so the
- * server answers `304 Not Modified` (no body) when nothing changed — we only download the payload
- * when it actually changed. On a change it caches the new JSON (and validators) and updates [apps];
- * on `304`, or on any failure (no/slow connection, parse error), it leaves the current list in
- * place. Nothing here blocks the UI — consumers observe [apps] and recompose if a fresher list
- * arrives. The fetch is kicked off once at app start from `MainActivity`; the About screen only
- * observes [apps] and never triggers it.
+ * [refresh] revalidates the catalog in the background using a conditional GET, delegated to
+ * [CatalogHttpSource] / OkHttp's cache: the stored `ETag`/`Last-Modified` go back as
+ * `If-None-Match`/`If-Modified-Since`, so the server answers `304 Not Modified` (no body) when
+ * nothing changed and we only download a payload that actually changed. On a change it caches the new
+ * JSON and updates [apps]; on `304`, or on any failure (no/slow connection, parse error), it leaves
+ * the current list in place. Nothing here blocks the UI — consumers observe [apps] and recompose if a
+ * fresher list arrives. The fetch is kicked off once at app start from `MainActivity`; the About
+ * screen only observes [apps] and never triggers it.
+ *
+ * **Two caches, on purpose.** OkHttp's (in `cacheDir`) is the HTTP layer's — it exists so
+ * revalidation works. Ours (`apps_catalog_<key>.json` in `filesDir`) is the last known good payload,
+ * read directly at startup to seed [apps] with no network stack involved, and it must survive the
+ * system reclaiming `cacheDir`.
  */
 class AppCatalogRepository(private val context: Context) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -72,11 +74,16 @@ class AppCatalogRepository(private val context: Context) {
     // so it needs no @Volatile.
     private var networkAppliedKey: String? = null
 
+    // Lazy so constructing the repository (which happens on first access from the Application) costs
+    // nothing until a refresh actually runs.
+    private val http by lazy { CatalogHttpSource(File(context.cacheDir, HTTP_CACHE_DIR)) }
+
     init {
         // Seed off the main thread from the cache (or the bundled snapshot) so the screen has data
         // before — and regardless of whether — the network refresh completes.
         scope.launch {
             seedFromCache(currentCatalogKey())
+            deleteLegacyValidatorFiles()
         }
     }
 
@@ -154,10 +161,10 @@ class AppCatalogRepository(private val context: Context) {
                         val fresh = parse(result.body)
                         require(fresh.isNotEmpty()) { "Catalog contained no apps" }
                         applyFetched(key, fresh)
-                        // Best-effort persistence; must not turn a good fetch into a failure.
+                        // Best-effort persistence; must not turn a good fetch into a failure. Only
+                        // the payload is ours to keep now — the validators live in OkHttp's cache.
                         runCatching { cacheFile(key).writeText(result.body) }
                             .onFailure { Log.w(TAG, "Failed to cache app catalog ($key)", it) }
-                        saveValidators(key, result.url, result.etag, result.lastModified)
                         CATALOG_REFRESH_UPDATED
                     }
                 }
@@ -174,61 +181,29 @@ class AppCatalogRepository(private val context: Context) {
      * Conditional GET for [key]'s locale file, falling back to English on a non-2xx primary response
      * (the localized file may not exist — the feed contract requires clients to fall back to
      * `/apps.json`). Throws on a transport failure or when no source is reachable.
+     *
+     * OkHttp's cache stores and replays the validators per URL, so the localized file and the English
+     * fallback can never be confused for one another.
      */
     private fun fetch(key: String): FetchResult {
         val primaryUrl = urlForKey(key)
-        // Validators only matter when we still hold the body they validate; otherwise a 304 would
-        // leave us with nothing to show. They carry the URL they were captured from so we never
-        // replay them against a different file (e.g. the English fallback vs. the localized file).
-        val validators = if (cacheFile(key).exists()) loadValidators(key) else Validators(null, null, null)
-
-        requestCatalog(primaryUrl, validators)?.let { return it }
+        http.fetch(primaryUrl)?.let { return it.toFetchResult(key) }
         // Primary unavailable (e.g. 404 for an untranslated locale): fall back to English.
         if (primaryUrl != ENGLISH_URL) {
-            requestCatalog(ENGLISH_URL, validators)?.let { return it }
+            http.fetch(ENGLISH_URL)?.let { return it.toFetchResult(key) }
         }
         error("Catalog unavailable")
     }
 
     /**
-     * Performs one conditional GET. Returns the [FetchResult] for `200`/`304`, or `null` for a
-     * response we should fall back on (any other status, e.g. `404`). [validators] are sent only
-     * when they were captured from this exact [url], so a `304` always has a matching body to keep.
+     * Nothing transferred means the catalog we already hold is current, so keep the list as-is. The
+     * exception is having lost our own snapshot (the HTTP cache in `cacheDir` and the snapshot in
+     * `filesDir` are evicted independently): then take the body OkHttp handed back, so the next
+     * launch seeds from a real catalog instead of the bundled asset.
      */
-    private fun requestCatalog(url: String, validators: Validators): FetchResult? {
-        val connection = (URL(url).openConnection() as HttpURLConnection).apply {
-            connectTimeout = CONNECT_TIMEOUT_MS
-            readTimeout = READ_TIMEOUT_MS
-            requestMethod = "GET"
-            // Ask for a gzip-compressed transfer; we decompress below based on the response header.
-            setRequestProperty("Accept-Encoding", "gzip")
-            if (validators.url == url) {
-                validators.etag?.let { setRequestProperty("If-None-Match", it) }
-                validators.lastModified?.let { setRequestProperty("If-Modified-Since", it) }
-            }
-        }
-        try {
-            when (connection.responseCode) {
-                HttpURLConnection.HTTP_NOT_MODIFIED -> return FetchResult.NotModified
-                HttpURLConnection.HTTP_OK -> Unit
-                else -> return null
-            }
-            val stream = if (connection.contentEncoding.equals("gzip", ignoreCase = true)) {
-                GZIPInputStream(connection.inputStream)
-            } else {
-                connection.inputStream
-            }
-            val body = stream.bufferedReader().use { it.readText() }
-            return FetchResult.Updated(
-                url = url,
-                body = body,
-                etag = connection.getHeaderField("ETag"),
-                lastModified = connection.getHeaderField("Last-Modified"),
-            )
-        } finally {
-            connection.disconnect()
-        }
-    }
+    private fun CatalogPayload.toFetchResult(key: String): FetchResult =
+        if (!transferred && cacheFile(key).exists()) FetchResult.NotModified
+        else FetchResult.Updated(json)
 
     /** Catalog cache key for the current device language: the locale code if the feed publishes one, else English. */
     private fun currentCatalogKey(): String {
@@ -241,32 +216,23 @@ class AppCatalogRepository(private val context: Context) {
 
     private fun cacheFile(key: String) = File(context.filesDir, "apps_catalog_$key.json")
 
-    private fun validatorsFile(key: String) = File(context.filesDir, "apps_catalog_$key.validators")
-
-    /** The cache validators from the last 200 response: source URL, ETag, then Last-Modified (one per line). */
-    private fun loadValidators(key: String): Validators {
-        val lines = runCatching {
-            validatorsFile(key).let { if (it.exists()) it.readText().lines() else emptyList() }
-        }.getOrDefault(emptyList())
-        return Validators(
-            url = lines.getOrNull(0)?.ifBlank { null },
-            etag = lines.getOrNull(1)?.ifBlank { null },
-            lastModified = lines.getOrNull(2)?.ifBlank { null },
-        )
+    /**
+     * Removes the `apps_catalog_<key>.validators` sidecar files the pre-OkHttp implementation wrote;
+     * the ETag/Last-Modified they held is OkHttp's cache's business now. Best-effort — a leftover file
+     * is inert, just dead weight on disk. Called at every startup, but after the first upgrade that's
+     * five `delete()` calls on absent files, which is cheaper than tracking whether it already ran.
+     */
+    private fun deleteLegacyValidatorFiles() {
+        (LOCALIZED_LOCALES + ENGLISH_KEY).forEach { key ->
+            runCatching { File(context.filesDir, "apps_catalog_$key.validators").delete() }
+        }
     }
-
-    private fun saveValidators(key: String, url: String, etag: String?, lastModified: String?) {
-        runCatching { validatorsFile(key).writeText("$url\n${etag.orEmpty()}\n${lastModified.orEmpty()}") }
-            .onFailure { Log.w(TAG, "Failed to store app catalog validators ($key)", it) }
-    }
-
-    private data class Validators(val url: String?, val etag: String?, val lastModified: String?)
 
     private sealed interface FetchResult {
-        /** Server returned new content (HTTP 200); [url] is the file it came from (localized or English). */
-        data class Updated(val url: String, val body: String, val etag: String?, val lastModified: String?) : FetchResult
+        /** A catalog to apply: either freshly downloaded, or recovered after losing our snapshot. */
+        data class Updated(val body: String) : FetchResult
 
-        /** Server reported the catalog is unchanged (HTTP 304); no body was transferred. */
+        /** Nothing was transferred — the catalog we already hold is current. */
         data object NotModified : FetchResult
     }
 
@@ -284,7 +250,11 @@ class AppCatalogRepository(private val context: Context) {
         private val LOCALIZED_LOCALES = setOf("de", "ar", "es", "ru")
 
         private const val ASSET_FILE = "apps.json"
-        private const val CONNECT_TIMEOUT_MS = 10_000
-        private const val READ_TIMEOUT_MS = 15_000
+
+        /**
+         * OkHttp cache directory, under `cacheDir` so the system may reclaim it — losing it only
+         * costs one full re-download, since the list itself is seeded from `filesDir`.
+         */
+        private const val HTTP_CACHE_DIR = "app_catalog_http"
     }
 }

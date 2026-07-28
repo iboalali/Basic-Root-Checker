@@ -107,9 +107,12 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.serialization.core)
 
-    // Remote "Other apps" catalog: JSON parsing for the apps.json feed + Coil image loading for
-    // the remote app icons (coil-network-okhttp pulls OkHttp transitively, used only by Coil).
+    // Remote "Other apps" catalog: JSON parsing for the apps.json feed, OkHttp for the conditional
+    // GET (its Cache owns the ETag/Last-Modified revalidation — see CatalogHttpSource), and Coil for
+    // the remote app icons. Coil already pulls OkHttp in transitively; it's declared explicitly
+    // because the catalog uses it directly, rather than relying on another library's dependency.
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
@@ -135,6 +138,8 @@ dependencies {
 
     // Unit tests
     testImplementation(libs.junit)
+    // Pins the catalog's conditional-GET contract against a local server (see CatalogHttpSourceTest)
+    testImplementation(libs.okhttp.mockwebserver)
 
     // Compose Preview Screenshot Testing — @PreviewTest marker + the tooling that renders previews
     screenshotTestImplementation(libs.screenshot.validation.api)
