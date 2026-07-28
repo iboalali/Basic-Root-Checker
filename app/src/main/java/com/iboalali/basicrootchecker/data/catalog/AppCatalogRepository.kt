@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.net.HttpURLConnection
@@ -62,6 +64,14 @@ class AppCatalogRepository(private val context: Context) {
     @Volatile
     private var loadedKey: String? = null
 
+    // Serializes publishing to [_apps] so a "don't downgrade" check and the write it guards can't be
+    // interleaved. Only ever held around in-memory work — never across the fetch.
+    private val stateMutex = Mutex()
+
+    // The catalog key a *network* response has been published for, or null. Guarded by [stateMutex],
+    // so it needs no @Volatile.
+    private var networkAppliedKey: String? = null
+
     init {
         // Seed off the main thread from the cache (or the bundled snapshot) so the screen has data
         // before — and regardless of whether — the network refresh completes.
@@ -70,9 +80,34 @@ class AppCatalogRepository(private val context: Context) {
         }
     }
 
-    private fun seedFromCache(key: String) {
-        _apps.value = loadCachedOrBundled(key)
-        loadedKey = key
+    /**
+     * Publishes the cached (or bundled) list for [key] — unless a network response for that same
+     * locale has already been published.
+     *
+     * That guard matters because this and [refresh] both run on the multi-threaded IO dispatcher: the
+     * startup seed's file read can finish *after* a fetch that already delivered fresher data, and
+     * without the check it would quietly replace the new list with the older cached one. A seed for a
+     * *different* locale (a language switch) still wins, which is the point — the cache for the newly
+     * selected language is more correct than a network list for the previous one.
+     */
+    private suspend fun seedFromCache(key: String) {
+        // Read outside the lock: this is blocking file IO and holding the mutex across it would
+        // serialize the seed against the fetch's result being published.
+        val loaded = loadCachedOrBundled(key)
+        stateMutex.withLock {
+            if (networkAppliedKey == key) return
+            _apps.value = loaded
+            loadedKey = key
+        }
+    }
+
+    /** Publishes a freshly fetched list for [key] and records that the network has spoken for it. */
+    private suspend fun applyFetched(key: String, fresh: List<CatalogApp>) {
+        stateMutex.withLock {
+            _apps.value = fresh
+            loadedKey = key
+            networkAppliedKey = key
+        }
     }
 
     private fun loadCachedOrBundled(key: String): List<CatalogApp> {
@@ -108,7 +143,9 @@ class AppCatalogRepository(private val context: Context) {
             val key = currentCatalogKey()
             // Language changed since the last seed (the singleton outlives the recreated activity):
             // switch the displayed list to the new locale's cache/bundled copy right away, so the UI
-            // doesn't keep showing the previous language until the network returns.
+            // doesn't keep showing the previous language until the network returns. Reading loadedKey
+            // unlocked is fine — a stale read only costs a redundant seed, which seedFromCache's
+            // don't-downgrade check absorbs.
             if (key != loadedKey) seedFromCache(key)
             runCatching {
                 when (val result = fetch(key)) {
@@ -116,8 +153,7 @@ class AppCatalogRepository(private val context: Context) {
                     is FetchResult.Updated -> {
                         val fresh = parse(result.body)
                         require(fresh.isNotEmpty()) { "Catalog contained no apps" }
-                        _apps.value = fresh
-                        loadedKey = key
+                        applyFetched(key, fresh)
                         // Best-effort persistence; must not turn a good fetch into a failure.
                         runCatching { cacheFile(key).writeText(result.body) }
                             .onFailure { Log.w(TAG, "Failed to cache app catalog ($key)", it) }
