@@ -147,6 +147,38 @@ class UserPreferences(private val context: Context) {
         }
     }
 
+    /**
+     * When the main screen's support card becomes eligible again (0 if never snoozed). Set whenever
+     * the user answers it — by dismissing *or* by opening the tip jar — so a look at the prices
+     * isn't followed by another ask on the next check. See `SupportGate`.
+     */
+    val supportPromptSnoozedUntil: Flow<Long> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[SUPPORT_PROMPT_SNOOZED_UNTIL] ?: 0L
+        }
+
+    suspend fun setSupportPromptSnoozedUntil(epochMs: Long) {
+        context.userSettingsDataStore.edit { preferences ->
+            preferences[SUPPORT_PROMPT_SNOOZED_UNTIL] = epochMs
+        }
+    }
+
+    /** How many times the support card has been dismissed; past the cap it never returns. */
+    val supportPromptDismissCount: Flow<Int> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[SUPPORT_PROMPT_DISMISS_COUNT] ?: 0
+        }
+
+    /** Increments [supportPromptDismissCount] atomically and returns the new total. */
+    suspend fun incrementSupportPromptDismissCount(): Int {
+        var newCount = 0
+        context.userSettingsDataStore.edit { preferences ->
+            newCount = (preferences[SUPPORT_PROMPT_DISMISS_COUNT] ?: 0) + 1
+            preferences[SUPPORT_PROMPT_DISMISS_COUNT] = newCount
+        }
+        return newCount
+    }
+
     companion object {
         private val TELEMETRY_ENABLED = booleanPreferencesKey("telemetry_enabled")
         private val HAPTICS_ENABLED = booleanPreferencesKey("haptics_enabled")
@@ -160,5 +192,7 @@ class UserPreferences(private val context: Context) {
         private val LAST_ROOT_CHECK_VERSION = stringPreferencesKey("last_root_check_version")
         private val ROOTED_CHECK_COUNT = intPreferencesKey("rooted_check_count")
         private val LAST_REVIEW_PROMPT_VERSION_CODE = intPreferencesKey("last_review_prompt_version_code")
+        private val SUPPORT_PROMPT_SNOOZED_UNTIL = longPreferencesKey("support_prompt_snoozed_until")
+        private val SUPPORT_PROMPT_DISMISS_COUNT = intPreferencesKey("support_prompt_dismiss_count")
     }
 }

@@ -88,7 +88,10 @@ class MainActivity : ComponentActivity() {
                     LocalHapticsEnabled provides hapticsEnabled,
                     LocalAppHaptics provides app.rootHaptics,
                 ) {
-                    AppRoot(tipCleared = billingController.tipCleared)
+                    AppRoot(
+                        tipCleared = billingController.tipCleared,
+                        tipEvents = billingController.events,
+                    )
                 }
             }
         }

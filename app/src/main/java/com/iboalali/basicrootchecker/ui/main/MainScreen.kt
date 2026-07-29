@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -87,6 +88,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.billing.TipProduct
+import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
@@ -96,8 +99,11 @@ import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
 import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.rememberHapticLongClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
@@ -108,6 +114,7 @@ fun MainScreen(
     viewModel: MainViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
 
     // Report the meaningful first frame for accurate time-to-fully-drawn (TTFD): the device-info
     // is populated synchronously in the ViewModel's init, so this fires as soon as the main screen
@@ -134,6 +141,12 @@ fun MainScreen(
         onNavigateToAbout = onNavigateToAbout,
         onNavigateToLicense = onNavigateToLicense,
         onNavigateToSettings = onNavigateToSettings,
+        tipProducts = tipProducts,
+        onSupportPromptShown = viewModel::onSupportPromptShown,
+        onSupportPromptOpened = viewModel::onSupportPromptOpened,
+        onSupportPromptDismissed = viewModel::onSupportPromptDismissed,
+        onTipSelected = viewModel::onTipSelected,
+        onDemoSupportPrompt = viewModel::demoSupportPrompt,
     )
 }
 
@@ -151,6 +164,12 @@ fun MainScreenContent(
     onNavigateToSettings: () -> Unit,
     onCheckRootDemo: (RootResult) -> Unit = {},
     onDemoUpdateChoice: (DebugUpdateChoice) -> Unit = {},
+    tipProducts: ImmutableList<TipProduct> = persistentListOf(),
+    onSupportPromptShown: () -> Unit = {},
+    onSupportPromptOpened: () -> Unit = {},
+    onSupportPromptDismissed: () -> Unit = {},
+    onTipSelected: (TipTier) -> Unit = {},
+    onDemoSupportPrompt: () -> Unit = {},
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -163,6 +182,7 @@ fun MainScreenContent(
     var aboutItemRect by remember { mutableStateOf<Rect?>(null) }
     var showDemoDialog by remember { mutableStateOf(false) }
     var showUpdateDemoDialog by remember { mutableStateOf(false) }
+    var showTipDialog by remember { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val checkingText = stringResource(R.string.string_checking_for_root)
@@ -283,6 +303,14 @@ fun MainScreenContent(
                                     rememberHapticClick {
                                         menuExpanded = false
                                         showUpdateDemoDialog = true
+                                    },
+                            )
+                            AppBarDropdownMenuItem(
+                                text = "Demo: support card",
+                                onClick =
+                                    rememberHapticClick {
+                                        menuExpanded = false
+                                        onDemoSupportPrompt()
                                     },
                             )
                         }
@@ -568,6 +596,27 @@ fun MainScreenContent(
                 Spacer(Modifier.height(24.dp))
             }
 
+            // Support Card. SupportGate already kept this out of the review prompt's session; the
+            // second condition hands the slot to an update that arrived *after* the card appeared,
+            // since that card is functional and time-sensitive while the ask can wait for the next
+            // check. Reporting "shown" from here (not the gate) keeps the signal honest.
+            val showSupportCard =
+                uiState.supportPromptVisible && uiState.updateStatus is AppUpdateEvent.None
+            LaunchedEffect(showSupportCard) { if (showSupportCard) onSupportPromptShown() }
+            AnimatedVisibility(visible = showSupportCard) {
+                // The trailing spacer lives inside so it collapses with the card.
+                Column {
+                    SupportCard(
+                        onSupportClick = {
+                            showTipDialog = true
+                            onSupportPromptOpened()
+                        },
+                        onDismiss = onSupportPromptDismissed,
+                    )
+                    Spacer(Modifier.height(24.dp))
+                }
+            }
+
             // Device Info Card
             OutlinedCard(
                 modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
@@ -639,6 +688,19 @@ fun MainScreenContent(
             // 24dp spacing + FAB height (56dp) + FAB bottom margin (16dp) + system bottom padding
             Spacer(Modifier.height(24.dp + 56.dp + 16.dp + bottomPadding))
         }
+    }
+
+    if (showTipDialog) {
+        // Dismiss on selection: Play's purchase sheet takes over, and the outcome is announced
+        // app-wide by AppRoot rather than by this screen.
+        TipJarDialog(
+            products = tipProducts,
+            onSelect = {
+                showTipDialog = false
+                onTipSelected(it)
+            },
+            onDismiss = { showTipDialog = false },
+        )
     }
 
     if (BuildConfig.DEBUG && showDemoDialog) {

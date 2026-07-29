@@ -43,6 +43,11 @@ Kontaktiere mich:</string>
     <string name="tip_jar_pending">Dein Trinkgeld steht noch aus – es wird abgeschlossen, sobald deine Zahlung bestätigt ist.</string>
     <string name="tip_jar_cleared">Dein ausstehendes Trinkgeld wurde abgeschlossen – danke für deine Unterstützung!</string>
     <string name="tip_jar_error">Etwas ist schiefgelaufen. Bitte versuche es erneut.</string>
+    <!-- Unterstützungs-Karte auf dem Hauptbildschirm, nach einer Root-Prüfung (siehe SupportGate) -->
+    <string name="support_card_title">Gefällt dir die App?</string>
+    <string name="support_card_body">Sie ist kostenlos und werbefrei. Ein kleines Trinkgeld hilft bei der Weiterentwicklung.</string>
+    <string name="support_card_action">Entwicklung unterstützen</string>
+    <string name="support_card_dismiss">Schließen</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>

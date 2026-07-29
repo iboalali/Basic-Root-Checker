@@ -24,7 +24,6 @@ import com.iboalali.basicrootchecker.util.PreviewPlayStoreTablet10
 import com.iboalali.basicrootchecker.util.PreviewPlayStoreTablet7
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.coroutines.flow.emptyFlow
 
 /**
  * Play Store listing screenshots, rendered on the JVM via Layoutlib (no device). The matrices are
@@ -112,7 +111,6 @@ private fun Settings() {
                 TipProduct(TipTier.MEDIUM, "$4.99"),
                 TipProduct(TipTier.LARGE, "$9.99"),
             ),
-        tipEvents = emptyFlow(),
         supporterTiers = persistentSetOf(TipTier.SMALL),
         onTipJarOpened = {},
         onTipSelected = {},

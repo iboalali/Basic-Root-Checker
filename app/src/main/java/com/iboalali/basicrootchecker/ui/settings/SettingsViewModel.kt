@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.analytics.Analytics
-import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.ThemeMode
@@ -14,11 +13,13 @@ import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
+/** Analytics label for tips started from Settings (vs. the main screen's support card). */
+private const val TIP_SOURCE_SETTINGS = "settings"
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -84,14 +85,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     val tipProducts: StateFlow<ImmutableList<TipProduct>> = billing.products
 
-    /** One-shot tip outcomes (thanks / pending / error) to surface as snackbars. */
-    val tipEvents: Flow<TipEvent> = billing.events
-
     /** Tiers whose durable record product is owned. Drives the debug view and future gating. */
     val supporterTiers: StateFlow<ImmutableSet<TipTier>> = billing.supporterTiers
 
     fun onTipJarOpened() {
-        Analytics.trackTipJarOpened()
+        Analytics.trackTipJarOpened(TIP_SOURCE_SETTINGS)
     }
 
     fun onTipSelected(tier: TipTier) {

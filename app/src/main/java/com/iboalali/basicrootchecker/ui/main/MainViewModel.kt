@@ -9,6 +9,8 @@ import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.billing.TipProduct
+import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.RootChecker
 import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
@@ -17,6 +19,7 @@ import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import de.boehrsi.devicemarketingnames.DeviceMarketingNames
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +30,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 private const val REVIEW_GATE_TAG = "ReviewGate"
+private const val SUPPORT_GATE_TAG = "SupportGate"
+
+/** Analytics label for tips started from the main screen's support card (vs. "settings"). */
+private const val TIP_SOURCE_SUPPORT_CARD = "support_card"
 
 enum class RootStatus {
     NOT_CHECKED,
@@ -47,6 +54,8 @@ data class MainUiState(
     val androidVersion: String = "",
     val updateStatus: AppUpdateEvent = AppUpdateEvent.None,
     val appUpdatedShown: Boolean = false,
+    /** Whether the tip-jar support card is offered (see [SupportGate]). */
+    val supportPromptVisible: Boolean = false,
 )
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -60,8 +69,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val reviewController = (application as BasicRootCheckerApplication).reviewController
 
+    private val billing = (application as BasicRootCheckerApplication).billingController
+
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
+
+    /** Tip offers for the support card's dialog. Empty in FOSS builds and until Play prices load. */
+    val tipProducts: StateFlow<ImmutableList<TipProduct>> = billing.products
 
     init {
         loadDeviceInfo()
@@ -110,7 +124,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val result = RootChecker.check(getApplication())
             applyResult(result)
             if (hapticsOn) playResultHaptic(result)
-            maybeRequestReview(result)
+            // Review first, support card second — and never both in one session (see SupportGate).
+            maybeShowSupportPrompt(maybeRequestReview(result))
         }
     }
 
@@ -123,7 +138,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val result = RootChecker.requestRoot(getApplication())
             applyResult(result)
             if (hapticsOn) playResultHaptic(result)
-            maybeRequestReview(result)
+            // Review first, support card second — and never both in one session (see SupportGate).
+            maybeShowSupportPrompt(maybeRequestReview(result))
         }
     }
 
@@ -136,12 +152,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * callback. A build without in-app review (FOSS) returns early, and a controller with no
      * attached activity reports `false`, so neither burns the slot or reports a prompt that never
      * happened.
+     *
+     * @return the rooted-check count this check produced, or `null` when the check counted toward
+     *   neither post-check ask — not a root-found result, or a build without Play review (where the
+     *   tip jar is absent too). [maybeShowSupportPrompt] consumes it instead of incrementing again.
      */
-    private suspend fun maybeRequestReview(result: RootResult) {
-        if (result !is RootResult.Rooted) return
+    private suspend fun maybeRequestReview(result: RootResult): Int? {
+        if (result !is RootResult.Rooted) return null
         // Nothing to rate on without a Play Store, so don't even count toward the gate: the slot
         // stays unspent (and the counter untouched) if this install is ever replaced by a Play build.
-        if (!reviewController.isAvailable) return
+        if (!reviewController.isAvailable) return null
         val rootedCount = userPreferences.incrementRootedCheckCount()
         val lastPromptedVersion = userPreferences.lastReviewPromptVersionCode.first()
         val currentVersion = BuildConfig.VERSION_CODE
@@ -156,8 +176,91 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         if (shouldRequest && reviewController.requestReview()) {
             userPreferences.setLastReviewPromptVersionCode(currentVersion)
+            reviewRequestedThisSession = true
             Analytics.trackReviewRequested()
         }
+        return rootedCount
+    }
+
+    /**
+     * After a root-found result, offer the tip jar inline once [SupportGate] opens. Runs *after*
+     * [maybeRequestReview] and takes the count it observed, so the two asks are ordered and the
+     * rooted-check counter is incremented exactly once per check.
+     *
+     * Only sets the state; the card is drawn (and reports itself shown) by `MainScreen`, which also
+     * yields the slot to a pending update card.
+     */
+    private suspend fun maybeShowSupportPrompt(rootedCount: Int?) {
+        if (rootedCount == null) return
+        val dismissCount = userPreferences.supportPromptDismissCount.first()
+        val snoozedUntil = userPreferences.supportPromptSnoozedUntil.first()
+        val shouldShow = SupportGate.shouldShow(
+            billingAvailable = billing.isAvailable,
+            productsLoaded = billing.products.value.isNotEmpty(),
+            alreadySupporter = billing.supporterTiers.value.isNotEmpty(),
+            rootedCount = rootedCount,
+            dismissCount = dismissCount,
+            snoozedUntilEpochMs = snoozedUntil,
+            nowEpochMs = System.currentTimeMillis(),
+            reviewRequestedThisSession = reviewRequestedThisSession,
+            updatePending = _uiState.value.updateStatus !is AppUpdateEvent.None,
+        )
+        if (BuildConfig.DEBUG) {
+            Log.d(
+                SUPPORT_GATE_TAG,
+                "rootedCount=$rootedCount (need ${SupportGate.MIN_ROOTED_CHECKS}), " +
+                    "dismissCount=$dismissCount (max ${SupportGate.MAX_DISMISSALS}), " +
+                    "snoozedUntil=$snoozedUntil, reviewThisSession=$reviewRequestedThisSession " +
+                    "-> shouldShow=$shouldShow",
+            )
+        }
+        if (shouldShow) _uiState.update { it.copy(supportPromptVisible = true) }
+    }
+
+    /** The support card actually reached the screen. Reported from the UI, not the gate. */
+    fun onSupportPromptShown() {
+        Analytics.trackSupportCardShown()
+    }
+
+    /**
+     * "Support development" tapped. Opening the tip jar is an answer either way, so the card steps
+     * aside for the snooze window — but unlike a dismissal it doesn't count against the cap.
+     */
+    fun onSupportPromptOpened() {
+        Analytics.trackTipJarOpened(TIP_SOURCE_SUPPORT_CARD)
+        _uiState.update { it.copy(supportPromptVisible = false) }
+        viewModelScope.launch { snoozeSupportPrompt() }
+    }
+
+    fun onSupportPromptDismissed() {
+        _uiState.update { it.copy(supportPromptVisible = false) }
+        viewModelScope.launch {
+            val dismissCount = userPreferences.incrementSupportPromptDismissCount()
+            snoozeSupportPrompt()
+            Analytics.trackSupportCardDismissed(dismissCount)
+        }
+    }
+
+    private suspend fun snoozeSupportPrompt() {
+        userPreferences.setSupportPromptSnoozedUntil(
+            SupportGate.snoozeUntil(System.currentTimeMillis())
+        )
+    }
+
+    fun onTipSelected(tier: TipTier) {
+        Analytics.trackTipSelected(tier.name)
+        billing.launchPurchase(tier)
+    }
+
+    /**
+     * Debug-only: forces the support card on, bypassing [SupportGate]. Needed because a debug build
+     * carries the `.debug` applicationId, so Play Billing never returns tip products for it and the
+     * real gate can't open — the card would otherwise be unreviewable on-device. Only ever called
+     * from the debug-gated overflow item. The tip dialog it opens will show its loading state, since
+     * there genuinely are no products here.
+     */
+    fun demoSupportPrompt() {
+        _uiState.update { it.copy(supportPromptVisible = true) }
     }
 
     private fun playResultHaptic(result: RootResult) = when (result) {
@@ -273,5 +376,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     override fun onCleared() {
         haptics.cancel()
+    }
+
+    private companion object {
+        /**
+         * Whether the Play review flow was requested anywhere in this process. Held per-process
+         * rather than per-ViewModel so an activity recreation can't let the support card slip into
+         * the same session as the review card. Mirrors the one-shot flag in `Analytics`.
+         */
+        @Volatile
+        private var reviewRequestedThisSession = false
     }
 }

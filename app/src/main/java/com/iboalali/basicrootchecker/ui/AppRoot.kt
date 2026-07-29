@@ -23,6 +23,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.navigation.AppNavigation
 import com.iboalali.basicrootchecker.navigation.LocalDetailAnchors
@@ -30,20 +31,47 @@ import com.iboalali.basicrootchecker.navigation.rememberDetailAnchorState
 import kotlinx.coroutines.flow.Flow
 
 /**
- * App root: hosts [AppNavigation] and overlays a single app-wide [SnackbarHost] so a late-cleared
- * tip can be announced over whatever screen is currently showing. Each screen still owns its own
+ * App root: hosts [AppNavigation] and overlays a single app-wide [SnackbarHost] so tip outcomes can
+ * be announced over whatever screen is currently showing. Each screen still owns its own
  * Scaffold/snackbars; this is a thin overlay (a [Box], not a nested Scaffold) reserved for signals
  * that aren't tied to any one screen.
+ *
+ * Both tip flows are owned here rather than by a screen:
+ * - [tipCleared] fires long after the purchase, typically away from Settings.
+ * - [tipEvents] is **single-consumer** (a [kotlinx.coroutines.channels.Channel]), and a tip can now
+ *   be started from either Settings or the main screen's support card. Two collectors would *split*
+ *   the events between them — not duplicate them — and at expanded width the secondary screens are
+ *   composed as an overlay over a live main screen, so both would be active at once. One consumer at
+ *   the root is correct regardless of which surface opened the tip jar, and this host draws above
+ *   the overlay card.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AppRoot(tipCleared: Flow<TipTier>) {
+fun AppRoot(tipCleared: Flow<TipTier>, tipEvents: Flow<TipEvent>) {
     val snackbarHostState = remember { SnackbarHostState() }
     val tipClearedMessage = stringResource(R.string.tip_jar_cleared)
+    val tipThanksMessage = stringResource(R.string.tip_jar_thanks)
+    val tipPendingMessage = stringResource(R.string.tip_jar_pending)
+    val tipErrorMessage = stringResource(R.string.tip_jar_error)
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(tipCleared, lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             tipCleared.collect { snackbarHostState.showSnackbar(tipClearedMessage) }
+        }
+    }
+    LaunchedEffect(tipEvents, lifecycleOwner) {
+        // One-shot events: collect only while at least STARTED, so a snackbar can't fire for an
+        // event delivered while the app is in the background.
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            tipEvents.collect { event ->
+                snackbarHostState.showSnackbar(
+                    when (event) {
+                        TipEvent.Thanks -> tipThanksMessage
+                        TipEvent.Pending -> tipPendingMessage
+                        TipEvent.Error -> tipErrorMessage
+                    }
+                )
+            }
         }
     }
 

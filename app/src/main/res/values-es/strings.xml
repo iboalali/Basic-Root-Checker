@@ -47,6 +47,11 @@
     <string name="tip_jar_pending">Tu propina está pendiente: se completará cuando se apruebe tu pago.</string>
     <string name="tip_jar_cleared">Tu propina pendiente se ha completado: ¡gracias por tu apoyo!</string>
     <string name="tip_jar_error">Algo salió mal. Inténtalo de nuevo.</string>
+    <!-- Tarjeta de apoyo en la pantalla principal, tras una comprobación de root (ver SupportGate) -->
+    <string name="support_card_title">¿Te gusta la app?</string>
+    <string name="support_card_body">Es gratuita y sin anuncios. Una pequeña propina ayuda a seguir desarrollándola.</string>
+    <string name="support_card_action">Apoya el desarrollo</string>
+    <string name="support_card_dismiss">Cerrar</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Tu dispositivo</string>
     <string name="string_checking_for_root">Comprobando root…</string>

@@ -45,6 +45,11 @@
     <string name="tip_jar_pending">إكراميتك قيد الانتظار — ستكتمل بمجرد الموافقة على الدفع.</string>
     <string name="tip_jar_cleared">تمت معالجة إكراميتك المعلّقة — شكرًا على دعمك!</string>
     <string name="tip_jar_error">حدث خطأ ما. يرجى المحاولة مرة أخرى.</string>
+    <!-- بطاقة الدعم في الشاشة الرئيسية، تظهر بعد فحص الروت (راجع SupportGate) -->
+    <string name="support_card_title">هل يعجبك التطبيق؟</string>
+    <string name="support_card_body">التطبيق مجاني وبدون إعلانات. إكرامية صغيرة تساعد في مواصلة التطوير.</string>
+    <string name="support_card_action">ادعم التطوير</string>
+    <string name="support_card_dismiss">إغلاق</string>
 
     <!-- About Strings -->
     <string name="about_part1">حقوق الطبع محفوظ 2026 iboalali\n\n

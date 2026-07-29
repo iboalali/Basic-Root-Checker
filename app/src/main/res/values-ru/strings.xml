@@ -47,6 +47,11 @@
     <string name="tip_jar_pending">Ваши чаевые ожидают подтверждения — они будут зачислены после одобрения платежа.</string>
     <string name="tip_jar_cleared">Ваши отложенные чаевые зачислены — спасибо за поддержку!</string>
     <string name="tip_jar_error">Что-то пошло не так. Попробуйте ещё раз.</string>
+    <!-- Карточка поддержки на главном экране, после проверки root (см. SupportGate) -->
+    <string name="support_card_title">Нравится приложение?</string>
+    <string name="support_card_body">Оно бесплатное и без рекламы. Небольшие чаевые помогают продолжать разработку.</string>
+    <string name="support_card_action">Поддержать разработку</string>
+    <string name="support_card_dismiss">Закрыть</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Ваше устройство</string>
     <string name="string_checking_for_root">Проверка root-доступа…</string>

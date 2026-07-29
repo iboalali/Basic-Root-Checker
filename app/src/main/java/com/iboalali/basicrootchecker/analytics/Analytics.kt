@@ -189,7 +189,28 @@ object Analytics {
     /** The explicit "Rate this app" link on the About screen was tapped. */
     fun trackRateLinkClicked() = track { TelemetryDeck.signal("rateLinkClicked") }
 
-    fun trackTipJarOpened() = track { TelemetryDeck.signal("tipJarOpened") }
+    /** [source] is where the tip jar was opened from — "settings" or "support_card". */
+    fun trackTipJarOpened(source: String) = track {
+        TelemetryDeck.signal(
+            "tipJarOpened",
+            mapOf("source" to source),
+        )
+    }
+
+    /**
+     * The main screen's support card actually appeared (the gate opened *and* nothing outranked it).
+     * Reported from the UI rather than the gate so it can't claim a card the screen never drew —
+     * pair it with [trackTipJarOpened] to read the card's conversion.
+     */
+    fun trackSupportCardShown() = track { TelemetryDeck.signal("supportCardShown") }
+
+    /** The support card was dismissed. [dismissCount] is the running total, capped by `SupportGate`. */
+    fun trackSupportCardDismissed(dismissCount: Int) = track {
+        TelemetryDeck.signal(
+            "supportCardDismissed",
+            mapOf("dismissCount" to dismissCount.toString()),
+        )
+    }
 
     fun trackTipSelected(tier: String) = track {
         TelemetryDeck.signal(

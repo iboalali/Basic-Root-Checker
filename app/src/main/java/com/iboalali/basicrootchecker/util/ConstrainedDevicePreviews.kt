@@ -12,7 +12,6 @@ import com.iboalali.basicrootchecker.ui.settings.SettingsScreenContent
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.coroutines.flow.emptyFlow
 
 @PreviewConstrainedDevices
 @Composable
@@ -118,7 +117,6 @@ private fun SettingsScreenConstrainedPreview() {
             onLanguageSelected = {},
             tipJarAvailable = true,
             tipProducts = persistentListOf(),
-            tipEvents = emptyFlow(),
             supporterTiers = persistentSetOf(),
             onTipJarOpened = {},
             onTipSelected = {},

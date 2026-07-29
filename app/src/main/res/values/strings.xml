@@ -58,6 +58,11 @@
     <string name="tip_jar_pending">Your tip is pending — it\'ll complete once your payment is approved.</string>
     <string name="tip_jar_cleared">Your pending tip cleared — thank you for your support!</string>
     <string name="tip_jar_error">Something went wrong. Please try again.</string>
+    <!-- Main screen support card, offered after a root check (see SupportGate) -->
+    <string name="support_card_title">Enjoying the app?</string>
+    <string name="support_card_body">It\'s free and ad-free. A small tip helps keep development going.</string>
+    <string name="support_card_action">Support development</string>
+    <string name="support_card_dismiss">Dismiss</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Your Device</string>
     <string name="string_checking_for_root">Checking for Root…</string>
