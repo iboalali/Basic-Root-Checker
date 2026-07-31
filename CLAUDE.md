@@ -159,16 +159,18 @@ Each of these has been paid for once. One line to recognise it; the detail is in
   (`progress > 0.999f && dragOffset == 0f`), or the `graphicsLayer`'s own scale feeds back into the
   source rect. → [`docs/adaptive-navigation.md`](docs/adaptive-navigation.md)
 
-## Known gap: large-screen Baseline Profile coverage
+## Large-screen Baseline Profile coverage — real, but only while a tablet stays attached
 
-Generation runs on the connected phone and the journey never crosses the 840dp breakpoint, so the
-shipped profile covers the single-pane push flow but **omits the expanded-width overlay path**. Cold
-start to `MainScreen` is form-factor-independent and already covered; the only missing piece is the
-first open of a secondary screen on a large window — a one-time JIT cost instead of AOT. This is
-optional polish, not correctness.
+The shipped profile **does** cover the expanded-width overlay path. It was regenerated 2026-07-31 with
+two devices connected at once — SM-G766B (phone, 384dp) and SM-X356B (Galaxy Tab Active5 Pro, in
+landscape at 1280dp) — and the plugin unioned both into the same `baseline-prof.txt`: `DetailOverlay`
+rules went 0 → 135, `OverlayScene` 2 → 138, `PredictiveBack` 0 → 37, including the `HPL` morph rules.
+No journey change was needed; the overlay renders in-composition, so the `*_list` testTags stay
+reachable.
 
-To close it, add a tablet/foldable Gradle Managed Device to the `baselineProfile { }` block (keeping
-`useConnectedDevices = true`); the plugin unions the rules from every device into the same
-`baseline-prof.txt`. No journey change is needed, and because the overlay renders in-composition the
-`*_list` testTags stay reachable. Revisit when tablets/foldables become a meaningful share of users. →
-`baseline-profiles`
+**The trap:** `baselineProfile { useConnectedDevices = true }` declares no Gradle Managed Device, so
+this coverage is a property of whatever happened to be plugged in, not of the build. Regenerating on a
+phone alone silently drops those ~1,150 rules — the build stays green and the profile just quietly gets
+worse. Either keep a ≥840dp device connected when regenerating, or make it durable by adding a
+tablet/foldable GMD to the `baselineProfile { }` block. The tablet must be in **landscape**: this one is
+800dp in portrait, just under the breakpoint. → `baseline-profiles`
