@@ -3,8 +3,9 @@
 A record of deliberate changes to **what** the app sends to TelemetryDeck and **why** — the
 signal set, its volume, and its quality. Companion to
 [`Basic-Root-Checker-StructuralData.json`](./Basic-Root-Checker-StructuralData.json) (the exported
-event/parameter inventory) and [`TQL-Guideline-v0.1.0.md`](./TQL-Guideline-v0.1.0.md) (the query
-language reference). Append a new dated section here for each future review.
+event/parameter inventory). For the query language itself, use the `telemetry-and-tql` skill — it
+bundles the complete TQL reference, which used to be duplicated in this folder. Append a new dated
+section here for each future review.
 
 Modeled on the same review done for the *Hide Persistent Notification* app. The big difference: that
 app runs a 5-second periodic foreground service, so its volume was dominated (~75%) by a signal

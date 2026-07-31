@@ -2,170 +2,166 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Build Commands
+It is deliberately an **index**: the rules that are easy to miss, plus pointers to the doc that owns
+each topic. When you learn something worth writing down, put it in the owning doc and link it here —
+don't grow this file. If it applies to more than one of my apps, it belongs in the shared kit
+(`iboalali-apps` / `android-base` plugins), not here.
+
+## Project overview
+
+Basic Root Checker tells the user whether their device has root access, and which provider grants it
+(Magisk / KernelSU / APatch). One screen does the work: device info plus a status area, with a FAB that
+runs the check. Settings, About, and Licences are secondary screens reachable from an overflow menu.
+
+The same checks are exposed to the system and to on-device agents through AppFunctions, so an assistant
+can answer "am I rooted?" without opening the app.
+
+Two flavors: `gplay` (tip jar, in-app updates, in-app review) and `foss` (no Google services, all three
+no-ops).
+
+## Repository hosting
+
+**GitHub** — `github.com/iboalali/Basic-Root-Checker`, default branch `master`. Use `gh`; the `glab`
+note in the global instructions does not apply here.
+
+## Definition of done
+
+Covered by the shared `definition-of-done` skill — changelog, release notes, screenshot test, Baseline
+Profile journey, accessibility, haptics, store assets. Don't restate it here.
+
+App-specific additions to that list:
+
+- Anything touching the root-detection probes must be verified on a **real rooted device**; the
+  hardware-dependent paths are not unit-tested.
+- Anything touching an `@AppFunction` must be verified with `adb` on API 36+ — a green build proves
+  nothing here (see Traps).
+
+## Documentation map
+
+| Topic | Doc |
+|---|---|
+| Components, data layer, monetization, build config, theming, tests | [`docs/architecture.md`](docs/architecture.md) |
+| Navigation 3, the large-screen detail overlay, its motion and gestures | [`docs/adaptive-navigation.md`](docs/adaptive-navigation.md) |
+| Signal taxonomy and query cookbook | [`docs/telemetry-optimization.md`](docs/telemetry-optimization.md) |
+| Known root-provider detection gaps | [`docs/root-provider-detection-gaps.md`](docs/root-provider-detection-gaps.md) |
+| Per-device haptic capability data | [`docs/haptic-capability-queries.json`](docs/haptic-capability-queries.json) |
+| Translation notes | [`docs/russian-translation-notes.md`](docs/russian-translation-notes.md), [`docs/spanish-translation-notes.md`](docs/spanish-translation-notes.md) |
+
+Shared conventions live in the kit rather than here: `definition-of-done`, `play-store-assets`,
+`telemetry-and-tql`, `agp9-screenshot-tests`, `baseline-profiles`, `appfunctions-wiring`,
+`compose-a11y-checklist`, `haptics-conventions`.
+
+Cross-project state — what's in flight across all my Android repos, and open items that affect this one
+— lives in the kit's `TODO.md` (`~/StudioProjects/ai-kit/TODO.md`,
+[Personal-AI-KIT](https://github.com/iboalali/Personal-AI-KIT)). **It currently flags a suspected
+AppFunctions bug in this app** that needs on-device verification.
+
+## Build commands
 
 ```bash
-# Build debug APK
-./gradlew assembleDebug
-
-# Build and install debug APK on connected device
-./gradlew installDebug
-
-# Build release APK
-./gradlew assembleRelease
-
-# Clean build
-./gradlew clean
-
-# Lint check
-./gradlew lint
-
-# Run unit tests
+./gradlew assembleDebug            # or installDebug / assembleRelease / clean / lint
 ./gradlew :app:testGplayDebugUnitTest
 
-# Generate the baseline profile (both flavors) on a connected device
+# Baseline Profile: generate both flavors on a connected device, then prove it moved the numbers
 ./gradlew :app:generateBaselineProfile
-
-# Prove the profile moved the numbers (A/B startup + scroll macrobenchmark)
 ./gradlew :baselineprofile:connectedGplayBenchmarkReleaseAndroidTest
 
-# Update the screenshot-test reference images (regression baseline; no device — JVM/Layoutlib)
-./gradlew :app:updateGplayDebugScreenshotTest
+# Screenshot tests (JVM/Layoutlib, no device)
+./gradlew :app:updateGplayDebugScreenshotTest      # rewrite reference images
+./gradlew :app:validateGplayDebugScreenshotTest    # fail on any visual diff
 
-# Check the UI against the committed reference images (fails on any visual diff)
-./gradlew :app:validateGplayDebugScreenshotTest
-
-# Export clean, upload-ready Play Store screenshots (all screens × all locales × store devices)
+# Clean, upload-ready Play Store screenshots (all screens × locales × store devices)
 ./scripts/generate-store-screenshots.sh [output-subfolder]
 ```
 
-Unit tests live in `app/src/test/` and cover the app's pure decision logic — e.g. `RootChecker.classify`/`parseMagiskVersionCode`, the analytics `SignalGate` startup buffering, and the two post-check prompt gates (`ReviewGate`, `SupportGate`). The hardware-dependent probes are not unit-tested; verify them on a real rooted device. AppFunctions are verified on a connected device (API 36+) with `adb shell cmd app_function list-app-functions --package <id>` and `... execute-app-function --function '<class>#<fn>' --parameters '{}'`, where `<class>` is the entry-point host `com.iboalali.basicrootchecker.appfunctions.BaseRootAppFunctionService` (not the generated `RootAppFunctionService`).
+Screenshot tests run on **`gplayDebug`** — these screens are flavor-independent, and flavor-specific
+bits like the tip jar are passed in as plain arguments. Prefer the Android Studio gutter icon to
+regenerate a single preview; the Gradle task is variant-level and rewrites every reference.
 
-## Architecture
+## Structural facts to know before changing navigation or the tip flow
 
-Android app that checks whether a device has root access, written in Kotlin with Jetpack Compose.
+1. **The large-screen overlay is a custom `OverlayScene` + `SceneStrategy`, not
+   `DialogSceneStrategy`.** It renders **in-composition** inside `AppRoot`, which is what allows
+   swipe-down dismissal, a drag-linked scrim, a tightly-bounded card, and its own exit animation. Don't
+   "simplify" it back to a platform `Dialog` — that breaks all four, plus predictive back and the
+   testTag scope. → [`docs/adaptive-navigation.md`](docs/adaptive-navigation.md)
+2. **It's width-gated by conditional metadata**, not a branch in the screen: the secondary entries get
+   `detailOverlay()` metadata only at ≥840dp, and the `entryProvider` re-runs on width change so it
+   follows fold/unfold live.
+3. **`navigateToDetail` keeps the back stack at `[Main, oneDetail]`.** The three secondary screens are
+   interchangeable siblings reached only from the main screen, which is what makes `overlaidEntries`
+   deterministic.
+4. **`AppRoot` owns both tip flows, and must.** `BillingController.events` is a `Channel`, so it's
+   **single-consumer** — two collectors *split* events rather than duplicating them. A tip can start
+   from Settings or from the main screen's support card, and at expanded width both surfaces are
+   composed at once. → [`docs/architecture.md`](docs/architecture.md)
+5. **The two post-check asks are serialized, review first.** `SupportGate.MIN_ROOTED_CHECKS` (5) sits
+   above `ReviewGate.MIN_ROOTED_CHECKS` (3), and a `@Volatile` session flag keeps them out of the same
+   session. Don't reorder or loosen either without reading why.
 
-**Package:** `com.iboalali.basicrootchecker`
+## Stack
 
-### Key Components
+Kotlin 2.4.10 · Java 17 · minSdk 23 · compile/target SDK 37 · AGP 9.3.1 (built-in Kotlin) ·
+Compose BOM · Navigation 3 · Material 3 Adaptive · `androidx.appfunctions` 1.0.0-alpha10 + KSP ·
+Coil 3 · TelemetryDeck.
 
-- **MainActivity** — Single activity host. Sets up splash screen with custom exit animation, dynamic colors, edge-to-edge, attaches the billing, in-app-update and in-app-review controllers to its lifecycle, kicks off the one background `AppCatalogRepository.refresh()` for the launch, and hosts `AppRoot` via `setContent`.
-- **AppRoot** (`ui/`) — Thin root overlay: a `Box` hosting `AppNavigation` plus one app-wide `SnackbarHost` for signals not tied to a single screen. Per-screen Scaffolds still own their own snackbars. It owns **both** tip flows: `tipCleared` (a late-cleared pending tip, which lands long after the purchase and away from Settings) and the one-shot `TipEvent`s (Thanks/Pending/Error). The latter **must** live here, not on a screen: `BillingController.events` is a `Channel`, so it is **single-consumer** — two collectors would *split* the events between them rather than duplicate them — and a tip can now start from either Settings or the main screen's support card. At expanded width the secondary screens are composed as an overlay *over a live `MainScreen`*, so both collectors would be active at once. One consumer at the root is correct regardless of which surface opened the tip jar, and this host draws above the overlay card.
-- **AppNavigation** (`navigation/`) — Navigation 3 setup with `NavDisplay`, `@Serializable` route keys (`MainRoute`, `SettingsRoute`, `AboutRoute`, `LicenseRoute`), and explicit back stack management. **Adaptive large screens:** at the **expanded** width breakpoint (≥840dp: tablets, unfolded foldables in landscape, desktop windows, XR panels) the secondary screens (Settings/About/License) open as a **dialog card over the dimmed main screen** instead of a full-screen push. This uses a **custom `OverlayScene` + `SceneStrategy`** (`navigation/DetailOverlayScene.kt`), not the built-in `DialogSceneStrategy` — the custom overlay renders **in-composition** (inside `AppRoot`, not a separate platform `Dialog` window) so it can be **swipe-down-dismissed**, fade its own scrim with the drag, draw a tightly-bounded card, and own its exit animation via `OverlayScene.onRemove()`. It's width-gated by *conditional metadata*: the three secondary entries get `detailOverlay()` metadata **only when** `currentWindowAdaptiveInfoV2().windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND)` (the `entryProvider` re-runs on width changes, so it follows fold/unfold/resize live); below the breakpoint they carry no metadata and fall through to the single-pane push flow with the app's own forward/back + predictive-back transitions. **The overlay** (`DetailOverlayScene.kt`): the scene's `overlaidEntries` is `[MainRoute]`, kept live and dimmed below the card. `DetailOverlayContent` hosts the screen in the shared `DetailCard` (`navigation/DetailCard.kt` — scrim + centered rounded 640dp-max `Surface`). `DetailCard` is a deliberately **stateless visual**: it owns no motion, taking a `scrimAlpha` lambda and a `cardModifier`, so the live overlay and the screenshot test (which renders the resting open state with the defaults) share one composable and the committed baseline stays representative.
+`gradle/libs.versions.toml` is **the source of truth for every version** — check there rather than
+trusting the numbers above.
 
-The presentation is a **container transform**, driven by `DetailMorphState` with exactly two motion drivers:
-- **`progress`** (an `Animatable`, 1 = open/resting … 0 = collapsed into the current anchor rect) — the single open/close driver. It interpolates the card's rect (scale + translation via `graphicsLayer`), its corner radius, the scrim alpha, and the content ↔ morph-icon cross-fade (`contentAlpha()` / `morphIconAlpha()` / `surfaceAlpha()`, each fading over a different slice of the range so the handoff lands bare).
-- **`dragOffset`** (px, downward-positive) — the transient elastic swipe-down pull, meaningful only while open. `applyDrag` decelerates it toward the `MaxElasticPull` asymptote, so the card resists and never slides off-screen. A release past threshold folds it into one `commitClose` (both decay on the same spec, keeping the motion continuous); below threshold it springs back.
+## Traps that cost real time
 
-**Anchors** (`navigation/DetailAnchors.kt`): `DetailAnchorState` is provided once from `AppRoot` and holds **screen-space** rects — the only frame the overlay (in-composition) and the overflow `DropdownMenu` (its own `Popup` window) can agree on; the overlay converts them to its local space via its measured origin. `MainScreen` reports the overflow `IconButton`'s rect continuously (`onGloballyPositioned`) and stores the tapped menu item's rect at click time, before the `Popup` tears down. So **open grows from the tapped menu item** (falling back to the overflow rect, then a centred scale-up) and **every close collapses into the overflow icon**. `overflowIconVisible` is held `false` for the overlay's whole lifetime and restored on dispose — which, because `NavDisplay` awaits `onRemove()`, is exactly when the collapse finishes — so the card appears to *become* the real icon, with the overlay drawing its own three-dots glyph at that slot to hand off to.
+Each of these has been paid for once. One line to recognise it; the detail is in the linked doc or skill.
 
-**Swipe-to-dismiss** is driven two ways: a `nestedScroll` connection (an inverted twin of Material's bottom-sheet `ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection`, so the pull only engages once the screen's inner `verticalScroll` + collapsing toolbar are exhausted at the top) **and** `draggable` for direct drags on the card chrome. The connection tracks whether the current gesture ever moved the list (`scrolled`): if it did, an over-pull past the top only peeks the card down by `ScrollEdgeHintTravel` and always springs back — **dismissing requires a fresh swipe-down that starts at the top**, so the gesture that was scrolling can't close the screen. Crossing `DismissDragThreshold` plays one haptic tick and shows the "Release to close" pill.
+- **An AppFunction can be completely dead while the build is green.** Compilation, unit tests, and
+  Play's upload validator all pass over a broken surface. Verify with
+  `adb shell cmd app_function execute-app-function`. → `appfunctions-wiring`
+- **R8 vertically merges `BaseRootAppFunctionService` into the generated subclass**, leaving the
+  generated XML pointing at a class absent from the release DEX — Play rejects the upload with *"The
+  Android App Functions XML could not be parsed from the binary."* The keep rule in
+  `proguard-rules.pro` prevents it; verify with
+  `grep BaseRootAppFunctionService app/build/outputs/mapping/<variant>/mapping.txt`. →
+  `appfunctions-wiring`
+- **`testTagsAsResourceId` must be re-enabled on the overflow `DropdownMenu`** — it renders in its own
+  `Popup` window, outside the `AppRoot` scope. Forgetting it fails *silently*: the journey can't find
+  the menu items, so the secondary screens never get profiled. → `baseline-profiles`
+- **The support card is unreviewable in a debug build.** The `.debug` applicationId means Play Billing
+  never returns tip products, so `productsLoaded` can't become true. Use the debug-gated **"Demo:
+  support card"** overflow item (`demoSupportPrompt()`). → [`docs/architecture.md`](docs/architecture.md)
+- **A `true` from `requestReview()` means "handed to Play", never "a card appeared."** Play gives no
+  "was it shown" callback. The version code — the release's single prompt — is spent only once the
+  request actually reached Play. → [`docs/architecture.md`](docs/architecture.md)
+- **Layoutlib's `Context` is a stub and never advances `LaunchedEffect`.** `getPackageInfo` returns
+  null, `queryIntentActivities` is unimplemented; guard both (see `DeviceInfo.getAppVersionName`,
+  `OtherAppsCard.findInstalledPwaPackage`) and gate entrance animations on `LocalInspectionMode`. One
+  crash fails the whole screenshot run. → `agp9-screenshot-tests`
+- **WebAPK detection matches the shared shell *activity class*** (`org.chromium.webapk.shell_apk.`),
+  not a package name — WebAPK packages differ per browser, and an unverified WebAPK isn't picked up by
+  `ACTION_VIEW` routing. Needs the `<intent>` entries in the manifest's `<queries>`. →
+  [`docs/architecture.md`](docs/architecture.md)
+- **Catalog ETag/Last-Modified validators are stored with the URL they came from** and only replayed
+  against that same URL — otherwise the English fallback can produce a `304` against a localized file
+  we don't hold. → [`docs/architecture.md`](docs/architecture.md)
+- **The committed screenshot references intentionally show "(Debug)".** The store export is a separate
+  script that neutralizes the debug name, renders, copies out, then restores both the strings and the
+  regression baseline. → `play-store-assets`
+- **`trackDeviceType` is one-shot per process.** It's read through rotations, folds, and resizes, which
+  would otherwise inflate the count. → [`docs/architecture.md`](docs/architecture.md)
+- **Haptics deliberately skip `createPredefined`** and `View.performHapticFeedback` — several OEMs drop
+  those silently while returning success. → `haptics-conventions`
+- **The overlay's resting card rect is captured only while untransformed**
+  (`progress > 0.999f && dragOffset == 0f`), or the `graphicsLayer`'s own scale feeds back into the
+  source rect. → [`docs/adaptive-navigation.md`](docs/adaptive-navigation.md)
 
-**Predictive back** is handled by the overlay's own `PredictiveBackHandler`, not `NavDisplay`: since this isn't a platform `Dialog`, without it the gesture would fall through and finish the Activity. It previews at most `BackMaxCollapseFraction` (0.12) of the collapse as you pull — a restrained peek, so a back-swipe doesn't fling the card across the screen — then `commitClose` finishes the rest on release, or `cancelClose` returns it. The settle animations run in the composable's `rememberCoroutineScope`, not the gesture's own coroutine, so a canceled gesture can still finish its spring-back.
+## Known gap: large-screen Baseline Profile coverage
 
-All four dismiss paths (scrim tap, close button, predictive/system back, drag or fling past threshold) funnel through `requestPop`, which is idempotent so a double-dismiss can't double-pop. For the *discrete* paths (scrim tap, close button) the pop happens first and `OverlayScene.onRemove()` plays the collapse; the *gesture* paths already animated `progress` to 0, so `onRemove()` is then a no-op. **All hot values are read inside deferred `graphicsLayer {}` / `offset {}` / `drawBehind {}` lambdas**, so animating them never recomposes the card subtree. One measurement subtlety: the resting card rect is captured only while untransformed (`progress > 0.999f && dragOffset == 0f`), so the `graphicsLayer`'s own scale/translation can't feed back into the source rect — and `revealed` holds the whole overlay at alpha 0 for that single measurement frame before the open animation starts. The secondary screens' leading icon is chosen by `LocalDetailNavIcon` (`navigation/DetailNavIcon.kt`): provided as `CLOSE` (an X) at expanded width — and inherited into the overlay content since it composes within NavDisplay's tree — and `BACK` (up-arrow) otherwise; both call the same `onNavigateBack`. A `navigateToDetail` helper keeps the back stack at `[Main, oneDetail]` (the three are interchangeable siblings reached only from the main screen), which makes `overlaidEntries` deterministic.
-- **MainScreen** (`ui/main/`) — Main screen composable. Displays device info (model, marketing name, Android version) and root status. FAB triggers root check. Long-press on device info copies to clipboard.
-- **MainViewModel** (`ui/main/`) — AndroidViewModel with `StateFlow<MainUiState>` for root check state, root provider + version, device info, in-app update flow state, and the support-card prompt (see **Post-check asks** below). Exposes `checkRoot()` (passive evaluation) and `requestRoot()` (forces shell construction to trigger the superuser allow dialog), both running through `RootChecker` on coroutines.
-- **SettingsScreen / SettingsViewModel** (`ui/settings/`) — Settings: telemetry and haptics toggles, the in-app language picker (Android 13+), the tip jar, and a privacy-policy link. It opens the shared `TipJarDialog` (`ui/tip/TipJar.kt`) and dismisses it on selection; the outcome snackbars are **not** collected here — see **AppRoot**.
-- **AboutScreen / AboutViewModel** (`ui/about/`) — About screen with collapsing toolbar, app version, contact links, and the "Other apps" card (`OtherAppsCard`). A **"Rate this app"** link is appended to the contact links only when `ReviewController.isAvailable` (Google Play builds); it opens the Play listing directly, separate from the automatic in-app review card. `AboutViewModel` is **read-only** — it just observes `AppCatalogRepository.apps`, projects each entry to an `OtherAppUi`, and filters this app out of its own list (matching on the release `applicationId`, so the `.debug` suffix is stripped first); the catalog fetch is owned by `MainActivity`. The screen splits into `AboutScreen` (wires the VM) and an `internal AboutScreenContent` (stateless, so the screenshot test can render it — see the `screenshotTest` visibility note below).
-- **Other apps card** (`ui/about/OtherAppsCard.kt`) — One row per catalog entry: icon (remote via Coil, with a bundled local fallback for the apps we ship art for), name, localized description, highlights bullets (inline Markdown via `util/InlineMarkdown.kt` — `**bold**`/`*italic*` only, no Markdown dependency), and the actions. An installable app shows **Open** when a launch intent resolves, else **Install** (Play listing); any entry with a website also gets **Website**. A web-only entry (no `packageName`) shows a single button: **Open** when the site is installed as a **PWA/WebAPK**, else **Website** — detected by matching the shared `org.chromium.webapk.shell_apk.` shell *activity class* rather than a package name, because WebAPK packages differ per browser and an *unverified* WebAPK isn't picked up by `ACTION_VIEW` link routing. Both lookups need the `<intent>` entries in the manifest's `<queries>`. The card hides itself when the list is empty.
-- **LicenseScreen** (`ui/license/`) — License screen with collapsing toolbar, license texts.
-- **RootChecker** (`data/`) — Two suspend entry points on `Dispatchers.IO`: `check(context)` evaluates passively; `requestRoot(context)` executes `Shell.cmd("id")` first to force libsu's main shell to construct (which triggers the Magisk/KernelSU/APatch allow dialog) before re-evaluating. Both return a `RootResult` sealed interface (`NotRooted` / `Unknown` / `Rooted(provider, version)` / `RootedNotGranted(provider)`). Providers are classified via the `RootProvider` enum (`MAGISK` / `KERNELSU` / `APATCH` / `OTHER` / `UNKNOWN`). Unprivileged probes (installed packages declared in `<queries>`, `/proc/self/mounts` scan, `su` binary existence across standard paths) run regardless of grant state, so a device with root installed but the app not yet allowed is reported as `RootedNotGranted` rather than `NotRooted`. When granted, the Magisk version is read via `magisk -v` / `magisk -V` and the `/data/adb/magisk` etc. paths confirm the provider. Both entry points take an `applyUiDelay` flag (default `true`; AppFunctions pass `false` to skip the ~1 s UI settle delay) and record each result via `UserPreferences.recordRootCheck`, so UI (FAB) and AppFunction callers share one "last checked" value.
-- **AppFunctions** (`appfunctions/`) — Exposes the app's root-check workflows to the Android system and on-device agents (e.g. Gemini) via `androidx.appfunctions` (Jetpack; resolves on Android 16+, no-ops below). Three functions: `checkRootStatus` (fresh passive check), `requestRootAccess` (triggers the superuser dialog), and `getLastRootCheck` (returns the last cached check + `checkedAt` without re-probing). Each gets its `Context` from `AppFunctionContext.context` and maps the sealed `RootResult` to the flat `@AppFunctionSerializable` `RootStatus`. Ships in both flavors (no Google dependency), release included. **Wiring (alpha10 `@AppFunctionServiceEntryPoint`):** the `@AppFunction`s and their agent-facing KDoc live on the abstract `BaseRootAppFunctionService : AppFunctionService()` (`RootAppFunctionService.kt`), annotated `@AppFunctionServiceEntryPoint(serviceName = "RootAppFunctionService", appFunctionXmlFileName = "root_app_function_service")` + `@RequiresApi(36)`; each method is a thin adapter delegating to `RootAppFunctions`, which stays a plain framework-annotation-free class so it's testable without the service lifecycle. The KSP `appfunctions-compiler` generates the concrete `RootAppFunctionService` **and** `assets/root_app_function_service.xml`, both declared in `AndroidManifest.xml` — the `<service>` carries the `BIND_APP_FUNCTION_SERVICE` permission, the `android.app.appfunctions.schema` / `.v2` `<property>`s, and the `android.app.appfunctions.AppFunctionService` intent-filter. `res/xml/app_metadata.xml` (the app-level `android.app.appfunctions.app_metadata` `<property>`) is the LLM-facing app description. **alpha10 migration notes:** alpha10 merged the former `appfunctions-service` artifact into `androidx.appfunctions` (there is no `appfunctions-service` alpha10), so the `androidx.appfunctions.service.*` package split is gone (`@AppFunction`, `AppFunctionContext`, `@AppFunctionSerializable`, `AppFunctionService`, `AppFunctionServiceEntryPoint` all live in `androidx.appfunctions`), the `AppFunctionService` is **no longer manifest-merged for us**, and the `appfunctions:aggregateAppFunctions` KSP arg is gone. **R8:** `proguard-rules.pro` keeps classes declaring `@AppFunction` methods — the generated XML identifies functions as `…BaseRootAppFunctionService#<name>`, and without the rule R8 vertically merges the abstract base into the generated subclass, leaving the XML pointing at a class absent from the release DEX (Play rejects that: "The Android App Functions XML could not be parsed from the binary"). Verify after a release build with `grep BaseRootAppFunctionService app/build/outputs/mapping/<variant>/mapping.txt` — the class and all three method names must map to themselves.
-- **Billing / tip jar** (`billing/`) — `BillingController` interface with two flavor implementations: `GPlayBillingController` (`gplay/`, Google Play Billing) and `NoOpBillingController` (`foss/`, reports `isAvailable = false` so the tip jar is hidden). Each `TipTier` (SMALL/MEDIUM/LARGE) has a durable *record* product (acknowledged, kept forever) and a *repeat* product (consumed, repurchasable); `supporterTiers` is recomputed from owned records on every connect, so it survives reinstalls. One-shot `events` (`TipEvent`) and `tipCleared` are both collected app-wide by `AppRoot` (see there for why `events` must have exactly one consumer); `tipCleared` fires when a previously-`PENDING` tip clears — pending purchase tokens are persisted in `UserPreferences` so a clear is recognized even after process death or on the next launch (vs. the routine re-grant of an already-owned tip on every connect).
-- **In-app review / rating** (`review/` + `ui/main/ReviewGate.kt`) — `ReviewController` interface with two flavor implementations, mirroring the billing/update split: `GPlayReviewController` (`gplay/`, the Play-managed in-app review card) and `NoOpReviewController` (`foss/`, `isAvailable = false`). Attached to `MainActivity`'s lifecycle. **`ReviewGate` is the pure, unit-tested decision logic** (`ReviewGateTest`): eligible once root has been confirmed `MIN_ROOTED_CHECKS` (3) times **and** the prompt hasn't already fired on this or a later version code — roughly once per release, on top of Play's own quota. `MainViewModel.maybeRequestReview` runs it after any `RootResult.Rooted` (confirming root is the app's "win" moment). **Gating rules that are easy to get wrong:** the version code is recorded — spending the release's single prompt — *only* once the request actually reached Play, so (a) FOSS returns early on `!isAvailable` without even counting toward the gate, and (b) `requestReview()` returns `Boolean` and reports `false` when no activity is attached (a check finishing mid-recreation), leaving the slot unspent. Play gives **no "was it shown" callback**, so a `true` return means "handed to Play", never "a card appeared" — don't build on it.
-- **Post-check asks: support card** (`ui/main/SupportCard.kt` + `ui/main/SupportGate.kt`) — After a root-found check the main screen can offer an inline, dismissible **Support development** card that opens the shared `TipJarDialog` (`ui/tip/TipJar.kt`). `SupportGate` is the pure, unit-tested decision logic (`SupportGateTest`), a sibling of `ReviewGate`. **The two post-check asks are deliberately serialized, review first**, because Play's review card is a system-modal overlay that fires roughly once per release while this one recurs: `SupportGate.MIN_ROOTED_CHECKS` (5) sits **above** `ReviewGate.MIN_ROOTED_CHECKS` (3) so a fresh install always reaches the review ask first, and a process-lifetime `reviewRequestedThisSession` flag (a `@Volatile` companion field on `MainViewModel`, so an activity recreation can't reset it) keeps them out of the *same session* — a frame-level check wouldn't do, since a card drawn behind Play's overlay would greet the user the moment they dismissed it and read as a double-ask. The gate also requires billing to be available (`gplay`), Play prices to have **loaded** (otherwise the card leads to a dead spinner), `supporterTiers` to be empty (never ask someone who already tipped), no pending update (that card is functional and time-sensitive, so it owns the slot), and the snooze/dismissal budget to be unspent: dismissing *or* opening the tip jar snoozes for `SNOOZE_MILLIS` (30 days), but only a dismissal counts toward `MAX_DISMISSALS` (3), past which the card never returns. `MainViewModel.maybeShowSupportPrompt` consumes the rooted count that `maybeRequestReview` already observed, so the counter increments exactly once per check. **Two subtleties:** the gate only sets state — `MainScreen` decides to *draw* it (`supportPromptVisible && updateStatus is None`, so an update arriving later still wins) and reports `supportCardShown` from there, keeping the analytics signal honest about cards the screen never drew. And the card is **unreviewable in a debug build**: the `.debug` applicationId means Play Billing never returns tip products, so `productsLoaded` can't become true — hence the debug-gated **"Demo: support card"** overflow item calling `demoSupportPrompt()`, which bypasses the gate (mirroring `demoUpdate`).
+Generation runs on the connected phone and the journey never crosses the 840dp breakpoint, so the
+shipped profile covers the single-pane push flow but **omits the expanded-width overlay path**. Cold
+start to `MainScreen` is form-factor-independent and already covered; the only missing piece is the
+first open of a secondary screen on a large window — a one-time JIT cost instead of AOT. This is
+optional polish, not correctness.
 
-- **App catalog** (`data/catalog/`) — Source of truth for the About screen's "Other apps" list, replacing the formerly hardcoded entries. `AppCatalogRepository` (app-scoped singleton on `BasicRootCheckerApplication`) exposes a `StateFlow<List<CatalogApp>>` filled from the best available source, in order: the latest successful download → the cached previous download (offline) → the per-locale snapshot bundled at `assets/apps.<locale>.json`, with English `apps.json` as the last resort (first run, offline). **Localization:** the feed publishes one file per locale (`apps.json` English default, plus `de`/`ar`/`es`/`ru`); we request the device language and, per the feed contract, fall back to English on a non-2xx (e.g. a `404` for an untranslated locale). Each locale caches separately (`apps_catalog_<key>.json`), so a language switch shows that language's list immediately. **`refresh()` is a conditional GET:** it replays the stored `ETag`/`Last-Modified` as `If-None-Match`/`If-Modified-Since`, so an unchanged catalog costs a `304` with no body. Validators are stored **with the URL they came from** and only replayed against that same URL, so the English fallback can never produce a `304` against a localized file we don't hold. Any failure (offline, parse error, empty list) leaves the current list untouched and reports the outcome to analytics. `MainActivity` calls `refresh()` once at launch; the About screen only ever observes. Parsing is lenient (`ignoreUnknownKeys`, every field but the list optional, `@JsonNames("whatsNew")` alias on `highlights`) so old caches and rolled-out feed changes both still bind.
-- **UserPreferences** (`data/`) — DataStore-Preferences store (telemetry, haptics, theme mode, last-seen version code, pending tip tokens, the rooted-check count + last review-prompt version code backing `ReviewGate`, the support-card snooze deadline + dismissal count backing `SupportGate`, and the last root check — result + timestamp, exposed as `lastRootCheck`/`recordRootCheck` and shared by the UI and AppFunctions).
-- **Analytics** (`analytics/`) — Thin `Analytics` object over the TelemetryDeck SDK; every `trackX` call routes through a `SignalGate`. TelemetryDeck is initialized **asynchronously** in `BasicRootCheckerApplication.onCreate` so cold start isn't blocked: the opt-out preference is read off the main thread, and `TelemetryDeck.start()` is posted *back* to the main thread (it registers a lifecycle observer, so it must run there). While the preference is still being read, `SignalGate` is `PENDING` and buffers signals in a bounded queue; `Analytics.setEnabled(true)` — called **after** `start()` so flushed signals reach an initialized SDK — replays them, while `setEnabled(false)` discards them. The Settings telemetry toggle reuses the same `setEnabled` path. `trackDeviceType` is **one-shot per process** (a `@Volatile` flag), so the rotations/folds/resizes it's read through can't inflate the count.
-- **TestEnvironment** (`util/`) — Detects synthetic, non-user runs — **Firebase Test Lab** and the **Play Console pre-launch report** robot (which runs on Test Lab), both of which set the documented `firebase.test.lab` system setting to `"true"`. `BasicRootCheckerApplication` feeds this into TelemetryDeck's `testMode` (alongside `BuildConfig.DEBUG`), so that traffic stops inflating installs/sessions/root-checks. **Flagged as test-mode rather than dropped:** a test-mode signal is segregated out of the production view (including the premade dashboards) yet stays inspectable via the dashboard's Test Mode toggle, so a detection false-positive merely misfiles a real user's data (recoverable) instead of destroying it. It has to be decided client-side at signal time because TelemetryDeck has no global/app-level query filter. Probing **fails open** (any read error → `false` → treated as a real user).
-- **DeviceInfo** (`util/`) — Helpers for app version retrieval and Android version name lookup (maps API level to name via `version_names` string array resource).
-- **Haptics** (`util/` + `ui/`) — Two layers, both gated on the user's "Haptic feedback" setting (`UserPreferences.hapticsEnabled`). A single `RootHaptics` (`util/`) instance lives on `BasicRootCheckerApplication` (`rootHaptics`) and is shared by both the root-check flow and the UI tap feedback. It plays the rich root-check vibrations from `MainViewModel`: a rising-frequency "checking" ramp plus distinct success/error/neutral result patterns, with graceful fallback across the vibration APIs (PWLE envelopes on API 36+ → amplitude waveforms on API 26+ → legacy patterns on 23–25); it reads the preference before playing. It also exposes subtle one-shots for UI feedback — `playTap`/`playLongPress`, which pick the best actuator API by *queryable* capability: a `PRIMITIVE_CLICK` composition where the actuator genuinely supports it (`areAllPrimitivesSupported`, API 30+ — crispest, e.g. Pixel), else a **raw** `createOneShot` amplitude pulse (API 26+) / legacy duration vibrate. It deliberately skips `createPredefined` (`EFFECT_CLICK` etc.): like the framework constants, predefined effects are HAL-mapped and several OEMs (notably Samsung) silently drop them, whereas a raw amplitude pulse always reaches the motor. `HapticClick` (`ui/`) wires those to Compose via the `rememberHapticClick` / `rememberHapticToggle` / `rememberHapticLongClick` helpers, gated on the `LocalHapticsEnabled` CompositionLocal (both it and `LocalAppHaptics` — the shared `RootHaptics` — are provided once by `MainActivity` around `AppRoot`). **Why the Vibrator and not `View.performHapticFeedback`:** there is no reliable way to detect whether a device renders a framework tap constant — many skinned OEMs (Samsung, OnePlus/Oppo, Xiaomi, Vivo) silently drop `CONTEXT_CLICK`/`VIRTUAL_KEY` *while the call still returns success*. Driving the Vibrator directly sidesteps that lottery (it works wherever there's an actuator, gated by the in-app toggle + master vibration, not the OS "touch feedback" sub-setting).
-- **Preview Utilities** (`util/`) — Custom preview annotations: `@PreviewLocales` (en, de, ar, es, ru) and `@PreviewPlayStoreListing` (Phone, 7" Tablet, 10" Tablet). `PreviewPlayStoreNative.kt` holds the native-resolution counterparts used by the screenshot tests — see **Screenshot Tests** below.
-
-### Build Configuration
-
-- **Gradle:** Kotlin DSL with version catalog (`gradle/libs.versions.toml`), AGP 9.3.1
-- **SDK:** compile/target 37 (Android 17), min 23
-- **Kotlin:** 2.4.10, JVM target 17 — AGP 9's **built-in Kotlin** compiles the modules; the app applies the Compose/serialization plugins but no separate `org.jetbrains.kotlin.android`, and the `:baselineprofile` module applies none.
-- **Build variants:** debug (appId suffix `.debug`, version suffix `-debug`) and release (minification + resource shrinking enabled)
-- **Product flavors:** `gplay` (Google Play services — the in-app-billing tip jar, in-app updates, and the in-app review card) and `foss` (no Google services — no-op billing/update/review implementations). Flavor-specific code lives under `app/src/gplay/` and `app/src/foss/`; unit tests run on the `gplay` variant (`:app:testGplayDebugUnitTest`).
-- **Compose** enabled with Compose BOM for dependency management
-- **Navigation 3** (`androidx.navigation3`) with Kotlin Serialization for route keys
-- **Material 3 Adaptive** (`androidx.compose.material3.adaptive:adaptive`, versioned separately from the Compose BOM) — `currentWindowAdaptiveInfoV2`/`WindowSizeClass` (via the transitive `androidx.window:window-core`) for the window-width check that switches the secondary screens to a dialog on large screens. See the **AppNavigation** component.
-- **AppFunctions** (`androidx.appfunctions` 1.0.0-alpha10: `appfunctions` + `appfunctions-compiler` (KSP) — alpha10 merged the former `appfunctions-service` artifact into `appfunctions`) with the `com.google.devtools.ksp` plugin (version paired to Kotlin); generated in both flavors. See the **AppFunctions** component above.
-- **Baseline Profiles:** a separate `:baselineprofile` module (`com.android.test`) generates the AOT profile shipped in both flavors; the `androidx.baselineprofile` plugin also adds synthetic `nonMinifiedRelease`/`benchmarkRelease` build types to `:app`. See the **Performance / Baseline Profiles** section.
-- **App catalog feed** (both flavors) — `kotlinx-serialization-json` parses the `apps.json` feed, and **Coil 3** (`coil-compose` + `coil-network-okhttp`) loads the remote app icons. Note `coil-network-okhttp` pulls **OkHttp** in transitively; the catalog's own fetch deliberately uses plain `HttpURLConnection`, so OkHttp is currently Coil's alone. See the **App catalog** component above.
-- **In-app review** (`com.google.android.play:review-ktx`, `gplay` flavor only) — see the **In-app review / rating** component above.
-- **Screenshot tests:** the `com.android.compose.screenshot` plugin renders `@PreviewTest` composables on the JVM. Needs **both** `android.experimental.enableScreenshotTest=true` in `gradle.properties` and `experimentalProperties["android.experimental.enableScreenshotTest"] = true` in the `android {}` block under AGP 9. See the **Screenshot Tests** section.
-
-### Localization
-
-Five locales: English (`en`), German (`de`), Arabic (`ar`), Spanish (`es`), Russian (`ru`). Locale config in `res/xml/app_locales_config.xml`.
-
-### Theming
-
-Compose Material3 with dynamic colors (API 31+), fallback to custom light/dark color schemes defined in `ui/theme/Color.kt`. Splash screen theme chain in XML (`values-v21/v23/v27/v31` theme qualifiers).
-
-### Accessibility
-
-**Keep accessibility (TalkBack and large font scales) in mind for all UI code — treat it as part of "done," not a follow-up.** When adding or changing Compose UI, apply these conventions (all already used in the codebase):
-
-- **Label actionable icons.** Any `IconButton`/clickable icon that isn't accompanied by visible text needs a `contentDescription` on its `Icon` (e.g. the overflow and navigation-up buttons). Decorative icons whose meaning is already conveyed by adjacent text — chevrons, the status icon, trailing affordances inside a labeled row — take `contentDescription = null`.
-- **Localize accessibility strings.** `contentDescription`s and action labels are user-facing: add them to `res/values/strings.xml` **and all four locale files** (`de`, `ar`, `es`, `ru`), same as any other string. Prefer the wording Android's own AppCompat resources use (e.g. "Navigate up", "More options") so it matches what users hear elsewhere.
-- **Announce in-place changes with a live region.** When content updates without moving focus (the root-check result, the in-app update card), mark the changing `Text` with `Modifier.semantics { liveRegion = LiveRegionMode.Polite }` so screen readers read the new value. Don't merge a whole card as a live region if it contains a focusable button.
-- **Label controls via their row.** For a row that pairs a title with a `Switch`/`RadioButton`, make the row itself `toggleable(role = Role.Switch)` / `selectable(role = Role.RadioButton)` and pass `onCheckedChange = null` / `onClick = null` to the control. This labels the control with the title and makes the whole row the touch target.
-- **Expose non-tap gestures as custom actions.** A long-press (or other gesture) action must also be reachable by screen readers — add a `CustomAccessibilityAction` (with a localized label) via `Modifier.semantics`, and avoid empty `onClick = {}` handlers that advertise a do-nothing action. See `DeviceInfoText` (copy on long-press).
-- **Touch targets ≥ 48dp** and **respect font scale** (use `sp`/Material typography, never fixed `dp` text). Keep the `@PreviewFontScale` / `@PreviewLightDark` preview coverage when adding screens.
-- **Verify on a real device with TalkBack** for behavioral changes — the IDE previews don't catch announcement/focus issues.
-
-### Haptics
-
-**Every tappable control gives a subtle tap tick, gated on the "Haptic feedback" setting — treat it as part of "done," like accessibility.** Don't call `LocalHapticFeedback`/`Vibrator` directly from a screen; wrap the control's handler with the helpers in `ui/HapticClick.kt`:
-
-- **Plain taps** (`Button`, `IconButton`, `FloatingActionButton`, `Card(onClick = …)`, `DropdownMenuItem`, `Modifier.clickable`, `selectable` rows, dialog buttons) → `onClick = rememberHapticClick(handler)`. For trailing-lambda `.clickable { … }`, rewrite as `.clickable(onClick = rememberHapticClick { … })`.
-- **`toggleable` rows** (a title paired with a `Switch`/`Checkbox`) → `onValueChange = rememberHapticToggle(handler)`. Leave the inner control's `onCheckedChange = null` / `onClick = null` (the row owns it, per the accessibility convention above).
-- **Long-press / other non-tap gestures** → `rememberHapticLongClick(handler)` (fires the standard `LongPress` buzz, which `detectTapGestures` doesn't add on its own). See `DeviceInfoText` (copy on long-press), which reuses the wrapped action for its `CustomAccessibilityAction` too.
-
-The helpers no-op when haptics are disabled and re-key correctly when the setting toggles, so nothing else is needed. They deliberately drive the `Vibrator` (via `RootHaptics`) rather than `View.performHapticFeedback` — don't "simplify" that to `performHapticFeedback(ContextClick)`, or taps go silent on Samsung/OnePlus/Xiaomi/Vivo (the call returns success but nothing fires, and there's no API to detect it). The root-check ramp/result vibrations are a separate concern — same shared `RootHaptics`, but played from `MainViewModel`, not the UI.
-
-### Performance / Baseline Profiles
-
-The app ships a **Baseline Profile** (ART AOT-compilation hints) so cold start and first-scroll are pre-compiled on install — measured ~19% faster cold start on a mid-range device. **When you add or rework a screen or a hot user journey, update the generator journey and regenerate — treat it as part of "done," like accessibility and haptics.**
-
-- **`:baselineprofile` module** (`com.android.test`, `androidx.baselineprofile` plugin) mirrors the app's `gplay`/`foss` flavors and targets `:app`. It holds two test classes (tests live in `src/main`, per `com.android.test` convention):
-  - `BaselineProfileGenerator` — the `BaselineProfileRule` journey: cold start, then navigate to and scroll Settings / About / License. `Journeys.kt` has the shared UI Automator helpers.
-  - `StartupBenchmarks` — A/B `MacrobenchmarkRule` tests: each metric has a `*BaselineProfile` test (`CompilationMode.Partial(BaselineProfileMode.Require)` — fails loudly if the profile is missing) paired with a `*NoCompilation` test (`CompilationMode.None`). Compare **medians**. Startup uses `StartupTimingMetric` (cold, ≥10 iters); the License scroll uses `FrameTimingMetric` (no `startupMode` — it `killProcess()`s and re-navigates in `setupBlock`, else the measured scroll finds an empty screen).
-- **Generated profiles are committed and shipped.** `generateBaselineProfile` writes per-flavor `baseline-prof.txt`/`startup-prof.txt` under `app/src/<flavor>Release/generated/baselineProfiles/`; release builds merge them into `assets/dexopt/baseline.prof[m]` (verify with Analyze APK). Both flavors get a profile (gplay's is larger — it includes the Play/billing paths).
-- **`testTagsAsResourceId` is mandatory for the journeys** — UI Automator finds elements via `By.res(<testTag>)`, locale-independently (the app ships 5 locales, so text matchers won't do). It's enabled on the `AppRoot` Box (the main window) **and must be re-enabled on every `Popup`/`DropdownMenu`/dialog**, which render in their own window outside that scope — see the overflow `DropdownMenu` in `MainScreen` (forgetting this silently breaks navigation: the menu items aren't found, so the secondary screens never get profiled). Any nav control or scroll container a journey touches needs a `Modifier.testTag(...)`; any new popup needs its own `Modifier.semantics { testTagsAsResourceId = true }`. **The tags surface in every build type, `debug` included** — `testTagsAsResourceId` is a semantics property with no build-type gating, and each tag appears as the bare string (`resource-id="menu_license"`, not package-prefixed), so `By.res("menu_license")` matches. `adb shell uiautomator dump` on a plain `gplayDebug` build is the quickest way to confirm a new tag is reachable before running a journey — verified that way on a tablet (it listed `menu_license`, `menu_settings`, `main_list`, `settings_list`). What genuinely requires the release-based variants (`nonMinifiedRelease`/`benchmarkRelease`) is **Macrobenchmark itself**, which needs a non-debuggable `profileable` build; that's a constraint on running the benchmarks, not on whether the tags exist.
-- **Large-screen coverage is a known gap — revisit when tablets/foldables become a meaningful share of users.** Generation runs on the connected phone (`useConnectedDevices = true`) and `Journeys.kt` never crosses the 840dp breakpoint, so the shipped profile covers the single-pane push flow but **omits the expanded-width path** — the custom `DetailOverlayScene` overlay (container transform + nested-scroll swipe dismiss) that hosts Settings/About/License as a card on tablets and unfolded foldables (see the **AppNavigation** component). There is no separate per-form-factor profile to ship: each flavor has exactly one profile, and a baseline profile is a list of class/method descriptors that ART applies at install time regardless of screen size. To cover large screens you don't make a second file — you make the generator *also* run at expanded width, and the `androidx.baselineprofile` plugin **merges** (unions) the rules from every device it generates on into the same `baseline-prof.txt`. Concretely: add a tablet/foldable **Gradle Managed Device** to the `baselineProfile { … }` block in `baselineprofile/build.gradle.kts` (keep `useConnectedDevices = true` so the phone is still included). At ≥840dp the existing navigate-to-secondary-screen steps take the overlay branch automatically — no journey logic change needed, **and** because the custom overlay renders **in-composition inside `AppRoot`** (unlike the old built-in `DialogSceneStrategy`'s separate platform `Dialog` window), the secondary screens' `*_list` testTags stay inside the `testTagsAsResourceId` scope — so `By.res(...)` finds them on the large-screen leg with **no** re-enabling needed (the overflow-`DropdownMenu` trap does *not* apply here). This is optional polish, not correctness — cold start to `MainScreen` is form-factor-independent and already covered; the only missing piece is the first open of a secondary screen on a large window (one-time JIT cost instead of AOT).
-- **TTFD:** `MainScreen` calls `ReportDrawnWhen { … }` so `timeToFullDisplay` marks the first meaningful frame (device info loads synchronously in the ViewModel's `init`, so it ≈ `timeToInitialDisplay`).
-- **Device requirements:** generation runs the journey on a connected device and needs API 33+ or root (works on the API 36 test device); measurement needs `<profileable android:shell="true">` (already in the manifest) on API 29+.
-- **Versions:** `benchmark`/`androidx.baselineprofile` are on `1.5.0-alpha` — required for AGP 9 (stable 1.4.x predates it). This build emits `frameCount` but not `frameOverrunMs` for the app's non-lazy `verticalScroll` screens, so startup is the headline metric and the scroll test mainly guards the journey. The plugin debug-signs its synthetic build types automatically (`release` has no signing config in `build.gradle.kts`).
-
-### Screenshot Tests (Compose Preview)
-
-The app uses the **official AndroidX Compose Preview Screenshot Testing** plugin (`com.android.compose.screenshot`) to render `@Preview`-style composables to PNGs **on the JVM via Layoutlib — no device/emulator**. It serves two goals at once: a **visual-regression baseline** (committed reference images, checked in CI) and **Play Store listing assets** (all screens, all locales, native device resolution). **When you add or rework a screen, add/refresh its `@PreviewTest` and regenerate — treat it as part of "done," like accessibility, haptics, and baseline profiles.**
-
-- **Where it lives:** `@PreviewTest` functions are in the **`screenshotTest` source set** (`app/src/screenshotTest/`), one per screen/state — they render the stateless `*Content` composables (e.g. `MainScreenContent`, `SettingsScreenContent`, `AboutScreenContent`, `LicenseScreen`) with fixed sample state. *The source set can only see `public`/`internal` members of `main`* — so a composable a screenshot needs must be at least `internal` (this is why `AboutScreenContent` is `internal`, not `private`). Enabled by the plugin + `screenshotTestImplementation(libs.screenshot.validation.api)` + `screenshotTestImplementation(libs.androidx.compose.ui.tooling)`, plus **both** `android.experimental.enableScreenshotTest=true` in `gradle.properties` **and** `experimentalProperties["android.experimental.enableScreenshotTest"] = true` in the `android {}` block (AGP 9 requires both, or the plugin fails to apply).
-- **Native-resolution device matrix:** `util/PreviewPlayStoreNative.kt` (the companion to `PreviewPlayStoreListing`) is the multipreview applied to each screen — **3 store devices × 5 locales = 15 PNGs per screen**. The tool sizes each PNG **purely from the `@Preview` device spec** (`output px == spec px`; there is no scale knob), so the devices use **pixel-based** specs (`spec:width=1080px,…,dpi=420`) to get high-resolution, native-size output. Each entry's `name` is kept free of special characters (no quotes) so the tool **embeds it in the reference filename** (`MainRootedShot_Phone_ar_<hash>_0.png`), making the PNGs sortable by screen/device/locale. Bare `@Preview(showBackground = true)` would render at small wrap-content size — always use a px device spec.
-- **Generate / validate:** `./gradlew :app:updateGplayDebugScreenshotTest` writes references under `app/src/screenshotTestGplayDebug/reference/…`; `:app:validateGplayDebugScreenshotTest` fails on any diff. The CLI tasks operate at the **variant level** (no per-preview filter) — to regenerate just one preview, use the **Android Studio gutter icon** on its `@PreviewTest` function. Run on the `gplayDebug` variant (these screens are flavor-independent; flavor-specific bits like the tip jar are passed in as plain args).
-- **Layoutlib preview-safety:** Layoutlib's `Context`/`PackageManager` is a stub — `getPackageInfo` returns null, `queryIntentActivities` is unimplemented, and `LaunchedEffect`-driven enter animations never advance. Code reached by a screenshot must degrade gracefully: guard package-manager calls (see `DeviceInfo.getAppVersionName`, `OtherAppsCard.findInstalledPwaPackage`) and gate entrance animations on `LocalInspectionMode.current` so the resting state renders (see the result-icon scale in `MainScreen`). A crash in any rendered composable fails the whole screenshot.
-- **Play Store export:** `scripts/generate-store-screenshots.sh [subfolder]` produces clean, upload-ready PNGs in `Play Store/Generated Screenshots/<subfolder>/`. The screenshot tool only renders the **debug** variant, whose `src/debug/res` renames the app to "… (Debug)"; the script temporarily neutralizes that override (the `screenshotTest` source set **cannot** override the app-under-test's resources), renders, copies the clean PNGs out with their `_<hash>_0` suffix stripped, then **restores both the debug strings and the committed regression baseline** — so a plain `validate` still passes and nothing is left modified. The committed `reference/` images therefore intentionally show "(Debug)"; the clean store assets are a separate export.
-
-## Changelog
-
-`CHANGELOG.md` at the repo root follows the [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) format with sections **Added / Changed / Deprecated / Removed / Fixed / Security**. In-flight work lives under `## [Unreleased]`; at release time that heading is renamed to `## [<version>] - <YYYY-MM-DD>` and a fresh empty `[Unreleased]` is added above it.
-
-**Update the changelog as part of every feature, bug fix, or user-visible behavior change.** Add a bullet under the appropriate section of `[Unreleased]` in the same commit (or PR) that introduces the change. Write entries in user-facing language — no commit SHAs, no internal jargon. Skip the changelog only for pure refactors, internal docs edits, dependency-only bumps with no user impact, or build-config tweaks that don't change shipped behavior.
-
-## Play Store release notes
-
-Per-version store "What's new" text lives under `Play Store/Release Notes/<version>/`, one file per locale named by language (`default`, `german`, `arabic`, `spanish`, `russian` — matching the `Play Store/Listing/` convention, not BCP-47 codes). Each version folder also has:
-- `play-console.txt` — all locales in Google Play's `<lang-tag>…</lang-tag>` block format (tags: `en-US`, `de-DE`, `ar`, `es-ES`, `ru-RU`) for pasting every language at once.
-- `all-locales.md` — the same content as a human-readable reference.
-
-Conventions: lead each note with `Version <x.y>:` (localized version word), then one line per highlight prefixed with `➕` (added), `🛠️` (changed), or `🔨` (fixed). Keep every locale within Play's **500-character** limit. Mirror the changelog's wording but condensed to user-facing highlights.
-
-**Keep release notes in sync with the changelog.** When `[Unreleased]` is cut to `## [<version>] - <YYYY-MM-DD>`, create `Play Store/Release Notes/<version>/` with all five locale files plus `play-console.txt` and `all-locales.md`, distilling that version's changelog entries into the format above.
+To close it, add a tablet/foldable Gradle Managed Device to the `baselineProfile { }` block (keeping
+`useConnectedDevices = true`); the plugin unions the rules from every device into the same
+`baseline-prof.txt`. No journey change is needed, and because the overlay renders in-composition the
+`*_list` testTags stay reachable. Revisit when tablets/foldables become a meaningful share of users. →
+`baseline-profiles`
