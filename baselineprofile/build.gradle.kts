@@ -30,11 +30,15 @@ android {
                 // 840dp breakpoint either way — most tablet profiles (Pixel Tablet, Medium Tablet,
                 // Nexus 10) are only 800dp in portrait, just under it, and would silently profile
                 // the phone path instead.
-                create("tabletApi35") {
+                create("tabletApi36") {
                     device = "Pixel C"
-                    apiLevel = 35
-                    // Profile capture needs a rootable image; google_apis/playstore are not.
-                    systemImageSource = "aosp"
+                    apiLevel = 36
+                    // Profile capture needs `adb root`, which rules out *_playstore images but not
+                    // this one. API 36 google_apis is already on disk and matches the physical test
+                    // devices, so this costs no download; no aosp image is installed at any level.
+                    systemImageSource = "google"
+                    // Pinned so the choice can't drift with what's installed; AGP warns without it.
+                    testedAbi = "x86_64"
                 }
             }
         }
@@ -58,7 +62,7 @@ android {
 // still contributes the single-pane push flow while the tablet contributes the overlay path.
 baselineProfile {
     useConnectedDevices = true
-    managedDevices += "tabletApi35"
+    managedDevices += "tabletApi36"
 }
 
 dependencies {

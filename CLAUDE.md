@@ -159,7 +159,7 @@ Each of these has been paid for once. One line to recognise it; the detail is in
   (`progress > 0.999f && dragOffset == 0f`), or the `graphicsLayer`'s own scale feeds back into the
   source rect. → [`docs/adaptive-navigation.md`](docs/adaptive-navigation.md)
 
-## Large-screen Baseline Profile coverage — real, but only while a tablet stays attached
+## Large-screen Baseline Profile coverage — covered, and no longer dependent on what's plugged in
 
 The shipped profile **does** cover the expanded-width overlay path. It was regenerated 2026-07-31 with
 two devices connected at once — SM-G766B (phone, 384dp) and SM-X356B (Galaxy Tab Active5 Pro, in
@@ -168,9 +168,21 @@ rules went 0 → 135, `OverlayScene` 2 → 138, `PredictiveBack` 0 → 37, inclu
 No journey change was needed; the overlay renders in-composition, so the `*_list` testTags stay
 reachable.
 
-**The trap:** `baselineProfile { useConnectedDevices = true }` declares no Gradle Managed Device, so
-this coverage is a property of whatever happened to be plugged in, not of the build. Regenerating on a
-phone alone silently drops those ~1,150 rules — the build stays green and the profile just quietly gets
-worse. Either keep a ≥840dp device connected when regenerating, or make it durable by adding a
-tablet/foldable GMD to the `baselineProfile { }` block. The tablet must be in **landscape**: this one is
-800dp in portrait, just under the breakpoint. → `baseline-profiles`
+**Why the `tabletApi36` GMD exists:** with only `useConnectedDevices = true`, that coverage was a
+property of whatever happened to be plugged in, not of the build — regenerating on a phone alone
+silently drops those ~1,150 rules while the build stays green. The GMD makes it reproducible. It was
+trial-run 2026-07-31 and emits the overlay rules *identically* to the physical tablet (138 / 135 / 37),
+so it is a real substitute, not an approximation.
+
+Three things about that device were each verified on the booted emulator rather than assumed, and are
+each the reason for a specific line:
+
+- **Pixel C, not Pixel Tablet.** Measured 2560×1800 @ 320dpi = **1280 × 900dp**, so it clears 840dp in
+  *both* orientations and boot rotation can't silently sabotage it. Pixel Tablet, Medium Tablet and
+  Nexus 10 are all 800dp in portrait — just under. The physical Tab Active5 Pro has the same trap and
+  only works because it sits in landscape.
+- **`systemImageSource = "google"`, not `"aosp"`.** `adb root` succeeds on `google_apis`, so profile
+  capture works; only `*_playstore` images block it. No `aosp` image is installed at any API level, so
+  `"aosp"` would cost a large download for no benefit.
+- **API 36 with `testedAbi = "x86_64"`.** Matches the physical test devices, is already on disk, and
+  pinning the ABI silences an AGP warning and stops the choice drifting. → `baseline-profiles`
