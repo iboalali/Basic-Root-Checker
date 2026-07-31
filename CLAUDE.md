@@ -21,8 +21,8 @@ no-ops).
 
 ## Repository hosting
 
-**GitHub** — `github.com/iboalali/Basic-Root-Checker`, default branch `master`. Use `gh`; the `glab`
-note in the global instructions does not apply here.
+**GitHub** — `github.com/iboalali/Basic-Root-Checker`, default branch `main` (renamed from `master`
+2026-07-31). Use `gh`; the `glab` note in the global instructions does not apply here.
 
 ## Definition of done
 
