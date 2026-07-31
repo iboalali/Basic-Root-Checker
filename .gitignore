@@ -48,5 +48,8 @@ app/src/main/res/values/publickey.xml
 .idea/
 /.kotlin/*
 
-# Claude Code per-project state
-.claude/
+# Claude Code — commit the shared knowledge, ignore per-machine state.
+# Tracked on purpose: settings.json (so a clone inherits the enabled plugins),
+# agents/ and agent-memory/ (so an agent's accumulated knowledge isn't lost per clone).
+/.claude/settings.local.json
+/.claude/worktrees
