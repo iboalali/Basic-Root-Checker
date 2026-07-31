@@ -14,8 +14,8 @@ import androidx.appfunctions.AppFunctionServiceEntryPoint
  *
  * These methods are thin adapters: the actual probing and mapping lives in [RootAppFunctions],
  * which stays a plain class so it remains testable without the Android service lifecycle. The
- * agent-facing contract — the KDoc that becomes each function's description in the generated
- * XML — lives here on the annotated methods.
+ * agent-facing contract — the KDoc that becomes each function's description in the generated XML —
+ * lives here on the annotated methods.
  *
  * Each function gets the Android [android.content.Context] it needs from
  * [AppFunctionContext.context] rather than the service, so the adapters stay side-effect free.
@@ -31,8 +31,8 @@ abstract class BaseRootAppFunctionService : AppFunctionService() {
 
     /**
      * Run a fresh root check on this device and return its current root status. Re-probes the
-     * device on every call. To read the previous check and the time it ran without re-probing,
-     * use getLastRootCheck.
+     * device on every call. To read the previous check and the time it ran without re-probing, use
+     * getLastRootCheck.
      *
      * @param appFunctionContext The execution context.
      * @return The current root status of the device.
@@ -42,10 +42,10 @@ abstract class BaseRootAppFunctionService : AppFunctionService() {
         functions.checkRootStatus(appFunctionContext)
 
     /**
-     * Request root access for this app, then return the resulting root status. If root is
-     * installed but not yet allowed for this app, the device's superuser dialog (Magisk, KernelSU,
-     * or APatch) appears and the user must approve it on the device, so this is not fully
-     * hands-free. To read the current state without prompting, use checkRootStatus.
+     * Request root access for this app, then return the resulting root status. If root is installed
+     * but not yet allowed for this app, the device's superuser dialog (Magisk, KernelSU, or APatch)
+     * appears and the user must approve it on the device, so this is not fully hands-free. To read
+     * the current state without prompting, use checkRootStatus.
      *
      * @param appFunctionContext The execution context.
      * @return The root status after the access request.

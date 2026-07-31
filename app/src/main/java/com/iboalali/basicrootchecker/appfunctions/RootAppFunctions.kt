@@ -6,8 +6,8 @@ import com.iboalali.basicrootchecker.data.RootCheckStatus
 import com.iboalali.basicrootchecker.data.RootChecker
 import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.data.UserPreferences
-import kotlinx.coroutines.flow.first
 import java.time.Instant
+import kotlinx.coroutines.flow.first
 
 /**
  * The implementation behind Basic Root Checker's AppFunctions — the app's root-check workflows
@@ -39,54 +39,60 @@ class RootAppFunctions {
     }
 }
 
-private fun RootResult.toRootStatus(checkedAt: Instant): RootStatus = when (this) {
-    is RootResult.Rooted -> RootStatus(
-        status = "ROOTED",
-        rooted = true,
-        accessGranted = true,
-        provider = provider.name,
+private fun RootResult.toRootStatus(checkedAt: Instant): RootStatus =
+    when (this) {
+        is RootResult.Rooted ->
+            RootStatus(
+                status = "ROOTED",
+                rooted = true,
+                accessGranted = true,
+                provider = provider.name,
+                manager = manager?.name,
+                version = version,
+                checkedAt = checkedAt,
+            )
+
+        is RootResult.RootedNotGranted ->
+            RootStatus(
+                status = "ROOTED_NOT_GRANTED",
+                rooted = true,
+                accessGranted = false,
+                provider = provider.name,
+                manager = manager?.name,
+                version = null,
+                checkedAt = checkedAt,
+            )
+
+        RootResult.NotRooted ->
+            RootStatus(
+                status = "NOT_ROOTED",
+                rooted = false,
+                accessGranted = false,
+                provider = null,
+                manager = null,
+                version = null,
+                checkedAt = checkedAt,
+            )
+
+        RootResult.Unknown ->
+            RootStatus(
+                status = "UNKNOWN",
+                rooted = false,
+                accessGranted = false,
+                provider = null,
+                manager = null,
+                version = null,
+                checkedAt = checkedAt,
+            )
+    }
+
+private fun LastRootCheck.toRootStatus(): RootStatus =
+    RootStatus(
+        status = status.name,
+        rooted = status == RootCheckStatus.ROOTED || status == RootCheckStatus.ROOTED_NOT_GRANTED,
+        accessGranted = status == RootCheckStatus.ROOTED,
+        provider = provider?.name,
         manager = manager?.name,
         version = version,
-        checkedAt = checkedAt,
+        checkedAt = Instant.ofEpochMilli(checkedAtEpochMs),
     )
-
-    is RootResult.RootedNotGranted -> RootStatus(
-        status = "ROOTED_NOT_GRANTED",
-        rooted = true,
-        accessGranted = false,
-        provider = provider.name,
-        manager = manager?.name,
-        version = null,
-        checkedAt = checkedAt,
-    )
-
-    RootResult.NotRooted -> RootStatus(
-        status = "NOT_ROOTED",
-        rooted = false,
-        accessGranted = false,
-        provider = null,
-        manager = null,
-        version = null,
-        checkedAt = checkedAt,
-    )
-
-    RootResult.Unknown -> RootStatus(
-        status = "UNKNOWN",
-        rooted = false,
-        accessGranted = false,
-        provider = null,
-        manager = null,
-        version = null,
-        checkedAt = checkedAt,
-    )
-}
-
-private fun LastRootCheck.toRootStatus(): RootStatus = RootStatus(
-    status = status.name,
-    rooted = status == RootCheckStatus.ROOTED || status == RootCheckStatus.ROOTED_NOT_GRANTED,
-    accessGranted = status == RootCheckStatus.ROOTED,
-    provider = provider?.name,
-    manager = manager?.name,
-    version = version,
-    checkedAt = Instant.ofEpochMilli(checkedAtEpochMs),
-)
