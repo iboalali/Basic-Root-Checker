@@ -115,6 +115,13 @@ Each of these has been paid for once. One line to recognise it; the detail is in
 - **An AppFunction can be completely dead while the build is green.** Compilation, unit tests, and
   Play's upload validator all pass over a broken surface. Verify with
   `adb shell cmd app_function execute-app-function`. → `appfunctions-wiring`
+- **The `AppFunctionContext` parameter is deliberately absent from all three functions — don't add it
+  back.** On the `@AppFunctionServiceEntryPoint` path it throws
+  `null cannot be cast to non-null type AppFunctionContext` on *every* call, because KSP omits it from
+  the inventory the dispatcher builds its parameter map from. v2.5 declared it and broke all three
+  functions; v2.4 had worked, so the app's own "verified with adb" note was true and stale at once. The
+  adapters pass `applicationContext` instead. `BaseRootAppFunctionService`'s KDoc explains the
+  mechanism — leave that comment in place. → `appfunctions-wiring`
 - **R8 vertically merges `BaseRootAppFunctionService` into the generated subclass**, leaving the
   generated XML pointing at a class absent from the release DEX — Play rejects the upload with *"The
   Android App Functions XML could not be parsed from the binary."* The keep rule in

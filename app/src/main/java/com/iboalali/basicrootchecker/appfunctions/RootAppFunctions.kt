@@ -1,6 +1,6 @@
 package com.iboalali.basicrootchecker.appfunctions
 
-import androidx.appfunctions.AppFunctionContext
+import android.content.Context
 import com.iboalali.basicrootchecker.data.LastRootCheck
 import com.iboalali.basicrootchecker.data.RootCheckStatus
 import com.iboalali.basicrootchecker.data.RootChecker
@@ -16,26 +16,30 @@ import kotlinx.coroutines.flow.first
  *
  * The `@AppFunction` annotations and the agent-facing KDoc live on [BaseRootAppFunctionService],
  * which delegates here; this class stays plain (no service lifecycle, no framework annotations) so
- * it can be exercised directly. Each function obtains the Android [android.content.Context] it
- * needs from [AppFunctionContext.context].
+ * it can be exercised directly.
+ *
+ * Each function takes the Android [Context] as a plain parameter — the service passes its own
+ * `applicationContext`. Deliberately **not** an `AppFunctionContext`: declaring one of those on the
+ * annotated entry point throws on every call, and taking a plain [Context] here also keeps this
+ * class callable from a test. See [BaseRootAppFunctionService] for the mechanism.
  */
 class RootAppFunctions {
 
     /** Runs a fresh passive root check and maps it to the agent-facing [RootStatus]. */
-    suspend fun checkRootStatus(appFunctionContext: AppFunctionContext): RootStatus {
-        val result = RootChecker.check(appFunctionContext.context, applyUiDelay = false)
+    suspend fun checkRootStatus(context: Context): RootStatus {
+        val result = RootChecker.check(context, applyUiDelay = false)
         return result.toRootStatus(Instant.now())
     }
 
     /** Forces the superuser prompt, then maps the resulting state to a [RootStatus]. */
-    suspend fun requestRootAccess(appFunctionContext: AppFunctionContext): RootStatus {
-        val result = RootChecker.requestRoot(appFunctionContext.context, applyUiDelay = false)
+    suspend fun requestRootAccess(context: Context): RootStatus {
+        val result = RootChecker.requestRoot(context, applyUiDelay = false)
         return result.toRootStatus(Instant.now())
     }
 
     /** Reads the last recorded check from [UserPreferences] without re-probing the device. */
-    suspend fun getLastRootCheck(appFunctionContext: AppFunctionContext): RootStatus? {
-        return UserPreferences(appFunctionContext.context).lastRootCheck.first()?.toRootStatus()
+    suspend fun getLastRootCheck(context: Context): RootStatus? {
+        return UserPreferences(context).lastRootCheck.first()?.toRootStatus()
     }
 }
 

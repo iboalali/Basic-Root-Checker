@@ -112,8 +112,12 @@ Three functions:
 | `requestRootAccess` | triggers the superuser dialog |
 | `getLastRootCheck` | returns the last cached check + `checkedAt` without re-probing |
 
-Each gets its `Context` from `AppFunctionContext.context` and maps the sealed `RootResult` to the flat
-`@AppFunctionSerializable` `RootStatus`.
+Each takes no parameters, receives the service's `applicationContext` from the adapter, and maps the
+sealed `RootResult` to the flat `@AppFunctionSerializable` `RootStatus`.
+
+**None of the three declares an `AppFunctionContext` parameter, and none may** — see the trap in
+[`../CLAUDE.md`](../CLAUDE.md). v2.5 briefly did, which broke all three at runtime while every local
+check stayed green.
 
 **Wiring.** The `@AppFunction`s and their agent-facing KDoc live on the abstract
 `BaseRootAppFunctionService : AppFunctionService()` (`RootAppFunctionService.kt`), annotated
