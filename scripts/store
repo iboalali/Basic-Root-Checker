@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+#
+# Run a shared Play Store script from the `iboalali-apps` kit against this repo.
+#
+# The scripts themselves are not in this repo — they live in the plugin, so a fix reaches every app at
+# once instead of being copied and diverging. This launcher only finds them; all per-app settings come
+# from "Play Store/store.json". See the `play-store-assets` skill.
+#
+#   ./scripts/store listing [--check]              regenerate Listing/all-locales.md, validate lengths
+#   ./scripts/store screenshots [VERSION] [--dry-run] [--commit]
+#   ./scripts/store iap-pricing [--check]          mirror live Play prices into the repo
+#   ./scripts/store iap-ppp [--check]              plan purchasing-power prices (no Play writes)
+#
+# Set AI_KIT_SCRIPTS to point at a checkout when iterating on the kit itself.
+set -euo pipefail
+
+find_scripts_dir() {
+  if [ -n "${AI_KIT_SCRIPTS:-}" ]; then
+    printf '%s\n' "$AI_KIT_SCRIPTS"
+    return
+  fi
+  # The plugin cache path carries the plugin version, so glob it and take the highest.
+  local candidate
+  candidate="$(ls -d "$HOME"/.claude/plugins/cache/ai-kit/iboalali-apps/*/scripts 2>/dev/null | sort -V | tail -1)"
+  if [ -n "$candidate" ]; then
+    printf '%s\n' "$candidate"
+    return
+  fi
+  # Fall back to a local checkout of the kit.
+  if [ -d "$HOME/Projects/ai-kit/iboalali-apps/scripts" ]; then
+    printf '%s\n' "$HOME/Projects/ai-kit/iboalali-apps/scripts"
+    return
+  fi
+  echo "error: cannot find the iboalali-apps scripts." >&2
+  echo "  Install the kit (/plugin install iboalali-apps) or set AI_KIT_SCRIPTS." >&2
+  exit 1
+}
+
+case "${1:-}" in
+  listing)      script=build-store-listing.py ;;
+  screenshots)  script=upload-store-screenshots.py ;;
+  iap-pricing)  script=fetch-iap-pricing.py ;;
+  iap-ppp)      script=plan-iap-ppp.py ;;
+  ""|-h|--help)
+    sed -n '3,15p' "$0" | sed 's/^# \{0,1\}//'
+    exit 0
+    ;;
+  *)
+    echo "error: unknown script '${1}'. Try: listing, screenshots, iap-pricing, iap-ppp" >&2
+    exit 1
+    ;;
+esac
+shift
+
+dir="$(find_scripts_dir)"
+[ -f "$dir/$script" ] || { echo "error: $dir/$script not found" >&2; exit 1; }
+
+# Run from the repo root, so the scripts' upward search for "Play Store/store.json" starts here.
+cd "$(dirname "$0")/.."
+exec python3 "$dir/$script" "$@"

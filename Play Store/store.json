@@ -1,0 +1,64 @@
+{
+  "_README": [
+    "Per-app settings for the shared Play Store scripts in the `iboalali-apps` kit.",
+    "",
+    "The scripts themselves live in the plugin, not in this repo, so this file is how they learn",
+    "anything app-specific: package name, locale map, folder layout, screenshot running order, IAP",
+    "product ids. They find it by walking up from the working directory, which is also how they",
+    "refuse to run outside an app repo.",
+    "",
+    "Adding a locale, a screenshot, or a product means editing this file — not a script. See the",
+    "`play-store-assets` skill for the full schema and the invocation commands."
+  ],
+
+  "package": "com.iboalali.basicrootchecker",
+
+  "locales": {
+    "default": "en-US",
+    "german": "de-DE",
+    "spanish": "es-ES",
+    "russian": "ru-RU",
+    "arabic": "ar"
+  },
+  "localeLabels": {
+    "en-US": "English (United States) — default listing",
+    "de-DE": "German",
+    "es-ES": "Spanish (Spain)",
+    "ru-RU": "Russian",
+    "ar": "Arabic"
+  },
+
+  "_listing": "This app names its field files with underscores and 'app_name' rather than the hyphenated 'name.txt' Billboard uses, so the 'files' map is not the default.",
+  "listing": {
+    "dir": "Play Store/Listing",
+    "files": {
+      "name": "app_name.txt",
+      "shortDescription": "short_description.txt",
+      "fullDescription": "full_description.txt"
+    }
+  },
+
+  "screenshots": {
+    "dir": "Play Store/Generated Screenshots",
+    "handMaintainedLocales": ["en-US"],
+    "devices": {
+      "Phone": "phoneScreenshots",
+      "Tablet7": "sevenInchScreenshots",
+      "Tablet10": "tenInchScreenshots"
+    },
+    "_order": "UNCONFIRMED — this app has never uploaded screenshots through the script, so nobody has decided the store's running order yet. Display order IS upload order and there is no way to reorder except re-uploading, so confirm this list before the first real run. LicenseShot is exported but deliberately left out: a legal credits list is weak store copy.",
+    "order": [
+      "MainRootedShot",
+      "MainNotCheckedShot",
+      "SettingsShot",
+      "AboutShot"
+    ]
+  },
+
+  "_iap": "Six tip products, 171 regions each, and NO pricing snapshot committed yet — run fetch-iap-pricing.py to create one. There are no per-product copy/icon folders, so productFolders is empty and prices.md will show every product as 'not sold by the app'; add entries as folders appear.",
+  "iap": {
+    "pricingDir": "Play Store/In-App Products/pricing",
+    "productIdPrefix": "tip_",
+    "productFolders": {}
+  }
+}
