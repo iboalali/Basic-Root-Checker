@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -6,6 +8,26 @@ plugins {
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.screenshot)
 }
+
+// Release signing credentials, so `./gradlew bundleGplayRelease` produces an upload-ready AAB instead
+// of requiring Studio's "Generate Signed App Bundle" wizard. Read from keystore.properties
+// (gitignored) with an environment-variable fallback for CI. Both absent is not an error: the release
+// build is left unsigned so a fresh clone still builds, and only the upload would fail.
+// See the `release-signing` skill.
+val signingProps = Properties().apply {
+    rootProject.file("keystore.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
+}
+
+fun signingValue(key: String, env: String): String? =
+    signingProps.getProperty(key)?.takeIf { it.isNotBlank() } ?: System.getenv(env)
+
+val signingStoreFile = signingValue("storeFile", "BASIC_ROOT_CHECKER_STORE_FILE")
+val signingStorePassword = signingValue("storePassword", "BASIC_ROOT_CHECKER_STORE_PASSWORD")
+val signingKeyAlias = signingValue("keyAlias", "BASIC_ROOT_CHECKER_KEY_ALIAS")
+val signingKeyPassword = signingValue("keyPassword", "BASIC_ROOT_CHECKER_KEY_PASSWORD")
+val canSignRelease = listOf(
+    signingStoreFile, signingStorePassword, signingKeyAlias, signingKeyPassword,
+).all { it != null } && file(signingStoreFile!!).exists()
 
 android {
     namespace = "com.iboalali.basicrootchecker"
@@ -21,8 +43,23 @@ android {
         androidResources.localeFilters += listOf("en", "ar", "de", "es", "ru")
         buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")
     }
+    // Set on the release build type, so it covers every flavor — bundleGplayRelease and
+    // bundleFossRelease both sign from this one config.
+    signingConfigs {
+        if (canSignRelease) {
+            create("release") {
+                storeFile = file(signingStoreFile!!)
+                storePassword = signingStorePassword
+                keyAlias = signingKeyAlias
+                keyPassword = signingKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
+            // null when no credentials were found — see canSignRelease above.
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
