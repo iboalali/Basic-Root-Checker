@@ -52,7 +52,7 @@ Shared conventions live in the kit rather than here: `definition-of-done`, `play
 `compose-a11y-checklist`, `haptics-conventions`.
 
 Cross-project state — what's in flight across all my Android repos, and open items that affect this one
-— lives in the kit's `TODO.md` (`~/StudioProjects/ai-kit/TODO.md`,
+— lives in the kit's `TODO.md` (`~/Projects/ai-kit/TODO.md`,
 [Personal-AI-KIT](https://github.com/iboalali/Personal-AI-KIT)). **It currently flags a suspected
 AppFunctions bug in this app** that needs on-device verification.
 
@@ -108,6 +108,32 @@ Coil 3 · TelemetryDeck.
 `gradle/libs.versions.toml` is **the source of truth for every version** — check there rather than
 trusting the numbers above.
 
+## Shared code — this repo does not build alone
+
+`settings.gradle.kts` runs a **Gradle composite build**: `includeBuild` on
+[`iboalali/Android-Shared`](https://github.com/iboalali/Android-Shared) (private), defaulting to the
+sibling path `../Android-Shared` and overridable with the `androidShared.path` Gradle property. The
+About screen's "Other apps" card comes from `com.iboalali.appcatalog:data` (feed loading, HTTP cache,
+bundled `assets/apps*.json`) and `:ui` (the shared row). Gradle substitutes those coordinates by
+`group:name`, so **the version in the coordinate is ignored** — don't bump it expecting an effect.
+
+**A fresh clone needs the sibling checkout**, and that repo needs its own gitignored `local.properties`
+with `sdk.dir`. Missing either fails at configuration time in a way that reads like a broken build
+file rather than an absent prerequisite.
+
+Two things this app keeps rather than takes:
+
+- **Its card chrome.** `ui/about/OtherAppsCard.kt` is the outlined card, its title and its dividers;
+  the rows inside it are the library's, with `contentPadding` as the only style override because the
+  card already pads horizontally.
+- **Its own four action strings.** App resources beat library resources of the same name, which is the
+  intended override path — the library ships the same keys in the same five locales as a fallback for
+  an app that hasn't got them.
+
+Much of what used to be here now lives there, and this app contributed most of it: the OkHttp
+`CatalogHttpSource`, its conditional-GET tests, and the seed/fetch race guard were all written in this
+repo before the move. Look for them in `Android-Shared`, not in `data/catalog/`, which is gone.
+
 ## Traps that cost real time
 
 Each of these has been paid for once. One line to recognise it; the detail is in the linked doc or skill.
@@ -138,16 +164,19 @@ Each of these has been paid for once. One line to recognise it; the detail is in
   "was it shown" callback. The version code — the release's single prompt — is spent only once the
   request actually reached Play. → [`docs/architecture.md`](docs/architecture.md)
 - **Layoutlib's `Context` is a stub and never advances `LaunchedEffect`.** `getPackageInfo` returns
-  null, `queryIntentActivities` is unimplemented; guard both (see `DeviceInfo.getAppVersionName`,
-  `OtherAppsCard.findInstalledPwaPackage`) and gate entrance animations on `LocalInspectionMode`. One
-  crash fails the whole screenshot run. → `agp9-screenshot-tests`
+  null, `queryIntentActivities` is unimplemented; guard both (see `DeviceInfo.getAppVersionName`, and
+  `findInstalledPwaPackage` — which now lives in `com.iboalali.appcatalog:ui`, not this repo) and gate
+  entrance animations on `LocalInspectionMode`. One crash fails the whole screenshot run. →
+  `agp9-screenshot-tests`
 - **WebAPK detection matches the shared shell *activity class*** (`org.chromium.webapk.shell_apk.`),
   not a package name — WebAPK packages differ per browser, and an unverified WebAPK isn't picked up by
   `ACTION_VIEW` routing. Needs the `<intent>` entries in the manifest's `<queries>`. →
   [`docs/architecture.md`](docs/architecture.md)
-- **Catalog ETag/Last-Modified validators are stored with the URL they came from** and only replayed
-  against that same URL — otherwise the English fallback can produce a `304` against a localized file
-  we don't hold. → [`docs/architecture.md`](docs/architecture.md)
+- **The catalog's traps moved out of this repo with its code.** The per-URL validator rule (replay an
+  `ETag`/`Last-Modified` only against the URL it came from, or the English fallback can produce a `304`
+  against a localized file we don't hold) is now OkHttp's `Cache` enforcing it inside the library, not
+  hand-written code here. Read them in `Android-Shared`'s `CLAUDE.md` before touching
+  `AppCatalogRepository`. → [`iboalali/Android-Shared`](https://github.com/iboalali/Android-Shared)
 - **The committed screenshot references intentionally show "(Debug)".** The store export is a separate
   script that neutralizes the debug name, renders, copies out, then restores both the strings and the
   regression baseline. → `play-store-assets`

@@ -48,9 +48,11 @@ Navigation and the large-screen detail overlay have their own doc:
   `ReviewController.isAvailable` (Google Play builds); it opens the Play listing directly, separate
   from the automatic in-app review card.
 
-  `AboutViewModel` is **read-only** — it observes `AppCatalogRepository.apps`, projects each entry to
-  an `OtherAppUi`, and filters this app out of its own list (matching on the release `applicationId`,
-  so the `.debug` suffix is stripped first). The catalog fetch is owned by `MainActivity`.
+  `AboutViewModel` is **read-only** — it observes `AppCatalogRepository.otherApps` and projects each
+  entry to the shared `@Immutable OtherApp`. Filtering this app out of its own list is no longer done
+  here: it moved into the repository, which derives the running package itself (matching on the release
+  `applicationId`, so the `.debug` suffix is stripped first). The catalog fetch is owned by
+  `MainActivity`.
 
   The screen splits into `AboutScreen` (wires the VM) and an `internal AboutScreenContent` (stateless,
   so the screenshot test can render it — the `screenshotTest` source set can only see
@@ -59,9 +61,15 @@ Navigation and the large-screen detail overlay have their own doc:
 
 ### Other apps card (`ui/about/OtherAppsCard.kt`)
 
-One row per catalog entry: icon (remote via Coil, with a bundled local fallback for the apps we ship
-art for), name, localized description, highlights bullets (inline Markdown via
-`util/InlineMarkdown.kt` — `**bold**` / `*italic*` only, no Markdown dependency), and the actions.
+The **card** is this app's; the **rows in it** are `com.iboalali.appcatalog:ui`'s `OtherAppRow`. What
+stays here is the outlined card, its title and its dividers, plus the three seams the library
+deliberately doesn't own — the haptic tick and `Analytics.trackOtherAppClicked` (both through one
+`onAction` callback, which fires before the intent) and this app's bundled icons (through
+`fallbackIcon`). The only visual override is `contentPadding`, because the card already pads
+horizontally. `util/InlineMarkdown.kt` moved to the library with the rows.
+
+Each row: icon (remote via Coil, with the local fallback above), name, localized description,
+highlights bullets (inline Markdown — `**bold**` / `*italic*` only, no Markdown dependency), actions.
 
 - An installable app shows **Open** when a launch intent resolves, else **Install** (Play listing).
 - Any entry with a website also gets **Website**.
@@ -70,8 +78,14 @@ art for), name, localized description, highlights bullets (inline Markdown via
 
 The PWA case is detected by matching the shared `org.chromium.webapk.shell_apk.` shell *activity
 class* rather than a package name, because WebAPK packages differ per browser and an *unverified*
-WebAPK isn't picked up by `ACTION_VIEW` link routing. Both lookups need the `<intent>` entries in the
-manifest's `<queries>`.
+WebAPK isn't picked up by `ACTION_VIEW` link routing. Both lookups need the `<intent>` entries in a
+`<queries>` block — which now also ship in the library's own manifest and merge in, so a consumer
+can't forget them; this app's are a harmless duplicate.
+
+`localIconFor`'s `else` branch names this app's `ic_baseline_android_24` rather than returning null.
+Returning null would hand the row the library's generic icon, which is a *different drawable* — the
+Material Symbols one Billboard uses. Leaving it null silently changed the art here, and the screenshot
+test is what caught it.
 
 The card hides itself when the list is empty.
 
@@ -214,32 +228,27 @@ card"** overflow item calling `demoSupportPrompt()`, which bypasses the gate (mi
 
 ## Data
 
-### App catalog (`data/catalog/`)
+### App catalog — moved out of this repo
 
-Source of truth for the About screen's "Other apps" list. `AppCatalogRepository` (app-scoped singleton
-on `BasicRootCheckerApplication`) exposes a `StateFlow<List<CatalogApp>>` filled from the best
-available source, in order:
+`data/catalog/` is **gone**. The About screen's "Other apps" list is now loaded by
+`com.iboalali.appcatalog:data` in the shared
+[`Android-Shared`](https://github.com/iboalali/Android-Shared) build, consumed as a Gradle composite
+build (see CLAUDE.md → "Shared code"). The five bundled `assets/apps*.json` snapshots went with it and
+merge back in from the library, ending a hand-sync across three repos.
 
-1. the latest successful download,
-2. the cached previous download (offline),
-3. the per-locale snapshot bundled at `assets/apps.<locale>.json`, with English `apps.json` as the last
-   resort (first run, offline).
+Most of that module started here. The OkHttp `CatalogHttpSource` with a real HTTP `Cache`, its seven
+MockWebServer tests, and the `Mutex` + `networkAppliedKey` guard that stops a cache seed publishing
+over a fresher network result were all written in this repo; the merged implementation is this app's,
+plus the two cleanups and the `@JsonNames("whatsNew")` alias the other apps held. **Read that repo's
+`CLAUDE.md` before changing catalog behaviour** — the feed schema is a cross-repo contract now, and the
+per-URL validator rule that keeps the English fallback from producing a `304` against a localized file
+is enforced there by OkHttp's cache rather than by code here.
 
-**Localization.** The feed publishes one file per locale (`apps.json` English default, plus `de` / `ar`
-/ `es` / `ru`). We request the device language and, per the feed contract, fall back to English on a
-non-2xx (e.g. a `404` for an untranslated locale). Each locale caches separately
-(`apps_catalog_<key>.json`), so a language switch shows that language's list immediately.
-
-**`refresh()` is a conditional GET.** It replays the stored `ETag` / `Last-Modified` as
-`If-None-Match` / `If-Modified-Since`, so an unchanged catalog costs a `304` with no body. Validators
-are stored **with the URL they came from** and only replayed against that same URL, so the English
-fallback can never produce a `304` against a localized file we don't hold.
-
-Any failure (offline, parse error, empty list) leaves the current list untouched and reports the
-outcome to analytics. `MainActivity` calls `refresh()` once at launch; the About screen only ever
-observes. Parsing is lenient (`ignoreUnknownKeys`, every field but the list optional,
-`@JsonNames("whatsNew")` alias on `highlights`) so old caches and rolled-out feed changes both still
-bind.
+What remains on this side: `BasicRootCheckerApplication` owns the repository as a lazy app-scoped
+singleton and supplies the library's `CatalogAnalytics`/`CatalogLogger` seams (the library is
+deliberately Hilt-free, so scoping is each app's job); `MainActivity` calls `refresh()` once at launch;
+the About screen only ever observes. Self-filtering — excluding this app from its own list — moved down
+into the repository, which derives the running package itself.
 
 ### UserPreferences (`data/`)
 
