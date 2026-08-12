@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - The in-app update download bar now fills smoothly as the download progresses, instead of jumping between values.
+- The **Highlights** label on the About screen's Other Apps list kept its shimmer animation but no longer redraws the whole label sixty times a second while the screen is open, so it costs less battery.
 
 ## [2.4] - 2026-06-19
 

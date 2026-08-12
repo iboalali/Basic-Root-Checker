@@ -152,7 +152,10 @@ dependencies {
 
     // Shared "Other apps" catalog from the Android-Shared repo, resolved by the composite build wired
     // up in settings.gradle.kts. The version is ignored under dependency substitution.
+    // `:ui` already exposes `:data` as an `api` dependency; both are declared because this app uses
+    // both directly — the Application owns the repository, and OtherAppsCard draws the shared row.
     implementation("com.iboalali.appcatalog:data:1.0.0")
+    implementation("com.iboalali.appcatalog:ui:1.0.0")
 
     // Material (for DynamicColors)
     implementation(libs.google.material)

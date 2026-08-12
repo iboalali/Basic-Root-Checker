@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.iboalali.appcatalog.ui.OtherApp
 import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
@@ -73,7 +74,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutScreenContent(
-    otherApps: ImmutableList<OtherAppUi>,
+    otherApps: ImmutableList<OtherApp>,
     onNavigateBack: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -87,7 +88,9 @@ internal fun AboutScreenContent(
     // True on Google Play builds (false on FOSS, where there's no Play Store to rate on). Safe cast
     // so Compose previews — whose context isn't the app's Application — fall back to hidden.
     val rateAvailable = remember {
-        (context.applicationContext as? BasicRootCheckerApplication)?.reviewController?.isAvailable == true
+        (context.applicationContext as? BasicRootCheckerApplication)
+            ?.reviewController
+            ?.isAvailable == true
     }
 
     Scaffold(
@@ -101,14 +104,17 @@ internal fun AboutScreenContent(
                     val navIcon = LocalDetailNavIcon.current
                     IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
-                            painter = painterResource(
-                                if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
-                                else R.drawable.arrow_back_24px,
-                            ),
-                            contentDescription = stringResource(
-                                if (navIcon == DetailNavIcon.CLOSE) R.string.content_description_close
-                                else R.string.content_description_navigate_up,
-                            ),
+                            painter =
+                                painterResource(
+                                    if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
+                                    else R.drawable.arrow_back_24px
+                                ),
+                            contentDescription =
+                                stringResource(
+                                    if (navIcon == DetailNavIcon.CLOSE)
+                                        R.string.content_description_close
+                                    else R.string.content_description_navigate_up
+                                ),
                         )
                     }
                 },
@@ -117,19 +123,20 @@ internal fun AboutScreenContent(
         },
     ) { innerPadding ->
         val layoutDirection = LocalLayoutDirection.current
-        val contentPadding = PaddingValues(
-            top = innerPadding.calculateTopPadding(),
-            start = innerPadding.calculateLeftPadding(layoutDirection),
-            end = innerPadding.calculateRightPadding(layoutDirection),
-        )
+        val contentPadding =
+            PaddingValues(
+                top = innerPadding.calculateTopPadding(),
+                start = innerPadding.calculateLeftPadding(layoutDirection),
+                end = innerPadding.calculateRightPadding(layoutDirection),
+            )
         val bottomPadding = innerPadding.calculateBottomPadding()
         Column(
-            modifier = Modifier
-                .testTag("about_list")
-                .fillMaxSize()
-                .padding(contentPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier.testTag("about_list")
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(16.dp))
@@ -140,13 +147,12 @@ internal fun AboutScreenContent(
                 shape = RoundedCornerShape(32.dp),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 32.dp),
-                ) {
+                Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 32.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(R.drawable.ic_baseline_tag_24),
-                            contentDescription = stringResource(R.string.contentDescription_appIcon),
+                            contentDescription =
+                                stringResource(R.string.contentDescription_appIcon),
                             modifier = Modifier.size(56.dp),
                         )
                         Spacer(Modifier.width(12.dp))
@@ -173,9 +179,10 @@ internal fun AboutScreenContent(
 
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        ),
+                        colors =
+                            CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                            ),
                         shape = RoundedCornerShape(20.dp),
                     ) {
                         SocialLinkRow(
@@ -196,7 +203,9 @@ internal fun AboutScreenContent(
                             iconRes = R.drawable.bluesky,
                             label = stringResource(R.string.about_link_bluesky),
                             handle = "@iboalali.bsky.social",
-                            onClick = { openUri("bluesky", "https://bsky.app/profile/iboalali.bsky.social") },
+                            onClick = {
+                                openUri("bluesky", "https://bsky.app/profile/iboalali.bsky.social")
+                            },
                         )
                         SocialLinkDivider()
                         SocialLinkRow(
@@ -253,10 +262,10 @@ private fun SocialLinkRow(
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = rememberHapticClick(onClick))
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier =
+            Modifier.fillMaxWidth()
+                .clickable(onClick = rememberHapticClick(onClick))
+                .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -297,24 +306,30 @@ private fun SocialLinkDivider() {
 private fun AboutScreenPreview() {
     BasicRootCheckerTheme {
         AboutScreenContent(
-            otherApps = persistentListOf(
-                OtherAppUi(
-                    name = "Billboard",
-                    description = "Show large text on screen, as big as possible without cutting it off.",
-                    iconUrl = null,
-                    website = "https://iboalali.com/app/billboard/",
-                    packageName = "com.iboalali.billboard",
-                    highlights = persistentListOf("New **dark theme** and bigger text scaling"),
+            otherApps =
+                persistentListOf(
+                    OtherApp(
+                        name = "Billboard",
+                        description =
+                            "Show large text on screen, as big as possible without cutting it off.",
+                        iconUrl = null,
+                        website = "https://iboalali.com/app/billboard/",
+                        packageName = "com.iboalali.billboard",
+                        highlights = persistentListOf("New **dark theme** and bigger text scaling"),
+                    ),
+                    OtherApp(
+                        name = "Icon Recomposer",
+                        description =
+                            "Light vector icons with a movable 3D emboss, then export to PNG, SVG, or VectorDrawable.",
+                        iconUrl = null,
+                        website = "https://iboalali.com/Icon-Recomposer/",
+                        packageName = null,
+                        highlights =
+                            persistentListOf(
+                                "Your work is **saved automatically** and restored when you return"
+                            ),
+                    ),
                 ),
-                OtherAppUi(
-                    name = "Icon Recomposer",
-                    description = "Light vector icons with a movable 3D emboss, then export to PNG, SVG, or VectorDrawable.",
-                    iconUrl = null,
-                    website = "https://iboalali.com/Icon-Recomposer/",
-                    packageName = null,
-                    highlights = persistentListOf("Your work is **saved automatically** and restored when you return"),
-                ),
-            ),
             onNavigateBack = {},
         )
     }

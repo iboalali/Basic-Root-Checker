@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.android.tools.screenshot.PreviewTest
+import com.iboalali.appcatalog.ui.OtherApp
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.navigation.DetailCard
 import com.iboalali.basicrootchecker.ui.about.AboutScreenContent
-import com.iboalali.basicrootchecker.ui.about.OtherAppUi
 import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
 import com.iboalali.basicrootchecker.ui.main.MainUiState
@@ -34,10 +34,10 @@ import kotlinx.collections.immutable.persistentSetOf
  *   screen with both annotations so the same shot renders at phone and 7-inch sizes.
  * - **10-inch** ([PreviewPlayStoreTablet10], landscape 1280dp ≥ 840dp): the secondary screens
  *   render as a **dialog card over the dimmed main screen** (`*DialogShot`) via the same
- *   [DetailCard] the custom `DetailOverlayScene` uses at expanded width — at its resting open state,
- *   since the overlay's container transform is motion the renderer can't advance. The main screen
- *   stays single-pane at every width, so its shots ([MainRootedShot] / [MainNotCheckedShot]) use
- *   all three matrices.
+ *   [DetailCard] the custom `DetailOverlayScene` uses at expanded width — at its resting open
+ *   state, since the overlay's container transform is motion the renderer can't advance. The main
+ *   screen stays single-pane at every width, so its shots ([MainRootedShot] / [MainNotCheckedShot])
+ *   use all three matrices.
  *
  * Generate / update with `./gradlew :app:updateGplayDebugScreenshotTest`; references land under
  * `app/src/screenshotTestGplayDebug/reference/.../ScreenshotTestsKt/` as
@@ -123,7 +123,7 @@ private fun About() {
     AboutScreenContent(
         otherApps =
             persistentListOf(
-                OtherAppUi(
+                OtherApp(
                     name = "Billboard",
                     description =
                         "Show large text on screen, as big as possible without cutting it off.",
@@ -132,7 +132,7 @@ private fun About() {
                     packageName = "com.iboalali.billboard",
                     highlights = persistentListOf("New **dark theme** and bigger text scaling"),
                 ),
-                OtherAppUi(
+                OtherApp(
                     name = "Icon Recomposer",
                     description =
                         "Light vector icons with a movable 3D emboss, then export to PNG, SVG, or VectorDrawable.",
