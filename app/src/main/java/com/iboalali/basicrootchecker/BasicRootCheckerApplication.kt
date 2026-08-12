@@ -7,7 +7,6 @@ import com.iboalali.appcatalog.data.CatalogAnalytics
 import com.iboalali.appcatalog.data.CatalogLogLevel
 import com.iboalali.appcatalog.data.CatalogLogger
 import com.iboalali.basicrootchecker.analytics.Analytics
-import com.iboalali.basicrootchecker.analytics.catalogResultToAnalyticsToken
 import com.iboalali.basicrootchecker.billing.BillingController
 import com.iboalali.basicrootchecker.billing.createBillingController
 import com.iboalali.basicrootchecker.data.UserPreferences
@@ -50,7 +49,7 @@ class BasicRootCheckerApplication : Application() {
             context = this,
             analytics =
                 CatalogAnalytics { result, error ->
-                    Analytics.trackAppCatalogRefresh(catalogResultToAnalyticsToken(result), error)
+                    Analytics.trackAppCatalogRefresh(result, error)
                 },
             logger =
                 CatalogLogger { level, throwable, message ->

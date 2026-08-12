@@ -1,7 +1,6 @@
 package com.iboalali.basicrootchecker.analytics
 
 import android.content.Context
-import com.iboalali.appcatalog.data.CatalogRefreshResult
 import com.telemetrydeck.sdk.TelemetryDeck
 import com.telemetrydeck.sdk.providers.FileUserIdentityProvider
 import java.util.UUID
@@ -16,29 +15,9 @@ const val OTHER_APP_ACTION_LAUNCH = "launch" // launched the installed app (or i
 const val OTHER_APP_ACTION_WEBSITE = "website" // opened its website (web-only app)
 
 // Outcome of the background "Other apps" catalog fetch.
-const val CATALOG_REFRESH_UPDATED = "updated" // 200: a new catalog was fetched and applied
-const val CATALOG_REFRESH_NOT_MODIFIED =
-    "not_modified" // 304: unchanged since last fetch, nothing downloaded
-const val CATALOG_REFRESH_FAILURE = "failure"
-
-/**
- * Maps the shared catalog module's refresh tokens onto **this app's** own ones.
- *
- * Deliberately not a pass-through: `com.iboalali.appcatalog:data` emits `notModified` (Billboard's
- * spelling) while this app has always reported `not_modified`. Letting the library's value through
- * would silently rewrite the token every historical `appCatalogRefresh` signal and query here uses.
- * `updated` and `failure` already match on both sides.
- *
- * Unknown input is passed through unchanged rather than dropped, so a token added to the library
- * later still reaches telemetry instead of vanishing.
- */
-internal fun catalogResultToAnalyticsToken(result: String): String =
-    when (result) {
-        CatalogRefreshResult.UPDATED -> CATALOG_REFRESH_UPDATED
-        CatalogRefreshResult.NOT_MODIFIED -> CATALOG_REFRESH_NOT_MODIFIED
-        CatalogRefreshResult.FAILURE -> CATALOG_REFRESH_FAILURE
-        else -> result
-    }
+// appCatalogRefresh "result" values are owned by CatalogRefreshResult in the shared catalog
+// module (com.iboalali.appcatalog:data) and emitted verbatim: "updated", "not_modified",
+// "failure". They are a cross-repo contract — see that class and CatalogRefreshResultTest.
 
 object Analytics {
 
@@ -151,10 +130,10 @@ object Analytics {
     }
 
     /**
-     * Outcome of the background "Other apps" catalog fetch run at launch. [result] is
-     * [CATALOG_REFRESH_UPDATED], [CATALOG_REFRESH_NOT_MODIFIED], or [CATALOG_REFRESH_FAILURE]; on
-     * failure [error] is the exception's simple name (e.g. connectivity vs. parse), so offline
-     * launches can be told from real errors.
+     * Outcome of the background "Other apps" catalog fetch run at launch. [result] is `"updated"`,
+     * `"not_modified"`, or `"failure"` (owned by `CatalogRefreshResult` in the shared catalog
+     * module and emitted verbatim); on failure [error] is the exception's simple name (e.g.
+     * connectivity vs. parse), so offline launches can be told from real errors.
      */
     fun trackAppCatalogRefresh(result: String, error: String? = null) = track {
         val params = buildMap {
