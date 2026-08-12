@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.haptics.compose.rememberHapticClick
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -66,9 +66,7 @@ private fun TipJarTiers(
 ) {
     if (products.isEmpty()) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             CircularProgressIndicator(modifier = Modifier.size(24.dp))
@@ -84,14 +82,14 @@ private fun TipJarTiers(
                 Card(
                     onClick = rememberHapticClick { onSelect(product.tier) },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    ),
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        ),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 16.dp),
+                        modifier =
+                            Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
@@ -112,10 +110,10 @@ private fun TipJarTiers(
 }
 
 /**
- * Mimics the [AlertDialog] surface so the tip-jar layout renders in the IDE preview.
- * A real [AlertDialog] draws inside a [androidx.compose.ui.window.Dialog] window, which the
- * Compose preview renderer shows as blank — so the preview reuses [TipJarTiers] inside a
- * plain dialog-shaped [Surface] instead.
+ * Mimics the [AlertDialog] surface so the tip-jar layout renders in the IDE preview. A real
+ * [AlertDialog] draws inside a [androidx.compose.ui.window.Dialog] window, which the Compose
+ * preview renderer shows as blank — so the preview reuses [TipJarTiers] inside a plain
+ * dialog-shaped [Surface] instead.
  */
 @Composable
 private fun TipJarDialogPreviewSurface(products: ImmutableList<TipProduct>) {
@@ -145,11 +143,12 @@ private fun TipJarDialogPreviewSurface(products: ImmutableList<TipProduct>) {
 private fun TipJarDialogPreview() {
     BasicRootCheckerTheme {
         TipJarDialogPreviewSurface(
-            products = persistentListOf(
-                TipProduct(TipTier.SMALL, "$1.99"),
-                TipProduct(TipTier.MEDIUM, "$4.99"),
-                TipProduct(TipTier.LARGE, "$9.99"),
-            ),
+            products =
+                persistentListOf(
+                    TipProduct(TipTier.SMALL, "$1.99"),
+                    TipProduct(TipTier.MEDIUM, "$4.99"),
+                    TipProduct(TipTier.LARGE, "$9.99"),
+                )
         )
     }
 }

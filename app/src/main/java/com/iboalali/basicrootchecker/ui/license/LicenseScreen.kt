@@ -36,8 +36,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.navigation.DetailNavIcon
 import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.haptics.compose.rememberHapticClick
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,14 +57,17 @@ fun LicenseScreen(onNavigateBack: () -> Unit) {
                     val navIcon = LocalDetailNavIcon.current
                     IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
-                            painter = painterResource(
-                                if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
-                                else R.drawable.arrow_back_24px,
-                            ),
-                            contentDescription = stringResource(
-                                if (navIcon == DetailNavIcon.CLOSE) R.string.content_description_close
-                                else R.string.content_description_navigate_up,
-                            ),
+                            painter =
+                                painterResource(
+                                    if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
+                                    else R.drawable.arrow_back_24px
+                                ),
+                            contentDescription =
+                                stringResource(
+                                    if (navIcon == DetailNavIcon.CLOSE)
+                                        R.string.content_description_close
+                                    else R.string.content_description_navigate_up
+                                ),
                         )
                     }
                 },
@@ -73,26 +76,24 @@ fun LicenseScreen(onNavigateBack: () -> Unit) {
         },
     ) { innerPadding ->
         val layoutDirection = LocalLayoutDirection.current
-        val contentPadding = PaddingValues(
-            top = innerPadding.calculateTopPadding(),
-            start = innerPadding.calculateLeftPadding(layoutDirection),
-            end = innerPadding.calculateRightPadding(layoutDirection),
-        )
+        val contentPadding =
+            PaddingValues(
+                top = innerPadding.calculateTopPadding(),
+                start = innerPadding.calculateLeftPadding(layoutDirection),
+                end = innerPadding.calculateRightPadding(layoutDirection),
+            )
         val bottomPadding = innerPadding.calculateBottomPadding()
 
         Column(
-            modifier = Modifier
-                .testTag("license_list")
-                .fillMaxSize()
-                .padding(contentPadding)
-                .verticalScroll(rememberScrollState()),
+            modifier =
+                Modifier.testTag("license_list")
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth().padding(horizontal = 16.dp)
             ) {
                 Spacer(Modifier.height(5.dp))
 
@@ -125,9 +126,7 @@ fun LicenseScreen(onNavigateBack: () -> Unit) {
                             gravity = android.view.Gravity.CENTER
                         }
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 )
 
                 Spacer(Modifier.height(20.dp))

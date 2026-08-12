@@ -54,11 +54,11 @@ import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.navigation.DetailNavIcon
 import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import com.iboalali.basicrootchecker.util.openPlayStoreListing
+import com.iboalali.haptics.compose.rememberHapticClick
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

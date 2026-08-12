@@ -163,6 +163,13 @@ dependencies {
     // itself, rather than relying on this module's `api` dependency to supply it.
     implementation("com.iboalali.telemetry:core:1.0.0")
 
+    // Shared haptics — the engine this app wrote, now shared. `RootHaptics` keeps what is genuinely
+    // this app's: the checking ramp and the three outcome buzzes, plus the capability signal. Both
+    // modules are declared because `RootHaptics` names `:core` types (`Haptics`, `HapticWaveform`)
+    // directly, not only through `:compose`.
+    implementation("com.iboalali.haptics:core:1.0.0")
+    implementation("com.iboalali.haptics:compose:1.0.0")
+
     // Material (for DynamicColors)
     implementation(libs.google.material)
 

@@ -25,9 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.R
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.haptics.compose.rememberHapticClick
 
 /**
  * Inline invitation to the tip jar, shown on the main screen after a root check once [SupportGate]
@@ -44,17 +44,15 @@ fun SupportCard(
     modifier: Modifier = Modifier,
 ) {
     OutlinedCard(
-        modifier = modifier
-            .widthIn(max = 600.dp)
-            .fillMaxWidth(),
+        modifier = modifier.widthIn(max = 600.dp).fillMaxWidth(),
         colors = CardDefaults.cardColors(),
         shape = RoundedCornerShape(32.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, top = 16.dp, end = 8.dp, bottom = 24.dp),
+            modifier =
+                Modifier.fillMaxWidth()
+                    .padding(start = 24.dp, top = 16.dp, end = 8.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(verticalAlignment = Alignment.Top) {
@@ -63,15 +61,11 @@ fun SupportCard(
                     // Decorative: the title beside it already names the card.
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .size(24.dp),
+                    modifier = Modifier.padding(top = 12.dp).size(24.dp),
                 )
                 Spacer(Modifier.width(16.dp))
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(top = 12.dp),
+                    modifier = Modifier.weight(1f).padding(top = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
@@ -93,9 +87,7 @@ fun SupportCard(
                 }
             }
             FilledTonalButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp),
+                modifier = Modifier.fillMaxWidth().padding(end = 16.dp),
                 onClick = rememberHapticClick(onSupportClick),
             ) {
                 Text(stringResource(R.string.support_card_action))

@@ -70,9 +70,9 @@ import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import com.iboalali.basicrootchecker.R
-import com.iboalali.basicrootchecker.ui.LocalAppHaptics
-import com.iboalali.basicrootchecker.ui.LocalHapticsEnabled
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
+import com.iboalali.haptics.compose.LocalAppHaptics
+import com.iboalali.haptics.compose.LocalHapticsEnabled
+import com.iboalali.haptics.compose.rememberHapticClick
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.exp
 import kotlin.math.roundToInt

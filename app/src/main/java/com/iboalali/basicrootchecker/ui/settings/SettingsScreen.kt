@@ -2,7 +2,6 @@ package com.iboalali.basicrootchecker.ui.settings
 
 import android.content.Intent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -64,12 +63,12 @@ import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.navigation.DetailNavIcon
 import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
-import com.iboalali.basicrootchecker.ui.rememberHapticToggle
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.haptics.compose.rememberHapticClick
+import com.iboalali.haptics.compose.rememberHapticToggle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
@@ -87,15 +86,16 @@ private val SettingsItemSpacing = 4.dp
 
 /**
  * Builds the corner shape for one item in the settings group so the items read as a single
- * connected list: rounded outer corners on the first/last item, near-square corners where
- * items meet.
+ * connected list: rounded outer corners on the first/last item, near-square corners where items
+ * meet.
  */
-internal fun settingsGroupShape(isFirst: Boolean, isLast: Boolean) = RoundedCornerShape(
-    topStart = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
-    topEnd = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
-    bottomStart = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
-    bottomEnd = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
-)
+internal fun settingsGroupShape(isFirst: Boolean, isLast: Boolean) =
+    RoundedCornerShape(
+        topStart = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+        topEnd = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+        bottomStart = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+        bottomEnd = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+    )
 
 @Composable
 fun SettingsScreen(
@@ -173,14 +173,17 @@ fun SettingsScreenContent(
                     val navIcon = LocalDetailNavIcon.current
                     IconButton(onClick = rememberHapticClick(onNavigateBack)) {
                         Icon(
-                            painter = painterResource(
-                                if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
-                                else R.drawable.arrow_back_24px,
-                            ),
-                            contentDescription = stringResource(
-                                if (navIcon == DetailNavIcon.CLOSE) R.string.content_description_close
-                                else R.string.content_description_navigate_up,
-                            ),
+                            painter =
+                                painterResource(
+                                    if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
+                                    else R.drawable.arrow_back_24px
+                                ),
+                            contentDescription =
+                                stringResource(
+                                    if (navIcon == DetailNavIcon.CLOSE)
+                                        R.string.content_description_close
+                                    else R.string.content_description_navigate_up
+                                ),
                         )
                     }
                 },
@@ -189,33 +192,34 @@ fun SettingsScreenContent(
         },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .testTag("settings_list")
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier.testTag("settings_list")
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(16.dp))
 
             if (tipJarAvailable) {
                 OutlinedCard(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxWidth(),
+                    modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                     colors = CardDefaults.cardColors(),
                     shape = settingsGroupShape(isFirst = true, isLast = false),
                     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = rememberHapticClick {
-                                onTipJarOpened()
-                                showTipDialog = true
-                            })
-                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .clickable(
+                                    onClick =
+                                        rememberHapticClick {
+                                            onTipJarOpened()
+                                            showTipDialog = true
+                                        }
+                                )
+                                .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
@@ -243,22 +247,20 @@ fun SettingsScreenContent(
             }
 
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = settingsGroupShape(isFirst = !tipJarAvailable, isLast = false),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .toggleable(
-                            value = telemetryEnabled,
-                            onValueChange = rememberHapticToggle(onTelemetryEnabledChange),
-                            role = Role.Switch,
-                        )
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .toggleable(
+                                value = telemetryEnabled,
+                                onValueChange = rememberHapticToggle(onTelemetryEnabledChange),
+                                role = Role.Switch,
+                            )
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -287,18 +289,18 @@ fun SettingsScreenContent(
                 Spacer(Modifier.height(SettingsItemSpacing))
 
                 OutlinedCard(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxWidth(),
+                    modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                     colors = CardDefaults.cardColors(),
                     shape = settingsGroupShape(isFirst = false, isLast = false),
                     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = rememberHapticClick { showResetIdentityDialog = true })
-                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .clickable(
+                                    onClick = rememberHapticClick { showResetIdentityDialog = true }
+                                )
+                                .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
@@ -320,22 +322,20 @@ fun SettingsScreenContent(
             Spacer(Modifier.height(SettingsItemSpacing))
 
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = settingsGroupShape(isFirst = false, isLast = false),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .toggleable(
-                            value = hapticsEnabled,
-                            onValueChange = rememberHapticToggle(onHapticsEnabledChange),
-                            role = Role.Switch,
-                        )
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .toggleable(
+                                value = hapticsEnabled,
+                                onValueChange = rememberHapticToggle(onHapticsEnabledChange),
+                                role = Role.Switch,
+                            )
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -363,18 +363,16 @@ fun SettingsScreenContent(
             Spacer(Modifier.height(SettingsItemSpacing))
 
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = settingsGroupShape(isFirst = false, isLast = false),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = rememberHapticClick { showThemeDialog = true })
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .clickable(onClick = rememberHapticClick { showThemeDialog = true })
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -402,18 +400,18 @@ fun SettingsScreenContent(
                 Spacer(Modifier.height(SettingsItemSpacing))
 
                 OutlinedCard(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxWidth(),
+                    modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                     colors = CardDefaults.cardColors(),
                     shape = settingsGroupShape(isFirst = false, isLast = false),
                     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = rememberHapticClick { showLanguageDialog = true })
-                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .clickable(
+                                    onClick = rememberHapticClick { showLanguageDialog = true }
+                                )
+                                .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
@@ -422,8 +420,9 @@ fun SettingsScreenContent(
                                 style = MaterialTheme.typography.bodyLarge,
                             )
                             Text(
-                                text = currentLanguageTag?.let { AppLanguage.displayName(it) }
-                                    ?: stringResource(R.string.language_system_default),
+                                text =
+                                    currentLanguageTag?.let { AppLanguage.displayName(it) }
+                                        ?: stringResource(R.string.language_system_default),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(top = 4.dp),
@@ -442,26 +441,28 @@ fun SettingsScreenContent(
             Spacer(Modifier.height(SettingsItemSpacing))
 
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = settingsGroupShape(isFirst = false, isLast = !BuildConfig.DEBUG),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = rememberHapticClick {
-                            Analytics.trackPrivacyPolicyClicked()
-                            context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy".toUri(),
-                                )
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .clickable(
+                                onClick =
+                                    rememberHapticClick {
+                                        Analytics.trackPrivacyPolicyClicked()
+                                        context.startActivity(
+                                            Intent(
+                                                Intent.ACTION_VIEW,
+                                                "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy"
+                                                    .toUri(),
+                                            )
+                                        )
+                                    }
                             )
-                        })
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -537,11 +538,14 @@ fun SettingsScreenContent(
             text = { Text(stringResource(R.string.settings_reset_identity_dialog_message)) },
             confirmButton = {
                 TextButton(
-                    onClick = rememberHapticClick {
-                        showResetIdentityDialog = false
-                        onResetIdentity()
-                        scope.launch { snackbarHostState.showSnackbar(resetIdentityDoneMessage) }
-                    },
+                    onClick =
+                        rememberHapticClick {
+                            showResetIdentityDialog = false
+                            onResetIdentity()
+                            scope.launch {
+                                snackbarHostState.showSnackbar(resetIdentityDoneMessage)
+                            }
+                        }
                 ) {
                     Text(stringResource(R.string.settings_reset_identity_confirm))
                 }
@@ -589,13 +593,14 @@ private fun LanguagePickerDialog(
 }
 
 @Composable
-private fun themeModeLabel(mode: ThemeMode): String = stringResource(
-    when (mode) {
-        ThemeMode.SYSTEM -> R.string.theme_follow_system
-        ThemeMode.LIGHT -> R.string.theme_light
-        ThemeMode.DARK -> R.string.theme_dark
-    }
-)
+private fun themeModeLabel(mode: ThemeMode): String =
+    stringResource(
+        when (mode) {
+            ThemeMode.SYSTEM -> R.string.theme_follow_system
+            ThemeMode.LIGHT -> R.string.theme_light
+            ThemeMode.DARK -> R.string.theme_dark
+        }
+    )
 
 @Composable
 private fun ThemePickerDialog(
@@ -632,10 +637,14 @@ private fun SettingOptionRow(
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .selectable(selected = selected, onClick = rememberHapticClick(onClick), role = Role.RadioButton)
-            .padding(vertical = 12.dp),
+        modifier =
+            Modifier.fillMaxWidth()
+                .selectable(
+                    selected = selected,
+                    onClick = rememberHapticClick(onClick),
+                    role = Role.RadioButton,
+                )
+                .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RadioButton(selected = selected, onClick = null)
@@ -663,11 +672,12 @@ private fun SettingsScreenPreview() {
             currentLanguageTag = "de",
             onLanguageSelected = {},
             tipJarAvailable = true,
-            tipProducts = persistentListOf(
-                TipProduct(TipTier.SMALL, "$1.99"),
-                TipProduct(TipTier.MEDIUM, "$4.99"),
-                TipProduct(TipTier.LARGE, "$9.99"),
-            ),
+            tipProducts =
+                persistentListOf(
+                    TipProduct(TipTier.SMALL, "$1.99"),
+                    TipProduct(TipTier.MEDIUM, "$4.99"),
+                    TipProduct(TipTier.LARGE, "$9.99"),
+                ),
             supporterTiers = persistentSetOf(TipTier.SMALL),
             onTipJarOpened = {},
             onTipSelected = {},

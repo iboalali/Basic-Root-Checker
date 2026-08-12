@@ -96,12 +96,12 @@ import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.navigation.LocalDetailAnchors
 import com.iboalali.basicrootchecker.navigation.screenRect
 import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
-import com.iboalali.basicrootchecker.ui.rememberHapticLongClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.haptics.compose.rememberHapticClick
+import com.iboalali.haptics.compose.rememberHapticLongClick
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch

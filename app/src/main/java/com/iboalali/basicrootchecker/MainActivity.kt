@@ -24,9 +24,9 @@ import com.google.android.material.color.DynamicColors
 import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.ui.AppRoot
-import com.iboalali.basicrootchecker.ui.LocalAppHaptics
-import com.iboalali.basicrootchecker.ui.LocalHapticsEnabled
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.haptics.compose.LocalAppHaptics
+import com.iboalali.haptics.compose.LocalHapticsEnabled
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -46,7 +46,8 @@ class MainActivity : ComponentActivity() {
             app.billingController.attach(this)
             app.reviewController.attach(this)
             // Kick off the "Other apps" catalog refresh at launch; it updates in the background and
-            // the About screen shows the cached/bundled list until (and unless) a fresher one arrives.
+            // the About screen shows the cached/bundled list until (and unless) a fresher one
+            // arrives.
             app.appCatalogRepository.refresh()
         }
 
@@ -58,15 +59,18 @@ class MainActivity : ComponentActivity() {
         val app = application as BasicRootCheckerApplication
         val billingController = app.billingController
         setContent {
-            val themeMode by userPreferences.themeMode
-                .collectAsStateWithLifecycle(initialValue = initialThemeMode)
-            val hapticsEnabled by userPreferences.hapticsEnabled
-                .collectAsStateWithLifecycle(initialValue = true)
-            val darkTheme = when (themeMode) {
-                ThemeMode.SYSTEM -> isSystemInDarkTheme()
-                ThemeMode.LIGHT -> false
-                ThemeMode.DARK -> true
-            }
+            val themeMode by
+                userPreferences.themeMode.collectAsStateWithLifecycle(
+                    initialValue = initialThemeMode
+                )
+            val hapticsEnabled by
+                userPreferences.hapticsEnabled.collectAsStateWithLifecycle(initialValue = true)
+            val darkTheme =
+                when (themeMode) {
+                    ThemeMode.SYSTEM -> isSystemInDarkTheme()
+                    ThemeMode.LIGHT -> false
+                    ThemeMode.DARK -> true
+                }
             // Keep status- and nav-bar icon contrast in sync with the resolved theme. Also works
             // around the splash screen theme not setting the light status bar on its own.
             LaunchedEffect(darkTheme) {
@@ -86,7 +90,7 @@ class MainActivity : ComponentActivity() {
                 }
                 CompositionLocalProvider(
                     LocalHapticsEnabled provides hapticsEnabled,
-                    LocalAppHaptics provides app.rootHaptics,
+                    LocalAppHaptics provides app.rootHaptics.haptics,
                 ) {
                     AppRoot(
                         tipCleared = billingController.tipCleared,
@@ -111,28 +115,34 @@ class MainActivity : ComponentActivity() {
 
             val timeDiff = startMillis - System.currentTimeMillis()
             Log.d("SplashScreen", "timeDiff is $timeDiff")
-            Log.d("SplashScreen", "animation duration is ${splashScreenProvider.iconAnimationDurationMillis}")
+            Log.d(
+                "SplashScreen",
+                "animation duration is ${splashScreenProvider.iconAnimationDurationMillis}",
+            )
 
-            val exitTimeDelay = if (timeDiff <= 0) {
-                splashScreenProvider.iconAnimationDurationMillis + timeDiff
-            } else {
-                splashScreenProvider.iconAnimationDurationMillis
-            }
+            val exitTimeDelay =
+                if (timeDiff <= 0) {
+                    splashScreenProvider.iconAnimationDurationMillis + timeDiff
+                } else {
+                    splashScreenProvider.iconAnimationDurationMillis
+                }
 
             Log.d("SplashScreen", "exitTimeDelay is $exitTimeDelay")
 
             ValueAnimator.ofFloat(1f, 0f).apply {
-                addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationCancel(animation: Animator) {
-                        Log.d("SplashScreen", "animation canceled")
-                        splashScreenProvider.remove()
-                    }
+                addListener(
+                    object : AnimatorListenerAdapter() {
+                        override fun onAnimationCancel(animation: Animator) {
+                            Log.d("SplashScreen", "animation canceled")
+                            splashScreenProvider.remove()
+                        }
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        Log.d("SplashScreen", "animation ended")
-                        splashScreenProvider.remove()
+                        override fun onAnimationEnd(animation: Animator) {
+                            Log.d("SplashScreen", "animation ended")
+                            splashScreenProvider.remove()
+                        }
                     }
-                })
+                )
                 startDelay = exitTimeDelay
                 addUpdateListener { animation ->
                     val animatedValue = animation.animatedValue as Float
