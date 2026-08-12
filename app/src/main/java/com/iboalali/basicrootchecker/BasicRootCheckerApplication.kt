@@ -15,8 +15,6 @@ import com.iboalali.basicrootchecker.review.createReviewController
 import com.iboalali.basicrootchecker.update.AppUpdateController
 import com.iboalali.basicrootchecker.update.createAppUpdateController
 import com.iboalali.basicrootchecker.util.RootHaptics
-import com.iboalali.basicrootchecker.util.TestEnvironment
-import com.telemetrydeck.sdk.TelemetryDeck
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -74,34 +72,24 @@ class BasicRootCheckerApplication : Application() {
             previous?.uncaughtException(thread, throwable)
         }
 
-        // Read the opt-out preference off the main thread so the (potentially slow) DataStore
-        // read never blocks cold start. TelemetryDeck.start() registers a lifecycle observer
-        // and must run on the main thread, so we hop back for just that call — it's posted to
-        // the main queue and runs after the first frame rather than blocking onCreate. Signals
-        // fired in the meantime are buffered by Analytics; setEnabled() then flushes them
-        // (enabled, after start()) or discards them (disabled).
+        // Read the opt-out preference off the main thread, so the (potentially slow) DataStore read
+        // never blocks cold start; then hop back to Main to apply it, because TelemetryDeck.start()
+        // registers a lifecycle observer. That hop is posted to the main queue, so it runs after
+        // the first frame rather than inside onCreate.
+        //
+        // Signals fired in the meantime are buffered. resolveStartupPreference() starts the SDK and
+        // then releases them, or discards them if the user opted out. Start-before-flush is the
+        // shared controller's guarantee now rather than this call site's — see
+        // com.iboalali.telemetry.TelemetryController, where a test covers it.
         applicationScope.launch {
             val enabled =
                 runCatching {
                         UserPreferences(this@BasicRootCheckerApplication).telemetryEnabled.first()
                     }
                     .getOrDefault(false)
-            if (enabled) {
-                withContext(Dispatchers.Main) {
-                    val builder =
-                        TelemetryDeck.Builder()
-                            .appID(BuildConfig.TELEMETRY_DECK_APP_ID)
-                            .showDebugLogs(BuildConfig.DEBUG)
-                            // Keep non-user runs out of production telemetry. See
-                            // [TestEnvironment.isFirebaseTestLab].
-                            .testMode(
-                                BuildConfig.DEBUG ||
-                                    TestEnvironment.isFirebaseTestLab(applicationContext)
-                            )
-                    TelemetryDeck.start(applicationContext, builder)
-                }
+            withContext(Dispatchers.Main) {
+                Analytics.resolveStartupPreference(applicationContext, enabled)
             }
-            Analytics.setEnabled(enabled)
         }
     }
 }

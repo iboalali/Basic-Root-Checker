@@ -1,9 +1,11 @@
 package com.iboalali.basicrootchecker.analytics
 
 import android.content.Context
+import android.util.Log
+import com.iboalali.basicrootchecker.BuildConfig
+import com.iboalali.telemetry.TelemetryConfig
+import com.iboalali.telemetry.TelemetryController
 import com.telemetrydeck.sdk.TelemetryDeck
-import com.telemetrydeck.sdk.providers.FileUserIdentityProvider
-import java.util.UUID
 
 const val ERROR_CATEGORY_THROWN_EXCEPTION = "thrown-exception"
 const val ERROR_CATEGORY_USER_INPUT = "user-input"
@@ -18,52 +20,63 @@ const val ERROR_CATEGORY_APP_STATE = "app-state"
 
 object Analytics {
 
-    private val gate = SignalGate()
+    /**
+     * The whole TelemetryDeck lifecycle — the startup buffer, when the SDK starts, and the
+     * start-before-flush ordering between them — lives in `com.iboalali.telemetry:core`. What stays
+     * here is this app's own signal vocabulary, below.
+     *
+     * The two things it needs from this app are the ones a library cannot derive: the `BuildConfig`
+     * app ID, and a logger (this app uses `android.util.Log`; the other two use Timber).
+     */
+    private val controller =
+        TelemetryController(
+            TelemetryConfig(
+                appId = BuildConfig.TELEMETRY_DECK_APP_ID,
+                debug = BuildConfig.DEBUG,
+                onLookupFailure = { throwable, message -> Log.w(TAG, message, throwable) },
+            )
+        )
+
+    private const val TAG = "Analytics"
 
     // Set once the device form factor has been reported, so config changes within a process
     // (rotation, fold/unfold, resize) don't emit the signal again — see [trackDeviceType].
     @Volatile private var deviceTypeReported = false
 
     /**
-     * Resolve the telemetry opt-out preference, read asynchronously at startup.
+     * Resolve the telemetry opt-out preference read asynchronously at startup: start the SDK if
+     * enabled and release the buffered signals, or discard them and stay silent.
      *
-     * - enabled: switch to live and flush, in order, any signals buffered while the preference was
-     *   still being read. MUST be called only after [TelemetryDeck.start] has run so the flushed
-     *   signals reach an initialized SDK.
-     * - disabled: drop everything buffered and stay silent.
-     *
-     * Also used by the Settings toggle at runtime, where the queue is already empty.
+     * **Call on the main thread** — `TelemetryDeck.start` registers a process lifecycle observer.
+     * The ordering that used to be this comment's job (start before flush, or the backlog is lost
+     * into an uninitialized SDK) is now the controller's, and is covered by a test there.
      */
-    fun setEnabled(enabled: Boolean) = gate.resolve(enabled)
+    fun resolveStartupPreference(context: Context, enabled: Boolean) =
+        controller.resolve(context, enabled)
+
+    /**
+     * The Settings opt-out toggle.
+     *
+     * Takes a [Context] because opting in has to be able to *start* the SDK: a session that
+     * launched opted-out never started it, and until this moved to the shared controller this app
+     * only reopened its signal buffer here — so signals silently no-op'd for the rest of the
+     * session and only resumed after a restart. Call on the main thread, as with
+     * [resolveStartupPreference].
+     */
+    fun setEnabled(context: Context, enabled: Boolean) = controller.setEnabled(context, enabled)
 
     /**
      * Discard the persisted anonymous user identifier so future signals can't be linked to those
      * sent before — a fresh random identity is generated on the next signal. Performs file I/O, so
      * call off the main thread.
-     *
-     * When the SDK is running, this resets its active identity provider and rotates the session so
-     * the break takes effect immediately. When it isn't (telemetry off this run, or just re-enabled
-     * and pending the next launch), the persisted identifier is cleared on disk directly so the
-     * next start picks up a new one instead of resurrecting the old identity.
      */
-    fun resetIdentity(context: Context) {
-        val instance = TelemetryDeck.getInstance()
-        if (instance != null) {
-            instance.identityProvider.resetIdentity()
-            instance.resetSession(UUID.randomUUID())
-        } else {
-            FileUserIdentityProvider().apply {
-                register(context.applicationContext, TelemetryDeck.Companion)
-                resetIdentity()
-            }
-        }
-    }
+    fun resetIdentity(context: Context) = controller.resetIdentity(context)
 
     /**
      * Run [action] now if telemetry is live, buffer it while the opt-out preference is still being
      * read at startup, or drop it once telemetry is known disabled.
      */
-    private fun track(action: () -> Unit) = gate.submit(action)
+    private fun track(action: () -> Unit) = controller.submit(action)
 
     fun trackError(
         id: String,

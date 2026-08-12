@@ -157,6 +157,12 @@ dependencies {
     implementation("com.iboalali.appcatalog:data:1.0.0")
     implementation("com.iboalali.appcatalog:ui:1.0.0")
 
+    // Shared TelemetryDeck lifecycle: the startup signal buffer, automated-test-traffic detection,
+    // and the start-before-flush ordering. This app's own signal vocabulary stays in analytics/.
+    // `telemetrydeck-sdk` below is still declared directly because Analytics calls TelemetryDeck
+    // itself, rather than relying on this module's `api` dependency to supply it.
+    implementation("com.iboalali.telemetry:core:1.0.0")
+
     // Material (for DynamicColors)
     implementation(libs.google.material)
 

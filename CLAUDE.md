@@ -121,6 +121,11 @@ bundled `assets/apps*.json`) and `:ui` (the shared row). Gradle substitutes thos
 with `sdk.dir`. Missing either fails at configuration time in a way that reads like a broken build
 file rather than an absent prerequisite.
 
+`com.iboalali.telemetry:core` comes from the same build and owns the **TelemetryDeck lifecycle**: the
+startup signal buffer, automated-test-traffic detection, the identity reset, and the start-before-flush
+ordering. `analytics/Analytics.kt` keeps only this app's signal vocabulary and delegates the rest.
+`analytics/SignalGate.kt` and `util/TestEnvironment.kt` are gone — don't reintroduce either.
+
 Two things this app keeps rather than takes:
 
 - **Its card chrome.** `ui/about/OtherAppsCard.kt` is the outlined card, its title and its dividers;

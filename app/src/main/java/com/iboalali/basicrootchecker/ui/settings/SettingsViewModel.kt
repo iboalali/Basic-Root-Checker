@@ -27,16 +27,20 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private val billing = (application as BasicRootCheckerApplication).billingController
 
-    val telemetryEnabled: StateFlow<Boolean> = prefs.telemetryEnabled.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = true,
-    )
+    val telemetryEnabled: StateFlow<Boolean> =
+        prefs.telemetryEnabled.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = true,
+        )
 
     fun setTelemetryEnabled(enabled: Boolean) {
+        // viewModelScope is main-dispatched, and setTelemetryEnabled resumes back on it, so the
+        // Analytics call lands on the main thread — which it must, since opting in can start the
+        // SDK and TelemetryDeck.start registers a process lifecycle observer.
         viewModelScope.launch {
             prefs.setTelemetryEnabled(enabled)
-            Analytics.setEnabled(enabled)
+            Analytics.setEnabled(getApplication(), enabled)
         }
     }
 
@@ -48,11 +52,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    val hapticsEnabled: StateFlow<Boolean> = prefs.hapticsEnabled.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = true,
-    )
+    val hapticsEnabled: StateFlow<Boolean> =
+        prefs.hapticsEnabled.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = true,
+        )
 
     fun setHapticsEnabled(enabled: Boolean) {
         viewModelScope.launch {
@@ -60,11 +65,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    val themeMode: StateFlow<ThemeMode> = prefs.themeMode.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = ThemeMode.SYSTEM,
-    )
+    val themeMode: StateFlow<ThemeMode> =
+        prefs.themeMode.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = ThemeMode.SYSTEM,
+        )
 
     fun setThemeMode(mode: ThemeMode) {
         viewModelScope.launch {

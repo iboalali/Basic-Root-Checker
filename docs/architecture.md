@@ -261,15 +261,26 @@ exposed as `lastRootCheck` / `recordRootCheck` and shared by the UI and AppFunct
 
 ### Analytics (`analytics/`)
 
-Thin `Analytics` object over the TelemetryDeck SDK; every `trackX` call routes through a `SignalGate`.
+Thin `Analytics` object over the TelemetryDeck SDK. **This app owns only the signal vocabulary** — the
+lifecycle around it (the startup buffer, when the SDK starts, and the ordering between them) moved to
+`com.iboalali.telemetry:core`, along with `SignalGate` and the old `util/TestEnvironment`. Every
+`trackX` call routes through `TelemetryController.submit`.
 
 TelemetryDeck is initialized **asynchronously** in `BasicRootCheckerApplication.onCreate` so cold start
-isn't blocked: the opt-out preference is read off the main thread, and `TelemetryDeck.start()` is posted
-*back* to the main thread (it registers a lifecycle observer, so it must run there). While the
-preference is still being read, `SignalGate` is `PENDING` and buffers signals in a bounded queue.
-`Analytics.setEnabled(true)` — called **after** `start()`, so flushed signals reach an initialized SDK
-— replays them; `setEnabled(false)` discards them. The Settings telemetry toggle reuses the same
-`setEnabled` path.
+isn't blocked: the opt-out preference is read off the main thread, then `Analytics.resolveStartupPreference`
+is posted *back* to the main thread (`TelemetryDeck.start()` registers a lifecycle observer, so it must
+run there). Signals fired while the preference is still being read are buffered in a bounded queue and
+released once it resolves — after the SDK starts, or discarded if the user opted out.
+
+**That ordering is no longer this repo's to get right.** Flushing before `start()` would deliver the
+backlog to an uninitialized SDK and lose it silently; it is now a property of the shared
+`TelemetryController` with a test covering it, rather than a rule spread across this file and the
+`Application`.
+
+The Settings toggle goes through `Analytics.setEnabled(context, enabled)`. It takes a `Context`
+because **opting in has to be able to start the SDK** — a session that launched opted-out never did.
+Before the move this app only reopened its signal buffer here, so opting in from Settings left
+telemetry silently dead until the next launch; the shared controller fixes that.
 
 `trackDeviceType` is **one-shot per process** (a `@Volatile` flag), so the rotations / folds / resizes
 it's read through can't inflate the count.
@@ -277,18 +288,25 @@ it's read through can't inflate the count.
 Signal taxonomy and query cookbook: [`telemetry-optimization.md`](telemetry-optimization.md). General
 TelemetryDeck practice and the TQL language reference are in the `telemetry-and-tql` skill.
 
-### TestEnvironment (`util/`)
+### Test-traffic detection — moved out of this repo
 
-Detects synthetic, non-user runs — **Firebase Test Lab** and the **Play Console pre-launch report**
-robot (which runs on Test Lab), both of which set the documented `firebase.test.lab` system setting to
-`"true"`. `BasicRootCheckerApplication` feeds this into TelemetryDeck's `testMode` (alongside
-`BuildConfig.DEBUG`), so that traffic stops inflating installs / sessions / root-checks.
+`util/TestEnvironment.kt` is **gone**. Detecting synthetic, non-user runs — **Firebase Test Lab** and
+the **Play Console pre-launch report** robot — now lives in `com.iboalali.telemetry:core` as
+`TestTraffic`, and the shared `TelemetryController` feeds it into TelemetryDeck's `testMode` alongside
+`BuildConfig.DEBUG`.
+
+**This app gained coverage in the move.** Its own version read only the documented `firebase.test.lab`
+system setting, which reads back null on much of the pre-launch pool — so that traffic was being
+counted as real users here. The shared detector adds emulator fingerprints, all three settings
+namespaces rather than just `System`, a spoofed-farm check (a Pixel hardware codename on a non-Google
+device), and `ActivityManager.isUserAMonkey()`.
 
 **Flagged as test-mode rather than dropped:** a test-mode signal is segregated out of the production
 view (including the premade dashboards) yet stays inspectable via the dashboard's Test Mode toggle, so
 a detection false-positive merely misfiles a real user's data (recoverable) instead of destroying it.
 It has to be decided client-side at signal time because TelemetryDeck has no global/app-level query
-filter. Probing **fails open** (any read error → `false` → treated as a real user).
+filter. Probing **fails open** (any read error → treated as a real user), and that is pinned by a test
+in the shared module.
 
 ### Haptics (`util/` + `ui/`)
 
@@ -371,8 +389,9 @@ Compose Material3 with dynamic colors (API 31+), falling back to custom light/da
 ## Tests
 
 Unit tests live in `app/src/test/` and cover the app's pure decision logic — `RootChecker.classify` /
-`parseMagiskVersionCode`, the analytics `SignalGate` startup buffering, and the two post-check prompt
-gates (`ReviewGate`, `SupportGate`). The hardware-dependent probes are **not** unit-tested; verify them
+`parseMagiskVersionCode`, and the two post-check prompt gates (`ReviewGate`, `SupportGate`). The
+analytics startup buffering used to be tested here too; those tests moved with `SignalGate` into
+`com.iboalali.telemetry:core`. The hardware-dependent probes are **not** unit-tested; verify them
 on a real rooted device.
 
 AppFunctions are verified on a connected device (API 36+):
