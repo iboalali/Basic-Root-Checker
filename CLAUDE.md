@@ -48,7 +48,7 @@ App-specific additions to that list:
 | Translation notes | [`docs/russian-translation-notes.md`](docs/russian-translation-notes.md), [`docs/spanish-translation-notes.md`](docs/spanish-translation-notes.md) |
 
 Shared conventions live in the kit rather than here: `definition-of-done`, `play-store-assets`,
-`telemetry-and-tql`, `agp9-screenshot-tests`, `baseline-profiles`, `appfunctions-wiring`,
+`telemetry-instrumentation`, `telemetry-and-tql`, `agp9-screenshot-tests`, `baseline-profiles`, `appfunctions-wiring`,
 `compose-a11y-checklist`, `haptics-conventions`.
 
 Cross-project state — what's in flight across all my Android repos, and open items that affect this one
