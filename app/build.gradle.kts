@@ -144,14 +144,15 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.serialization.core)
 
-    // Remote "Other apps" catalog: JSON parsing for the apps.json feed, OkHttp for the conditional
-    // GET (its Cache owns the ETag/Last-Modified revalidation — see CatalogHttpSource), and Coil for
-    // the remote app icons. Coil already pulls OkHttp in transitively; it's declared explicitly
-    // because the catalog uses it directly, rather than relying on another library's dependency.
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.okhttp)
+    // Coil for the remote app icons in the "Other apps" list. The catalog's own JSON parsing and its
+    // OkHttp conditional GET moved to com.iboalali.appcatalog:data below, which declares them itself —
+    // hence no direct kotlinx-serialization-json or okhttp here any more.
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // Shared "Other apps" catalog from the Android-Shared repo, resolved by the composite build wired
+    // up in settings.gradle.kts. The version is ignored under dependency substitution.
+    implementation("com.iboalali.appcatalog:data:1.0.0")
 
     // Material (for DynamicColors)
     implementation(libs.google.material)
@@ -176,7 +177,6 @@ dependencies {
     // Unit tests
     testImplementation(libs.junit)
     // Pins the catalog's conditional-GET contract against a local server (see CatalogHttpSourceTest)
-    testImplementation(libs.okhttp.mockwebserver)
 
     // Compose Preview Screenshot Testing — @PreviewTest marker + the tooling that renders previews
     screenshotTestImplementation(libs.screenshot.validation.api)

@@ -1,6 +1,7 @@
 package com.iboalali.basicrootchecker.analytics
 
 import android.content.Context
+import com.iboalali.appcatalog.data.CatalogRefreshResult
 import com.telemetrydeck.sdk.TelemetryDeck
 import com.telemetrydeck.sdk.providers.FileUserIdentityProvider
 import java.util.UUID
@@ -11,13 +12,33 @@ const val ERROR_CATEGORY_APP_STATE = "app-state"
 
 // How the user opened an entry in About → "Other apps".
 const val OTHER_APP_ACTION_PLAY_STORE = "play_store" // opened its Play Store listing
-const val OTHER_APP_ACTION_LAUNCH = "launch"         // launched the installed app (or its PWA)
-const val OTHER_APP_ACTION_WEBSITE = "website"       // opened its website (web-only app)
+const val OTHER_APP_ACTION_LAUNCH = "launch" // launched the installed app (or its PWA)
+const val OTHER_APP_ACTION_WEBSITE = "website" // opened its website (web-only app)
 
 // Outcome of the background "Other apps" catalog fetch.
-const val CATALOG_REFRESH_UPDATED = "updated"           // 200: a new catalog was fetched and applied
-const val CATALOG_REFRESH_NOT_MODIFIED = "not_modified" // 304: unchanged since last fetch, nothing downloaded
+const val CATALOG_REFRESH_UPDATED = "updated" // 200: a new catalog was fetched and applied
+const val CATALOG_REFRESH_NOT_MODIFIED =
+    "not_modified" // 304: unchanged since last fetch, nothing downloaded
 const val CATALOG_REFRESH_FAILURE = "failure"
+
+/**
+ * Maps the shared catalog module's refresh tokens onto **this app's** own ones.
+ *
+ * Deliberately not a pass-through: `com.iboalali.appcatalog:data` emits `notModified` (Billboard's
+ * spelling) while this app has always reported `not_modified`. Letting the library's value through
+ * would silently rewrite the token every historical `appCatalogRefresh` signal and query here uses.
+ * `updated` and `failure` already match on both sides.
+ *
+ * Unknown input is passed through unchanged rather than dropped, so a token added to the library
+ * later still reaches telemetry instead of vanishing.
+ */
+internal fun catalogResultToAnalyticsToken(result: String): String =
+    when (result) {
+        CatalogRefreshResult.UPDATED -> CATALOG_REFRESH_UPDATED
+        CatalogRefreshResult.NOT_MODIFIED -> CATALOG_REFRESH_NOT_MODIFIED
+        CatalogRefreshResult.FAILURE -> CATALOG_REFRESH_FAILURE
+        else -> result
+    }
 
 object Analytics {
 
@@ -25,15 +46,14 @@ object Analytics {
 
     // Set once the device form factor has been reported, so config changes within a process
     // (rotation, fold/unfold, resize) don't emit the signal again — see [trackDeviceType].
-    @Volatile
-    private var deviceTypeReported = false
+    @Volatile private var deviceTypeReported = false
 
     /**
      * Resolve the telemetry opt-out preference, read asynchronously at startup.
      *
-     * - enabled: switch to live and flush, in order, any signals buffered while
-     *   the preference was still being read. MUST be called only after
-     *   [TelemetryDeck.start] has run so the flushed signals reach an initialized SDK.
+     * - enabled: switch to live and flush, in order, any signals buffered while the preference was
+     *   still being read. MUST be called only after [TelemetryDeck.start] has run so the flushed
+     *   signals reach an initialized SDK.
      * - disabled: drop everything buffered and stay silent.
      *
      * Also used by the Settings toggle at runtime, where the queue is already empty.
@@ -47,8 +67,8 @@ object Analytics {
      *
      * When the SDK is running, this resets its active identity provider and rotates the session so
      * the break takes effect immediately. When it isn't (telemetry off this run, or just re-enabled
-     * and pending the next launch), the persisted identifier is cleared on disk directly so the next
-     * start picks up a new one instead of resurrecting the old identity.
+     * and pending the next launch), the persisted identifier is cleared on disk directly so the
+     * next start picks up a new one instead of resurrecting the old identity.
      */
     fun resetIdentity(context: Context) {
         val instance = TelemetryDeck.getInstance()
@@ -64,8 +84,8 @@ object Analytics {
     }
 
     /**
-     * Run [action] now if telemetry is live, buffer it while the opt-out preference
-     * is still being read at startup, or drop it once telemetry is known disabled.
+     * Run [action] now if telemetry is live, buffer it while the opt-out preference is still being
+     * read at startup, or drop it once telemetry is known disabled.
      */
     private fun track(action: () -> Unit) = gate.submit(action)
 
@@ -175,7 +195,10 @@ object Analytics {
         )
     }
 
-    /** The in-app review gate opened and the Play-managed flow was requested (it may not actually show). */
+    /**
+     * The in-app review gate opened and the Play-managed flow was requested (it may not actually
+     * show).
+     */
     fun trackReviewRequested() = track { TelemetryDeck.signal("reviewRequested") }
 
     /** The in-app review flow could not be launched (request/launch error from Play). */
@@ -198,13 +221,15 @@ object Analytics {
     }
 
     /**
-     * The main screen's support card actually appeared (the gate opened *and* nothing outranked it).
-     * Reported from the UI rather than the gate so it can't claim a card the screen never drew —
-     * pair it with [trackTipJarOpened] to read the card's conversion.
+     * The main screen's support card actually appeared (the gate opened *and* nothing outranked
+     * it). Reported from the UI rather than the gate so it can't claim a card the screen never drew
+     * — pair it with [trackTipJarOpened] to read the card's conversion.
      */
     fun trackSupportCardShown() = track { TelemetryDeck.signal("supportCardShown") }
 
-    /** The support card was dismissed. [dismissCount] is the running total, capped by `SupportGate`. */
+    /**
+     * The support card was dismissed. [dismissCount] is the running total, capped by `SupportGate`.
+     */
     fun trackSupportCardDismissed(dismissCount: Int) = track {
         TelemetryDeck.signal(
             "supportCardDismissed",
@@ -291,11 +316,12 @@ object Analytics {
 
     /**
      * One-shot per cold start: the device form factor, so the tablet / large-screen audience can be
-     * sized (e.g. to decide whether the Baseline Profile should also cover the expanded-width dialog
-     * path). Idempotent within a process — only the first call emits, so a rotation, fold/unfold, or
-     * resize after launch can't inflate the count.
+     * sized (e.g. to decide whether the Baseline Profile should also cover the expanded-width
+     * dialog path). Idempotent within a process — only the first call emits, so a rotation,
+     * fold/unfold, or resize after launch can't inflate the count.
      *
-     * - [formFactor]: "phone" or "tablet", from the device's stable smallest width (≥600dp = tablet).
+     * - [formFactor]: "phone" or "tablet", from the device's stable smallest width (≥600dp =
+     *   tablet).
      * - [widthSizeClass]: the launch-time window width class — "compact", "medium", or "expanded".
      *   "expanded" (≥840dp) is exactly when the secondary screens open as a dialog; a foldable
      *   registers by its posture at launch (folded ≈ compact, unfolded ≈ expanded).

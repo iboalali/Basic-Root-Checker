@@ -1,11 +1,16 @@
 package com.iboalali.basicrootchecker
 
 import android.app.Application
+import android.util.Log
+import com.iboalali.appcatalog.data.AppCatalogRepository
+import com.iboalali.appcatalog.data.CatalogAnalytics
+import com.iboalali.appcatalog.data.CatalogLogLevel
+import com.iboalali.appcatalog.data.CatalogLogger
 import com.iboalali.basicrootchecker.analytics.Analytics
+import com.iboalali.basicrootchecker.analytics.catalogResultToAnalyticsToken
 import com.iboalali.basicrootchecker.billing.BillingController
 import com.iboalali.basicrootchecker.billing.createBillingController
 import com.iboalali.basicrootchecker.data.UserPreferences
-import com.iboalali.basicrootchecker.data.catalog.AppCatalogRepository
 import com.iboalali.basicrootchecker.review.ReviewController
 import com.iboalali.basicrootchecker.review.createReviewController
 import com.iboalali.basicrootchecker.update.AppUpdateController
@@ -22,6 +27,10 @@ import kotlinx.coroutines.withContext
 
 class BasicRootCheckerApplication : Application() {
 
+    private companion object {
+        const val CATALOG_LOG_TAG = "AppCatalogRepository"
+    }
+
     val appUpdateController: AppUpdateController by lazy { createAppUpdateController(this) }
 
     val billingController: BillingController by lazy { createBillingController(this) }
@@ -36,7 +45,22 @@ class BasicRootCheckerApplication : Application() {
      * on first access; `MainActivity` calls [AppCatalogRepository.refresh] once at app start to
      * revalidate it in the background.
      */
-    val appCatalogRepository: AppCatalogRepository by lazy { AppCatalogRepository(this) }
+    val appCatalogRepository: AppCatalogRepository by lazy {
+        AppCatalogRepository(
+            context = this,
+            analytics =
+                CatalogAnalytics { result, error ->
+                    Analytics.trackAppCatalogRefresh(catalogResultToAnalyticsToken(result), error)
+                },
+            logger =
+                CatalogLogger { level, throwable, message ->
+                    when (level) {
+                        CatalogLogLevel.INFO -> Log.i(CATALOG_LOG_TAG, message, throwable)
+                        CatalogLogLevel.WARN -> Log.w(CATALOG_LOG_TAG, message, throwable)
+                    }
+                },
+        )
+    }
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

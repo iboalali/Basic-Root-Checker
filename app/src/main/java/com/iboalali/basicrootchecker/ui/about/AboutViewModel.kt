@@ -25,34 +25,34 @@ data class OtherAppUi(
 
 /**
  * Backs the About screen's "Other apps" card. **Read-only:** it only observes the app-scoped
- * [com.iboalali.basicrootchecker.data.catalog.AppCatalogRepository]; the catalog fetch is owned by
- * `MainActivity` (kicked off once at app start). This VM just projects the cached/bundled list for
- * the UI and filters this app out of its own list.
+ * [com.iboalali.appcatalog.data.AppCatalogRepository] (the shared one from
+ * `com.iboalali.appcatalog:data`); the catalog fetch is owned by `MainActivity` (kicked off once at
+ * app start). This VM just projects the cached/bundled list for the UI.
+ *
+ * This app is already excluded from the list by the repository, which derives the running package
+ * itself — that filtering used to live here, and identically in the other two apps.
  */
 class AboutViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = (application as BasicRootCheckerApplication).appCatalogRepository
 
-    // Strip the debug suffix so this app is filtered out of its own "Other apps" list in every build
-    // variant (the catalog lists the release applicationId).
-    private val selfPackage = application.packageName.removeSuffix(".debug")
-
-    val otherApps: StateFlow<ImmutableList<OtherAppUi>> = repository.apps
-        .map { apps ->
-            apps.asSequence()
-                .filter { it.packageName != selfPackage }
-                .map {
-                    OtherAppUi(
-                        name = it.name,
-                        description = it.description,
-                        iconUrl = it.icon,
-                        website = it.website,
-                        packageName = it.packageName,
-                        highlights = it.highlights.toImmutableList(),
-                    )
-                }
-                .toList()
-                .toImmutableList()
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), persistentListOf())
+    val otherApps: StateFlow<ImmutableList<OtherAppUi>> =
+        repository.otherApps
+            .map { apps ->
+                apps
+                    .asSequence()
+                    .map {
+                        OtherAppUi(
+                            name = it.name,
+                            description = it.description,
+                            iconUrl = it.icon,
+                            website = it.website,
+                            packageName = it.packageName,
+                            highlights = it.highlights.toImmutableList(),
+                        )
+                    }
+                    .toList()
+                    .toImmutableList()
+            }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), persistentListOf())
 }
