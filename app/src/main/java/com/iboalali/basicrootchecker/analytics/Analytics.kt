@@ -9,15 +9,12 @@ const val ERROR_CATEGORY_THROWN_EXCEPTION = "thrown-exception"
 const val ERROR_CATEGORY_USER_INPUT = "user-input"
 const val ERROR_CATEGORY_APP_STATE = "app-state"
 
-// How the user opened an entry in About → "Other apps".
-const val OTHER_APP_ACTION_PLAY_STORE = "play_store" // opened its Play Store listing
-const val OTHER_APP_ACTION_LAUNCH = "launch" // launched the installed app (or its PWA)
-const val OTHER_APP_ACTION_WEBSITE = "website" // opened its website (web-only app)
-
-// Outcome of the background "Other apps" catalog fetch.
-// appCatalogRefresh "result" values are owned by CatalogRefreshResult in the shared catalog
-// module (com.iboalali.appcatalog:data) and emitted verbatim: "updated", "not_modified",
-// "failure". They are a cross-repo contract — see that class and CatalogRefreshResultTest.
+// The "Other apps" telemetry vocabularies are owned by the shared catalog module
+// (com.iboalali.appcatalog:data) and emitted verbatim. Both are cross-repo contracts, pinned there
+// by OtherAppActionTest and CatalogRefreshResultTest:
+//
+//   otherAppClicked "action"    -> OtherAppAction:       "play_store", "launch", "website"
+//   appCatalogRefresh "result"  -> CatalogRefreshResult: "updated", "not_modified", "failure"
 
 object Analytics {
 
@@ -116,8 +113,9 @@ object Analytics {
 
     /**
      * The user acted on an entry in About → "Other apps". [action] is how they opened it:
-     * [OTHER_APP_ACTION_PLAY_STORE], [OTHER_APP_ACTION_LAUNCH], or [OTHER_APP_ACTION_WEBSITE].
-     * [packageName] is the app's package, or its website/name for entries without one (web apps).
+     * `"play_store"`, `"launch"`, or `"website"` (owned by `OtherAppAction` in the shared catalog
+     * module and emitted verbatim). [packageName] is the app's package, or its website/name for
+     * entries without one (web apps).
      */
     fun trackOtherAppClicked(packageName: String, action: String) = track {
         TelemetryDeck.signal(

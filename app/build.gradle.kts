@@ -179,7 +179,6 @@ dependencies {
 
     // Unit tests
     testImplementation(libs.junit)
-    // Pins the catalog's conditional-GET contract against a local server (see CatalogHttpSourceTest)
 
     // Compose Preview Screenshot Testing — @PreviewTest marker + the tooling that renders previews
     screenshotTestImplementation(libs.screenshot.validation.api)
