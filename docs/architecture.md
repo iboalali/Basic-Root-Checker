@@ -336,7 +336,8 @@ Layoutlib-rendered screenshots don't crash.
 ### Preview utilities (`util/`)
 
 `@PreviewLocales` (en, de, ar, es, ru) and `@PreviewPlayStoreListing` (Phone, 7" Tablet, 10" Tablet).
-`PreviewPlayStoreNative.kt` holds the native-resolution counterparts used by the screenshot tests —
+`com.iboalali.previews:matrix` (Android-Shared) holds the native-resolution counterparts used by the
+screenshot tests —
 3 store devices × 5 locales = 15 PNGs per screen. Each entry's `name` is kept free of special
 characters so the tool embeds it in the reference filename.
 

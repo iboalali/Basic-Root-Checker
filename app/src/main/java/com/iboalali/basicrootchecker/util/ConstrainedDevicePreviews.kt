@@ -10,6 +10,7 @@ import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
 import com.iboalali.basicrootchecker.ui.settings.SettingsScreenContent
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.previews.matrix.PreviewConstrainedDevices
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -18,12 +19,13 @@ import kotlinx.collections.immutable.persistentSetOf
 private fun MainScreenConstrainedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_CHECKED,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.NOT_CHECKED,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
@@ -41,14 +43,15 @@ private fun MainScreenConstrainedPreview() {
 private fun MainScreenRootedConstrainedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.ROOTED,
-                rootProvider = RootProvider.MAGISK,
-                rootProviderVersion = "27.0",
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.ROOTED,
+                    rootProvider = RootProvider.MAGISK,
+                    rootProviderVersion = "27.0",
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
@@ -66,13 +69,14 @@ private fun MainScreenRootedConstrainedPreview() {
 private fun MainScreenNotGrantedConstrainedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_GRANTED,
-                rootProvider = RootProvider.MAGISK,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.NOT_GRANTED,
+                    rootProvider = RootProvider.MAGISK,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},

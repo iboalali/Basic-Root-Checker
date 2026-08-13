@@ -18,10 +18,10 @@ import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
 import com.iboalali.basicrootchecker.ui.settings.SettingsScreenContent
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
-import com.iboalali.basicrootchecker.util.PreviewPlayStorePhone
-import com.iboalali.basicrootchecker.util.PreviewPlayStoreTablet10
-import com.iboalali.basicrootchecker.util.PreviewPlayStoreTablet7
 import com.iboalali.nav3.overlay.DetailCard
+import com.iboalali.previews.matrix.PreviewPlayStorePhone
+import com.iboalali.previews.matrix.PreviewPlayStoreTablet10
+import com.iboalali.previews.matrix.PreviewPlayStoreTablet7
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 

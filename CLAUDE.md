@@ -140,6 +140,15 @@ Much of what used to be here now lives there, and this app contributed most of i
 `CatalogHttpSource`, its conditional-GET tests, and the seed/fetch race guard were all written in this
 repo before the move. Look for them in `Android-Shared`, not in `data/catalog/`, which is gone.
 
+**The screenshot matrices are `com.iboalali.previews:matrix` now**, not
+`util/PreviewPlayStoreNative.kt` and `util/PreviewConstrainedDevices.kt`. This app won the naming
+(`PreviewPlayStore*`); Billboard renamed onto it. Declared `implementation` rather than
+`screenshotTestImplementation` because `util/ConstrainedDevicePreviews.kt` — the preview *functions* —
+sits in `src/main`. That also means those preview functions ship in the release APK (12
+`ConstrainedDevicePreviews` entries in `mapping.txt`); moving them to `screenshotTest` would fix both.
+`util/PreviewPlayStoreListing.kt` stays: it is the older **dp**-based matrix, unusable for store
+uploads but fine for browsing previews in the IDE, and still used 3×.
+
 **The large-screen overlay is `com.iboalali.nav3:overlay` now, not `navigation/`.** `DetailOverlayScene`,
 `DetailCard`, `DetailNavIcon` and `DetailAnchors` are gone from this repo; `AppNavigation.kt` stays,
 because it is this app's own nav host. **Billboard was the donor here, not this app**, and adopting

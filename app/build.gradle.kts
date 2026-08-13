@@ -177,6 +177,12 @@ dependencies {
     // equals/hashCode instead of a reference-equality anonymous object.
     implementation("com.iboalali.nav3:overlay:1.0.0")
 
+    // Shared Play Console screenshot matrices and the constrained-device stress specs. Declared on
+    // `implementation`, not `screenshotTestImplementation`, because this app's constrained-device
+    // preview *functions* live in `src/main` (util/ConstrainedDevicePreviews.kt) rather than in the
+    // screenshotTest source set. Moving them would let this drop to screenshotTest only.
+    implementation("com.iboalali.previews:matrix:1.0.0")
+
     // Material (for DynamicColors)
     implementation(libs.google.material)
 
