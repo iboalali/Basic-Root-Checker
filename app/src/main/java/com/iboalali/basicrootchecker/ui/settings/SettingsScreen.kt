@@ -21,7 +21,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -61,14 +60,13 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.ThemeMode
-import com.iboalali.basicrootchecker.navigation.DetailNavIcon
-import com.iboalali.basicrootchecker.navigation.LocalDetailNavIcon
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import com.iboalali.haptics.compose.rememberHapticClick
 import com.iboalali.haptics.compose.rememberHapticToggle
+import com.iboalali.nav3.overlay.DetailNavigationIcon
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
@@ -167,26 +165,11 @@ fun SettingsScreenContent(
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_settings)) },
-                navigationIcon = {
-                    // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over
-                    // the main screen on large screens (see LocalDetailNavIcon).
-                    val navIcon = LocalDetailNavIcon.current
-                    IconButton(onClick = rememberHapticClick(onNavigateBack)) {
-                        Icon(
-                            painter =
-                                painterResource(
-                                    if (navIcon == DetailNavIcon.CLOSE) R.drawable.close_24px
-                                    else R.drawable.arrow_back_24px
-                                ),
-                            contentDescription =
-                                stringResource(
-                                    if (navIcon == DetailNavIcon.CLOSE)
-                                        R.string.content_description_close
-                                    else R.string.content_description_navigate_up
-                                ),
-                        )
-                    }
-                },
+                // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over the
+                // main screen on large screens (see LocalDetailNavIcon). Glyphs and content
+                // descriptions come from LocalDetailOverlayStyle, and the haptic tap is the shared
+                // component's — onNavigateBack goes in unwrapped.
+                navigationIcon = { DetailNavigationIcon(onBack = onNavigateBack) },
                 scrollBehavior = scrollBehavior,
             )
         },

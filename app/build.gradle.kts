@@ -170,6 +170,13 @@ dependencies {
     implementation("com.iboalali.haptics:core:1.0.0")
     implementation("com.iboalali.haptics:compose:1.0.0")
 
+    // Shared adaptive detail overlay: the ≥840dp container-transform card, its scene strategy, the
+    // anchor state that bridges the overflow menu's Popup to it, and the leading nav icon. This app
+    // wrote neither — Billboard did — but adopting it is what brings the two fixes this copy lacked:
+    // the `isTraversalGroup` semantics on the overlay root, and a scene with value-based
+    // equals/hashCode instead of a reference-equality anonymous object.
+    implementation("com.iboalali.nav3:overlay:1.0.0")
+
     // Material (for DynamicColors)
     implementation(libs.google.material)
 

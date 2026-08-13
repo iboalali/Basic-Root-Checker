@@ -11,7 +11,6 @@ import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.ThemeMode
-import com.iboalali.basicrootchecker.navigation.DetailCard
 import com.iboalali.basicrootchecker.ui.about.AboutScreenContent
 import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
@@ -22,6 +21,7 @@ import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.PreviewPlayStorePhone
 import com.iboalali.basicrootchecker.util.PreviewPlayStoreTablet10
 import com.iboalali.basicrootchecker.util.PreviewPlayStoreTablet7
+import com.iboalali.nav3.overlay.DetailCard
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 

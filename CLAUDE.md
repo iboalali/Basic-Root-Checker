@@ -81,10 +81,11 @@ regenerate a single preview; the Gradle task is variant-level and rewrites every
 ## Structural facts to know before changing navigation or the tip flow
 
 1. **The large-screen overlay is a custom `OverlayScene` + `SceneStrategy`, not
-   `DialogSceneStrategy`.** It renders **in-composition** inside `AppRoot`, which is what allows
-   swipe-down dismissal, a drag-linked scrim, a tightly-bounded card, and its own exit animation. Don't
-   "simplify" it back to a platform `Dialog` — that breaks all four, plus predictive back and the
-   testTag scope. → [`docs/adaptive-navigation.md`](docs/adaptive-navigation.md)
+   `DialogSceneStrategy`, and it lives in `com.iboalali.nav3:overlay`, not this repo.** It renders
+   **in-composition** inside `AppRoot`, which is what allows swipe-down dismissal, a drag-linked scrim,
+   a tightly-bounded card, and its own exit animation. Don't "simplify" it back to a platform `Dialog`
+   — that breaks all four, plus predictive back and the testTag scope. Changing it changes Billboard
+   too. → [`docs/adaptive-navigation.md`](docs/adaptive-navigation.md)
 2. **It's width-gated by conditional metadata**, not a branch in the screen: the secondary entries get
    `detailOverlay()` metadata only at ≥840dp, and the `entryProvider` re-runs on width change so it
    follows fold/unfold live.
@@ -138,6 +139,23 @@ Two things this app keeps rather than takes:
 Much of what used to be here now lives there, and this app contributed most of it: the OkHttp
 `CatalogHttpSource`, its conditional-GET tests, and the seed/fetch race guard were all written in this
 repo before the move. Look for them in `Android-Shared`, not in `data/catalog/`, which is gone.
+
+**The large-screen overlay is `com.iboalali.nav3:overlay` now, not `navigation/`.** `DetailOverlayScene`,
+`DetailCard`, `DetailNavIcon` and `DetailAnchors` are gone from this repo; `AppNavigation.kt` stays,
+because it is this app's own nav host. **Billboard was the donor here, not this app**, and adopting
+its version brought two fixes this copy never had:
+
+- **`semantics { isTraversalGroup = true }` on the overlay root**, so a screen reader reads scrim +
+  card as one unit ahead of the dimmed main screen. This copy had a bare `Box(Modifier.fillMaxSize())`.
+- **A named scene class with value-based `equals`/`hashCode`.** This copy returned an anonymous
+  `object : OverlayScene<NavKey>`, so every recomposition looked like a new scene to `NavDisplay` —
+  which is what its transition bookkeeping uses to decide whether to compose the entry again. Nothing
+  failed visibly, which is exactly why it survived.
+
+What this app contributes back is the deletion of `Modifier.detailDialogShape()` — the screen-level
+32dp clip left over from the `DialogSceneStrategy` era, which this repo had already removed as
+redundant and Billboard had not. `AppNavigation` provides a `DetailOverlayStyle` naming this app's
+seven resources, so the library ships none of them.
 
 ## Traps that cost real time
 

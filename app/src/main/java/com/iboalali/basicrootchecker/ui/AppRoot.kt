@@ -26,8 +26,8 @@ import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.navigation.AppNavigation
-import com.iboalali.basicrootchecker.navigation.LocalDetailAnchors
-import com.iboalali.basicrootchecker.navigation.rememberDetailAnchorState
+import com.iboalali.nav3.overlay.LocalDetailAnchors
+import com.iboalali.nav3.overlay.rememberDetailAnchorState
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -41,9 +41,9 @@ import kotlinx.coroutines.flow.Flow
  * - [tipEvents] is **single-consumer** (a [kotlinx.coroutines.channels.Channel]), and a tip can now
  *   be started from either Settings or the main screen's support card. Two collectors would *split*
  *   the events between them — not duplicate them — and at expanded width the secondary screens are
- *   composed as an overlay over a live main screen, so both would be active at once. One consumer at
- *   the root is correct regardless of which surface opened the tip jar, and this host draws above
- *   the overlay card.
+ *   composed as an overlay over a live main screen, so both would be active at once. One consumer
+ *   at the root is correct regardless of which surface opened the tip jar, and this host draws
+ *   above the overlay card.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

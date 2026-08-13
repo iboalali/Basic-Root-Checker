@@ -93,8 +93,6 @@ import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
-import com.iboalali.basicrootchecker.navigation.LocalDetailAnchors
-import com.iboalali.basicrootchecker.navigation.screenRect
 import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
@@ -102,6 +100,8 @@ import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import com.iboalali.haptics.compose.rememberHapticClick
 import com.iboalali.haptics.compose.rememberHapticLongClick
+import com.iboalali.nav3.overlay.LocalDetailAnchors
+import com.iboalali.nav3.overlay.screenRect
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
