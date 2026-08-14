@@ -183,6 +183,10 @@ dependencies {
     // sites in `MainScreen` dropped their own `rememberHapticClick` wrappers to avoid a double tick.
     implementation("com.iboalali.ui:menu:1.0.0")
 
+    // The ColorScheme cross-fade, which this app hand-wrote over 36 of Material's 48 colour roles.
+    // The library's copy covers all 48 and has a test that fails when Material adds one.
+    implementation("com.iboalali.ui:theme:1.0.0")
+
     // Shared Play Console screenshot matrices and the constrained-device stress specs. Declared on
     // `implementation`, not `screenshotTestImplementation`, because this app's constrained-device
     // preview *functions* live in `src/main` (util/ConstrainedDevicePreviews.kt) rather than in the

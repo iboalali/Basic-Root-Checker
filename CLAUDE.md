@@ -166,6 +166,12 @@ What this app contributes back is the deletion of `Modifier.detailDialogShape()`
 redundant and Billboard had not. `AppNavigation` provides a `DetailOverlayStyle` naming this app's
 seven resources, so the library ships none of them.
 
+**The theme cross-fade is `com.iboalali.ui:theme` now.** `BasicRootCheckerTheme` keeps its palettes
+and its dynamic-color decision; only the `copy(…)` over every colour role moved. This app's copy
+animated 36 of Material's 48 roles, as did both others' — the twelve fixed-accent roles had never been
+animated anywhere. Nothing here looks different, because those roles are constant across light and
+dark; a dynamic-color change is where the gap showed.
+
 **The overflow menu is `com.iboalali.ui:menu` now, not `ui/components/AppBarDropdownMenuItem.kt`.**
 This adoption *changed behaviour here*, and in this app's favour: the shared `AppBarDropdownMenuItem`
 routes its `onClick` through `rememberHapticClick`, and this repo's local copy did not — its menu
