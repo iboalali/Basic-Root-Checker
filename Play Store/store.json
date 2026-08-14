@@ -52,7 +52,36 @@
       "MainNotCheckedShot",
       "SettingsShot",
       "AboutShot"
-    ]
+    ],
+
+    "_render": [
+      "Settings for `./scripts/generate-store-screenshots.sh`, which is a launcher for the kit's",
+      "render-store-screenshots.py. This app is the flavoured one: the task and the reference path",
+      "both carry the Gplay flavour.",
+      "",
+      "debugStrings is not set: the default glob app/src/debug/res/values*/strings.xml finds all",
+      "three of this app's files, which the old script listed by hand — so a fourth localized debug",
+      "app name now joins automatically instead of being missed.",
+      "",
+      "slotAliases is load-bearing here, and its absence was a latent break: the 'order' above names",
+      "SettingsShot and AboutShot, which do NOT exist for Tablet10 — at >=840dp those screens render",
+      "as *DialogShot. The uploader's preflight would have failed on the first real run with 'missing",
+      "sources: .../Tablet10/AboutShot.png'. Nothing caught it because this app has never uploaded",
+      "screenshots through the script."
+    ],
+    "render": {
+      "gradleTask": ":app:updateGplayDebugScreenshotTest",
+      "referenceDir": "app/src/screenshotTestGplayDebug/reference/com/iboalali/basicrootchecker/screenshots/ScreenshotTestsKt",
+      "appName": "Basic Root Checker",
+      "debugAppName": "Basic Root Checker (Debug)",
+      "slotAliases": {
+        "Tablet10": {
+          "SettingsDialogShot": "SettingsShot",
+          "AboutDialogShot": "AboutShot",
+          "LicenseDialogShot": "LicenseShot"
+        }
+      }
+    }
   },
 
   "_iap": "Six tip products, 171 regions each, and NO pricing snapshot committed yet — run fetch-iap-pricing.py to create one. There are no per-product copy/icon folders, so productFolders is empty and prices.md will show every product as 'not sold by the app'; add entries as folders appear.",

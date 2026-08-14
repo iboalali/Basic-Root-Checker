@@ -71,7 +71,7 @@ AppFunctions bug in this app** that needs on-device verification.
 ./gradlew :app:validateGplayDebugScreenshotTest    # fail on any visual diff
 
 # Clean, upload-ready Play Store screenshots (all screens × locales × store devices)
-./scripts/generate-store-screenshots.sh [output-subfolder]
+./scripts/generate-store-screenshots.sh [VERSION] [--dry-run]
 ```
 
 Screenshot tests run on **`gplayDebug`** — these screens are flavor-independent, and flavor-specific
