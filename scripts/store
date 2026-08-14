@@ -10,6 +10,10 @@
 #   ./scripts/store screenshots [VERSION] [--dry-run] [--commit]
 #   ./scripts/store iap-pricing [--check]          mirror live Play prices into the repo
 #   ./scripts/store iap-ppp [--check]              plan purchasing-power prices (no Play writes)
+#   ./scripts/store video-record --serial SERIAL [--orientation vertical] [--locale default]
+#   ./scripts/store video-compose [--orientation vertical] [--locale default]
+#
+# The two video commands read "Play Store/Video/storyboard.json"; see the `store-video` skill.
 #
 # Set AI_KIT_SCRIPTS to point at a checkout when iterating on the kit itself.
 set -euo pipefail
@@ -41,12 +45,14 @@ case "${1:-}" in
   screenshots)  script=upload-store-screenshots.py ;;
   iap-pricing)  script=fetch-iap-pricing.py ;;
   iap-ppp)      script=plan-iap-ppp.py ;;
+  video-record)  script=record-store-video.py ;;
+  video-compose) script=compose-store-video.py ;;
   ""|-h|--help)
-    sed -n '3,15p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '3,18p' "$0" | sed 's/^# \{0,1\}//'
     exit 0
     ;;
   *)
-    echo "error: unknown script '${1}'. Try: listing, screenshots, iap-pricing, iap-ppp" >&2
+    echo "error: unknown script '${1}'. Try: listing, screenshots, iap-pricing, iap-ppp, video-record, video-compose" >&2
     exit 1
     ;;
 esac
