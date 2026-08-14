@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -21,12 +20,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.color.DynamicColors
-import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.ui.AppRoot
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.haptics.compose.LocalAppHaptics
 import com.iboalali.haptics.compose.LocalHapticsEnabled
+import com.iboalali.ui.theme.isDark
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -65,12 +64,7 @@ class MainActivity : ComponentActivity() {
                 )
             val hapticsEnabled by
                 userPreferences.hapticsEnabled.collectAsStateWithLifecycle(initialValue = true)
-            val darkTheme =
-                when (themeMode) {
-                    ThemeMode.SYSTEM -> isSystemInDarkTheme()
-                    ThemeMode.LIGHT -> false
-                    ThemeMode.DARK -> true
-                }
+            val darkTheme = themeMode.isDark()
             // Keep status- and nav-bar icon contrast in sync with the resolved theme. Also works
             // around the splash screen theme not setting the light status bar on its own.
             LaunchedEffect(darkTheme) {

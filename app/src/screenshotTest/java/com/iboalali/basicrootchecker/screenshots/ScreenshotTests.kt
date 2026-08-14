@@ -10,7 +10,7 @@ import com.iboalali.appcatalog.ui.OtherApp
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.RootProvider
-import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.ui.theme.ThemeMode
 import com.iboalali.basicrootchecker.ui.about.AboutScreenContent
 import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent

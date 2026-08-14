@@ -7,7 +7,7 @@ import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
-import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.ui.theme.ThemeMode
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.collections.immutable.ImmutableList

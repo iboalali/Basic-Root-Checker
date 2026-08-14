@@ -2,7 +2,7 @@ package com.iboalali.basicrootchecker.util
 
 import androidx.compose.runtime.Composable
 import com.iboalali.basicrootchecker.data.RootProvider
-import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.ui.theme.ThemeMode
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
 import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
