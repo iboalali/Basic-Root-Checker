@@ -166,6 +166,14 @@ What this app contributes back is the deletion of `Modifier.detailDialogShape()`
 redundant and Billboard had not. `AppNavigation` provides a `DetailOverlayStyle` naming this app's
 seven resources, so the library ships none of them.
 
+**The overflow menu is `com.iboalali.ui:menu` now, not `ui/components/AppBarDropdownMenuItem.kt`.**
+This adoption *changed behaviour here*, and in this app's favour: the shared `AppBarDropdownMenuItem`
+routes its `onClick` through `rememberHapticClick`, and this repo's local copy did not — its menu
+items were the only silent tap targets across the three apps. The five call sites in `MainScreen`
+consequently **dropped their own `rememberHapticClick` wrappers**, which would otherwise now tick
+twice. `MainScreen`'s bare `DropdownMenu` became `HapticDropdownMenu`, which sets
+`testTagsAsResourceId` itself; the 16dp corner this app wants is a parameter and is still passed.
+
 ## Traps that cost real time
 
 Each of these has been paid for once. One line to recognise it; the detail is in the linked doc or skill.

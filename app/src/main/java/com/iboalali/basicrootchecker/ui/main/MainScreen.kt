@@ -34,7 +34,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
@@ -74,7 +73,6 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
@@ -93,7 +91,6 @@ import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
-import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
@@ -102,6 +99,8 @@ import com.iboalali.haptics.compose.rememberHapticClick
 import com.iboalali.haptics.compose.rememberHapticLongClick
 import com.iboalali.nav3.overlay.LocalDetailAnchors
 import com.iboalali.nav3.overlay.screenRect
+import com.iboalali.ui.menu.AppBarDropdownMenuItem
+import com.iboalali.ui.menu.HapticDropdownMenu
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -226,17 +225,16 @@ fun MainScreenContent(
                                 },
                         )
                     }
-                    DropdownMenu(
+                    // HapticDropdownMenu, not DropdownMenu: it re-enables testTagsAsResourceId
+                    // across the popup boundary, which this call site used to do by hand. Every
+                    // onClick below is a plain lambda — AppBarDropdownMenuItem wraps it in
+                    // rememberHapticClick itself, so wrapping here too would tick twice.
+                    HapticDropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false },
                         // Rounded corners to match the app's cards/FAB (Material3's default menu
                         // corner is much tighter).
                         shape = RoundedCornerShape(16.dp),
-                        // The menu renders in its own Popup window, outside AppRoot's
-                        // testTagsAsResourceId scope, so re-enable it here too — otherwise the
-                        // menu items' test tags aren't visible to UI Automator (By.res), and the
-                        // benchmark/profile journeys can't navigate to the secondary screens.
-                        modifier = Modifier.semantics { testTagsAsResourceId = true },
                     ) {
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_license),
@@ -251,12 +249,11 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick =
-                                rememberHapticClick {
-                                    detailAnchors.openOriginScreenRect = licenseItemRect
-                                    menuExpanded = false
-                                    onNavigateToLicense()
-                                },
+                            onClick = {
+                                detailAnchors.openOriginScreenRect = licenseItemRect
+                                menuExpanded = false
+                                onNavigateToLicense()
+                            },
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_settings),
@@ -270,12 +267,11 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick =
-                                rememberHapticClick {
-                                    detailAnchors.openOriginScreenRect = settingsItemRect
-                                    menuExpanded = false
-                                    onNavigateToSettings()
-                                },
+                            onClick = {
+                                detailAnchors.openOriginScreenRect = settingsItemRect
+                                menuExpanded = false
+                                onNavigateToSettings()
+                            },
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_about),
@@ -289,29 +285,26 @@ fun MainScreenContent(
                                     contentDescription = null,
                                 )
                             },
-                            onClick =
-                                rememberHapticClick {
-                                    detailAnchors.openOriginScreenRect = aboutItemRect
-                                    menuExpanded = false
-                                    onNavigateToAbout()
-                                },
+                            onClick = {
+                                detailAnchors.openOriginScreenRect = aboutItemRect
+                                menuExpanded = false
+                                onNavigateToAbout()
+                            },
                         )
                         if (BuildConfig.DEBUG) {
                             AppBarDropdownMenuItem(
                                 text = "Demo: in-app update",
-                                onClick =
-                                    rememberHapticClick {
-                                        menuExpanded = false
-                                        showUpdateDemoDialog = true
-                                    },
+                                onClick = {
+                                    menuExpanded = false
+                                    showUpdateDemoDialog = true
+                                },
                             )
                             AppBarDropdownMenuItem(
                                 text = "Demo: support card",
-                                onClick =
-                                    rememberHapticClick {
-                                        menuExpanded = false
-                                        onDemoSupportPrompt()
-                                    },
+                                onClick = {
+                                    menuExpanded = false
+                                    onDemoSupportPrompt()
+                                },
                             )
                         }
                     }

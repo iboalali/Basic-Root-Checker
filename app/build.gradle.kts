@@ -177,6 +177,12 @@ dependencies {
     // equals/hashCode instead of a reference-equality anonymous object.
     implementation("com.iboalali.nav3:overlay:1.0.0")
 
+    // The app-bar overflow menu and its items. The shared `AppBarDropdownMenuItem` wraps its own
+    // `onClick` in `rememberHapticClick`, which this app's local copy did *not* — so its menu items
+    // were the only silent tap targets of the three apps, and adopting this fixes that. The call
+    // sites in `MainScreen` dropped their own `rememberHapticClick` wrappers to avoid a double tick.
+    implementation("com.iboalali.ui:menu:1.0.0")
+
     // Shared Play Console screenshot matrices and the constrained-device stress specs. Declared on
     // `implementation`, not `screenshotTestImplementation`, because this app's constrained-device
     // preview *functions* live in `src/main` (util/ConstrainedDevicePreviews.kt) rather than in the
