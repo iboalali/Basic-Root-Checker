@@ -172,6 +172,23 @@ animated 36 of Material's 48 roles, as did both others' — the twelve fixed-acc
 animated anywhere. Nothing here looks different, because those roles are constant across light and
 dark; a dynamic-color change is where the gap showed.
 
+**The Licences screen is `com.iboalali.ui:licences` now, and this adoption fixed a real compliance
+gap.** This app credited **two** libraries while shipping **seven** — TelemetryDeck among them, which
+is MIT and requires its notice reproduced. It now shows all seven, grouped by license. Three things
+are worth knowing:
+
+- **`license_list` stays on the scrollable node here**, because `StartupBenchmarks` flings it and the
+  Baseline Profile journey waits on it. The library ships *content*, not a screen, precisely so the
+  collapsing `LargeTopAppBar` and that testTag remain this repo's.
+- **The `AndroidView` + `TextView` + `Linkify` interop is gone.** It existed to autolink URLs inside
+  the license text; the shared rows are the links. It also read `MaterialTheme` colours in its
+  `factory` with no `update` block, so those colours were captured once — latent rather than a live
+  bug, but not worth carrying forward.
+- **The old "AndroidDeviceNames / Jared Rummler" credit named the wrong project.** The dependency is
+  `de.boehrsi:devicemarketingnames`. The entry is corrected, but **its Apache 2.0 classification is
+  inherited and unverified** — the artifact ships no LICENSE, its POM has no `<licenses>` block, and
+  the sources carry no header. Confirm upstream before the next release.
+
 **The overflow menu is `com.iboalali.ui:menu` now, not `ui/components/AppBarDropdownMenuItem.kt`.**
 This adoption *changed behaviour here*, and in this app's favour: the shared `AppBarDropdownMenuItem`
 routes its `onClick` through `rememberHapticClick`, and this repo's local copy did not — its menu

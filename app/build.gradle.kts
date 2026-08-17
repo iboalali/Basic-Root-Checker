@@ -187,6 +187,12 @@ dependencies {
     // The library's copy covers all 48 and has a test that fails when Material adds one.
     implementation("com.iboalali.ui:theme:1.0.0")
 
+    // The open-source credits list and the verbatim license texts. This app keeps its collapsing
+    // LargeTopAppBar and its `license_list` testTag; the list itself and — the reason it matters —
+    // `AndroidSharedAttributions` come from the library. This app was crediting two libraries while
+    // shipping seven, including TelemetryDeck, which is MIT and requires its notice.
+    implementation("com.iboalali.ui:licences:1.0.0")
+
     // Shared Play Console screenshot matrices and the constrained-device stress specs. Declared on
     // `implementation`, not `screenshotTestImplementation`, because this app's constrained-device
     // preview *functions* live in `src/main` (util/ConstrainedDevicePreviews.kt) rather than in the
