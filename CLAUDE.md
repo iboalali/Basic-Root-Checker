@@ -173,9 +173,11 @@ animated anywhere. Nothing here looks different, because those roles are constan
 dark; a dynamic-color change is where the gap showed.
 
 **The Licences screen is `com.iboalali.ui:licences` now, and this adoption fixed a real compliance
-gap.** This app credited **two** libraries while shipping **seven** — TelemetryDeck among them, which
-is MIT and requires its notice reproduced. It now shows all seven, grouped by license. Three things
-are worth knowing:
+gap.** This app credited **two** libraries while shipping **seven**. Four of the five missing ones are
+Apache 2.0, whose §4(a) obliges us to pass the license on; the fifth, TelemetryDeck, publishes a
+*modified* MIT with the attribution clause removed, so crediting it is courtesy rather than
+obligation — see Android-Shared's CLAUDE.md. It now shows all seven, grouped by license. Three
+things are worth knowing:
 
 - **`license_list` stays on the scrollable node here**, because `StartupBenchmarks` flings it and the
   Baseline Profile journey waits on it. The library ships *content*, not a screen, precisely so the
@@ -185,9 +187,12 @@ are worth knowing:
   `factory` with no `update` block, so those colours were captured once — latent rather than a live
   bug, but not worth carrying forward.
 - **The old "AndroidDeviceNames / Jared Rummler" credit named the wrong project.** The dependency is
-  `de.boehrsi:devicemarketingnames`. The entry is corrected, but **its Apache 2.0 classification is
-  inherited and unverified** — the artifact ships no LICENSE, its POM has no `<licenses>` block, and
-  the sources carry no header. Confirm upstream before the next release.
+  `de.boehrsi:devicemarketingnames`, by Boehrsi. The entry is corrected, and its Apache 2.0
+  classification was **verified upstream 2026-08-17** — worth recording *how*, because the published
+  artifact is silent: no LICENSE in the AAR, no `<licenses>` in the POM, no source header. The
+  repository's `LICENSE.txt` is the Apache 2.0 text, byte-identical to the copy `:ui:licences`
+  ships, and there is no NOTICE file. **A dependency can carry zero license metadata and still be
+  properly licensed** — the artifact is not the source of truth, the repository is.
 
 **The overflow menu is `com.iboalali.ui:menu` now, not `ui/components/AppBarDropdownMenuItem.kt`.**
 This adoption *changed behaviour here*, and in this app's favour: the shared `AppBarDropdownMenuItem`

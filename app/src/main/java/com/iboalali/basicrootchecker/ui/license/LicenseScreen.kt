@@ -37,8 +37,8 @@ import com.iboalali.ui.licences.OssLicenses
  *
  * Everything arriving through the shared modules — Coil, OkHttp, kotlinx.coroutines,
  * kotlinx.serialization, the TelemetryDeck SDK — is in `AndroidSharedAttributions` and must not be
- * repeated here. TelemetryDeck in particular was credited *nowhere* in this app before that list
- * existed, and it is MIT, which requires the notice.
+ * repeated here. Four of them were credited *nowhere* in this app before that list existed, and all
+ * four are Apache 2.0, whose §4(a) obliges us to pass the license on.
  */
 private val BasicRootCheckerLibraries =
     listOf(
@@ -53,10 +53,11 @@ private val BasicRootCheckerLibraries =
             // *different project* — the dependency is and was `de.boehrsi:devicemarketingnames`,
             // which is Boehrsi's, so the old credit named the wrong library and the wrong author.
             //
-            // The Apache 2.0 classification is inherited from that old string and is NOT verified:
-            // the artifact ships no LICENSE file, its POM declares no `<licenses>` block, and the
-            // sources carry no header. Confirm against the upstream repository before the next
-            // release rather than trusting this line.
+            // Apache 2.0 verified upstream 2026-08-17: the published artifact carries no license
+            // metadata at all (no LICENSE in the AAR, no `<licenses>` in the POM, no source
+            // header),
+            // but the repository's `LICENSE.txt` is the Apache 2.0 text byte-identical to the copy
+            // `:ui:licences` ships, and there is no NOTICE file, so §4(d) adds nothing.
             name = "DeviceMarketingNames",
             author = "Boehrsi",
             url = "https://github.com/Boehrsi/DeviceMarketingNames",
