@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.color.DynamicColors
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.ui.AppRoot
+import com.iboalali.basicrootchecker.ui.main.DemoRootOverride
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.haptics.compose.LocalAppHaptics
 import com.iboalali.haptics.compose.LocalHapticsEnabled
@@ -39,6 +40,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
+
+        // Debug-only: let a launch intent decide the next check's outcome, so the store
+        // video records on an unrooted emulator with no demo picker in the shot.
+        if (BuildConfig.DEBUG) DemoRootOverride.applyFrom(intent)
 
         (application as BasicRootCheckerApplication).let { app ->
             app.appUpdateController.attach(this)
@@ -75,7 +80,7 @@ class MainActivity : ComponentActivity() {
             }
             BasicRootCheckerTheme(darkTheme = darkTheme) {
                 // The window background comes from the XML theme, which follows the *system*
-                // day/night setting and ignores the in-app override — so it would peek through
+                // day/night setting and ignores the in-app override, so it would peek through
                 // (in the wrong theme) during screen transitions. Drive it from the resolved
                 // color scheme so the activity background matches, and cross-fades, with the theme.
                 val backgroundColor = MaterialTheme.colorScheme.background

@@ -32,6 +32,19 @@ proguard/
 # Android Studio captures folder
 captures/
 
+# Store video: the raw take and its layer PNGs are large, regenerable build output. The finished cuts
+# under "Play Store/Video/<version>/" stay tracked, like the rest of the listing assets, and so does
+# "Video/qr/", which is a small committed input rather than output.
+/Play Store/Video/raw/
+
+# ...and so is "draft/", which is where compose-store-video.py writes when no --version is given. It
+# is a scratch pad: a cut gets rebuilt a dozen times while the wording, the pacing and the end card
+# are argued over, and git cannot delta-compress an MP4, so each rebuild would add a few more
+# megabytes of permanent history for a version nobody will ever ask for again. Commit a release with
+# `--version vX.Y` instead, which writes to "Play Store/Video/vX.Y/<locale>/" beside the matching
+# "Generated Screenshots/vX.Y/".
+/Play Store/Video/draft/
+
 # Intellij
 *.iml
 .idea/workspace.xml
@@ -41,7 +54,7 @@ captures/
 *.jks
 *.keystore
 
-# Release signing — the real credentials, never committed. keystore.properties.template is.
+# Release signing: the real credentials, never committed. keystore.properties.template is.
 /keystore.properties
 
 # External native build folder generated in Android Studio 2.2 and later
@@ -52,7 +65,7 @@ app/src/main/res/values/publickey.xml
 .idea/
 /.kotlin/*
 
-# Claude Code — commit the shared knowledge, ignore per-machine state.
+# Claude Code: commit the shared knowledge, ignore per-machine state.
 # Tracked on purpose: settings.json (so a clone inherits the enabled plugins),
 # agents/ and agent-memory/ (so an agent's accumulated knowledge isn't lost per clone).
 /.claude/settings.local.json

@@ -1,0 +1,366 @@
+{
+  "_README": [
+    "The script for this app's store/social video. Read by the shared scripts in the `iboalali-apps`",
+    "kit. See the `store-video` skill for the full shape and for what each step verb does.",
+    "",
+    "Two passes run over `scenes`: a rehearsal that resolves every tag to screen coordinates, then a",
+    "recorded pass that replays those coordinates on a freshly reset device. Both passes start from",
+    "the same state, which is why the coordinates stay valid.",
+    "",
+    "THE SUBJECT OF THIS VIDEO CANNOT HAPPEN ON THE RECORDING DEVICE. The story is a root check that",
+    "SUCCEEDS, and no emulator is rooted: the AOSP `su` on a userdebug image refuses any caller that",
+    "is not shell or root, so `Shell.isAppGrantedRoot()` is false no matter what is installed. Even",
+    "sideloading the real Magisk app only reaches 'root available, not granted': the package probe",
+    "fires while the grant does not. So the result is armed from outside the app instead; see",
+    "setup._package and the 'check' scene."
+  ],
+  "locales": ["default"],
+  "localeTags": {
+    "default": "en-US"
+  },
+  "_locales": [
+    "English only for now, deliberately. The app ships five languages (en, de, es, ru, ar) and its",
+    "Play listing covers all five, so the other four are worth making, but the story and pacing get",
+    "approved once, in one language, before four more takes are shot against them.",
+    "",
+    "Adding one is: a caption per scene plus an endCard.subtitle/cta.action here, a localeTags entry,",
+    "and one `video-record --locale <name>` run. Unlike Hide Persistent Notifications, it needs NO",
+    "rootable image and no reboot between languages. See setup.localeScope."
+  ],
+  "brand": {
+    "_note": [
+      "Taken from the launcher icon, which is the app's only real brand mark: a white '#' on Material",
+      "Deep Purple 500 (#673AB7, `md_purple_500` in colors.xml, despite the name). The plate is that",
+      "purple taken most of the way to black so the phone stays the brightest thing in frame, and the",
+      "accent is the same hue lifted until dark text sits legibly on it.",
+      "",
+      "Deliberately NOT the app's Material theme, whose burnt orange (#AB3500) never reaches the",
+      "screen: the app calls DynamicColors on API 31+, so what the camera sees is the device",
+      "wallpaper's palette, not the bundled one. Branding the plate off a palette the footage does not",
+      "contain would clash with the footage on every device it is recorded on."
+    ],
+    "plateFrom": "#2A2140",
+    "plateTo": "#0E0A16",
+    "accent": "#BFA8FF",
+    "text": "#FFFFFF",
+    "textDim": "#BDB2D6",
+    "font": "Noto Sans"
+  },
+  "orientations": {
+    "vertical": {
+      "canvas": [1080, 1920],
+      "skin": "pixel_9_pro_xl",
+      "device": {
+        "scale": 0.78,
+        "centerX": 0.5,
+        "centerY": 0.6
+      },
+      "caption": {
+        "top": 0.055,
+        "size": 62,
+        "align": "center"
+      }
+    },
+    "horizontal": {
+      "canvas": [1920, 1080],
+      "skin": "pixel_9_pro_xl",
+      "reuseRawFrom": "vertical",
+      "device": {
+        "scale": 0.88,
+        "centerX": 0.735,
+        "centerY": 0.5
+      },
+      "caption": {
+        "top": 0.3,
+        "size": 66,
+        "align": "start",
+        "inlineStart": 0.06,
+        "width": 0.4
+      }
+    }
+  },
+  "_skin": [
+    "A real SDK skin: the hardware image IS the frame, so the proportions are a real phone's. It",
+    "requires an AVD whose resolution matches the skin's display exactly. pixel_9_pro_xl is",
+    "1344x2992, so record on Pixel_9_Pro_XL (or the _root clone). The compositor checks and refuses",
+    "rather than stretching the footage.",
+    "",
+    "This app has a second reason to care which handset the frame draws, and it is unique among the",
+    "three: the main screen PRINTS THE DEVICE NAME. A Pixel 9 Pro XL body around a screen reading",
+    "'emulator / emu64xa' is the kind of detail that is invisible until someone sees it and then",
+    "cannot unsee it. See _recordingDevice."
+  ],
+  "_recordingDevice": [
+    "The AVD's build properties are patched so the device card reads like the phone in the frame:",
+    "",
+    "  ro.product.{vendor,system_ext}.model  = Pixel 9 Pro XL",
+    "  ro.product.{vendor,system_ext}.device = komodo",
+    "",
+    "Out of the box an emulator reports model `sdk_gphone64_x86_64` and device `emu64xa`, which the",
+    "marketing-name lookup renders as 'emulator', and the app shows both on the main screen, directly",
+    "under the result. `ro.*` properties cannot be set at runtime even as root ('Failed to set",
+    "property'), and `-prop` on the emulator command line accepts only `qemu.*`, so this is an edit",
+    "to the guest's build.prop files:",
+    "",
+    "  emulator -avd Pixel_9_Pro_XL_root … -writable-system    # remount is refused without it",
+    "  adb remount && adb reboot                               # overlayfs needs the reboot",
+    "  adb root && adb remount",
+    "  # patch /vendor/build.prop and /system/system_ext/etc/build.prop, then reboot",
+    "",
+    "vendor wins over system_ext in the default ro.product.property_source_order, so vendor is the",
+    "one that matters; system_ext is patched to match so the two cannot disagree later. Originals are",
+    "worth keeping: the change survives reboots and outlives whatever it was recorded for."
+  ],
+  "setup": {
+    "package": "com.iboalali.basicrootchecker.debug",
+    "_package": [
+      "The DEBUG applicationId, on purpose. Two things this video needs exist only in a debug build:",
+      "",
+      "1. `DemoRootOverride`, the armed result. The FAB then runs the release path exactly (checking",
+      "   snackbar, spinner, ~1s, result animation, success haptic) with only the answer decided in",
+      "   advance. Without arming, a debug FAB opens the developer result PICKER, which would sit in",
+      "   the middle of the shot; a release FAB runs a real check, which on this device answers 'not",
+      "   rooted'.",
+      "2. Nothing else. The APK is otherwise the production one.",
+      "",
+      "A debug build also carries three things the camera must NOT see: app_name 'Basic Root Checker",
+      "(Debug)', a blue launcher background and a blue splash icon, all of them in app/src/debug/res.",
+      "Build the take's APK with that folder moved aside, exactly as the screenshot export neutralises",
+      "the name for store screenshots:",
+      "",
+      "  mv app/src/debug/res /tmp/bk && ./gradlew :app:installGplayDebug; mv /tmp/bk app/src/debug/res",
+      "",
+      "versionNameSuffix '-debug' is left alone: it only shows on the About screen, which this journey",
+      "never opens."
+    ],
+    "clearForeignNotifiers": true,
+    "_clearForeignNotifiers": [
+      "Needed even though this video never opens the shade, because two `android` notifications put",
+      "ICONS in the status bar that demo mode does not remove: a filled warning triangle and a",
+      "Safety-Center shield ('set a screen lock'). `notifications -e visible false` does not touch",
+      "them (they survive it) and `dumpsys statusbar` reports `mIcons=` empty, so they do not look",
+      "like notification icons either. Snoozing the notifications is what clears them.",
+      "",
+      "Snoozing rather than dismissing is the only lever available for a notification we do not own,",
+      "and it lapses on its own long after the take. The recorder force-stops non-system posters and",
+      "snoozes `android`/`com.android.*`, which cannot be force-stopped."
+    ],
+    "localeScope": "app",
+    "_localeScope": [
+      "Per-app locale (`cmd locale set-app-locales`), not the device's. Every frame of this video is",
+      "the app's own UI. There is no notification shade, no quick-settings tile, no permission",
+      "dialog, and the status bar is in demo mode showing a fixed clock and no text. So nothing on",
+      "screen is rendered by the framework, and there is nothing for the device language to change.",
+      "",
+      "Which means the other four languages need no rootable image, no `setprop persist.sys.locale`",
+      "and no reboot between takes. Hide Persistent Notifications needs all three, because ITS subject",
+      "is a framework surface; this app should not inherit that cost.",
+      "",
+      "The recorder applies it after the warm-up launch, on every pass: `pm clear` drops a per-app",
+      "locale, and one set before the package has ever run reports success and is silently gone by the",
+      "time the app next starts."
+    ],
+    "emulatorDisplayOverride": null,
+    "_emulatorDisplayOverride": [
+      "null: record at the AVD's native 1344x2992, which is what the pixel_9_pro_xl skin expects.",
+      "Only reach for this if the emulator is rasterising in software, and check that first, because",
+      "software rendering is almost always a stale XAUTHORITY rather than an absent GPU:",
+      "",
+      "  adb shell dumpsys SurfaceFlinger | grep -iE '^GLES:'   # SwiftShader = software",
+      "",
+      "The override costs inset correctness (the status-bar and cutout insets do not scale with",
+      "`wm size`) and with a working GPU buys nothing."
+    ],
+    "pressLeadMs": 500,
+    "pressOffsetMs": -220,
+    "_pressOffsetMs": [
+      "Carried over from the sibling app's measurement on the same AVD and the same capture path.",
+      "Re-measure if the press ring drifts off the finger: sample a frame at a logged press time, and",
+      "if the on-screen reaction has already begun, make this more negative.",
+      "",
+      "It matters more here than it does there. This video has exactly ONE press in it, so there is no",
+      "second marker for the eye to average against. If it sits wrong, that is the whole video."
+    ],
+    "showTouches": false,
+    "tapDwell": {
+      "beforeMs": 750,
+      "holdMs": 220,
+      "afterMs": 300
+    },
+    "_tapDwell": [
+      "beforeMs exceeds pressLeadMs plus the marker's fade, so the ring is sitting still on an",
+      "unchanged screen for about a quarter-second before the finger lands. Show the press, then press.",
+      "",
+      "showTouches asks Android for its own touch circle, but that overlay layer is not captured by",
+      "screenrecord on an API 37 emulator, so it is off and the compositor draws the marker from the",
+      "press log instead; leaving both on would double the indicator."
+    ],
+    "demoStatusBar": {
+      "clock": "1200",
+      "batteryLevel": 100,
+      "batteryPlugged": false,
+      "wifiLevel": 4,
+      "wifiFullyConnected": true,
+      "showMobile": false,
+      "hideNotificationIcons": true,
+      "_hideNotificationIcons": [
+        "true here, unlike Hide Persistent Notifications, where the row of stuck icons IS the problem",
+        "being shown. Nothing in this story involves notifications, so any icon in the bar is a stray",
+        "from whatever the emulator last ran."
+      ]
+    },
+    "_absentKeys": [
+      "No notificationListener, personaPackagePrefix, personas or clearForeignNotifiers: this app has",
+      "no notification listener and needs no staged clutter. They are optional in the recorder, which",
+      "they were not until this storyboard existed, since it had only ever driven one app."
+    ]
+  },
+  "scenes": [
+    {
+      "id": "question",
+      "caption": {
+        "default": "Is your device\nrooted?"
+      },
+      "steps": [
+        {
+          "launch": {
+            "extras": {
+              "demo_root": "magisk",
+              "demo_root_version": "29.0"
+            }
+          }
+        },
+        {
+          "wait": 3200
+        }
+      ],
+      "_note": [
+        "The extras arm the result before a single frame is recorded, so nothing in the journey has to",
+        "reach for it later. `monkey` cannot carry extras, so the recorder switches this step to an",
+        "explicit `am start` against the resolved launcher activity: same cold start, same splash.",
+        "",
+        "3200ms because a cold start spends the first ~1.5s on the splash screen and the entrance",
+        "animation, leaving the viewer about 1.7s on the resting screen: enough to take in the empty",
+        "status card, its 'tap the # button' hint, and the device card underneath."
+      ]
+    },
+    {
+      "id": "check",
+      "caption": {
+        "default": "One tap\nto find out."
+      },
+      "steps": [
+        {
+          "tap": {
+            "tag": "check_fab"
+          }
+        },
+        {
+          "wait": 900
+        }
+      ],
+      "_note": [
+        "The single press in the video. tapDwell adds 750ms of settle before it and 300ms after, so",
+        "this scene is ~2.2s in total.",
+        "",
+        "`check_fab` is a testTag added for this journey. Addressing the FAB by its content description",
+        "would have worked in English and broken in the other four languages. The rule is ids, never",
+        "text, and this is the control the whole video turns on.",
+        "",
+        "The 900ms tail covers the checking state: the snackbar rising, the spinner replacing the",
+        "status glyph. The result lands about a second after the press, so the scene boundary falls",
+        "roughly where the answer appears."
+      ]
+    },
+    {
+      "id": "answer",
+      "caption": {
+        "default": "Yes, via Magisk."
+      },
+      "steps": [
+        {
+          "wait": 3600
+        }
+      ],
+      "_note": [
+        "Nothing happens here on purpose. The scene exists to hold on the payoff: the green check",
+        "scaling in, 'Your Device has Root access', 'via Magisk v29.0' underneath, and the device card",
+        "below it naming the same phone the frame is drawing.",
+        "",
+        "The trailing wait is also what the end card fades in over. The compositor freezes the take's",
+        "LAST FRAME and cross-fades from it, so whatever the screen is doing when the recorder stops is",
+        "what the viewer stares at for three seconds. Everything has to be settled by then. Check it",
+        "after any change to this scene:",
+        "",
+        "  ffmpeg -sseof -0.3 -i raw.mp4 -frames:v 1 out.png"
+      ]
+    }
+  ],
+  "endCard": {
+    "title": "Basic Root Checker",
+    "subtitle": {
+      "default": "Is your device rooted? Find out instantly."
+    },
+    "cta": {
+      "action": {
+        "default": "Get the app"
+      },
+      "url": "iboalali.com/brc",
+      "qr": "Play Store/Video/qr/brc.png"
+    },
+    "_cta": [
+      "The short link, verified 200 and redirecting to the app's page. 16 characters, so the pill's",
+      "autosizing leaves it at full size. The printed string drops the scheme because 'https://' costs",
+      "eight characters of legibility and tells the viewer nothing; the QR's payload keeps it, because",
+      "a scheme-less payload is ambiguous and some readers surface it as plain text with nothing to",
+      "tap. The compositor compares the two and refuses to build if they disagree.",
+      "",
+      "Not the Play URL: play.google.com/store/apps/details?id=com.iboalali.basicrootchecker is 66",
+      "characters, unreadable at any size that fits, and absurd on the listing cut where the viewer is",
+      "already standing on the listing.",
+      "",
+      "The QR is not dead weight on the vertical cut even though you cannot scan a code with the phone",
+      "displaying it: Android's Circle to Search reads QR codes off the device's own screen, and the",
+      "audience for an Android root checker is exactly the people who have it.",
+      "",
+      "Wording carries no price claim and no Google Play badge artwork, so the same card is safe in",
+      "feeds AND as the Play listing's video, whose guidance discourages both."
+    ],
+    "holdMs": 3400
+  },
+  "audio": {
+    "track": "Play Store/Video/audio/flipping-in.mp3",
+    "title": "Flipping In",
+    "artist": "Wax Lyricist",
+    "source": "https://freemusicarchive.org/music/wax-lyricist/the-wax-lyricist/flipping-in/",
+    "licence": "CC0 1.0 Universal (public domain dedication) - no attribution required, commercial use permitted",
+    "startAt": 0,
+    "gainDb": 0,
+    "targetLufs": -16,
+    "fadeInMs": 600,
+    "fadeOutMs": 2200
+  },
+  "_audio": [
+    "The same bed as Hide Persistent Notifications, deliberately: one track across the apps reads as",
+    "a house sound rather than as reuse, the way the plate, the bezel and the end-card layout already",
+    "do. CC0 is what makes that free: no attribution obligation to carry into every future re-post,",
+    "and no bookkeeping when a cut is re-published years later.",
+    "",
+    "The file is COPIED into this repo rather than referenced across repos. 6.7MB duplicated is the",
+    "cheaper mistake: a relative path into a sibling checkout breaks on any machine that does not have",
+    "it, and the licence has to travel with the asset to be worth anything.",
+    "",
+    "Licence rules, since this is where the next track gets chosen: NonCommercial disqualifies one",
+    "outright however good it sounds; these videos market an app. CC0 beats CC-BY. Free Music",
+    "Archive's own filters are not trustworthy on their own; open each candidate's page and confirm.",
+    "",
+    "startAt 0 takes the track's opening. The source runs 4 minutes and this cut is 12.7 seconds, so",
+    "if the intro is too sparse to carry the video, move startAt to a more developed bar rather than",
+    "reaching for gainDb. The mastering targets -16 LUFS either way.",
+    "",
+    "-16 LUFS, not the -14 platforms normalise to: this track measures -20.2 LUFS with only -2.0 dBTP",
+    "of headroom, so -14 needs gain the peaks cannot absorb and loudnorm abandons linear mode. Verify",
+    "the output stays below -1.0 dBTP; platforms only ever turn content down, so delivering slightly",
+    "quiet is safe and delivering something that clips is not."
+  ]
+}

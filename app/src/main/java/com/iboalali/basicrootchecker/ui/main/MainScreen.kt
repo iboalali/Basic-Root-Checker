@@ -227,7 +227,7 @@ fun MainScreenContent(
                     }
                     // HapticDropdownMenu, not DropdownMenu: it re-enables testTagsAsResourceId
                     // across the popup boundary, which this call site used to do by hand. Every
-                    // onClick below is a plain lambda — AppBarDropdownMenuItem wraps it in
+                    // onClick below is a plain lambda. AppBarDropdownMenuItem wraps it in
                     // rememberHapticClick itself, so wrapping here too would tick twice.
                     HapticDropdownMenu(
                         expanded = menuExpanded,
@@ -316,13 +316,26 @@ fun MainScreenContent(
             FloatingActionButton(
                 onClick =
                     rememberHapticClick {
-                        if (BuildConfig.DEBUG) {
-                            showDemoDialog = true
-                        } else {
-                            onCheckRoot()
-                            scope.launch { snackbarHostState.showSnackbar(checkingText) }
+                        // An armed result takes the RELEASE path (snackbar, spinner, result
+                        // animation, outcome haptic) with only the answer decided in advance, so
+                        // a recording shows what a real user sees. The picker is the interactive
+                        // fallback when nothing was armed.
+                        val armed = if (BuildConfig.DEBUG) DemoRootOverride.armed else null
+                        when {
+                            armed != null -> {
+                                onCheckRootDemo(armed)
+                                scope.launch { snackbarHostState.showSnackbar(checkingText) }
+                            }
+
+                            BuildConfig.DEBUG -> showDemoDialog = true
+
+                            else -> {
+                                onCheckRoot()
+                                scope.launch { snackbarHostState.showSnackbar(checkingText) }
+                            }
                         }
                     },
+                modifier = Modifier.testTag("check_fab"),
                 shape = RoundedCornerShape(16.dp),
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
