@@ -102,12 +102,11 @@ regenerate a single preview; the Gradle task is variant-level and rewrites every
 
 ## Stack
 
-Kotlin 2.4.10 · Java 17 · minSdk 23 · compile/target SDK 37 · AGP 9.3.1 (built-in Kotlin) ·
-Compose BOM · Navigation 3 · Material 3 Adaptive · `androidx.appfunctions` 1.0.0-alpha10 + KSP ·
-Coil 3 · TelemetryDeck.
+**Kotlin** · Java 17 · minSdk 23 · compile/target SDK 37 · **AGP** (built-in Kotlin) · Compose BOM ·
+Navigation 3 · Material 3 Adaptive · `androidx.appfunctions` + KSP · Coil 3 · TelemetryDeck.
 
-`gradle/libs.versions.toml` is **the source of truth for every version** — check there rather than
-trusting the numbers above.
+`gradle/libs.versions.toml` is **the source of truth for every version**, and each entry carries its
+upstream release-notes URL. No version number is repeated here, so there is nothing to drift.
 
 ## Shared code — this repo does not build alone
 

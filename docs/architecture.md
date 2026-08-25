@@ -343,7 +343,8 @@ characters so the tool embeds it in the reference filename.
 
 ## Build configuration
 
-- **Gradle:** Kotlin DSL with a version catalog (`gradle/libs.versions.toml`), AGP 9.3.1.
+- **Gradle:** Kotlin DSL with a version catalog (`gradle/libs.versions.toml`), which is where the AGP
+  version lives.
 - **SDK:** compile/target 37 (Android 17), min 23.
 - **Kotlin:** 2.4.10, JVM target 17. AGP 9's **built-in Kotlin** compiles the modules; the app applies
   the Compose/serialization plugins but no separate `org.jetbrains.kotlin.android`, and the
