@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5] - 2026-08-26
+
 ### Added
 - Two how-to videos, and the debug-only recording tooling they need. `Play Store/Video/howto/request-access.json` covers the state people write in about: the app can see a root manager and still be refused by it, and the message saying so reads like a broken app until you find the button. `Play Store/Video/howto/analytics.json` covers turning usage data off and resetting the anonymous ID. Both need a debug build, so three things now know a recording is in progress: `DemoDeviceOverride` takes the device name and model from the launch intent (an emulator otherwise reads "emulator" and "emu64xa" under a Pixel bezel), and the "Demo:" overflow items and the "Debug: record products" card hide themselves while it is armed. An armed root result now also governs the Request Root access button, which previously ran a real su request and answered "not rooted" in the middle of a demo of the opposite. All of it is behind `BuildConfig.DEBUG`.
 - On large screens (tablets, unfolded foldables, desktop windows, and XR panels), opening Settings, About, or Licenses now shows it as a dialog over the main screen instead of replacing the whole screen — dismiss it with the close button, by tapping outside, with Back, or by swiping the card down. Phones are unchanged.

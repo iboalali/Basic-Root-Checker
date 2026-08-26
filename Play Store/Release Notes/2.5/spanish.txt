@@ -1,0 +1,8 @@
+Versión 2.5:
+➕ Pantallas grandes: Ajustes, Acerca de y Licencias como diálogo, se cierra deslizando
+➕ Valora la app sin salir, y un enlace en Acerca de (Google Play)
+➕ Tarjeta opcional para apoyar el desarrollo tras comprobar root (Google Play)
+🛠️ Otras apps se actualiza desde la web, en tu idioma
+🛠️ Licencias acredita todas las bibliotecas incluidas, por licencia
+🛠️ Inicio más rápido y primer desplazamiento más fluido
+🔨 El interruptor de datos de uso se aplica al instante

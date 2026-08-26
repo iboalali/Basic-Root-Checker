@@ -1,0 +1,63 @@
+# Play Store release notes — 2.5
+
+All locales in one place. Language tags are the Play Console codes. Paste each
+block under **Release → Production → … → Release notes** for the matching language.
+
+## en-US (default)
+```
+Version 2.5:
+➕ Large screens: Settings, About and Licenses open as a swipe-to-close dialog
+➕ Rate this app without leaving it, plus a link on About (Google Play)
+➕ Optional Support development card after a root check (Google Play)
+🛠️ Other Apps on About refreshes from the web, in your language
+🛠️ Licenses credits every bundled library, grouped by license
+🛠️ Faster cold start and smoother first scroll
+🔨 Usage-data switch applies immediately; smoother update progress
+```
+
+## de-DE (German)
+```
+Version 2.5:
+➕ Große Displays: Einstellungen, Über und Lizenzen als Dialog, per Wischen schließbar
+➕ App direkt in der App bewerten, plus Link unter Über (Google Play)
+➕ Optionale Karte Entwicklung unterstützen nach einer Root-Prüfung (Google Play)
+🛠️ Andere Apps lädt aktuelle Infos aus dem Web, in deiner Sprache
+🛠️ Lizenzen nennt alle Bibliotheken, nach Lizenz gruppiert
+🛠️ Schnellerer Start, flüssigeres erstes Scrollen
+🔨 Nutzungsdaten-Schalter wirkt sofort; flüssigerer Update-Fortschritt
+```
+
+## ar (Arabic)
+```
+اصدار 2.5:
+➕ الشاشات الكبيرة: الإعدادات وحول والتراخيص تُفتح كنافذة تُغلق بالسحب
+➕ قيّم التطبيق من داخله، مع رابط في شاشة حول (Google Play)
+➕ بطاقة اختيارية لدعم التطوير بعد فحص الروت (Google Play)
+🛠️ قائمة تطبيقات أخرى في شاشة حول تُحدّث من الويب بلغتك
+🛠️ التراخيص تذكر كل المكتبات المضمّنة، مجمّعة حسب الترخيص
+🛠️ بدء تشغيل أسرع وتمرير أول أكثر سلاسة
+🔨 مفتاح بيانات الاستخدام يعمل فوراً؛ تقدّم تحديث أكثر سلاسة
+```
+
+## es-ES (Spanish)
+```
+Versión 2.5:
+➕ Pantallas grandes: Ajustes, Acerca de y Licencias como diálogo, se cierra deslizando
+➕ Valora la app sin salir, y un enlace en Acerca de (Google Play)
+➕ Tarjeta opcional para apoyar el desarrollo tras comprobar root (Google Play)
+🛠️ Otras apps se actualiza desde la web, en tu idioma
+🛠️ Licencias acredita todas las bibliotecas incluidas, por licencia
+🛠️ Inicio más rápido y primer desplazamiento más fluido
+🔨 El interruptor de datos de uso se aplica al instante
+```
+
+## ru-RU (Russian)
+```
+Версия 2.5:
+➕ Большие экраны: Настройки, О приложении и Лицензии — как диалог, закрывается свайпом
+➕ Оценка приложения внутри него и ссылка в разделе О приложении (Google Play)
+➕ Необязательная карточка поддержки разработки после проверки root (Google Play)
+🛠️ Другие приложения обновляются из интернета, на вашем языке
+🛠️ Лицензии перечисляют все встроенные библиотеки, по лицензиям
+🔨 Быстрее запуск; переключатель данных срабатывает сразу; плавнее индикатор обновления
+```

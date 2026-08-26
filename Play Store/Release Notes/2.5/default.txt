@@ -1,0 +1,8 @@
+Version 2.5:
+➕ Large screens: Settings, About and Licenses open as a swipe-to-close dialog
+➕ Rate this app without leaving it, plus a link on About (Google Play)
+➕ Optional Support development card after a root check (Google Play)
+🛠️ Other Apps on About refreshes from the web, in your language
+🛠️ Licenses credits every bundled library, grouped by license
+🛠️ Faster cold start and smoother first scroll
+🔨 Usage-data switch applies immediately; smoother update progress
