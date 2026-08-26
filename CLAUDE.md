@@ -32,7 +32,11 @@ Profile journey, accessibility, haptics, store assets. Don't restate it here.
 App-specific additions to that list:
 
 - Anything touching the root-detection probes must be verified on a **real rooted device**; the
-  hardware-dependent paths are not unit-tested.
+  hardware-dependent paths are not unit-tested. An emulator covers the two ungranted states with a
+  one-command toggle and is worth running first — but it can never reach `Rooted`, because AOSP's
+  `su` refuses app uids in the binary, so `adb root` is not root the app can use. Recipe, and the
+  `libsu` per-process caching trap that makes a mid-session state change look like a detection bug,
+  in [`docs/root-provider-detection-gaps.md`](docs/root-provider-detection-gaps.md).
 - Anything touching an `@AppFunction` must be verified with `adb` on API 36+ — a green build proves
   nothing here (see Traps).
 
@@ -257,12 +261,21 @@ Each of these has been paid for once. One line to recognise it; the detail is in
 
 ## Large-screen Baseline Profile coverage — covered, and no longer dependent on what's plugged in
 
-The shipped profile **does** cover the expanded-width overlay path. It was regenerated 2026-07-31 with
+The shipped profile **does** cover the expanded-width overlay path. It was regenerated 2026-08-26 with
 two devices connected at once — SM-G766B (phone, 384dp) and SM-X356B (Galaxy Tab Active5 Pro, in
 landscape at 1280dp) — and the plugin unioned both into the same `baseline-prof.txt`: `DetailOverlay`
-rules went 0 → 135, `OverlayScene` 2 → 138, `PredictiveBack` 0 → 37, including the `HPL` morph rules.
-No journey change was needed; the overlay renders in-composition, so the `*_list` testTags stay
-reachable.
+153 rules, `OverlayScene` 140, `PredictiveBack` 37, including the `HPL` morph rules. No journey change
+was needed; the overlay renders in-composition, so the `*_list` testTags stay reachable.
+
+**The profile is only as current as the code it was captured against.** It names classes by their real
+package, so extracting code to `Android-Shared` silently invalidates every rule that moved: before this
+regeneration the committed profile still carried 342 rules for classes deleted from this repo and *zero*
+for the eight `com.iboalali.*` packages that replaced them. Rules that no longer resolve are skipped at
+install time, so nothing fails — the paths simply stop being compiled ahead of time. The cheap check
+after any regeneration is that those package counts are non-zero:
+`com.iboalali.nav3.overlay` 268, `appcatalog` 231, `telemetry` 77, `haptics` 73, `ui.licences` 41,
+`ui.theme` 29, `ui.menu` 20. `previews.matrix` is legitimately 0 — the preview functions ship in the
+APK but never run.
 
 **Why the `tabletApi36` GMD exists:** with only `useConnectedDevices = true`, that coverage was a
 property of whatever happened to be plugged in, not of the build — regenerating on a phone alone

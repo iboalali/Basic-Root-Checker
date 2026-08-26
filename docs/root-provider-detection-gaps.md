@@ -130,6 +130,57 @@ detected.
   - Repeat with Kitsune's "hide the Magisk app" / KernelSU hidden-manager enabled to
     confirm the path heuristic still fires and to document residual gaps.
 
+## What an emulator can and cannot verify
+
+An emulator covers two of the four `RootResult` states. It cannot reach the granted case at
+all without Magisk, so hardware verification stays on the list — but the ungranted paths are
+real probes here, not mocks, and they are cheap to re-run.
+
+### `adb root` is not root the app can use
+
+A `google_apis` (never `*_playstore`) image is `userdebug`, so `adb root` succeeds and the
+shell becomes uid 0. **The app still sees nothing**, and no amount of relaxing the filesystem
+changes that. AOSP's `/system/xbin/su` serves only uid 0 and uid 2000 (`AID_SHELL`), and it
+enforces that *in the binary*: from an app uid it answers `su: not allowed`. Verified with
+SELinux permissive, with the binary at mode 4755, and with `/system/xbin` traversable — the
+refusal is unconditional. `libsu`'s `Shell.isAppGrantedRoot()` therefore cannot return true.
+
+Reaching `Rooted` (and every provider-specific signal: `MAGISK` / `KERNELSU` / `APATCH`
+identification, manager-package naming, `magisk -v` parsing, the mount and `/data/adb/magisk`
+probes) requires real Magisk in the ramdisk, i.e. a tool such as `rootAVD`.
+
+### A two-state rig for the ungranted paths
+
+`/system/xbin` ships as `drwxr-x--- root shell`, so an app cannot traverse into it and
+`suBinaryHit` is false. Granting search permission makes the `su` binary stat-able while
+still unusable — which is exactly the `RootedNotGranted` shape. Boot with `-writable-system`
+(and `-gpu host`, or the emulator quietly falls back to `lavapipe`/`swangle` software
+rendering), then `adb root && adb remount` once per boot:
+
+```bash
+adb shell chmod 755 /system/xbin   # -> RootedNotGranted(OTHER)   rooted=true,  accessGranted=false
+adb shell chmod 750 /system/xbin   # -> NotRooted                 rooted=false, accessGranted=false
+adb shell am force-stop com.iboalali.basicrootchecker    # between every flip — see below
+```
+
+This drives the real `suBinaryHit` signal and the `suBinaryHit -> OTHER` branch in
+[`classify`](../app/src/main/java/com/iboalali/basicrootchecker/data/RootChecker.kt), so it is
+worth more than a unit test with a hand-built `RootSignals`. Reading the result through the
+`checkRootStatus` AppFunction returns `status`, `provider` and `manager` in one call, which
+also exercises the AppFunctions surface at the same time.
+
+### Force-stop between checks, or the rig lies
+
+`granted` is `Boolean?`, and the `false` and `null` cases classify differently: no provider
+plus `granted == false` is `NotRooted`, while no provider plus `granted == null` is `Unknown`.
+`libsu` resolves the grant once per process and caches it, so **changing root state under a
+live process reports `Unknown`** — which reads exactly like a detection bug and is not one.
+Alternating the mode above without `am force-stop` produces that phantom `Unknown`; with a
+fresh process each time the two states are deterministic.
+
+The same caching is why a real device only needs one check per session, and why an agent
+calling `checkRootStatus` repeatedly gets a stable answer.
+
 ## Changelog
 
 Per `CLAUDE.md`, add a bullet under `## [Unreleased]` → **Fixed** in `CHANGELOG.md` in the
