@@ -365,7 +365,20 @@ characters so the tool embeds it in the reference filename.
   flavors.
 - **Baseline Profiles:** a separate `:baselineprofile` module (`com.android.test`); the
   `androidx.baselineprofile` plugin also adds synthetic `nonMinifiedRelease` / `benchmarkRelease` build
-  types to `:app`.
+  types to `:app`. `StartupBenchmarks` pairs every metric A/B — `CompilationMode.None` against
+  `Partial(BaselineProfileMode.Require)` — and `Require` is the load-bearing part: it fails the test
+  when the profile is absent instead of quietly measuring an unprofiled build. Medians measured
+  2026-08-26 on the two physical test devices (gplay, 10 startup iterations, 7 scroll):
+
+  | | cold start (TTID) | scroll `frameDurationCpuMs` P99 | `frameOverrunMs` P99 |
+  |---|---|---|---|
+  | SM-G766B (phone, 384dp) | 812.9 → 737.9 ms (−9.2%) | 21.6 → 18.9 ms | 9.3 → 9.0 ms |
+  | SM-X356B (tablet, portrait) | 668.8 → 586.9 ms (−12.2%) | 23.2 → 14.9 ms | 10.4 → 2.9 ms |
+
+  On the tablet `frameOverrunMs` P50 crosses from +1.9 ms to −4.8 ms — the median frame stops missing
+  its deadline. Read its percentiles as directional though: the fling covers 9–10 frames per iteration
+  against the phone's ~70, so ~65 frames back them rather than ~490. The scroll target is the Licenses
+  list, which in portrait is the full-screen path, not the ≥840dp overlay.
 - **App catalog feed** (both flavors) — `kotlinx-serialization-json` parses the feed, and **Coil 3**
   (`coil-compose` + `coil-network-okhttp`) loads the remote icons. Note `coil-network-okhttp` pulls
   **OkHttp** in transitively; the catalog's own fetch deliberately uses plain `HttpURLConnection`, so
