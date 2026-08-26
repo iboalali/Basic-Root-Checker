@@ -67,7 +67,11 @@
       "SettingsShot and AboutShot, which do NOT exist for Tablet10 — at >=840dp those screens render",
       "as *DialogShot. The uploader's preflight would have failed on the first real run with 'missing",
       "sources: .../Tablet10/AboutShot.png'. Nothing caught it because this app has never uploaded",
-      "screenshots through the script."
+      "screenshots through the script.",
+      "",
+      "excludeShots holds the in-app update card's four states. They are a regression baseline for a",
+      "flow otherwise only reachable through the debug 'Demo: in-app update' item, and an update",
+      "prompt is not store copy — so they render into reference/ but never into the export."
     ],
     "render": {
       "gradleTask": ":app:updateGplayDebugScreenshotTest",
@@ -80,7 +84,13 @@
           "AboutDialogShot": "AboutShot",
           "LicenseDialogShot": "LicenseShot"
         }
-      }
+      },
+      "excludeShots": [
+        "UpdateAvailableShot",
+        "UpdateDownloadingShot",
+        "UpdateDownloadedShot",
+        "UpdateFailedShot"
+      ]
     }
   },
 

@@ -18,6 +18,7 @@ import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
 import com.iboalali.basicrootchecker.ui.settings.SettingsScreenContent
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.nav3.overlay.DetailCard
 import com.iboalali.previews.matrix.PreviewPlayStorePhone
 import com.iboalali.previews.matrix.PreviewPlayStoreTablet10
@@ -26,9 +27,14 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
 /**
- * Play Store listing screenshots, rendered on the JVM via Layoutlib (no device). The matrices are
- * split per Play Console slot because the app's navigation is adaptive at the 840dp width
- * breakpoint (see `AppNavigation`):
+ * Compose screenshots, rendered on the JVM via Layoutlib (no device). Two kinds live here:
+ * - **Listing shots**, which double as the Play Store upload — everything below except the update
+ *   flow. The matrices are split per Play Console slot, as described next.
+ * - **Regression-only shots** for states the store should never show, currently the in-app update
+ *   card. `render.excludeShots` in "Play Store/store.json" keeps these out of the export.
+ *
+ * The matrices are split per Play Console slot because the app's navigation is adaptive at the
+ * 840dp width breakpoint (see `AppNavigation`):
  * - **Phone + 7-inch** ([PreviewPlayStorePhone] + [PreviewPlayStoreTablet7], both portrait <
  *   840dp): each secondary screen renders **single-pane / full-screen**, one `@PreviewTest` per
  *   screen with both annotations so the same shot renders at phone and 7-inch sizes.
@@ -80,6 +86,34 @@ private fun MainRooted() {
                 deviceMarketingName = "Pixel 8 Pro",
                 deviceModelName = "husky",
                 androidVersion = "Android 16",
+            ),
+        onCheckRoot = {},
+        onRequestRoot = {},
+        onUpdateRequested = {},
+        onInstallRequested = {},
+        onAppUpdatedSnackbarShown = {},
+        onNavigateToAbout = {},
+        onNavigateToLicense = {},
+        onNavigateToSettings = {},
+    )
+}
+
+/**
+ * The main screen with the in-app update card in [updateStatus]. Built on the not-checked state,
+ * which is where an update card is actually met: the update check runs at launch, before anyone has
+ * tapped the FAB. That also keeps these shots about the card — the root-result rendering is already
+ * covered by [MainRootedShot].
+ */
+@Composable
+private fun MainWithUpdate(updateStatus: AppUpdateEvent) {
+    MainScreenContent(
+        uiState =
+            MainUiState(
+                rootStatus = RootStatus.NOT_CHECKED,
+                deviceMarketingName = "Pixel 8 Pro",
+                deviceModelName = "husky",
+                androidVersion = "Android 16",
+                updateStatus = updateStatus,
             ),
         onCheckRoot = {},
         onRequestRoot = {},
@@ -188,6 +222,65 @@ fun MainNotCheckedShot() {
 @Composable
 fun MainRootedShot() {
     BasicRootCheckerTheme { MainRooted() }
+}
+
+// ---- In-app update flow — regression only, never uploaded
+// ----------------------------------------
+
+/*
+ * Every state the update card can be in, which is otherwise reachable only through the debug
+ * "Demo: in-app update" overflow item.
+ *
+ * Two matrices, because the card is `widthIn(max = 600.dp)` and width is the only axis it responds
+ * to. [PreviewPlayStorePhone] (411dp) is below the cap, so the card fills the width and the long
+ * German and Russian strings are at their tightest. [PreviewPlayStoreTablet10] is above it, and its
+ * 800dp landscape height is the least vertical room the column ever gets. Tablet7 is capped-width
+ * and tall, so it adds nothing either of those two doesn't already show.
+ *
+ * These are a regression baseline, not store copy — an update prompt does not sell the app. They
+ * are listed in `render.excludeShots` in "Play Store/store.json", which keeps them out of the
+ * export that feeds the Play Console.
+ */
+
+@PreviewTest
+@PreviewPlayStorePhone
+@PreviewPlayStoreTablet10
+@Composable
+fun UpdateAvailableShot() {
+    BasicRootCheckerTheme { MainWithUpdate(AppUpdateEvent.Available) }
+}
+
+/**
+ * Mid-download. `UpdateCard` drives the bar through `animateFloatAsState`, which initializes at its
+ * target rather than animating up from zero, so the renderer lands on a stable 3.5 / 12.0 MB.
+ */
+@PreviewTest
+@PreviewPlayStorePhone
+@PreviewPlayStoreTablet10
+@Composable
+fun UpdateDownloadingShot() {
+    BasicRootCheckerTheme {
+        MainWithUpdate(
+            AppUpdateEvent.Downloading(bytesDownloaded = 3_500_000, totalBytes = 12_000_000)
+        )
+    }
+}
+
+@PreviewTest
+@PreviewPlayStorePhone
+@PreviewPlayStoreTablet10
+@Composable
+fun UpdateDownloadedShot() {
+    BasicRootCheckerTheme { MainWithUpdate(AppUpdateEvent.Downloaded) }
+}
+
+/** The error code is not rendered — the card shows one generic line — so any value will do. */
+@PreviewTest
+@PreviewPlayStorePhone
+@PreviewPlayStoreTablet10
+@Composable
+fun UpdateFailedShot() {
+    BasicRootCheckerTheme { MainWithUpdate(AppUpdateEvent.Failed(errorCode = -100)) }
 }
 
 // ---- Secondary screens, single-pane (phone + 7-inch, < 840dp)
