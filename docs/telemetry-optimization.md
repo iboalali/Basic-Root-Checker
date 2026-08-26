@@ -112,3 +112,67 @@ is per-user churn.
   "baseFilters": "thisApp", "appID": "613251CD-B223-443A-9583-3A18586FAB55"
 }
 ```
+
+---
+
+## 2026-08-26 — the support-card funnel counts offers, not appearances (v2.5)
+
+### What the signals mean
+
+The main screen's tip-jar card emits three signals, and together they are the funnel:
+
+| Signal | Params | Meaning |
+|---|---|---|
+| `supportCardShown` | — | one offer reached the screen |
+| `tipJarOpened` | `source=support_card` | the offer was taken |
+| `supportCardDismissed` | `dismissCount` | the offer was declined, with the running total |
+
+`supportCardShown` is emitted **once per process**. `MainViewModel.onSupportPromptShown` holds the
+guard; `MainScreen` calls it from a `LaunchedEffect` keyed on the card's visibility.
+
+### Why the guard is needed
+
+Two things make the card become visible more than once for a single offer, and each re-runs the
+reporting effect:
+
+1. **Activity recreation** — rotation, fold/unfold, resize. `MainActivity` sets no `configChanges`,
+   so the activity is rebuilt and the composition restarts, while the `MainViewModel` holding
+   `supportPromptVisible` is retained.
+2. **An update card taking the slot.** `MainScreen` yields the slot to a pending in-app update,
+   since that card is functional and time-sensitive while the ask can wait. When the update
+   resolves, the support card comes back.
+
+Without the guard those inflate `supportCardShown` while `tipJarOpened` and `supportCardDismissed`
+stay accurate — both are tap-driven — so the conversion rate would read low for a reason that has
+nothing to do with the card.
+
+One offer per process is the correct ceiling: answering the card either way snoozes it for a month
+(`SupportGate.snoozeUntil`), so a second genuine offer cannot occur in the same process.
+
+This is the same one-shot shape as `deviceType` (`Analytics.trackDeviceType`) and the
+`reviewRequestedThisSession` flag — three places where a config change would otherwise be counted as
+a user action.
+
+### Reading the conversion
+
+```json
+{
+  "queryType": "timeseries", "granularity": "week",
+  "aggregations": [
+    { "type": "filtered",
+      "filter": { "type": "selector", "dimension": "type", "value": "supportCardShown" },
+      "aggregator": { "type": "eventCount", "name": "shown" } },
+    { "type": "filtered",
+      "filter": { "type": "and", "fields": [
+        { "type": "selector", "dimension": "type", "value": "tipJarOpened" },
+        { "type": "selector", "dimension": "source", "value": "support_card" }
+      ]},
+      "aggregator": { "type": "eventCount", "name": "opened" } }
+  ],
+  "filter": { "type": "selector", "dimension": "isTestMode", "value": "False" },
+  "baseFilters": "thisApp", "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+}
+```
+
+Keep the `isTestMode` filter: the debug-only **Demo: support card** overflow item drives the same
+state, so it emits `supportCardShown` too — as test-flagged data, since debug builds set test mode.

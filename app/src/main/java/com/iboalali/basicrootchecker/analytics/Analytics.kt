@@ -214,6 +214,10 @@ object Analytics {
      * The main screen's support card actually appeared (the gate opened *and* nothing outranked
      * it). Reported from the UI rather than the gate so it can't claim a card the screen never drew
      * — pair it with [trackTipJarOpened] to read the card's conversion.
+     *
+     * One signal per process, so the count is distinct offers rather than appearances: a rotation,
+     * or an update card handing the slot back, re-runs the reporting effect. `MainViewModel` holds
+     * that guard, since the state it protects outlives the composition.
      */
     fun trackSupportCardShown() = track { TelemetryDeck.signal("supportCardShown") }
 

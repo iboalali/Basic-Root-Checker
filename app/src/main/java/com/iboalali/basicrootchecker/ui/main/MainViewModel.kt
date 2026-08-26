@@ -217,8 +217,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (shouldShow) _uiState.update { it.copy(supportPromptVisible = true) }
     }
 
-    /** The support card actually reached the screen. Reported from the UI, not the gate. */
+    /**
+     * The support card actually reached the screen. Reported from the UI, not the gate, and at most
+     * once per process.
+     *
+     * `MainScreen` reports from a `LaunchedEffect` keyed on the card's visibility, which re-runs
+     * every time the card becomes visible again — on an activity recreation (rotation, fold/unfold,
+     * resize), and when an update card that took the slot gives it back. Only one genuine offer can
+     * happen per process, because answering the card either way snoozes it for a month, so a second
+     * report would always be the same card counted twice.
+     */
     fun onSupportPromptShown() {
+        if (supportCardReported) return
+        supportCardReported = true
         Analytics.trackSupportCardShown()
     }
 
@@ -386,5 +397,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
          */
         @Volatile
         private var reviewRequestedThisSession = false
+
+        /**
+         * Whether `supportCardShown` has been reported in this process. Per-process for the same
+         * reason as the flag above: activity recreation restarts the composition that reports it,
+         * and the same card must not be counted twice. See [onSupportPromptShown].
+         */
+        @Volatile
+        private var supportCardReported = false
     }
 }
