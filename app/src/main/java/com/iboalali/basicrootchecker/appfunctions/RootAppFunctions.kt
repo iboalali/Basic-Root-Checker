@@ -4,7 +4,6 @@ import android.content.Context
 import com.iboalali.basicrootchecker.data.LastRootCheck
 import com.iboalali.basicrootchecker.data.RootCheckStatus
 import com.iboalali.basicrootchecker.data.RootChecker
-import com.iboalali.basicrootchecker.data.RootResult
 import com.iboalali.basicrootchecker.data.UserPreferences
 import java.time.Instant
 import kotlinx.coroutines.flow.first
@@ -26,70 +25,23 @@ import kotlinx.coroutines.flow.first
 class RootAppFunctions {
 
     /** Runs a fresh passive root check and maps it to the agent-facing [RootStatus]. */
-    suspend fun checkRootStatus(context: Context): RootStatus {
-        val result = RootChecker.check(context, applyUiDelay = false)
-        return result.toRootStatus(Instant.now())
-    }
+    suspend fun checkRootStatus(context: Context): RootStatus =
+        RootChecker.checkRecorded(context, applyUiDelay = false).record.toRootStatus()
 
     /** Forces the superuser prompt, then maps the resulting state to a [RootStatus]. */
-    suspend fun requestRootAccess(context: Context): RootStatus {
-        val result = RootChecker.requestRoot(context, applyUiDelay = false)
-        return result.toRootStatus(Instant.now())
-    }
+    suspend fun requestRootAccess(context: Context): RootStatus =
+        RootChecker.requestRootRecorded(context, applyUiDelay = false).record.toRootStatus()
 
     /** Reads the last recorded check from [UserPreferences] without re-probing the device. */
-    suspend fun getLastRootCheck(context: Context): RootStatus? {
-        return UserPreferences(context).lastRootCheck.first()?.toRootStatus()
-    }
+    suspend fun getLastRootCheck(context: Context): RootStatus? =
+        UserPreferences(context).lastRootCheck.first()?.toRootStatus()
 }
 
-private fun RootResult.toRootStatus(checkedAt: Instant): RootStatus =
-    when (this) {
-        is RootResult.Rooted ->
-            RootStatus(
-                status = "ROOTED",
-                rooted = true,
-                accessGranted = true,
-                provider = provider.name,
-                manager = manager?.name,
-                version = version,
-                checkedAt = checkedAt,
-            )
-
-        is RootResult.RootedNotGranted ->
-            RootStatus(
-                status = "ROOTED_NOT_GRANTED",
-                rooted = true,
-                accessGranted = false,
-                provider = provider.name,
-                manager = manager?.name,
-                version = null,
-                checkedAt = checkedAt,
-            )
-
-        RootResult.NotRooted ->
-            RootStatus(
-                status = "NOT_ROOTED",
-                rooted = false,
-                accessGranted = false,
-                provider = null,
-                manager = null,
-                version = null,
-                checkedAt = checkedAt,
-            )
-
-        RootResult.Unknown ->
-            RootStatus(
-                status = "UNKNOWN",
-                rooted = false,
-                accessGranted = false,
-                provider = null,
-                manager = null,
-                version = null,
-                checkedAt = checkedAt,
-            )
-    }
-
+/**
+ * The one mapping from a persisted check to the agent-facing shape. All three functions above go
+ * through it, so whichever one an agent calls, the same check reports the same `checkedAt` — the
+ * instant [RootChecker] recorded, never a second reading of the clock.
+ */
 private fun LastRootCheck.toRootStatus(): RootStatus =
     RootStatus(
         status = status.name,
