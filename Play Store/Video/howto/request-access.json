@@ -1,0 +1,218 @@
+{
+  "_README": [
+    "The script for this app's 'root is available, but not granted' video. Read by the shared scripts",
+    "in the `iboalali-apps` kit; see the `store-video` skill for the full shape and what each step verb",
+    "does.",
+    "",
+    "    ./scripts/store video-record  --serial emulator-5554 --storyboard howto/request-access",
+    "    ./scripts/store video-compose --storyboard howto/request-access",
+    "",
+    "Its takes and cuts are filed under the storyboard's own path below Play Store/Video, so it cannot",
+    "write over the promo: raw/howto/request-access/<orientation>/<locale>/ and",
+    "<version>/<locale>/howto/request-access/.",
+    "",
+    "The state this video is about is the one people write in about. The app can see that a root",
+    "manager is present and still be refused by it, and the message saying so reads, at a glance, like",
+    "the app is broken. It is not: one button away is the fix."
+  ],
+  "locales": ["default"],
+  "localeTags": { "default": "en-US" },
+  "_locales": [
+    "English only for now. Nothing here is a framework surface, so localeScope is 'app' and every",
+    "extra language is one caption set plus one `--locale <name>` run: no rootable image, no reboot."
+  ],
+  "brand": {
+    "_note": [
+      "The promo's, unchanged. Taken from the launcher icon, which is the app's only real brand mark:",
+      "a white '#' on Material Deep Purple 500. See the promo storyboard for why it is deliberately",
+      "NOT the app's Material theme."
+    ],
+    "plateFrom": "#2A2140",
+    "plateTo": "#0E0A16",
+    "accent": "#BFA8FF",
+    "text": "#FFFFFF",
+    "textDim": "#BDB2D6",
+    "font": "Noto Sans"
+  },
+  "orientations": {
+    "vertical": {
+      "canvas": [1080, 1920],
+      "skin": "pixel_9_pro_xl",
+      "device": { "scale": 0.78, "centerX": 0.5, "centerY": 0.6 },
+      "caption": { "top": 0.055, "size": 62, "align": "center" },
+      "zoom": 1.35
+    },
+    "horizontal": {
+      "canvas": [1920, 1080],
+      "skin": "pixel_9_pro_xl",
+      "reuseRawFrom": "vertical",
+      "device": { "scale": 0.88, "centerX": 0.735, "centerY": 0.5 },
+      "caption": { "top": 0.3, "size": 66, "align": "start", "inlineStart": 0.06, "width": 0.4 },
+      "zoom": 2.0
+    }
+  },
+  "_zoom": [
+    "The promo has no camera moves; this does, because its subject is a sentence rather than a green",
+    "tick. 'Root is available but this app has not been granted access' has to be read, and at the",
+    "size a phone-in-a-frame gives it, it is a grey smear.",
+    "",
+    "Two levels, as in Hide Persistent Notification's how-tos and for the same reason: the recording",
+    "is about 650 canvas pixels wide in the vertical frame and about 410 in the horizontal one, so one",
+    "number would either barely move the vertical cut or swallow the horizontal."
+  ],
+  "setup": {
+    "package": "com.iboalali.basicrootchecker.debug",
+    "_package": [
+      "The DEBUG build, like the promo: the armed root result is BuildConfig.DEBUG-gated and no",
+      "emulator is rooted, so there is no other way to film this state.",
+      "",
+      "That has a cost worth knowing before re-recording. `app/src/debug/res` renames the app to",
+      "'Basic Root Checker (Debug)' and overrides the splash drawable, and the title bar renders",
+      "app_name, so the resource overrides have to be neutralized on disk for the build being filmed:",
+      "",
+      "    mv app/src/debug/res /tmp/brc-debug-res && ./gradlew :app:assembleGplayDebug ;",
+      "    mv /tmp/brc-debug-res app/src/debug/res",
+      "",
+      "The applicationId keeps its .debug suffix, which is invisible: nothing this journey films",
+      "renders the package name."
+    ],
+    "startInApp": {
+      "extras": {
+        "demo_root": "not-granted",
+        "demo_device_name": "Pixel 9 Pro XL",
+        "demo_device_model": "komodo"
+      }
+    },
+    "_startInApp": [
+      "The app is opened off camera, during reset, so the take begins on the app's own screen. The",
+      "promo does the opposite on purpose: its story starts with the question, and it launches on",
+      "camera. A how-to should start on the screen it is about to talk about.",
+      "",
+      "demo_root arms the answer the FAB will give, so the recorded journey is the real one (checking",
+      "snackbar, spinner, result animation, outcome haptic) with only the outcome decided in advance.",
+      "",
+      "demo_device_name and demo_device_model decide what the device card says. Without them it reads",
+      "'emulator' and 'emu64xa', which contradicts the Pixel bezel the capture is composited into and",
+      "does not match the promo. Arming a device also tells the app a recording is in progress, which",
+      "is what hides Settings' debug-only cards."
+    ],
+    "clearForeignNotifiers": true,
+    "localeScope": "app",
+    "_localeScope": [
+      "'app'. This video never opens a framework surface, so the per-app locale is enough and every",
+      "language is just another run."
+    ],
+    "emulatorDisplayOverride": null,
+    "pressLeadMs": 500,
+    "pressOffsetMs": -220,
+    "showTouches": false,
+    "tapDwell": { "beforeMs": 750, "holdMs": 220, "afterMs": 300 },
+    "demoStatusBar": {
+      "clock": "1200",
+      "batteryLevel": 100,
+      "batteryPlugged": false,
+      "wifiLevel": 4,
+      "wifiFullyConnected": true,
+      "showMobile": false,
+      "hideNotificationIcons": true
+    }
+  },
+  "titleCard": {
+    "title": "Basic Root Checker",
+    "subtitle": { "default": "What to do when root isn't granted" },
+    "holdMs": 2600
+  },
+  "audio": {
+    "track": "Play Store/Video/audio/flipping-in.mp3",
+    "title": "Flipping In",
+    "artist": "Wax Lyricist",
+    "source": "https://freemusicarchive.org/music/wax-lyricist/the-wax-lyricist/flipping-in/",
+    "licence": "CC0 1.0 Universal (public domain dedication) - no attribution required, commercial use permitted",
+    "_note": ["The promo's bed. The same track across an app's videos is what makes them read as a set."],
+    "startAt": 0,
+    "gainDb": 0,
+    "targetLufs": -16,
+    "fadeInMs": 600,
+    "fadeOutMs": 2200
+  },
+  "scenes": [
+    {
+      "id": "check",
+      "caption": { "default": "Run the check." },
+      "steps": [
+        { "wait": 1300 },
+        { "zoom": { "tag": "check_fab", "ms": 550 } },
+        { "wait": 400 },
+        { "tap": { "tag": "check_fab" } },
+        { "wait": 1600 }
+      ],
+      "_note": [
+        "1300ms is a beat to read the device card before anything moves. The push goes to the control",
+        "about to be tapped, so the camera move and the press are one gesture, and the 400ms after it",
+        "lets the move settle before the marker ring arrives 500ms ahead of the finger.",
+        "",
+        "1600ms covers the checking snackbar and the spinner, which the armed path runs in full."
+      ]
+    },
+    {
+      "id": "result",
+      "caption": { "default": "Root is there,\nbut not allowed yet." },
+      "steps": [
+        { "zoom": { "focus": [0.5, 0.33], "ms": 600 } },
+        { "wait": 2600 }
+      ],
+      "_note": [
+        "The push onto the status area is the whole reason this video zooms. Two lines have to be",
+        "read: the message, and 'via Magisk' under it, which is what tells the viewer the app found a",
+        "manager and was refused by it rather than finding nothing.",
+        "",
+        "A fixed focus point because the status text carries no tag and its wording is localized. 0.33",
+        "is the midpoint of the message and the provider line on a 1344x2992 screen. Re-measure with",
+        "`android layout --pretty` if the status area's layout changes."
+      ]
+    },
+    {
+      "id": "request",
+      "caption": { "default": "Tap Request Root access." },
+      "steps": [
+        { "zoom": { "tag": "request_root", "ms": 550 } },
+        { "wait": 500 },
+        { "tap": { "tag": "request_root" } },
+        { "wait": 1600 }
+      ],
+      "_note": [
+        "The armed result governs this button as it governs the FAB, so the tap runs the app's real",
+        "request path and lands back on the same state. That is not a fudge: it is what a real device",
+        "does when the manager's prompt is dismissed. The app asks, and nothing changes."
+      ]
+    },
+    {
+      "id": "approve",
+      "caption": { "default": "Then approve it\nin your root manager." },
+      "steps": [{ "zoom": "out", "ms": 450 }, { "wait": 2400 }],
+      "_note": [
+        "The one beat this video cannot film. The prompt belongs to Magisk, KernelSU or APatch, none of",
+        "which exists on an unrooted emulator, and mocking one up would be wrong twice over: it is",
+        "another project's UI, against which the About screen already disclaims affiliation, and it",
+        "would show one manager's dialog to viewers using any of several.",
+        "",
+        "So the caption says it instead. A caption is the video's own voice and is correct for every",
+        "manager. If a rooted recording device ever exists, this is the only scene that changes.",
+        "",
+        "The trailing wait is the tail the end card fades in over, and the pull-back has to finish and",
+        "settle before the take stops: the recording is frozen on its LAST frame for the whole hold."
+      ]
+    }
+  ],
+  "endCard": {
+    "_note": ["The promo's card, unchanged. Same app, same offer, same link."],
+    "title": "Basic Root Checker",
+    "subtitle": { "default": "Is your device rooted? Find out instantly." },
+    "cta": {
+      "action": { "default": "Get the app" },
+      "url": "iboalali.com/brc",
+      "qr": "Play Store/Video/qr/brc.png"
+    },
+    "holdMs": 3400
+  }
+}
