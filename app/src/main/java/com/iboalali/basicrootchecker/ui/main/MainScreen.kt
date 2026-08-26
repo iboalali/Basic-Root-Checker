@@ -291,7 +291,11 @@ fun MainScreenContent(
                                 onNavigateToAbout()
                             },
                         )
-                        if (BuildConfig.DEBUG) {
+                        // Hidden while a video is being recorded. Filming needs a debug build, and
+                        // neutralizing src/debug/res does not touch the controls the debug *code*
+                        // adds: a how-to that opens this menu on camera would otherwise show two
+                        // "Demo:" rows under a caption naming the item to tap.
+                        if (BuildConfig.DEBUG && !DemoDeviceOverride.recording) {
                             AppBarDropdownMenuItem(
                                 text = "Demo: in-app update",
                                 onClick = {

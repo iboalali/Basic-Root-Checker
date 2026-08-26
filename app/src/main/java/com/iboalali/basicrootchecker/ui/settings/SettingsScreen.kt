@@ -59,7 +59,7 @@ import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
-import com.iboalali.ui.theme.ThemeMode
+import com.iboalali.basicrootchecker.ui.main.DemoDeviceOverride
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.util.AppLanguage
@@ -67,6 +67,7 @@ import com.iboalali.basicrootchecker.util.PreviewLocales
 import com.iboalali.haptics.compose.rememberHapticClick
 import com.iboalali.haptics.compose.rememberHapticToggle
 import com.iboalali.nav3.overlay.DetailNavigationIcon
+import com.iboalali.ui.theme.ThemeMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
@@ -426,7 +427,11 @@ fun SettingsScreenContent(
             OutlinedCard(
                 modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
-                shape = settingsGroupShape(isFirst = false, isLast = !BuildConfig.DEBUG),
+                shape =
+                    settingsGroupShape(
+                        isFirst = false,
+                        isLast = !BuildConfig.DEBUG || DemoDeviceOverride.recording,
+                    ),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
@@ -469,7 +474,9 @@ fun SettingsScreenContent(
                 }
             }
 
-            if (BuildConfig.DEBUG) {
+            // Hidden while a video is being recorded: filming needs a debug build, and this card
+            // would otherwise sit at the bottom of the settings list the how-to is filming.
+            if (BuildConfig.DEBUG && !DemoDeviceOverride.recording) {
                 Spacer(Modifier.height(SettingsItemSpacing))
                 DebugTipJarCard(
                     supporterTiers = supporterTiers,

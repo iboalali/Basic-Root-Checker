@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.color.DynamicColors
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.ui.AppRoot
+import com.iboalali.basicrootchecker.ui.main.DemoDeviceOverride
 import com.iboalali.basicrootchecker.ui.main.DemoRootOverride
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.haptics.compose.LocalAppHaptics
@@ -41,9 +42,13 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        // Debug-only: let a launch intent decide the next check's outcome, so the store
-        // video records on an unrooted emulator with no demo picker in the shot.
-        if (BuildConfig.DEBUG) DemoRootOverride.applyFrom(intent)
+        // Debug-only: let a launch intent decide the next check's outcome, and which phone the
+        // device card names, so the store video records on an unrooted emulator with no demo
+        // picker in the shot and no "emu64xa" under a Pixel bezel.
+        if (BuildConfig.DEBUG) {
+            DemoRootOverride.applyFrom(intent)
+            DemoDeviceOverride.applyFrom(intent)
+        }
 
         (application as BasicRootCheckerApplication).let { app ->
             app.appUpdateController.attach(this)

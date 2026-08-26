@@ -106,10 +106,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val app = getApplication<Application>()
         val resources = app.resources
 
+        // A debug build may have been launched with a device armed for a recording; see
+        // DemoDeviceOverride for why the emulator's own name is the wrong thing to film.
+        val demoName = if (BuildConfig.DEBUG) DemoDeviceOverride.name else null
+        val demoModel = if (BuildConfig.DEBUG) DemoDeviceOverride.model else null
+
         _uiState.update {
             it.copy(
-                deviceMarketingName = DeviceMarketingNames.getSingleName(),
-                deviceModelName = Build.DEVICE,
+                deviceMarketingName = demoName ?: DeviceMarketingNames.getSingleName(),
+                deviceModelName = demoModel ?: Build.DEVICE,
                 androidVersion = "${resources.getString(R.string.textViewAndroidVersion)} ${DeviceInfo.getAndroidVersionName()}",
             )
         }
