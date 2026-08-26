@@ -110,6 +110,17 @@ internal fun parseMagiskVersionCode(code: Long): String {
     return "$major.$minor"
 }
 
+/**
+ * The version out of `magisk -v`, which answers `<version>:<channel>[:R]` — "27.0:MAGISK:R" on a
+ * stable build. Only the first field names the version; the rest is Magisk's own bookkeeping and
+ * has no meaning to someone reading the status card. Everything the version field itself carries
+ * is kept, including suffixes like "-delta" or "-alpha" that identify a fork or a canary build.
+ *
+ * Returns null when the line carries no version, so the caller can fall back to `magisk -V`.
+ */
+internal fun parseMagiskVersionName(raw: String): String? =
+    raw.substringBefore(':').trim().takeIf { it.isNotEmpty() }
+
 object RootChecker {
 
     // Known manager package ids → the specific manager they identify. Iteration order is the
@@ -274,8 +285,8 @@ object RootChecker {
     private fun queryMagiskVersion(): String? {
         val nameResult = Shell.cmd("magisk -v").exec()
         if (nameResult.isSuccess) {
-            val name = nameResult.out.firstOrNull()?.trim().orEmpty()
-            if (name.isNotEmpty()) return name
+            val name = nameResult.out.firstOrNull()?.let(::parseMagiskVersionName)
+            if (name != null) return name
         }
         val codeResult = Shell.cmd("magisk -V").exec()
         if (codeResult.isSuccess) {
