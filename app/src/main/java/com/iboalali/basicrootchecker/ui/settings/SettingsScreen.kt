@@ -46,6 +46,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -239,6 +241,7 @@ fun SettingsScreenContent(
                 Row(
                     modifier =
                         Modifier.fillMaxWidth()
+                            .testTag("settings_telemetry")
                             .toggleable(
                                 value = telemetryEnabled,
                                 onValueChange = rememberHapticToggle(onTelemetryEnabledChange),
@@ -281,6 +284,7 @@ fun SettingsScreenContent(
                     Row(
                         modifier =
                             Modifier.fillMaxWidth()
+                                .testTag("settings_reset_identity")
                                 .clickable(
                                     onClick = rememberHapticClick { showResetIdentityDialog = true }
                                 )
@@ -523,11 +527,15 @@ fun SettingsScreenContent(
 
     if (showResetIdentityDialog) {
         AlertDialog(
+            // A Dialog is its own window, outside the scope that turns test tags into resource-ids,
+            // so re-enable it here or the tags below are invisible to uiautomator.
+            modifier = Modifier.semantics { testTagsAsResourceId = true },
             onDismissRequest = { showResetIdentityDialog = false },
             title = { Text(stringResource(R.string.settings_reset_identity_title)) },
             text = { Text(stringResource(R.string.settings_reset_identity_dialog_message)) },
             confirmButton = {
                 TextButton(
+                    modifier = Modifier.testTag("reset_identity_confirm"),
                     onClick =
                         rememberHapticClick {
                             showResetIdentityDialog = false
@@ -535,13 +543,16 @@ fun SettingsScreenContent(
                             scope.launch {
                                 snackbarHostState.showSnackbar(resetIdentityDoneMessage)
                             }
-                        }
+                        },
                 ) {
                     Text(stringResource(R.string.settings_reset_identity_confirm))
                 }
             },
             dismissButton = {
-                TextButton(onClick = rememberHapticClick { showResetIdentityDialog = false }) {
+                TextButton(
+                    modifier = Modifier.testTag("reset_identity_cancel"),
+                    onClick = rememberHapticClick { showResetIdentityDialog = false },
+                ) {
                     Text(stringResource(android.R.string.cancel))
                 }
             },

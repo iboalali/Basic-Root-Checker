@@ -587,7 +587,28 @@ fun MainScreenContent(
                             uiState.rootStatus == RootStatus.NOT_ROOTED
                     ) {
                         Spacer(Modifier.height(16.dp))
-                        FilledTonalButton(onClick = rememberHapticClick(onRequestRoot)) {
+                        FilledTonalButton(
+                            // An armed result governs this button as it governs the FAB. Without
+                            // that, a demo showing "root is available but not granted" would run a
+                            // real su request against the emulator and answer "not rooted",
+                            // contradicting the state being demonstrated. Re-applying the armed
+                            // result is what a real device does when the manager's prompt is
+                            // dismissed: it asks, and nothing changes.
+                            onClick =
+                                rememberHapticClick {
+                                    val armed =
+                                        if (BuildConfig.DEBUG) DemoRootOverride.armed else null
+                                    if (armed != null) {
+                                        onCheckRootDemo(armed)
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar(checkingText)
+                                        }
+                                    } else {
+                                        onRequestRoot()
+                                    }
+                                },
+                            modifier = Modifier.testTag("request_root"),
+                        ) {
                             Text(text = stringResource(R.string.action_request_root))
                         }
                     }
