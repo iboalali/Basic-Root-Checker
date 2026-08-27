@@ -40,13 +40,47 @@
 
   "screenshots": {
     "dir": "Play Store/Generated Screenshots",
-    "handMaintainedLocales": ["en-US"],
+
+    "_handMaintainedLocales": [
+      "Empty: no locale's listing is maintained by hand. All five locales' app name, short and full",
+      "description are already live and byte-identical to `Play Store/Listing`, so the uploader's",
+      "listing push is a no-op for every one of them, and the export renders en-US alongside the other",
+      "four. Naming a locale here freezes its screenshots at whatever the store already holds."
+    ],
+    "handMaintainedLocales": [],
+
+    "_listingFiles": [
+      "The uploader reads its own file map rather than the `listing.files` above, and keys the app name",
+      "`title` where that one keys it `name`. The same three files under two vocabularies, so the maps",
+      "cannot be shared. Without this the uploader looks for the kit's default hyphenated names and",
+      "stops on four locales of missing sources before it reaches the store."
+    ],
+    "listingFiles": {
+      "title": "app_name.txt",
+      "shortDescription": "short_description.txt",
+      "fullDescription": "full_description.txt"
+    },
+
     "devices": {
       "Phone": "phoneScreenshots",
       "Tablet7": "sevenInchScreenshots",
       "Tablet10": "tenInchScreenshots"
     },
-    "_order": "UNCONFIRMED — this app has never uploaded screenshots through the script, so nobody has decided the store's running order yet. Display order IS upload order and there is no way to reorder except re-uploading, so confirm this list before the first real run. LicenseShot is exported but deliberately left out: a legal credits list is weak store copy.",
+
+    "_order": [
+      "The store's running order, for every locale and all three device types. Display order is upload",
+      "order and the Play API has no ordering field, so this list is the only place it is decided and",
+      "changing it later means re-uploading the whole set.",
+      "",
+      "It leads with the answer: the green result naming the provider, which is the one question the app",
+      "exists to answer. The idle state follows to show how that answer is reached, since the '#' button",
+      "is the entire interaction. Settings comes third and carries the most substance per pixel; on",
+      "Tablet10 it is the swipe-to-close overlay, so the large-screen layout gets a slot of its own.",
+      "About closes on reassurance, which this category needs: it does NOT root your phone, and it",
+      "collects no personal information.",
+      "",
+      "LicenseShot is exported but deliberately left out: a legal credits list is weak store copy."
+    ],
     "order": [
       "MainRootedShot",
       "MainNotCheckedShot",
