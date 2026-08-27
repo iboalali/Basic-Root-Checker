@@ -1,6 +1,6 @@
 Basic Root Checker 2.5 is out.
 
-🔨 Magisk versions read as versions again: "via Magisk v27.0", not "v27.0:MAGISK:R". Every Magisk user saw that one.
+🔨 Magisk versions read as versions again: "via Magisk v27.0", not "v27.0:MAGISK:R".
 ➕ On tablets and foldables, Settings, About and Licenses open as a card you swipe away.
 🛠️ Licenses credits every bundled library, grouped by license.
 🛠️ Faster cold start, smoother first scroll.
