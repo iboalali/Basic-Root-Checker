@@ -31,12 +31,17 @@ Profile journey, accessibility, haptics, store assets. Don't restate it here.
 
 App-specific additions to that list:
 
-- Anything touching the root-detection probes must be verified on a **real rooted device**; the
-  hardware-dependent paths are not unit-tested. An emulator covers the two ungranted states with a
-  one-command toggle and is worth running first — but it can never reach `Rooted`, because AOSP's
-  `su` refuses app uids in the binary, so `adb root` is not root the app can use. Recipe, and the
-  `libsu` per-process caching trap that makes a mid-session state change look like a detection bug,
-  in [`docs/root-provider-detection-gaps.md`](docs/root-provider-detection-gaps.md).
+- Anything touching the root-detection probes needs an emulator run, and only the granted case needs
+  a rooted one. A stock image covers three of the four `RootResult` states and **every provider and
+  manager the app names**: the only signal that yields `KERNELSU` or `APATCH` is an installed package
+  id, so a manifest-only stub APK per id drives the real probe. All 17 ids in `PACKAGE_MANAGERS` were
+  confirmed that way on API 36 (2026-08-27), which is the check worth repeating, because a package
+  missing from the manifest's `<queries>` fails *silently* and looks like a device with no root
+  manager. `Rooted` needs a real provider (Magisk via `rootAVD`); no `su` you write yourself will do,
+  because an app process has an empty capability bounding set and so cannot complete `setuid(0)`.
+  Recipes, the debug-FAB trap that tests the demo picker instead of the detector, and the `libsu`
+  per-process caching trap that makes a mid-session state change look like a detection bug, in
+  [`docs/root-provider-detection-gaps.md`](docs/root-provider-detection-gaps.md).
 - Anything touching an `@AppFunction` must be verified with `adb` on API 36+ — a green build proves
   nothing here (see Traps).
 
