@@ -324,6 +324,10 @@ fun MainScreenContent(
                         // animation, outcome haptic) with only the answer decided in advance, so
                         // a recording shows what a real user sees. The picker is the interactive
                         // fallback when nothing was armed.
+                        //
+                        // Except while recording. On a genuinely rooted emulator the answer does
+                        // not need arming, and a developer picker in the middle of the shot is the
+                        // one thing the armed path exists to avoid.
                         val armed = if (BuildConfig.DEBUG) DemoRootOverride.armed else null
                         when {
                             armed != null -> {
@@ -331,7 +335,8 @@ fun MainScreenContent(
                                 scope.launch { snackbarHostState.showSnackbar(checkingText) }
                             }
 
-                            BuildConfig.DEBUG -> showDemoDialog = true
+                            BuildConfig.DEBUG && !DemoDeviceOverride.recording ->
+                                showDemoDialog = true
 
                             else -> {
                                 onCheckRoot()
