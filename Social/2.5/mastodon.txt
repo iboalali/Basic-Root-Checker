@@ -1,0 +1,12 @@
+Basic Root Checker 2.5 is out.
+
+🔨 Magisk versions read as versions again: "via Magisk v27.0", not "v27.0:MAGISK:R". Every Magisk user saw that one.
+➕ On tablets and foldables, Settings, About and Licenses open as a card you swipe away.
+🛠️ Licenses credits every bundled library, grouped by license.
+🛠️ Faster cold start, smoother first scroll.
+
+No ads. Collects no personal information.
+
+https://play.google.com/store/apps/details?id=com.iboalali.basicrootchecker
+
+#Android #Magisk #KernelSU #APatch
