@@ -4,14 +4,15 @@
     <string name="about_not_affiliated">Diese app wird nichts von chainfire oder SuperSU unterstützt.</string>
     <string name="about_link_email">E-Mail</string>
     <string name="about_link_website">Website</string>
+    <string name="about_link_rate_this_app">App bewerten</string>
     <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
 Diese app wird NICHT dein Gerät rooten.\n
 Diese app erfordert ROOT zugriff, benutzen auf eigener gefahr.\n
-Diese app sammelt keine daten oder persönliche informationen.\n\n\n
+Diese app sammelt keine persönlichen informationen.\n\n\n
 Kontaktiere mich:</string>
     <string name="action_about">Über</string>
     <string name="action_privacy_policy">Datenschutzerklärung</string>
-    <string name="action_licence">Lizenzen</string>
+    <string name="action_license">Lizenzen</string>
     <string name="action_settings">Einstellungen</string>
 
     <!-- Settings Strings -->
@@ -42,6 +43,11 @@ Kontaktiere mich:</string>
     <string name="tip_jar_pending">Dein Trinkgeld steht noch aus – es wird abgeschlossen, sobald deine Zahlung bestätigt ist.</string>
     <string name="tip_jar_cleared">Dein ausstehendes Trinkgeld wurde abgeschlossen – danke für deine Unterstützung!</string>
     <string name="tip_jar_error">Etwas ist schiefgelaufen. Bitte versuche es erneut.</string>
+    <!-- Unterstützungs-Karte auf dem Hauptbildschirm, nach einer Root-Prüfung (siehe SupportGate) -->
+    <string name="support_card_title">Gefällt dir die App?</string>
+    <string name="support_card_body">Sie ist kostenlos und werbefrei. Ein kleines Trinkgeld hilft bei der Weiterentwicklung.</string>
+    <string name="support_card_action">Entwicklung unterstützen</string>
+    <string name="support_card_dismiss">Schließen</string>
     <string name="rootAvailable">Root zugriff vorhanden</string>
     <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
     <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
@@ -62,6 +68,9 @@ Kontaktiere mich:</string>
     <string name="content_description_android_version">Android-Version</string>
     <string name="content_description_more_options">Weitere Optionen</string>
     <string name="content_description_navigate_up">Nach oben navigieren</string>
+    <string name="content_description_close">Schließen</string>
+    <string name="content_description_dismiss_dialog">Dialog schließen</string>
+    <string name="detail_release_to_close">Zum Schließen loslassen</string>
     <string name="action_copy">Kopieren</string>
     <string name="toast_content_copied">Inhalt kopiert</string>
 
@@ -70,8 +79,10 @@ Kontaktiere mich:</string>
     <string name="label_model">Modell</string>
     <string name="label_android_version">Android Version</string>
     <string name="other_apps_title">Weitere Apps</string>
-    <string name="other_apps_billboard_description">Diese App hilft dir, großen Text auf dem Bildschirm anzuzeigen, und macht ihn so groß wie möglich, ohne den Text abzuschneiden.\n\nKann in Meetings verwendet werden, um über ein Thema mit einer Zahl oder einem Text abzustimmen.</string>
-    <string name="other_apps_hide_notifications_description">Wähle eine dauerhafte Benachrichtigung zum Ausblenden aus und halte sie versteckt, solange diese App installiert ist.</string>
+    <string name="about_other_app_open">Öffnen</string>
+    <string name="about_other_app_install">Installieren</string>
+    <string name="about_other_app_website">Website</string>
+    <string name="about_other_app_highlights">Highlights</string>
 
     <!-- In-app updates -->
     <string name="update_available_title">Update verfügbar</string>

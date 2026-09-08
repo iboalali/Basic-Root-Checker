@@ -88,7 +88,7 @@ class GPlayAppUpdateController(context: Context) : AppUpdateController {
             ActivityResultContracts.StartIntentSenderForResult()
         ) { result ->
             if (result.resultCode != Activity.RESULT_OK) {
-                Log.w(TAG, "Update flow cancelled or failed: resultCode=${result.resultCode}")
+                Log.w(TAG, "Update flow canceled or failed: resultCode=${result.resultCode}")
             }
         }
         activity.lifecycle.addObserver(lifecycleObserver)

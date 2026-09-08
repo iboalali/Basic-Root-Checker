@@ -1,0 +1,8 @@
+Version 2.5:
+➕ Große Displays: Einstellungen, Über und Lizenzen als Dialog, per Wischen schließbar
+➕ App direkt in der App bewerten, plus Link unter Über (Google Play)
+➕ Optionale Karte Entwicklung unterstützen nach einer Root-Prüfung (Google Play)
+🛠️ Andere Apps lädt aktuelle Infos aus dem Web, in deiner Sprache
+🛠️ Lizenzen nennt alle Bibliotheken, nach Lizenz gruppiert
+🛠️ Schnellerer Start, flüssigeres erstes Scrollen
+🔨 Nutzungsdaten-Schalter wirkt sofort; flüssigerer Update-Fortschritt

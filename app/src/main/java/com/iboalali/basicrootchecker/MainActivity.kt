@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -21,12 +20,14 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.color.DynamicColors
-import com.iboalali.basicrootchecker.data.ThemeMode
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.ui.AppRoot
-import com.iboalali.basicrootchecker.ui.LocalAppHaptics
-import com.iboalali.basicrootchecker.ui.LocalHapticsEnabled
+import com.iboalali.basicrootchecker.ui.main.DemoDeviceOverride
+import com.iboalali.basicrootchecker.ui.main.DemoRootOverride
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.haptics.compose.LocalAppHaptics
+import com.iboalali.haptics.compose.LocalHapticsEnabled
+import com.iboalali.ui.theme.isDark
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -41,9 +42,22 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
+        // Debug-only: let a launch intent decide the next check's outcome, and which phone the
+        // device card names, so the store video records on an unrooted emulator with no demo
+        // picker in the shot and no "emu64xa" under a Pixel bezel.
+        if (BuildConfig.DEBUG) {
+            DemoRootOverride.applyFrom(intent)
+            DemoDeviceOverride.applyFrom(intent)
+        }
+
         (application as BasicRootCheckerApplication).let { app ->
             app.appUpdateController.attach(this)
             app.billingController.attach(this)
+            app.reviewController.attach(this)
+            // Kick off the "Other apps" catalog refresh at launch; it updates in the background and
+            // the About screen shows the cached/bundled list until (and unless) a fresher one
+            // arrives.
+            app.appCatalogRepository.refresh()
         }
 
         val userPreferences = UserPreferences(this)
@@ -54,15 +68,13 @@ class MainActivity : ComponentActivity() {
         val app = application as BasicRootCheckerApplication
         val billingController = app.billingController
         setContent {
-            val themeMode by userPreferences.themeMode
-                .collectAsStateWithLifecycle(initialValue = initialThemeMode)
-            val hapticsEnabled by userPreferences.hapticsEnabled
-                .collectAsStateWithLifecycle(initialValue = true)
-            val darkTheme = when (themeMode) {
-                ThemeMode.SYSTEM -> isSystemInDarkTheme()
-                ThemeMode.LIGHT -> false
-                ThemeMode.DARK -> true
-            }
+            val themeMode by
+                userPreferences.themeMode.collectAsStateWithLifecycle(
+                    initialValue = initialThemeMode
+                )
+            val hapticsEnabled by
+                userPreferences.hapticsEnabled.collectAsStateWithLifecycle(initialValue = true)
+            val darkTheme = themeMode.isDark()
             // Keep status- and nav-bar icon contrast in sync with the resolved theme. Also works
             // around the splash screen theme not setting the light status bar on its own.
             LaunchedEffect(darkTheme) {
@@ -73,7 +85,7 @@ class MainActivity : ComponentActivity() {
             }
             BasicRootCheckerTheme(darkTheme = darkTheme) {
                 // The window background comes from the XML theme, which follows the *system*
-                // day/night setting and ignores the in-app override — so it would peek through
+                // day/night setting and ignores the in-app override, so it would peek through
                 // (in the wrong theme) during screen transitions. Drive it from the resolved
                 // color scheme so the activity background matches, and cross-fades, with the theme.
                 val backgroundColor = MaterialTheme.colorScheme.background
@@ -82,9 +94,12 @@ class MainActivity : ComponentActivity() {
                 }
                 CompositionLocalProvider(
                     LocalHapticsEnabled provides hapticsEnabled,
-                    LocalAppHaptics provides app.rootHaptics,
+                    LocalAppHaptics provides app.rootHaptics.haptics,
                 ) {
-                    AppRoot(tipCleared = billingController.tipCleared)
+                    AppRoot(
+                        tipCleared = billingController.tipCleared,
+                        tipEvents = billingController.events,
+                    )
                 }
             }
         }
@@ -104,28 +119,34 @@ class MainActivity : ComponentActivity() {
 
             val timeDiff = startMillis - System.currentTimeMillis()
             Log.d("SplashScreen", "timeDiff is $timeDiff")
-            Log.d("SplashScreen", "animation duration is ${splashScreenProvider.iconAnimationDurationMillis}")
+            Log.d(
+                "SplashScreen",
+                "animation duration is ${splashScreenProvider.iconAnimationDurationMillis}",
+            )
 
-            val exitTimeDelay = if (timeDiff <= 0) {
-                splashScreenProvider.iconAnimationDurationMillis + timeDiff
-            } else {
-                splashScreenProvider.iconAnimationDurationMillis
-            }
+            val exitTimeDelay =
+                if (timeDiff <= 0) {
+                    splashScreenProvider.iconAnimationDurationMillis + timeDiff
+                } else {
+                    splashScreenProvider.iconAnimationDurationMillis
+                }
 
             Log.d("SplashScreen", "exitTimeDelay is $exitTimeDelay")
 
             ValueAnimator.ofFloat(1f, 0f).apply {
-                addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationCancel(animation: Animator) {
-                        Log.d("SplashScreen", "animation canceled")
-                        splashScreenProvider.remove()
-                    }
+                addListener(
+                    object : AnimatorListenerAdapter() {
+                        override fun onAnimationCancel(animation: Animator) {
+                            Log.d("SplashScreen", "animation canceled")
+                            splashScreenProvider.remove()
+                        }
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        Log.d("SplashScreen", "animation ended")
-                        splashScreenProvider.remove()
+                        override fun onAnimationEnd(animation: Animator) {
+                            Log.d("SplashScreen", "animation ended")
+                            splashScreenProvider.remove()
+                        }
                     }
-                })
+                )
                 startDelay = exitTimeDelay
                 addUpdateListener { animation ->
                     val animatedValue = animation.animatedValue as Float

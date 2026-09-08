@@ -44,4 +44,4 @@ See [CHANGELOG.md](CHANGELOG.md) for the release history.
 - **AppFunctions:** [androidx.appfunctions](https://developer.android.com/jetpack/androidx/releases/appfunctions) exposes root-check workflows to the system and on-device agents (both flavors; KSP-generated schema)
 - **Device names:** [DeviceMarketingNames](https://github.com/nicoaccessmedia/DeviceMarketingNames)
 - **In-app billing:** Google Play Billing (tip jar) in the `gplay` flavor; a no-op in `foss`
-- **Build system:** Gradle with Kotlin DSL and version catalog (AGP 9.1.0)
+- **Build system:** Gradle with Kotlin DSL and version catalog (AGP)

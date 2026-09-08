@@ -1,0 +1,92 @@
+{
+  "description": "TelemetryDeck TQL queries for the \"hapticCapabilities\" signal of Basic Root Checker. The signal fires once per cold start (RootHaptics.init) and carries five string parameters: hasVibrator, amplitudeControl, primitiveClick, envelopeEffectsSupported (all \"true\"/\"false\") and sdkInt (the Android API level, e.g. \"33\"). The signal name lives in the \"type\" dimension; unique devices are counted with a thetaSketch over clientUser. Because the parameter values are strings, selectors match \"true\"/\"false\", not booleans. Omit \"intervals\" to let the dashboard date picker drive the range, or add e.g. \"intervals\": [\"P90D/PT0S\"] to hardcode a window. Swap the thetaSketch over clientUser for {\"type\":\"count\",\"name\":\"count\"} to count signals (~cold starts) instead of unique devices.",
+  "appId": "613251CD-B223-443A-9583-3A18586FAB55",
+  "appName": "Basic Root Checker",
+  "signal": "hapticCapabilities",
+  "parameters": {
+    "hasVibrator": "\"true\"/\"false\" — device has an actuator at all",
+    "amplitudeControl": "\"true\"/\"false\" — API 26+ amplitude-controlled waveforms (the result buzz)",
+    "primitiveClick": "\"true\"/\"false\" — API 30+ crisp PRIMITIVE_CLICK for UI taps (else a raw amplitude one-shot)",
+    "envelopeEffectsSupported": "\"true\"/\"false\" — API 36+ PWLE wave-envelope (the rising \"checking\" ramp)",
+    "sdkInt": "Android API level as a string, e.g. \"33\""
+  },
+  "queries": [
+    {
+      "name": "Capability support overview",
+      "description": "One panel, all four flags. totalUsers is the denominator (everyone who emitted the signal); each filtered aggregation is the count of unique devices where that capability is on.",
+      "query": {
+        "queryType": "timeseries",
+        "granularity": "all",
+        "filter": { "type": "selector", "dimension": "type", "value": "hapticCapabilities" },
+        "aggregations": [
+          { "type": "thetaSketch", "name": "totalUsers", "fieldName": "clientUser" },
+          { "type": "filtered",
+            "filter": { "type": "selector", "dimension": "hasVibrator", "value": "true" },
+            "aggregator": { "type": "thetaSketch", "name": "hasVibratorUsers", "fieldName": "clientUser" } },
+          { "type": "filtered",
+            "filter": { "type": "selector", "dimension": "amplitudeControl", "value": "true" },
+            "aggregator": { "type": "thetaSketch", "name": "amplitudeControlUsers", "fieldName": "clientUser" } },
+          { "type": "filtered",
+            "filter": { "type": "selector", "dimension": "primitiveClick", "value": "true" },
+            "aggregator": { "type": "thetaSketch", "name": "primitiveClickUsers", "fieldName": "clientUser" } },
+          { "type": "filtered",
+            "filter": { "type": "selector", "dimension": "envelopeEffectsSupported", "value": "true" },
+            "aggregator": { "type": "thetaSketch", "name": "envelopeUsers", "fieldName": "clientUser" } }
+        ]
+      }
+    },
+    {
+      "name": "Single-flag breakdown (template)",
+      "description": "True vs false split for one boolean param. Swap \"hasVibrator\" for amplitudeControl, primitiveClick, or envelopeEffectsSupported.",
+      "query": {
+        "queryType": "groupBy",
+        "granularity": "all",
+        "filter": { "type": "selector", "dimension": "type", "value": "hapticCapabilities" },
+        "dimensions": [ { "type": "default", "dimension": "hasVibrator", "outputName": "hasVibrator" } ],
+        "aggregations": [ { "type": "thetaSketch", "name": "users", "fieldName": "clientUser" } ]
+      }
+    },
+    {
+      "name": "Android version (SDK level) distribution",
+      "description": "Unique devices per Android API level. Note sdkInt is a string, so ordering is lexical.",
+      "query": {
+        "queryType": "topN",
+        "granularity": "all",
+        "filter": { "type": "selector", "dimension": "type", "value": "hapticCapabilities" },
+        "dimension": { "type": "default", "dimension": "sdkInt", "outputName": "sdkInt" },
+        "metric": "users",
+        "threshold": 20,
+        "aggregations": [ { "type": "thetaSketch", "name": "users", "fieldName": "clientUser" } ]
+      }
+    },
+    {
+      "name": "Envelope (PWLE ramp) adoption over time",
+      "description": "The rich \"checking\" sweep is the rarest capability — this tracks the supported share month over month against the total.",
+      "query": {
+        "queryType": "timeseries",
+        "granularity": "month",
+        "filter": { "type": "selector", "dimension": "type", "value": "hapticCapabilities" },
+        "aggregations": [
+          { "type": "thetaSketch", "name": "totalUsers", "fieldName": "clientUser" },
+          { "type": "filtered",
+            "filter": { "type": "selector", "dimension": "envelopeEffectsSupported", "value": "true" },
+            "aggregator": { "type": "thetaSketch", "name": "envelopeUsers", "fieldName": "clientUser" } }
+        ]
+      }
+    },
+    {
+      "name": "Tap-quality matrix",
+      "description": "Cross-tabs primitiveClick x amplitudeControl to bucket devices into crisp-primitive vs raw-amplitude vs no-tap — the fallback ladder in RootHaptics.playTap.",
+      "query": {
+        "queryType": "groupBy",
+        "granularity": "all",
+        "filter": { "type": "selector", "dimension": "type", "value": "hapticCapabilities" },
+        "dimensions": [
+          { "type": "default", "dimension": "primitiveClick", "outputName": "primitiveClick" },
+          { "type": "default", "dimension": "amplitudeControl", "outputName": "amplitudeControl" }
+        ],
+        "aggregations": [ { "type": "thetaSketch", "name": "users", "fieldName": "clientUser" } ]
+      }
+    }
+  ]
+}

@@ -3,7 +3,9 @@ package com.iboalali.basicrootchecker.ui.main
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -32,7 +34,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
@@ -54,12 +55,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -80,25 +86,39 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
+import com.iboalali.basicrootchecker.billing.TipProduct
+import com.iboalali.basicrootchecker.billing.TipTier
 import com.iboalali.basicrootchecker.data.RootManager
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.basicrootchecker.data.RootResult
-import com.iboalali.basicrootchecker.ui.components.AppBarDropdownMenuItem
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
-import com.iboalali.basicrootchecker.ui.rememberHapticLongClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.haptics.compose.rememberHapticClick
+import com.iboalali.haptics.compose.rememberHapticLongClick
+import com.iboalali.nav3.overlay.LocalDetailAnchors
+import com.iboalali.nav3.overlay.screenRect
+import com.iboalali.ui.menu.AppBarDropdownMenuItem
+import com.iboalali.ui.menu.HapticDropdownMenu
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
     onNavigateToAbout: () -> Unit,
-    onNavigateToLicence: () -> Unit,
+    onNavigateToLicense: () -> Unit,
     onNavigateToSettings: () -> Unit,
     viewModel: MainViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
+
+    // Report the meaningful first frame for accurate time-to-fully-drawn (TTFD): the device-info
+    // is populated synchronously in the ViewModel's init, so this fires as soon as the main screen
+    // has real content rather than at the first (empty) frame.
+    ReportDrawnWhen { uiState.deviceMarketingName.isNotEmpty() }
 
     MainScreenContent(
         uiState = uiState,
@@ -118,12 +138,18 @@ fun MainScreen(
         onInstallRequested = viewModel::onInstallRequested,
         onAppUpdatedSnackbarShown = viewModel::onAppUpdatedSnackbarShown,
         onNavigateToAbout = onNavigateToAbout,
-        onNavigateToLicence = onNavigateToLicence,
+        onNavigateToLicense = onNavigateToLicense,
         onNavigateToSettings = onNavigateToSettings,
+        tipProducts = tipProducts,
+        onSupportPromptShown = viewModel::onSupportPromptShown,
+        onSupportPromptOpened = viewModel::onSupportPromptOpened,
+        onSupportPromptDismissed = viewModel::onSupportPromptDismissed,
+        onTipSelected = viewModel::onTipSelected,
+        onDemoSupportPrompt = viewModel::demoSupportPrompt,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MainScreenContent(
     uiState: MainUiState,
@@ -133,16 +159,29 @@ fun MainScreenContent(
     onInstallRequested: () -> Unit,
     onAppUpdatedSnackbarShown: () -> Unit,
     onNavigateToAbout: () -> Unit,
-    onNavigateToLicence: () -> Unit,
+    onNavigateToLicense: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onCheckRootDemo: (RootResult) -> Unit = {},
     onDemoUpdateChoice: (DebugUpdateChoice) -> Unit = {},
+    tipProducts: ImmutableList<TipProduct> = persistentListOf(),
+    onSupportPromptShown: () -> Unit = {},
+    onSupportPromptOpened: () -> Unit = {},
+    onSupportPromptDismissed: () -> Unit = {},
+    onTipSelected: (TipTier) -> Unit = {},
+    onDemoSupportPrompt: () -> Unit = {},
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var menuExpanded by remember { mutableStateOf(false) }
+    // Shared anchors for the large-screen detail container transform: the overflow button reports
+    // where to collapse into, and a tapped menu item reports where the dialog should grow from.
+    val detailAnchors = LocalDetailAnchors.current
+    var licenseItemRect by remember { mutableStateOf<Rect?>(null) }
+    var settingsItemRect by remember { mutableStateOf<Rect?>(null) }
+    var aboutItemRect by remember { mutableStateOf<Rect?>(null) }
     var showDemoDialog by remember { mutableStateOf(false) }
     var showUpdateDemoDialog by remember { mutableStateOf(false) }
+    var showTipDialog by remember { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val checkingText = stringResource(R.string.string_checking_for_root)
@@ -167,61 +206,108 @@ fun MainScreenContent(
                     )
                 },
                 actions = {
-                    IconButton(onClick = rememberHapticClick { menuExpanded = true }) {
+                    IconButton(
+                        onClick = rememberHapticClick { menuExpanded = true },
+                        modifier =
+                            Modifier.testTag("overflow_menu").onGloballyPositioned {
+                                detailAnchors.overflowScreenRect = it.screenRect()
+                            },
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.more_vert_24px),
-                            contentDescription = stringResource(R.string.content_description_more_options),
+                            contentDescription =
+                                stringResource(R.string.content_description_more_options),
+                            // Held hidden while the detail overlay is up so its collapsing card can
+                            // "become" this icon; the overlay restores it as it dismisses.
+                            modifier =
+                                Modifier.graphicsLayer {
+                                    alpha = if (detailAnchors.overflowIconVisible) 1f else 0f
+                                },
                         )
                     }
-                    DropdownMenu(
+                    // HapticDropdownMenu, not DropdownMenu: it re-enables testTagsAsResourceId
+                    // across the popup boundary, which this call site used to do by hand. Every
+                    // onClick below is a plain lambda. AppBarDropdownMenuItem wraps it in
+                    // rememberHapticClick itself, so wrapping here too would tick twice.
+                    HapticDropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false },
+                        // Rounded corners to match the app's cards/FAB (Material3's default menu
+                        // corner is much tighter).
+                        shape = RoundedCornerShape(16.dp),
                     ) {
                         AppBarDropdownMenuItem(
-                            text = stringResource(R.string.action_licence),
+                            text = stringResource(R.string.action_license),
+                            modifier =
+                                Modifier.testTag("menu_license").onGloballyPositioned {
+                                    licenseItemRect = it.screenRect()
+                                },
                             leadingIcon = {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_baseline_text_snippet_24),
+                                    painter =
+                                        painterResource(R.drawable.ic_baseline_text_snippet_24),
                                     contentDescription = null,
                                 )
                             },
-                            onClick = rememberHapticClick {
+                            onClick = {
+                                detailAnchors.openOriginScreenRect = licenseItemRect
                                 menuExpanded = false
-                                onNavigateToLicence()
+                                onNavigateToLicense()
                             },
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_settings),
+                            modifier =
+                                Modifier.testTag("menu_settings").onGloballyPositioned {
+                                    settingsItemRect = it.screenRect()
+                                },
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(R.drawable.settings_24px),
                                     contentDescription = null,
                                 )
                             },
-                            onClick = rememberHapticClick {
+                            onClick = {
+                                detailAnchors.openOriginScreenRect = settingsItemRect
                                 menuExpanded = false
                                 onNavigateToSettings()
                             },
                         )
                         AppBarDropdownMenuItem(
                             text = stringResource(R.string.action_about),
+                            modifier =
+                                Modifier.testTag("menu_about").onGloballyPositioned {
+                                    aboutItemRect = it.screenRect()
+                                },
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_baseline_android_24),
                                     contentDescription = null,
                                 )
                             },
-                            onClick = rememberHapticClick {
+                            onClick = {
+                                detailAnchors.openOriginScreenRect = aboutItemRect
                                 menuExpanded = false
                                 onNavigateToAbout()
                             },
                         )
-                        if (BuildConfig.DEBUG) {
+                        // Hidden while a video is being recorded. Filming needs a debug build, and
+                        // neutralizing src/debug/res does not touch the controls the debug *code*
+                        // adds: a how-to that opens this menu on camera would otherwise show two
+                        // "Demo:" rows under a caption naming the item to tap.
+                        if (BuildConfig.DEBUG && !DemoDeviceOverride.recording) {
                             AppBarDropdownMenuItem(
                                 text = "Demo: in-app update",
-                                onClick = rememberHapticClick {
+                                onClick = {
                                     menuExpanded = false
                                     showUpdateDemoDialog = true
+                                },
+                            )
+                            AppBarDropdownMenuItem(
+                                text = "Demo: support card",
+                                onClick = {
+                                    menuExpanded = false
+                                    onDemoSupportPrompt()
                                 },
                             )
                         }
@@ -232,21 +318,41 @@ fun MainScreenContent(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = rememberHapticClick {
-                    if (BuildConfig.DEBUG) {
-                        showDemoDialog = true
-                    } else {
-                        onCheckRoot()
-                        scope.launch { snackbarHostState.showSnackbar(checkingText) }
-                    }
-                },
+                onClick =
+                    rememberHapticClick {
+                        // An armed result takes the RELEASE path (snackbar, spinner, result
+                        // animation, outcome haptic) with only the answer decided in advance, so
+                        // a recording shows what a real user sees. The picker is the interactive
+                        // fallback when nothing was armed.
+                        //
+                        // Except while recording. On a genuinely rooted emulator the answer does
+                        // not need arming, and a developer picker in the middle of the shot is the
+                        // one thing the armed path exists to avoid.
+                        val armed = if (BuildConfig.DEBUG) DemoRootOverride.armed else null
+                        when {
+                            armed != null -> {
+                                onCheckRootDemo(armed)
+                                scope.launch { snackbarHostState.showSnackbar(checkingText) }
+                            }
+
+                            BuildConfig.DEBUG && !DemoDeviceOverride.recording ->
+                                showDemoDialog = true
+
+                            else -> {
+                                onCheckRoot()
+                                scope.launch { snackbarHostState.showSnackbar(checkingText) }
+                            }
+                        }
+                    },
+                modifier = Modifier.testTag("check_fab"),
                 shape = RoundedCornerShape(16.dp),
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_baseline_tag_24),
-                    contentDescription = stringResource(R.string.content_description_check_for_root),
+                    contentDescription =
+                        stringResource(R.string.content_description_check_for_root),
                 )
             }
         },
@@ -267,45 +373,45 @@ fun MainScreenContent(
         val contentPadding =
             PaddingValues(top = topPadding, start = leftPadding, end = rightPadding)
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier.testTag("main_list")
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(16.dp))
 
             // Root Status Card
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = RoundedCornerShape(32.dp),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp),
+                    modifier = Modifier.fillMaxWidth().padding(32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     AnimatedContent(
                         targetState = uiState.rootStatus,
                         transitionSpec = {
-                            (fadeIn(tween(300)) + scaleIn(
-                                spring(
-                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                                    stiffness = Spring.StiffnessLow,
-                                ),
-                                initialScale = 0.6f,
-                            )).togetherWith(
-                                fadeOut(tween(200)) + scaleOut(
-                                    tween(200),
-                                    targetScale = 0.6f,
-                                ),
-                            )
+                            (fadeIn(tween(300)) +
+                                    scaleIn(
+                                        spring(
+                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                                            stiffness = Spring.StiffnessLow,
+                                        ),
+                                        initialScale = 0.6f,
+                                    ))
+                                .togetherWith(
+                                    fadeOut(tween(200)) +
+                                        scaleOut(
+                                            tween(200),
+                                            targetScale = 0.6f,
+                                        )
+                                )
                         },
                         label = "statusIcon",
                     ) { status ->
@@ -322,25 +428,38 @@ fun MainScreenContent(
                                 }
 
                                 else -> {
-                                    val imageRes = when (status) {
-                                        RootStatus.ROOTED -> R.drawable.ic_success_c
-                                        RootStatus.NOT_ROOTED, RootStatus.UNKNOWN -> R.drawable.ic_fail_c
-                                        RootStatus.NOT_GRANTED -> R.drawable.ic_unknown_c
-                                        else -> R.drawable.ic_unknown_c
-                                    }
-                                    val isResult = status == RootStatus.ROOTED ||
+                                    val imageRes =
+                                        when (status) {
+                                            RootStatus.ROOTED -> R.drawable.ic_success_c
+                                            RootStatus.NOT_ROOTED,
+                                            RootStatus.UNKNOWN -> R.drawable.ic_fail_c
+                                            RootStatus.NOT_GRANTED -> R.drawable.ic_unknown_c
+                                            else -> R.drawable.ic_unknown_c
+                                        }
+                                    val isResult =
+                                        status == RootStatus.ROOTED ||
                                             status == RootStatus.NOT_ROOTED ||
                                             status == RootStatus.UNKNOWN ||
                                             status == RootStatus.NOT_GRANTED
-                                    val scale = remember { Animatable(if (isResult) 0f else 1f) }
+                                    // Start at full scale when rendered by a preview/screenshot
+                                    // tool
+                                    // (LaunchedEffect-driven enter animations don't advance there,
+                                    // so
+                                    // the icon would otherwise stay scaled to 0 and be invisible).
+                                    val inInspection = LocalInspectionMode.current
+                                    val scale = remember {
+                                        Animatable(if (isResult && !inInspection) 0f else 1f)
+                                    }
                                     LaunchedEffect(Unit) {
                                         if (isResult) {
                                             scale.animateTo(
                                                 targetValue = 1f,
-                                                animationSpec = spring(
-                                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                                                    stiffness = Spring.StiffnessMediumLow,
-                                                ),
+                                                animationSpec =
+                                                    spring(
+                                                        dampingRatio =
+                                                            Spring.DampingRatioMediumBouncy,
+                                                        stiffness = Spring.StiffnessMediumLow,
+                                                    ),
                                             )
                                         }
                                     }
@@ -350,9 +469,8 @@ fun MainScreenContent(
                                         // description would just be announced redundantly.
                                         painter = painterResource(imageRes),
                                         contentDescription = null,
-                                        modifier = Modifier
-                                            .size(96.dp)
-                                            .graphicsLayer {
+                                        modifier =
+                                            Modifier.size(96.dp).graphicsLayer {
                                                 scaleX = scale.value
                                                 scaleY = scale.value
                                             },
@@ -372,14 +490,19 @@ fun MainScreenContent(
                         label = "statusText",
                     ) { status ->
                         Text(
-                            text = when (status) {
-                                RootStatus.NOT_CHECKED -> stringResource(R.string.textView_checkForRoot)
-                                RootStatus.CHECKING -> stringResource(R.string.string_checking_for_root)
-                                RootStatus.ROOTED -> stringResource(R.string.rootAvailable)
-                                RootStatus.NOT_ROOTED -> stringResource(R.string.rootNotAvailable)
-                                RootStatus.UNKNOWN -> stringResource(R.string.rootUnknown)
-                                RootStatus.NOT_GRANTED -> stringResource(R.string.rootNotGranted)
-                            },
+                            text =
+                                when (status) {
+                                    RootStatus.NOT_CHECKED ->
+                                        stringResource(R.string.textView_checkForRoot)
+                                    RootStatus.CHECKING ->
+                                        stringResource(R.string.string_checking_for_root)
+                                    RootStatus.ROOTED -> stringResource(R.string.rootAvailable)
+                                    RootStatus.NOT_ROOTED ->
+                                        stringResource(R.string.rootNotAvailable)
+                                    RootStatus.UNKNOWN -> stringResource(R.string.rootUnknown)
+                                    RootStatus.NOT_GRANTED ->
+                                        stringResource(R.string.rootNotGranted)
+                                },
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Center,
                             // Announce the result to screen readers when the status changes,
@@ -391,41 +514,60 @@ fun MainScreenContent(
                     // A bare "Other" (root present but no recognized manager) tells the user
                     // nothing, so suppress the line; a named OTHER-family manager (e.g. SuperSU)
                     // still shows.
-                    val isGenericOther = uiState.rootManager == null &&
-                            uiState.rootProvider == RootProvider.OTHER
-                    val showProvider = (uiState.rootStatus == RootStatus.ROOTED ||
+                    val isGenericOther =
+                        uiState.rootManager == null && uiState.rootProvider == RootProvider.OTHER
+                    val showProvider =
+                        (uiState.rootStatus == RootStatus.ROOTED ||
                             uiState.rootStatus == RootStatus.NOT_GRANTED) &&
                             uiState.rootProvider != RootProvider.UNKNOWN &&
                             !isGenericOther
                     if (showProvider) {
                         // Prefer the specific installed manager; fall back to the family name when
                         // only a mount/path/su signal identified it (no package).
-                        val providerName = when (uiState.rootManager) {
-                            RootManager.MAGISK -> stringResource(R.string.root_provider_magisk)
-                            RootManager.KITSUNE_MASK -> stringResource(R.string.root_manager_kitsune_mask)
-                            RootManager.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
-                            RootManager.KERNELSU_NEXT -> stringResource(R.string.root_manager_kernelsu_next)
-                            RootManager.SUKISU_ULTRA -> stringResource(R.string.root_manager_sukisu_ultra)
-                            RootManager.RESUKISU -> stringResource(R.string.root_manager_resukisu)
-                            RootManager.APATCH -> stringResource(R.string.root_provider_apatch)
-                            RootManager.SUPERSU -> stringResource(R.string.root_manager_supersu)
-                            RootManager.SUPERUSER -> stringResource(R.string.root_manager_superuser)
-                            RootManager.KINGROOT -> stringResource(R.string.root_manager_kingroot)
-                            RootManager.PHH -> stringResource(R.string.root_manager_phh)
-                            null -> when (uiState.rootProvider) {
-                                RootProvider.MAGISK -> stringResource(R.string.root_provider_magisk)
-                                RootProvider.KERNELSU -> stringResource(R.string.root_provider_kernelsu)
-                                RootProvider.APATCH -> stringResource(R.string.root_provider_apatch)
-                                RootProvider.OTHER -> stringResource(R.string.root_provider_other)
-                                RootProvider.UNKNOWN -> ""
+                        val providerName =
+                            when (uiState.rootManager) {
+                                RootManager.MAGISK -> stringResource(R.string.root_provider_magisk)
+                                RootManager.KITSUNE_MASK ->
+                                    stringResource(R.string.root_manager_kitsune_mask)
+                                RootManager.KERNELSU ->
+                                    stringResource(R.string.root_provider_kernelsu)
+                                RootManager.KERNELSU_NEXT ->
+                                    stringResource(R.string.root_manager_kernelsu_next)
+                                RootManager.SUKISU_ULTRA ->
+                                    stringResource(R.string.root_manager_sukisu_ultra)
+                                RootManager.RESUKISU ->
+                                    stringResource(R.string.root_manager_resukisu)
+                                RootManager.APATCH -> stringResource(R.string.root_provider_apatch)
+                                RootManager.SUPERSU -> stringResource(R.string.root_manager_supersu)
+                                RootManager.SUPERUSER ->
+                                    stringResource(R.string.root_manager_superuser)
+                                RootManager.KINGROOT ->
+                                    stringResource(R.string.root_manager_kingroot)
+                                RootManager.PHH -> stringResource(R.string.root_manager_phh)
+                                null ->
+                                    when (uiState.rootProvider) {
+                                        RootProvider.MAGISK ->
+                                            stringResource(R.string.root_provider_magisk)
+                                        RootProvider.KERNELSU ->
+                                            stringResource(R.string.root_provider_kernelsu)
+                                        RootProvider.APATCH ->
+                                            stringResource(R.string.root_provider_apatch)
+                                        RootProvider.OTHER ->
+                                            stringResource(R.string.root_provider_other)
+                                        RootProvider.UNKNOWN -> ""
+                                    }
                             }
-                        }
                         val version = uiState.rootProviderVersion
-                        val providerText = if (version != null) {
-                            stringResource(R.string.root_provider_via_with_version, providerName, version)
-                        } else {
-                            stringResource(R.string.root_provider_via, providerName)
-                        }
+                        val providerText =
+                            if (version != null) {
+                                stringResource(
+                                    R.string.root_provider_via_with_version,
+                                    providerName,
+                                    version,
+                                )
+                            } else {
+                                stringResource(R.string.root_provider_via, providerName)
+                            }
                         Spacer(Modifier.height(4.dp))
                         Text(
                             text = providerText,
@@ -445,11 +587,33 @@ fun MainScreenContent(
                         )
                     }
 
-                    if (uiState.rootStatus == RootStatus.NOT_GRANTED ||
-                        uiState.rootStatus == RootStatus.NOT_ROOTED
+                    if (
+                        uiState.rootStatus == RootStatus.NOT_GRANTED ||
+                            uiState.rootStatus == RootStatus.NOT_ROOTED
                     ) {
                         Spacer(Modifier.height(16.dp))
-                        FilledTonalButton(onClick = rememberHapticClick(onRequestRoot)) {
+                        FilledTonalButton(
+                            // An armed result governs this button as it governs the FAB. Without
+                            // that, a demo showing "root is available but not granted" would run a
+                            // real su request against the emulator and answer "not rooted",
+                            // contradicting the state being demonstrated. Re-applying the armed
+                            // result is what a real device does when the manager's prompt is
+                            // dismissed: it asks, and nothing changes.
+                            onClick =
+                                rememberHapticClick {
+                                    val armed =
+                                        if (BuildConfig.DEBUG) DemoRootOverride.armed else null
+                                    if (armed != null) {
+                                        onCheckRootDemo(armed)
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar(checkingText)
+                                        }
+                                    } else {
+                                        onRequestRoot()
+                                    }
+                                },
+                            modifier = Modifier.testTag("request_root"),
+                        ) {
                             Text(text = stringResource(R.string.action_request_root))
                         }
                     }
@@ -468,19 +632,36 @@ fun MainScreenContent(
                 Spacer(Modifier.height(24.dp))
             }
 
+            // Support Card. SupportGate already kept this out of the review prompt's session; the
+            // second condition hands the slot to an update that arrived *after* the card appeared,
+            // since that card is functional and time-sensitive while the ask can wait for the next
+            // check. Reporting "shown" from here (not the gate) keeps the signal honest.
+            val showSupportCard =
+                uiState.supportPromptVisible && uiState.updateStatus is AppUpdateEvent.None
+            LaunchedEffect(showSupportCard) { if (showSupportCard) onSupportPromptShown() }
+            AnimatedVisibility(visible = showSupportCard) {
+                // The trailing spacer lives inside so it collapses with the card.
+                Column {
+                    SupportCard(
+                        onSupportClick = {
+                            showTipDialog = true
+                            onSupportPromptOpened()
+                        },
+                        onDismiss = onSupportPromptDismissed,
+                    )
+                    Spacer(Modifier.height(24.dp))
+                }
+            }
+
             // Device Info Card
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = RoundedCornerShape(32.dp),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
+                    modifier = Modifier.fillMaxWidth().padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
@@ -492,21 +673,31 @@ fun MainScreenContent(
                     DeviceInfoText(
                         label = stringResource(R.string.label_device_name),
                         text = uiState.deviceMarketingName,
-                        contentDescription = stringResource(R.string.content_description_marketing_name),
+                        contentDescription =
+                            stringResource(R.string.content_description_marketing_name),
                         onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
                     )
-                    if (!uiState.deviceMarketingName.equals(uiState.deviceModelName, ignoreCase = true)) {
+                    if (
+                        !uiState.deviceMarketingName.equals(
+                            uiState.deviceModelName,
+                            ignoreCase = true,
+                        )
+                    ) {
                         DeviceInfoText(
                             label = stringResource(R.string.label_model),
                             text = uiState.deviceModelName,
-                            contentDescription = stringResource(R.string.content_description_model_name),
-                            onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
+                            contentDescription =
+                                stringResource(R.string.content_description_model_name),
+                            onCopied = {
+                                scope.launch { snackbarHostState.showSnackbar(copiedText) }
+                            },
                         )
                     }
                     DeviceInfoText(
                         label = stringResource(R.string.label_android_version),
                         text = uiState.androidVersion,
-                        contentDescription = stringResource(R.string.content_description_android_version),
+                        contentDescription =
+                            stringResource(R.string.content_description_android_version),
                         onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
                     )
                 }
@@ -516,9 +707,7 @@ fun MainScreenContent(
 
             // Disclaimer Card
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = RoundedCornerShape(32.dp),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
@@ -535,6 +724,19 @@ fun MainScreenContent(
             // 24dp spacing + FAB height (56dp) + FAB bottom margin (16dp) + system bottom padding
             Spacer(Modifier.height(24.dp + 56.dp + 16.dp + bottomPadding))
         }
+    }
+
+    if (showTipDialog) {
+        // Dismiss on selection: Play's purchase sheet takes over, and the outcome is announced
+        // app-wide by AppRoot rather than by this screen.
+        TipJarDialog(
+            products = tipProducts,
+            onSelect = {
+                showTipDialog = false
+                onTipSelected(it)
+            },
+            onDismiss = { showTipDialog = false },
+        )
     }
 
     if (BuildConfig.DEBUG && showDemoDialog) {
@@ -574,8 +776,7 @@ private fun DeviceInfoText(
     val context = LocalContext.current
     val copyLabel = stringResource(R.string.action_copy)
     val copy: () -> Unit = {
-        val clipboard =
-            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         clipboard.setPrimaryClip(ClipData.newPlainText(contentDescription, text))
         onCopied()
     }
@@ -583,22 +784,23 @@ private fun DeviceInfoText(
     // own), gated on the user's haptics setting; reused for the accessibility action too.
     val copyWithHaptic = rememberHapticLongClick(copy)
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            // Long-press copies for sighted users; screen readers reach the same action
-            // through a labelled custom action, since the row has no primary click.
-            .pointerInput(copyWithHaptic) {
-                detectTapGestures(onLongPress = { copyWithHaptic() })
-            }
-            .semantics {
-                customActions = listOf(
-                    CustomAccessibilityAction(copyLabel) {
-                        copyWithHaptic()
-                        true
-                    },
-                )
-            }
-            .padding(vertical = 4.dp),
+        modifier =
+            Modifier.fillMaxWidth()
+                // Long-press copies for sighted users; screen readers reach the same action
+                // through a labeled custom action, since the row has no primary click.
+                .pointerInput(copyWithHaptic) {
+                    detectTapGestures(onLongPress = { copyWithHaptic() })
+                }
+                .semantics {
+                    customActions =
+                        listOf(
+                            CustomAccessibilityAction(copyLabel) {
+                                copyWithHaptic()
+                                true
+                            }
+                        )
+                }
+                .padding(vertical = 4.dp)
     ) {
         Text(
             text = label,
@@ -617,19 +819,20 @@ private fun DeviceInfoText(
 private fun MainScreenNotCheckedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_CHECKED,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.NOT_CHECKED,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -640,19 +843,20 @@ private fun MainScreenNotCheckedPreview() {
 private fun MainScreenCheckingPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.CHECKING,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.CHECKING,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -663,21 +867,22 @@ private fun MainScreenCheckingPreview() {
 private fun MainScreenRootedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.ROOTED,
-                rootProvider = RootProvider.MAGISK,
-                rootProviderVersion = "27.0",
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.ROOTED,
+                    rootProvider = RootProvider.MAGISK,
+                    rootProviderVersion = "27.0",
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -688,19 +893,20 @@ private fun MainScreenRootedPreview() {
 private fun MainScreenLocalesPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_CHECKED,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.NOT_CHECKED,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -711,21 +917,22 @@ private fun MainScreenLocalesPreview() {
 private fun MainScreenNotGrantedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_GRANTED,
-                rootProvider = RootProvider.KERNELSU,
-                rootManager = RootManager.SUKISU_ULTRA,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.NOT_GRANTED,
+                    rootProvider = RootProvider.KERNELSU,
+                    rootManager = RootManager.SUKISU_ULTRA,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -739,19 +946,20 @@ private fun MainScreenNotGrantedPreview() {
 private fun MainScreenNotRootedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_ROOTED,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.NOT_ROOTED,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }

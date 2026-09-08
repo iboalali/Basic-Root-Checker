@@ -22,7 +22,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -30,11 +29,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
@@ -43,17 +45,36 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.iboalali.appcatalog.ui.OtherApp
+import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.basicrootchecker.util.openPlayStoreListing
+import com.iboalali.haptics.compose.rememberHapticClick
+import com.iboalali.nav3.overlay.DetailNavigationIcon
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+
+@Composable
+fun AboutScreen(onNavigateBack: () -> Unit) {
+    // Read-only: the catalog fetch is owned by MainActivity (kicked off at app start). This screen
+    // just observes the already-loaded "Other apps" list.
+    val viewModel: AboutViewModel = viewModel()
+    val otherApps by viewModel.otherApps.collectAsStateWithLifecycle()
+    AboutScreenContent(otherApps = otherApps, onNavigateBack = onNavigateBack)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen(onNavigateBack: () -> Unit) {
+internal fun AboutScreenContent(
+    otherApps: ImmutableList<OtherApp>,
+    onNavigateBack: () -> Unit,
+) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
 
@@ -62,36 +83,43 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
         context.startActivity(Intent(Intent.ACTION_VIEW, uri.toUri()))
     }
 
+    // True on Google Play builds (false on FOSS, where there's no Play Store to rate on). Safe cast
+    // so Compose previews — whose context isn't the app's Application — fall back to hidden.
+    val rateAvailable = remember {
+        (context.applicationContext as? BasicRootCheckerApplication)
+            ?.reviewController
+            ?.isAvailable == true
+    }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_about)) },
-                navigationIcon = {
-                    IconButton(onClick = rememberHapticClick(onNavigateBack)) {
-                        Icon(
-                            painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = stringResource(R.string.content_description_navigate_up),
-                        )
-                    }
-                },
+                // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over the
+                // main screen on large screens (see LocalDetailNavIcon). Glyphs and content
+                // descriptions come from LocalDetailOverlayStyle, and the haptic tap is the shared
+                // component's — onNavigateBack goes in unwrapped.
+                navigationIcon = { DetailNavigationIcon(onBack = onNavigateBack) },
                 scrollBehavior = scrollBehavior,
             )
         },
     ) { innerPadding ->
         val layoutDirection = LocalLayoutDirection.current
-        val contentPadding = PaddingValues(
-            top = innerPadding.calculateTopPadding(),
-            start = innerPadding.calculateLeftPadding(layoutDirection),
-            end = innerPadding.calculateRightPadding(layoutDirection),
-        )
+        val contentPadding =
+            PaddingValues(
+                top = innerPadding.calculateTopPadding(),
+                start = innerPadding.calculateLeftPadding(layoutDirection),
+                end = innerPadding.calculateRightPadding(layoutDirection),
+            )
         val bottomPadding = innerPadding.calculateBottomPadding()
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier.testTag("about_list")
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(16.dp))
@@ -102,13 +130,12 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                 shape = RoundedCornerShape(32.dp),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 32.dp),
-                ) {
+                Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 32.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(R.drawable.ic_baseline_tag_24),
-                            contentDescription = stringResource(R.string.contentDescription_appIcon),
+                            contentDescription =
+                                stringResource(R.string.contentDescription_appIcon),
                             modifier = Modifier.size(56.dp),
                         )
                         Spacer(Modifier.width(12.dp))
@@ -135,9 +162,10 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
 
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        ),
+                        colors =
+                            CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                            ),
                         shape = RoundedCornerShape(20.dp),
                     ) {
                         SocialLinkRow(
@@ -158,7 +186,9 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                             iconRes = R.drawable.bluesky,
                             label = stringResource(R.string.about_link_bluesky),
                             handle = "@iboalali.bsky.social",
-                            onClick = { openUri("bluesky", "https://bsky.app/profile/iboalali.bsky.social") },
+                            onClick = {
+                                openUri("bluesky", "https://bsky.app/profile/iboalali.bsky.social")
+                            },
                         )
                         SocialLinkDivider()
                         SocialLinkRow(
@@ -172,6 +202,18 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                                 )
                             },
                         )
+                        if (rateAvailable) {
+                            SocialLinkDivider()
+                            SocialLinkRow(
+                                iconRes = R.drawable.star_24px,
+                                label = stringResource(R.string.about_link_rate_this_app),
+                                handle = stringResource(R.string.about_link_rate_subtitle),
+                                onClick = {
+                                    Analytics.trackRateLinkClicked()
+                                    context.openPlayStoreListing()
+                                },
+                            )
+                        }
                     }
 
                     Spacer(Modifier.height(16.dp))
@@ -186,20 +228,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
             Spacer(Modifier.height(16.dp))
 
             OtherAppsCard(
-                apps = persistentListOf(
-                    OtherApp(
-                        name = "Billboard",
-                        descriptionRes = R.string.other_apps_billboard_description,
-                        iconRes = R.mipmap.billboard_app_icon,
-                        packageName = "com.iboalali.billboard",
-                    ),
-                    OtherApp(
-                        name = "Hide Persistent Notifications",
-                        descriptionRes = R.string.other_apps_hide_notifications_description,
-                        iconRes = R.mipmap.hide_persistent_notification_app_icon,
-                        packageName = "com.iboalali.hidepersistentnotifications",
-                    ),
-                ),
+                apps = otherApps,
                 modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
             )
 
@@ -216,10 +245,10 @@ private fun SocialLinkRow(
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = rememberHapticClick(onClick))
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier =
+            Modifier.fillMaxWidth()
+                .clickable(onClick = rememberHapticClick(onClick))
+                .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -259,6 +288,32 @@ private fun SocialLinkDivider() {
 @Composable
 private fun AboutScreenPreview() {
     BasicRootCheckerTheme {
-        AboutScreen(onNavigateBack = {})
+        AboutScreenContent(
+            otherApps =
+                persistentListOf(
+                    OtherApp(
+                        name = "Billboard",
+                        description =
+                            "Show large text on screen, as big as possible without cutting it off.",
+                        iconUrl = null,
+                        website = "https://iboalali.com/app/billboard/",
+                        packageName = "com.iboalali.billboard",
+                        highlights = persistentListOf("New **dark theme** and bigger text scaling"),
+                    ),
+                    OtherApp(
+                        name = "Icon Recomposer",
+                        description =
+                            "Light vector icons with a movable 3D emboss, then export to PNG, SVG, or VectorDrawable.",
+                        iconUrl = null,
+                        website = "https://iboalali.com/Icon-Recomposer/",
+                        packageName = null,
+                        highlights =
+                            persistentListOf(
+                                "Your work is **saved automatically** and restored when you return"
+                            ),
+                    ),
+                ),
+            onNavigateBack = {},
+        )
     }
 }

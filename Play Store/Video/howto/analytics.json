@@ -1,0 +1,346 @@
+{
+  "_README": [
+    "The script for this app's 'how to turn off analytics' video. Read by the shared scripts in the",
+    "`iboalali-apps` kit; see the `store-video` skill for the full shape and what each step verb does.",
+    "",
+    "    ./scripts/store video-record  --serial emulator-5554 --storyboard howto/analytics",
+    "    ./scripts/store video-compose --storyboard howto/analytics",
+    "",
+    "Its takes and cuts are filed under the storyboard's own path below Play Store/Video, so it cannot",
+    "write over the promo or the other how-to: raw/howto/analytics/<orientation>/<locale>/ and",
+    "<version>/<locale>/howto/analytics/.",
+    "",
+    "Worth more than it sounds for an app in this corner of Android. People who root their phones tend",
+    "to care what leaves them, and the app has two answers rather than one: a switch that stops the",
+    "sending, and a reset that severs what was already sent from anything sent later."
+  ],
+  "locales": [
+    "default"
+  ],
+  "localeTags": {
+    "default": "en-US"
+  },
+  "_locales": [
+    "English only for now. Nothing here is a framework surface, so localeScope is 'app' and every",
+    "extra language is one caption set plus one `--locale <name>` run: no rootable image, no reboot."
+  ],
+  "brand": {
+    "_note": [
+      "The promo's, unchanged. Taken from the launcher icon, which is the app's only real brand mark:",
+      "a white '#' on Material Deep Purple 500. See the promo storyboard for why it is deliberately",
+      "NOT the app's Material theme."
+    ],
+    "plateFrom": "#2A2140",
+    "plateTo": "#0E0A16",
+    "accent": "#BFA8FF",
+    "text": "#FFFFFF",
+    "textDim": "#BDB2D6",
+    "font": "Noto Sans"
+  },
+  "orientations": {
+    "vertical": {
+      "canvas": [
+        1080,
+        1920
+      ],
+      "skin": "pixel_9_pro_xl",
+      "device": {
+        "scale": 0.78,
+        "centerX": 0.5,
+        "centerY": 0.6
+      },
+      "caption": {
+        "top": 0.055,
+        "size": 62,
+        "align": "center"
+      },
+      "zoom": 1.35
+    },
+    "horizontal": {
+      "canvas": [
+        1920,
+        1080
+      ],
+      "skin": "pixel_9_pro_xl",
+      "reuseRawFrom": "vertical",
+      "device": {
+        "scale": 0.88,
+        "centerX": 0.735,
+        "centerY": 0.5
+      },
+      "caption": {
+        "top": 0.3,
+        "size": 66,
+        "align": "start",
+        "inlineStart": 0.06,
+        "width": 0.4
+      },
+      "zoom": 2.0
+    }
+  },
+  "_zoom": [
+    "Two levels, as in the other how-to. The pushes go on the two settings rows the video names, so",
+    "their second lines are readable: those lines are the ones that say what the control actually",
+    "does, and this video is about a privacy promise rather than a button."
+  ],
+  "setup": {
+    "package": "com.iboalali.basicrootchecker.debug",
+    "_package": [
+      "The DEBUG build, like the promo: the armed root result is BuildConfig.DEBUG-gated and no",
+      "emulator is rooted, so there is no other way to film this state.",
+      "",
+      "That has a cost worth knowing before re-recording. `app/src/debug/res` renames the app to",
+      "'Basic Root Checker (Debug)' and overrides the splash drawable, and the title bar renders",
+      "app_name, so the resource overrides have to be neutralized on disk for the build being filmed:",
+      "",
+      "    mv app/src/debug/res /tmp/brc-debug-res && ./gradlew :app:assembleGplayDebug ;",
+      "    mv /tmp/brc-debug-res app/src/debug/res",
+      "",
+      "The applicationId keeps its .debug suffix, which is invisible: nothing this journey films",
+      "renders the package name."
+    ],
+    "startInApp": {
+      "extras": {
+        "demo_device_name": "Pixel 9 Pro XL",
+        "demo_device_model": "komodo"
+      }
+    },
+    "_startInApp": [
+      "No demo_root here: this video never runs a check, so the status area stays on its 'touch the #",
+      "button' prompt, which is what a viewer's own first screen looks like.",
+      "",
+      "demo_device_name and demo_device_model decide what the device card says. Without them it reads",
+      "'emulator' and 'emu64xa', which contradicts the Pixel bezel the capture is composited into.",
+      "Arming a device also tells the app a recording is in progress, which is what hides Settings'",
+      "debug-only 'Debug: record products' card from the bottom of the list this video films."
+    ],
+    "clearForeignNotifiers": true,
+    "localeScope": "app",
+    "_localeScope": [
+      "'app'. This video never opens a framework surface, so the per-app locale is enough and every",
+      "language is just another run."
+    ],
+    "emulatorDisplayOverride": null,
+    "pressLeadMs": 500,
+    "pressOffsetMs": -220,
+    "showTouches": false,
+    "tapDwell": {
+      "beforeMs": 750,
+      "holdMs": 220,
+      "afterMs": 300
+    },
+    "demoStatusBar": {
+      "clock": "1200",
+      "batteryLevel": 100,
+      "batteryPlugged": false,
+      "wifiLevel": 4,
+      "wifiFullyConnected": true,
+      "showMobile": false,
+      "hideNotificationIcons": true
+    }
+  },
+  "titleCard": {
+    "title": "Basic Root Checker",
+    "subtitle": {
+      "default": "How to turn off analytics"
+    },
+    "holdMs": 2600
+  },
+  "audio": {
+    "track": "Play Store/Video/audio/flipping-in.mp3",
+    "title": "Flipping In",
+    "artist": "Wax Lyricist",
+    "source": "https://freemusicarchive.org/music/wax-lyricist/the-wax-lyricist/flipping-in/",
+    "licence": "CC0 1.0 Universal (public domain dedication) - no attribution required, commercial use permitted",
+    "_note": [
+      "The promo's bed. The same track across an app's videos is what makes them read as a set."
+    ],
+    "startAt": 0,
+    "gainDb": 0,
+    "targetLufs": -16,
+    "fadeInMs": 600,
+    "fadeOutMs": 2200
+  },
+  "scenes": [
+    {
+      "id": "menu",
+      "caption": {
+        "default": "Open the menu."
+      },
+      "steps": [
+        {
+          "wait": 1300
+        },
+        {
+          "zoom": {
+            "tag": "overflow_menu",
+            "ms": 550
+          }
+        },
+        {
+          "wait": 400
+        },
+        {
+          "tap": {
+            "tag": "overflow_menu"
+          }
+        },
+        {
+          "wait": 700
+        }
+      ],
+      "_note": [
+        "1300ms is a beat to read the screen before anything moves. The push goes to the control",
+        "about to be tapped, so the camera move and the press are one gesture."
+      ]
+    },
+    {
+      "id": "settings",
+      "caption": {
+        "default": "Open Settings."
+      },
+      "steps": [
+        {
+          "tap": {
+            "tag": "menu_settings"
+          }
+        },
+        {
+          "wait": 700
+        },
+        {
+          "zoom": "out",
+          "ms": 450
+        },
+        {
+          "wait": 900
+        }
+      ],
+      "_note": [
+        "Still zoomed from the previous scene, which is the point: the menu opens under the control",
+        "we pushed in on, so the item being named is legible. The pull-back rides the push",
+        "transition to Settings, so the camera and the app move together instead of taking turns."
+      ]
+    },
+    {
+      "id": "reset",
+      "caption": {
+        "default": "Reset your anonymous ID."
+      },
+      "steps": [
+        {
+          "wait": 400
+        },
+        {
+          "zoom": {
+            "tag": "settings_reset_identity",
+            "ms": 600
+          }
+        },
+        {
+          "wait": 450
+        },
+        {
+          "tap": {
+            "tag": "settings_reset_identity"
+          }
+        },
+        {
+          "wait": 700
+        }
+      ],
+      "_note": [
+        "Reset first, switch second, and the order is forced by the app rather than chosen: the",
+        "reset row only exists while analytics are on. Turning the switch off first would make the",
+        "row this scene needs disappear before it could be filmed."
+      ]
+    },
+    {
+      "id": "confirm",
+      "caption": {
+        "default": "Confirm the reset."
+      },
+      "steps": [
+        {
+          "zoom": "out",
+          "ms": 450
+        },
+        {
+          "wait": 1200
+        },
+        {
+          "tap": {
+            "tag": "reset_identity_confirm"
+          }
+        },
+        {
+          "wait": 1400
+        }
+      ],
+      "_note": [
+        "The pull-back rides the dialog opening. It has to happen: the dialog is centred while the",
+        "camera is pushed in on a row, and at 2.0x the horizontal cut is narrower than the dialog,",
+        "so holding the push would crop it.",
+        "",
+        "The trailing wait covers the confirmation snackbar."
+      ]
+    },
+    {
+      "id": "off",
+      "caption": {
+        "default": "Or turn it off\nentirely."
+      },
+      "steps": [
+        {
+          "zoom": {
+            "tag": "settings_telemetry",
+            "ms": 600
+          }
+        },
+        {
+          "wait": 450
+        },
+        {
+          "tap": {
+            "tag": "settings_telemetry"
+          }
+        },
+        {
+          "wait": 1600
+        },
+        {
+          "zoom": "out",
+          "ms": 450
+        },
+        {
+          "wait": 1100
+        }
+      ],
+      "_note": [
+        "The switch flips and the reset row below it disappears, because there is no identity left",
+        "to reset once nothing is being sent. That is the scene's payoff and it needs no caption: a",
+        "row vanishing says 'this no longer applies' better than a sentence would.",
+        "",
+        "The trailing 1100ms is the tail the end card fades in over. The pull-back has to finish and",
+        "settle before the take stops, because the recording is frozen on its LAST frame."
+      ]
+    }
+  ],
+  "endCard": {
+    "_note": [
+      "The promo's card, unchanged. Same app, same offer, same link."
+    ],
+    "title": "Basic Root Checker",
+    "subtitle": {
+      "default": "Is your device rooted? Find out instantly."
+    },
+    "cta": {
+      "action": {
+        "default": "Get the app"
+      },
+      "url": "iboalali.com/brc",
+      "qr": "Play Store/Video/qr/brc.png"
+    },
+    "holdMs": 3400
+  }
+}

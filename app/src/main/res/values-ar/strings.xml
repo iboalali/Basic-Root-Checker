@@ -12,7 +12,7 @@
     <string name="root_provider_other">أخرى</string>
     <string name="root_provider_via">عبر %1$s</string>
     <string name="root_provider_via_with_version">عبر %1$s v%2$s</string>
-    <string name="action_licence">حقوق</string>
+    <string name="action_license">حقوق</string>
     <string name="action_about">عنا</string>
     <string name="action_settings">الإعدادات</string>
     <string name="action_privacy_policy">سياسة الخصوصية</string>
@@ -45,16 +45,22 @@
     <string name="tip_jar_pending">إكراميتك قيد الانتظار — ستكتمل بمجرد الموافقة على الدفع.</string>
     <string name="tip_jar_cleared">تمت معالجة إكراميتك المعلّقة — شكرًا على دعمك!</string>
     <string name="tip_jar_error">حدث خطأ ما. يرجى المحاولة مرة أخرى.</string>
+    <!-- بطاقة الدعم في الشاشة الرئيسية، تظهر بعد فحص الروت (راجع SupportGate) -->
+    <string name="support_card_title">هل يعجبك التطبيق؟</string>
+    <string name="support_card_body">التطبيق مجاني وبدون إعلانات. إكرامية صغيرة تساعد في مواصلة التطوير.</string>
+    <string name="support_card_action">ادعم التطوير</string>
+    <string name="support_card_dismiss">إغلاق</string>
 
     <!-- About Strings -->
     <string name="about_part1">حقوق الطبع محفوظ 2026 iboalali\n\n
 هذا التطبيق لا يعطيك خاصية الRoot.\n
 هذا التطبيق يتطلب خاصية الRoot، استعملها على مسؤوليتك.\n
-هذا التطبيق لا يجمع معلومات عن جهازك أو شخصيتك\n\n\n
+هذا التطبيق لا يجمع أي معلومات شخصية\n\n\n
 اتصل بي:</string>
     <string name="about_not_affiliated">هذا البرنامج ليست تابع ولا مأيّد من Chainfire أو SuperSU</string>
     <string name="about_link_email">البريد الإلكتروني</string>
     <string name="about_link_website">الموقع الإلكتروني</string>
+    <string name="about_link_rate_this_app">قيّم التطبيق</string>
     <string name="textView_checkForRoot">المس على الزر المستدير في أسفل اليمين للتحقق من حالة من خاصية الـ Root</string>
     <string name="textViewAndroidVersion">اندرود</string>
     <string name="string_your_device">جهازك</string>
@@ -65,6 +71,9 @@
     <string name="content_description_android_version">إصدار أندرويد</string>
     <string name="content_description_more_options">خيارات إضافية</string>
     <string name="content_description_navigate_up">التنقل إلى أعلى</string>
+    <string name="content_description_close">إغلاق</string>
+    <string name="content_description_dismiss_dialog">إغلاق مربع الحوار</string>
+    <string name="detail_release_to_close">حرّر للإغلاق</string>
     <string name="action_copy">نسخ</string>
     <string name="toast_content_copied">تم نسخ المحتوى</string>
 
@@ -73,8 +82,10 @@
     <string name="label_model">الموديل</string>
     <string name="label_android_version">إصدار الأندرويد</string>
     <string name="other_apps_title">تطبيقات أخرى</string>
-    <string name="other_apps_billboard_description">هذا التطبيق يساعدك على عرض نص كبير على الشاشة، ويجعله بأكبر حجم ممكن دون قطع النص.\n\nيمكن استخدامه في الاجتماعات للتصويت على موضوع برقم أو نص.</string>
-    <string name="other_apps_hide_notifications_description">اختر إشعارًا دائمًا لإخفائه، وسيبقى مخفيًا طالما هذا التطبيق مثبت.</string>
+    <string name="about_other_app_open">فتح</string>
+    <string name="about_other_app_install">تثبيت</string>
+    <string name="about_other_app_website">الموقع الإلكتروني</string>
+    <string name="about_other_app_highlights">أبرز التحديثات</string>
 
     <!-- In-app updates -->
     <string name="update_available_title">تحديث متاح</string>

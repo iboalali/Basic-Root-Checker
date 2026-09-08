@@ -1,0 +1,137 @@
+{
+  "_README": [
+    "Per-app settings for the shared Play Store scripts in the `iboalali-apps` kit.",
+    "",
+    "The scripts themselves live in the plugin, not in this repo, so this file is how they learn",
+    "anything app-specific: package name, locale map, folder layout, screenshot running order, IAP",
+    "product ids. They find it by walking up from the working directory, which is also how they",
+    "refuse to run outside an app repo.",
+    "",
+    "Adding a locale, a screenshot, or a product means editing this file — not a script. See the",
+    "`play-store-assets` skill for the full schema and the invocation commands."
+  ],
+
+  "package": "com.iboalali.basicrootchecker",
+
+  "locales": {
+    "default": "en-US",
+    "german": "de-DE",
+    "spanish": "es-ES",
+    "russian": "ru-RU",
+    "arabic": "ar"
+  },
+  "localeLabels": {
+    "en-US": "English (United States) — default listing",
+    "de-DE": "German",
+    "es-ES": "Spanish (Spain)",
+    "ru-RU": "Russian",
+    "ar": "Arabic"
+  },
+
+  "_listing": "This app names its field files with underscores and 'app_name' rather than the hyphenated 'name.txt' Billboard uses, so the 'files' map is not the default.",
+  "listing": {
+    "dir": "Play Store/Listing",
+    "files": {
+      "name": "app_name.txt",
+      "shortDescription": "short_description.txt",
+      "fullDescription": "full_description.txt"
+    }
+  },
+
+  "screenshots": {
+    "dir": "Play Store/Generated Screenshots",
+
+    "_handMaintainedLocales": [
+      "Empty: no locale's listing is maintained by hand. All five locales' app name, short and full",
+      "description are already live and byte-identical to `Play Store/Listing`, so the uploader's",
+      "listing push is a no-op for every one of them, and the export renders en-US alongside the other",
+      "four. Naming a locale here freezes its screenshots at whatever the store already holds."
+    ],
+    "handMaintainedLocales": [],
+
+    "_listingFiles": [
+      "The uploader reads its own file map rather than the `listing.files` above, and keys the app name",
+      "`title` where that one keys it `name`. The same three files under two vocabularies, so the maps",
+      "cannot be shared. Without this the uploader looks for the kit's default hyphenated names and",
+      "stops on four locales of missing sources before it reaches the store."
+    ],
+    "listingFiles": {
+      "title": "app_name.txt",
+      "shortDescription": "short_description.txt",
+      "fullDescription": "full_description.txt"
+    },
+
+    "devices": {
+      "Phone": "phoneScreenshots",
+      "Tablet7": "sevenInchScreenshots",
+      "Tablet10": "tenInchScreenshots"
+    },
+
+    "_order": [
+      "The store's running order, for every locale and all three device types. Display order is upload",
+      "order and the Play API has no ordering field, so this list is the only place it is decided and",
+      "changing it later means re-uploading the whole set.",
+      "",
+      "It leads with the answer: the green result naming the provider, which is the one question the app",
+      "exists to answer. The idle state follows to show how that answer is reached, since the '#' button",
+      "is the entire interaction. Settings comes third and carries the most substance per pixel; on",
+      "Tablet10 it is the swipe-to-close overlay, so the large-screen layout gets a slot of its own.",
+      "About closes on reassurance, which this category needs: it does NOT root your phone, and it",
+      "collects no personal information.",
+      "",
+      "LicenseShot is exported but deliberately left out: a legal credits list is weak store copy."
+    ],
+    "order": [
+      "MainRootedShot",
+      "MainNotCheckedShot",
+      "SettingsShot",
+      "AboutShot"
+    ],
+
+    "_render": [
+      "Settings for `./scripts/generate-store-screenshots.sh`, which is a launcher for the kit's",
+      "render-store-screenshots.py. This app is the flavoured one: the task and the reference path",
+      "both carry the Gplay flavour.",
+      "",
+      "debugStrings is not set: the default glob app/src/debug/res/values*/strings.xml finds all",
+      "three of this app's files, which the old script listed by hand — so a fourth localized debug",
+      "app name now joins automatically instead of being missed.",
+      "",
+      "slotAliases is load-bearing here, and its absence was a latent break: the 'order' above names",
+      "SettingsShot and AboutShot, which do NOT exist for Tablet10 — at >=840dp those screens render",
+      "as *DialogShot. The uploader's preflight would have failed on the first real run with 'missing",
+      "sources: .../Tablet10/AboutShot.png'. Nothing caught it because this app has never uploaded",
+      "screenshots through the script.",
+      "",
+      "excludeShots holds the in-app update card's four states. They are a regression baseline for a",
+      "flow otherwise only reachable through the debug 'Demo: in-app update' item, and an update",
+      "prompt is not store copy — so they render into reference/ but never into the export."
+    ],
+    "render": {
+      "gradleTask": ":app:updateGplayDebugScreenshotTest",
+      "referenceDir": "app/src/screenshotTestGplayDebug/reference/com/iboalali/basicrootchecker/screenshots/ScreenshotTestsKt",
+      "appName": "Basic Root Checker",
+      "debugAppName": "Basic Root Checker (Debug)",
+      "slotAliases": {
+        "Tablet10": {
+          "SettingsDialogShot": "SettingsShot",
+          "AboutDialogShot": "AboutShot",
+          "LicenseDialogShot": "LicenseShot"
+        }
+      },
+      "excludeShots": [
+        "UpdateAvailableShot",
+        "UpdateDownloadingShot",
+        "UpdateDownloadedShot",
+        "UpdateFailedShot"
+      ]
+    }
+  },
+
+  "_iap": "Six tip products, 171 regions each, and NO pricing snapshot committed yet — run fetch-iap-pricing.py to create one. There are no per-product copy/icon folders, so productFolders is empty and prices.md will show every product as 'not sold by the app'; add entries as folders appear.",
+  "iap": {
+    "pricingDir": "Play Store/In-App Products/pricing",
+    "productIdPrefix": "tip_",
+    "productFolders": {}
+  }
+}

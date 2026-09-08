@@ -25,6 +25,14 @@ sealed interface RootResult {
     ) : RootResult
 }
 
+/**
+ * A completed root check: the classified [result] plus the [record] persisted for it.
+ *
+ * The record holds the authoritative timestamp. A caller that reports when a check ran takes it
+ * from here instead of reading the clock again, so one check is never described by two instants.
+ */
+data class RecordedCheck(val result: RootResult, val record: LastRootCheck)
+
 /** Coarse root-solution family, used for detection logic (Magisk-only probes) and analytics. */
 enum class RootProvider { MAGISK, KERNELSU, APATCH, OTHER, UNKNOWN }
 
@@ -102,6 +110,17 @@ internal fun parseMagiskVersionCode(code: Long): String {
     return "$major.$minor"
 }
 
+/**
+ * The version out of `magisk -v`, which answers `<version>:<channel>[:R]` — "27.0:MAGISK:R" on a
+ * stable build. Only the first field names the version; the rest is Magisk's own bookkeeping and
+ * has no meaning to someone reading the status card. Everything the version field itself carries
+ * is kept, including suffixes like "-delta" or "-alpha" that identify a fork or a canary build.
+ *
+ * Returns null when the line carries no version, so the caller can fall back to `magisk -V`.
+ */
+internal fun parseMagiskVersionName(raw: String): String? =
+    raw.substringBefore(':').trim().takeIf { it.isNotEmpty() }
+
 object RootChecker {
 
     // Known manager package ids → the specific manager they identify. Iteration order is the
@@ -160,26 +179,38 @@ object RootChecker {
      * animation has time to play; callers that want an immediate result (e.g. AppFunctions
      * invoked by an agent) pass `false`.
      */
-    suspend fun check(context: Context, applyUiDelay: Boolean = true): RootResult = withContext(Dispatchers.IO) {
-        val result = classify(collectSignals(context))
-        recordCheck(context, result)
-        if (applyUiDelay) delay(1000.milliseconds)
-        result
-    }
+    suspend fun check(context: Context, applyUiDelay: Boolean = true): RootResult =
+        checkRecorded(context, applyUiDelay).result
 
-    suspend fun requestRoot(context: Context, applyUiDelay: Boolean = true): RootResult = withContext(Dispatchers.IO) {
-        // Forces libsu to construct its main shell, which prompts the Magisk/KernelSU/APatch
-        // allow dialog if the user has not yet made a decision.
-        Shell.cmd("id").exec()
-        val result = classify(collectSignals(context))
-        recordCheck(context, result)
-        if (applyUiDelay) delay(1000.milliseconds)
-        result
-    }
+    /** [check], also handing back the record persisted for it. See [RecordedCheck]. */
+    suspend fun checkRecorded(context: Context, applyUiDelay: Boolean = true): RecordedCheck =
+        withContext(Dispatchers.IO) {
+            val result = classify(collectSignals(context))
+            val record = recordCheck(context, result)
+            if (applyUiDelay) delay(1000.milliseconds)
+            RecordedCheck(result, record)
+        }
+
+    suspend fun requestRoot(context: Context, applyUiDelay: Boolean = true): RootResult =
+        requestRootRecorded(context, applyUiDelay).result
+
+    /** [requestRoot], also handing back the record persisted for it. See [RecordedCheck]. */
+    suspend fun requestRootRecorded(context: Context, applyUiDelay: Boolean = true): RecordedCheck =
+        withContext(Dispatchers.IO) {
+            // Forces libsu to construct its main shell, which prompts the Magisk/KernelSU/APatch
+            // allow dialog if the user has not yet made a decision.
+            Shell.cmd("id").exec()
+            val result = classify(collectSignals(context))
+            val record = recordCheck(context, result)
+            if (applyUiDelay) delay(1000.milliseconds)
+            RecordedCheck(result, record)
+        }
 
     /** Persist [result] as the last root check so any caller (UI or AppFunction) shares it. */
-    private suspend fun recordCheck(context: Context, result: RootResult) {
-        UserPreferences(context).recordRootCheck(result.toRecord(System.currentTimeMillis()))
+    private suspend fun recordCheck(context: Context, result: RootResult): LastRootCheck {
+        val record = result.toRecord(System.currentTimeMillis())
+        UserPreferences(context).recordRootCheck(record)
+        return record
     }
 
     private fun RootResult.toRecord(checkedAtEpochMs: Long): LastRootCheck = when (this) {
@@ -254,8 +285,8 @@ object RootChecker {
     private fun queryMagiskVersion(): String? {
         val nameResult = Shell.cmd("magisk -v").exec()
         if (nameResult.isSuccess) {
-            val name = nameResult.out.firstOrNull()?.trim().orEmpty()
-            if (name.isNotEmpty()) return name
+            val name = nameResult.out.firstOrNull()?.let(::parseMagiskVersionName)
+            if (name != null) return name
         }
         val codeResult = Shell.cmd("magisk -V").exec()
         if (codeResult.isSuccess) {

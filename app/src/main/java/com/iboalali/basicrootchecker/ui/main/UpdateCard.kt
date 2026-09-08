@@ -1,5 +1,6 @@
 package com.iboalali.basicrootchecker.ui.main
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,20 +12,21 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iboalali.basicrootchecker.R
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.haptics.compose.rememberHapticClick
 
 @Composable
 fun UpdateCard(
@@ -34,17 +36,13 @@ fun UpdateCard(
     modifier: Modifier = Modifier,
 ) {
     OutlinedCard(
-        modifier = modifier
-            .widthIn(max = 600.dp)
-            .fillMaxWidth(),
+        modifier = modifier.widthIn(max = 600.dp).fillMaxWidth(),
         colors = CardDefaults.cardColors(),
         shape = RoundedCornerShape(32.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
+            modifier = Modifier.fillMaxWidth().padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             when (updateStatus) {
@@ -60,7 +58,10 @@ fun UpdateCard(
                         text = stringResource(R.string.update_available_body),
                         style = MaterialTheme.typography.bodyMedium,
                     )
-                    Button(modifier = Modifier.fillMaxWidth(), onClick = rememberHapticClick(onUpdateClick)) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = rememberHapticClick(onUpdateClick),
+                    ) {
                         Text(stringResource(R.string.update_action_update))
                     }
                 }
@@ -74,17 +75,27 @@ fun UpdateCard(
                     val total = updateStatus.totalBytes
                     val downloaded = updateStatus.bytesDownloaded
                     if (total > 0L) {
-                        val progress = (downloaded.toFloat() / total.toFloat()).coerceIn(0f, 1f)
+                        val targetProgress =
+                            (downloaded.toFloat() / total.toFloat()).coerceIn(0f, 1f)
+                        // LinearProgressIndicator snaps to each value; Play reports bytes in
+                        // sporadic chunks, so animate between them for a smooth-moving bar.
+                        val progress by
+                            animateFloatAsState(
+                                targetValue = targetProgress,
+                                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                                label = "updateDownloadProgress",
+                            )
                         LinearProgressIndicator(
                             progress = { progress },
                             modifier = Modifier.fillMaxWidth(),
                         )
                         Text(
-                            text = stringResource(
-                                R.string.update_progress_megabytes,
-                                formatMegabytes(downloaded),
-                                formatMegabytes(total),
-                            ),
+                            text =
+                                stringResource(
+                                    R.string.update_progress_megabytes,
+                                    formatMegabytes(downloaded),
+                                    formatMegabytes(total),
+                                ),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     } else {
@@ -98,7 +109,10 @@ fun UpdateCard(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                     )
-                    Button(modifier = Modifier.fillMaxWidth(), onClick = rememberHapticClick(onInstallClick)) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = rememberHapticClick(onInstallClick),
+                    ) {
                         Text(stringResource(R.string.update_action_install))
                     }
                 }
@@ -137,10 +151,11 @@ private fun UpdateCardAvailablePreview() {
 private fun UpdateCardDownloadingPreview() {
     BasicRootCheckerTheme {
         UpdateCard(
-            updateStatus = AppUpdateEvent.Downloading(
-                bytesDownloaded = 3_500_000,
-                totalBytes = 12_000_000,
-            ),
+            updateStatus =
+                AppUpdateEvent.Downloading(
+                    bytesDownloaded = 3_500_000,
+                    totalBytes = 12_000_000,
+                ),
             onUpdateClick = {},
             onInstallClick = {},
         )

@@ -6,55 +6,135 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEvent
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXPANDED_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
+import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
-import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
+import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreen
 import com.iboalali.basicrootchecker.ui.settings.SettingsScreen
+import com.iboalali.nav3.overlay.DetailNavIcon
+import com.iboalali.nav3.overlay.DetailOverlaySceneStrategy
+import com.iboalali.nav3.overlay.DetailOverlayStyle
+import com.iboalali.nav3.overlay.LocalDetailNavIcon
+import com.iboalali.nav3.overlay.LocalDetailOverlayStyle
+import com.iboalali.nav3.overlay.detailOverlay
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object MainRoute : NavKey
+@Serializable data object MainRoute : NavKey
 
-@Serializable
-data object AboutRoute : NavKey
+@Serializable data object AboutRoute : NavKey
 
-@Serializable
-data object LicenceRoute : NavKey
+@Serializable data object LicenseRoute : NavKey
 
-@Serializable
-data object SettingsRoute : NavKey
+@Serializable data object SettingsRoute : NavKey
 
-private val animation: ContentTransform = ContentTransform(
-    targetContentEnter = slideInHorizontally(tween(300)) { it } +
-            fadeIn(tween(300)),
-    initialContentExit = slideOutHorizontally(tween(300)) { -it / 4 } +
-            fadeOut(tween(300 / 2)),
-)
+// Android's canonical phone/tablet split: sw600dp (the smallest-width bucket tablets fall into).
+private const val TABLET_SMALLEST_WIDTH_DP = 600
+
+/**
+ * This app's resources for the shared detail overlay (`com.iboalali.nav3:overlay`). A plain
+ * top-level `val` rather than a remembered one: [DetailOverlayStyle] holds resource ids only, so
+ * building it costs nothing and it has no composition to be scoped to.
+ *
+ * `overflowIcon` must stay the same drawable `MainScreen`'s overflow icon button draws — the
+ * closing card morphs into that slot and hands off to the real glyph, so a mismatch shows as a
+ * flicker at the end of every dismiss.
+ */
+private val rootCheckerOverlayStyle =
+    DetailOverlayStyle(
+        overflowIcon = R.drawable.more_vert_24px,
+        backIcon = R.drawable.arrow_back_24px,
+        closeIcon = R.drawable.close_24px,
+        releaseToCloseLabel = R.string.detail_release_to_close,
+        scrimDismissLabel = R.string.content_description_dismiss_dialog,
+        backContentDescription = R.string.content_description_navigate_up,
+        closeContentDescription = R.string.content_description_close,
+    )
+
+private val animation: ContentTransform =
+    ContentTransform(
+        targetContentEnter = slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)),
+        initialContentExit = slideOutHorizontally(tween(300)) { -it / 4 } + fadeOut(tween(300 / 2)),
+    )
 
 /**
  * Pop transition that mirrors the forward push so the back animation follows the swipe side.
  *
  * @param towardRight the direction the dismissed (current) screen slides off-screen. The revealed
- * (previous) screen parallax-enters from that same side. Driven by the predictive-back swipe edge.
+ *   (previous) screen parallax-enters from that same side. Driven by the predictive-back swipe
+ *   edge.
  */
-private fun popTransition(towardRight: Boolean): ContentTransform = ContentTransform(
-    targetContentEnter = slideInHorizontally(tween(300)) { if (towardRight) -it / 4 else it / 4 } +
-            fadeIn(tween(300)),
-    initialContentExit = slideOutHorizontally(tween(300)) { if (towardRight) it else -it } +
-            fadeOut(tween(300 / 2)),
-)
+private fun popTransition(towardRight: Boolean): ContentTransform =
+    ContentTransform(
+        targetContentEnter =
+            slideInHorizontally(tween(300)) { if (towardRight) -it / 4 else it / 4 } +
+                fadeIn(tween(300)),
+        initialContentExit =
+            slideOutHorizontally(tween(300)) { if (towardRight) it else -it } +
+                fadeOut(tween(300 / 2)),
+    )
 
-
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun AppNavigation() {
     val backStack = rememberNavBackStack(MainRoute)
+
+    // At the expanded width breakpoint (≥840dp: tablets, unfolded foldables in landscape, desktop
+    // windows, XR panels) the secondary screens (Settings/About/License) open as a dialog over the
+    // dimmed main screen instead of replacing it. Below it (phones, medium widths) they push
+    // full-screen with the transitions defined above.
+    val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
+    val isExpanded = windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND)
+
+    // One-shot per cold start: report phone-vs-tablet and the launch-time window width class so the
+    // large-screen audience can be sized. Analytics dedups within the process, so the
+    // recompositions
+    // this is read through on resize/fold/unfold don't re-send it.
+    // Read via LocalConfiguration, not LocalContext.current.resources.configuration: a
+    // Configuration
+    // change doesn't invalidate LocalContext reads, so that route can hand back a stale value.
+    val configuration = LocalConfiguration.current
+    LaunchedEffect(Unit) {
+        Analytics.trackDeviceType(
+            formFactor =
+                if (configuration.smallestScreenWidthDp >= TABLET_SMALLEST_WIDTH_DP) "tablet"
+                else "phone",
+            widthSizeClass =
+                when {
+                    isExpanded -> "expanded"
+                    windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) ->
+                        "medium"
+                    else -> "compact"
+                },
+        )
+    }
+
+    val overlayStrategy = remember { DetailOverlaySceneStrategy() }
+
+    // Tag the secondary screens for the custom overlay only when expanded, so they present as a
+    // dismissable card over the dimmed main screen (scrim-tap / back / the close button / a
+    // swipe-down all dismiss). With no metadata they fall through to the single-pane push flow.
+    // entryProvider re-runs on width changes (e.g. fold/unfold, window resize), so the presentation
+    // follows the current size live.
+    val detailMetadata: Map<String, Any> = if (isExpanded) detailOverlay() else emptyMap()
+
+    // The secondary screens show a back-arrow when pushed full-screen, and a close (X) when shown
+    // as a dialog beside the still-visible main screen. The Dialog content inherits this local.
+    val detailNavIcon = if (isExpanded) DetailNavIcon.CLOSE else DetailNavIcon.BACK
 
     // NavDisplay requires a non-empty back stack. Guard every pop so a double-back — a fast
     // system back-gesture, or tapping Up again while the exit animation still has the screen
@@ -63,58 +143,81 @@ fun AppNavigation() {
         if (backStack.size > 1) backStack.removeLastOrNull()
     }
 
-    NavDisplay(
-        backStack = backStack,
-        onBack = { popBackStack() },
-        transitionSpec = { animation },
-        popTransitionSpec = { popTransition(towardRight = true) },
-        predictivePopTransitionSpec = { edge ->
-            popTransition(towardRight = edge != NavigationEvent.EDGE_RIGHT)
-        },
-        entryProvider = entryProvider {
-            entry<MainRoute> {
-                MainScreen(
-                    onNavigateToAbout = {
-                        Analytics.trackNavigation("/main", "/about")
-                        backStack.add(AboutRoute)
-                    },
-                    onNavigateToLicence = {
-                        Analytics.trackNavigation("/main", "/licence")
-                        backStack.add(LicenceRoute)
-                    },
-                    onNavigateToSettings = {
-                        Analytics.trackNavigation("/main", "/settings")
-                        backStack.add(SettingsRoute)
-                    },
-                )
-            }
+    // Open a secondary screen, keeping the stack at [Main, oneDetail] (the three are
+    // interchangeable
+    // siblings reached only from the main screen). On phones this is a no-op; it just guards
+    // against
+    // ever stacking two secondary screens.
+    val navigateToDetail: (NavKey) -> Unit = { route ->
+        if (backStack.lastOrNull() != MainRoute) backStack.removeLastOrNull()
+        backStack.add(route)
+    }
 
-            entry<SettingsRoute> {
-                SettingsScreen(
-                    onNavigateBack = {
-                        Analytics.trackNavigation("/settings", "/main")
-                        popBackStack()
-                    },
-                )
-            }
+    CompositionLocalProvider(
+        LocalDetailNavIcon provides detailNavIcon,
+        // Every drawable and string the shared overlay draws, named here so the library holds no
+        // Basic Root Checker resources.
+        LocalDetailOverlayStyle provides rootCheckerOverlayStyle,
+    ) {
+        NavDisplay(
+            backStack = backStack,
+            onBack = { popBackStack() },
+            sceneStrategies = listOf(overlayStrategy),
+            transitionSpec = { animation },
+            popTransitionSpec = { popTransition(towardRight = true) },
+            predictivePopTransitionSpec = { edge ->
+                popTransition(towardRight = edge != NavigationEvent.EDGE_RIGHT)
+            },
+            entryProvider =
+                entryProvider {
+                    entry<MainRoute> {
+                        MainScreen(
+                            onNavigateToAbout = {
+                                Analytics.trackNavigation("/main", "/about")
+                                navigateToDetail(AboutRoute)
+                            },
+                            onNavigateToLicense = {
+                                // "/licence" keeps the pre-rename British spelling on purpose: it
+                                // is
+                                // a TelemetryDeck path, and renaming it would split this screen's
+                                // history into two series. Same for the "/licence" -> "/main" pop.
+                                Analytics.trackNavigation("/main", "/licence")
+                                navigateToDetail(LicenseRoute)
+                            },
+                            onNavigateToSettings = {
+                                Analytics.trackNavigation("/main", "/settings")
+                                navigateToDetail(SettingsRoute)
+                            },
+                        )
+                    }
 
-            entry<AboutRoute> {
-                AboutScreen(
-                    onNavigateBack = {
-                        Analytics.trackNavigation("/about", "/main")
-                        popBackStack()
-                    },
-                )
-            }
+                    entry<SettingsRoute>(metadata = detailMetadata) {
+                        SettingsScreen(
+                            onNavigateBack = {
+                                Analytics.trackNavigation("/settings", "/main")
+                                popBackStack()
+                            }
+                        )
+                    }
 
-            entry<LicenceRoute> {
-                LicenceScreen(
-                    onNavigateBack = {
-                        Analytics.trackNavigation("/licence", "/main")
-                        popBackStack()
-                    },
-                )
-            }
-        },
-    )
+                    entry<AboutRoute>(metadata = detailMetadata) {
+                        AboutScreen(
+                            onNavigateBack = {
+                                Analytics.trackNavigation("/about", "/main")
+                                popBackStack()
+                            }
+                        )
+                    }
+
+                    entry<LicenseRoute>(metadata = detailMetadata) {
+                        LicenseScreen(
+                            onNavigateBack = {
+                                Analytics.trackNavigation("/licence", "/main")
+                                popBackStack()
+                            }
+                        )
+                    }
+                },
+        )
+    }
 }

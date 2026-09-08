@@ -1,6 +1,7 @@
 package com.iboalali.basicrootchecker.data
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class RootCheckerTest {
@@ -322,5 +323,37 @@ class RootCheckerTest {
         assertEquals("27.0", parseMagiskVersionCode(27006))
         assertEquals("28.1", parseMagiskVersionCode(28102))
         assertEquals("26.3", parseMagiskVersionCode(26301))
+    }
+
+    // --- parseMagiskVersionName ---------------------------------------------
+
+    @Test
+    fun `parseMagiskVersionName drops the channel and build fields`() {
+        // The shape `magisk -v` answers on a real install, measured on Magisk 25.2.
+        assertEquals("25.2", parseMagiskVersionName("25.2:MAGISK:R"))
+        assertEquals("27.0", parseMagiskVersionName("27.0:MAGISK"))
+        assertEquals("28.1", parseMagiskVersionName("28.1:MAGISK:R"))
+    }
+
+    @Test
+    fun `parseMagiskVersionName keeps fork and canary suffixes`() {
+        // These belong to the version itself, so they stay: they are how a user tells a fork or a
+        // canary build apart from stable.
+        assertEquals("26.4-delta", parseMagiskVersionName("26.4-delta:DELTA:R"))
+        assertEquals("f9e82c9f-alpha", parseMagiskVersionName("f9e82c9f-alpha:MAGISK:R"))
+    }
+
+    @Test
+    fun `parseMagiskVersionName tolerates a bare version and stray whitespace`() {
+        assertEquals("27.0", parseMagiskVersionName("27.0"))
+        assertEquals("27.0", parseMagiskVersionName("  27.0:MAGISK:R  "))
+    }
+
+    @Test
+    fun `parseMagiskVersionName returns null when no version is present`() {
+        // Falls through to the `magisk -V` version code instead of showing an empty version.
+        assertNull(parseMagiskVersionName(""))
+        assertNull(parseMagiskVersionName("   "))
+        assertNull(parseMagiskVersionName(":MAGISK:R"))
     }
 }

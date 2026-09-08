@@ -15,9 +15,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
+import com.iboalali.haptics.compose.rememberHapticClick
 
-enum class DebugUpdateChoice { AVAILABLE, DOWNLOADING, DOWNLOADED, FAILED, RESET }
+enum class DebugUpdateChoice {
+    AVAILABLE,
+    DOWNLOADING,
+    DOWNLOADED,
+    FAILED,
+    RESET,
+}
 
 /**
  * Debug-only picker that jumps the in-app-update card to any state so the update flow can be
@@ -35,8 +41,9 @@ fun DebugUpdateDialog(
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Text(
-                    text = "Drives the update card. The Update / Install buttons stay live, " +
-                        "so you can also walk the real flow.",
+                    text =
+                        "Drives the update card. The Update / Install buttons stay live, " +
+                            "so you can also walk the real flow.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -57,19 +64,20 @@ private fun DebugUpdateRow(label: String, onClick: () -> Unit) {
     Text(
         text = label,
         style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = rememberHapticClick(onClick))
-            .padding(vertical = 14.dp),
+        modifier =
+            Modifier.fillMaxWidth()
+                .clickable(onClick = rememberHapticClick(onClick))
+                .padding(vertical = 14.dp),
     )
 }
 
 private data class DebugUpdateOption(val label: String, val choice: DebugUpdateChoice)
 
-private val updateChoiceOptions = listOf(
-    DebugUpdateOption("Update available", DebugUpdateChoice.AVAILABLE),
-    DebugUpdateOption("Downloading (animated)", DebugUpdateChoice.DOWNLOADING),
-    DebugUpdateOption("Update downloaded", DebugUpdateChoice.DOWNLOADED),
-    DebugUpdateOption("Update failed", DebugUpdateChoice.FAILED),
-    DebugUpdateOption("Reset / hide", DebugUpdateChoice.RESET),
-)
+private val updateChoiceOptions =
+    listOf(
+        DebugUpdateOption("Update available", DebugUpdateChoice.AVAILABLE),
+        DebugUpdateOption("Downloading (animated)", DebugUpdateChoice.DOWNLOADING),
+        DebugUpdateOption("Update downloaded", DebugUpdateChoice.DOWNLOADED),
+        DebugUpdateOption("Update failed", DebugUpdateChoice.FAILED),
+        DebugUpdateOption("Reset / hide", DebugUpdateChoice.RESET),
+    )

@@ -5,20 +5,21 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.analytics.Analytics
-import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
-import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.ui.theme.ThemeMode
 import com.iboalali.basicrootchecker.data.UserPreferences
 import com.iboalali.basicrootchecker.util.AppLanguage
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
+/** Analytics label for tips started from Settings (vs. the main screen's support card). */
+private const val TIP_SOURCE_SETTINGS = "settings"
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -26,16 +27,20 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private val billing = (application as BasicRootCheckerApplication).billingController
 
-    val telemetryEnabled: StateFlow<Boolean> = prefs.telemetryEnabled.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = true,
-    )
+    val telemetryEnabled: StateFlow<Boolean> =
+        prefs.telemetryEnabled.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = true,
+        )
 
     fun setTelemetryEnabled(enabled: Boolean) {
+        // viewModelScope is main-dispatched, and setTelemetryEnabled resumes back on it, so the
+        // Analytics call lands on the main thread — which it must, since opting in can start the
+        // SDK and TelemetryDeck.start registers a process lifecycle observer.
         viewModelScope.launch {
             prefs.setTelemetryEnabled(enabled)
-            Analytics.setEnabled(enabled)
+            Analytics.setEnabled(getApplication(), enabled)
         }
     }
 
@@ -47,11 +52,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    val hapticsEnabled: StateFlow<Boolean> = prefs.hapticsEnabled.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = true,
-    )
+    val hapticsEnabled: StateFlow<Boolean> =
+        prefs.hapticsEnabled.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = true,
+        )
 
     fun setHapticsEnabled(enabled: Boolean) {
         viewModelScope.launch {
@@ -59,11 +65,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    val themeMode: StateFlow<ThemeMode> = prefs.themeMode.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = ThemeMode.SYSTEM,
-    )
+    val themeMode: StateFlow<ThemeMode> =
+        prefs.themeMode.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = ThemeMode.SYSTEM,
+        )
 
     fun setThemeMode(mode: ThemeMode) {
         viewModelScope.launch {
@@ -84,14 +91,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     val tipProducts: StateFlow<ImmutableList<TipProduct>> = billing.products
 
-    /** One-shot tip outcomes (thanks / pending / error) to surface as snackbars. */
-    val tipEvents: Flow<TipEvent> = billing.events
-
     /** Tiers whose durable record product is owned. Drives the debug view and future gating. */
     val supporterTiers: StateFlow<ImmutableSet<TipTier>> = billing.supporterTiers
 
     fun onTipJarOpened() {
-        Analytics.trackTipJarOpened()
+        Analytics.trackTipJarOpened(TIP_SOURCE_SETTINGS)
     }
 
     fun onTipSelected(tier: TipTier) {

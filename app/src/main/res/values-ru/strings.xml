@@ -14,7 +14,7 @@
     <string name="root_provider_other">Другой</string>
     <string name="root_provider_via">через %1$s</string>
     <string name="root_provider_via_with_version">через %1$s v%2$s</string>
-    <string name="action_licence">Лицензии</string>
+    <string name="action_license">Лицензии</string>
     <string name="action_about">О приложении</string>
     <string name="action_settings">Настройки</string>
     <string name="action_privacy_policy">Политика конфиденциальности</string>
@@ -47,6 +47,11 @@
     <string name="tip_jar_pending">Ваши чаевые ожидают подтверждения — они будут зачислены после одобрения платежа.</string>
     <string name="tip_jar_cleared">Ваши отложенные чаевые зачислены — спасибо за поддержку!</string>
     <string name="tip_jar_error">Что-то пошло не так. Попробуйте ещё раз.</string>
+    <!-- Карточка поддержки на главном экране, после проверки root (см. SupportGate) -->
+    <string name="support_card_title">Нравится приложение?</string>
+    <string name="support_card_body">Оно бесплатное и без рекламы. Небольшие чаевые помогают продолжать разработку.</string>
+    <string name="support_card_action">Поддержать разработку</string>
+    <string name="support_card_dismiss">Закрыть</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Ваше устройство</string>
     <string name="string_checking_for_root">Проверка root-доступа…</string>
@@ -55,10 +60,11 @@
     <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
         Это приложение НЕ предоставляет root-доступ.\n
         Для работы требуется root-доступ — используйте на свой страх и риск.\n
-        Приложение не собирает никаких данных и личной информации.\n\n\n
+        Приложение не собирает никакой личной информации.\n\n\n
         Связаться со мной:</string>
     <string name="about_link_email">Эл. почта</string>
     <string name="about_link_website">Сайт</string>
+    <string name="about_link_rate_this_app">Оценить приложение</string>
     <string name="about_not_affiliated">Это приложение не связано с topjohnwu и libsu и не одобрено ими</string>
 
     <!-- Style Strings -->
@@ -68,6 +74,9 @@
     <string name="content_description_android_version">Версия Android</string>
     <string name="content_description_more_options">Другие параметры</string>
     <string name="content_description_navigate_up">Перейти вверх</string>
+    <string name="content_description_close">Закрыть</string>
+    <string name="content_description_dismiss_dialog">Закрыть диалоговое окно</string>
+    <string name="detail_release_to_close">Отпустите, чтобы закрыть</string>
     <string name="action_copy">Копировать</string>
 
     <!-- Device Info Labels -->
@@ -89,8 +98,10 @@
 
     <!-- Other Apps -->
     <string name="other_apps_title">Другие приложения</string>
-    <string name="other_apps_billboard_description">Это приложение помогает выводить крупный текст на экран и автоматически подбирает максимально возможный размер шрифта без обрезания текста.\n\nПодходит для совещаний — для голосования по теме числом или словом.</string>
-    <string name="other_apps_hide_notifications_description">Выберите постоянное уведомление, которое нужно скрыть, и оно будет оставаться скрытым, пока установлено это приложение.</string>
+    <string name="about_other_app_open">Открыть</string>
+    <string name="about_other_app_install">Установить</string>
+    <string name="about_other_app_website">Веб-сайт</string>
+    <string name="about_other_app_highlights">Главное</string>
 
     <!-- AppFunctions -->
     <string name="appfunctions_description">Позволяет системе и приложениям-ассистентам проверять наличие root-доступа на устройстве, не открывая приложение.</string>

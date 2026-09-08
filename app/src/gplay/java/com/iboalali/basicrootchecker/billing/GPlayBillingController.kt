@@ -339,7 +339,7 @@ class GPlayBillingController(context: Context) : BillingController {
      */
     private fun grant(purchase: Purchase, tier: TipTier, productId: String) {
         if (isRecordProductId(productId)) {
-            _supporterTiers.value = _supporterTiers.value.add(tier)
+            _supporterTiers.value = _supporterTiers.value.adding(tier)
             if (!purchase.isAcknowledged) {
                 val params = AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)

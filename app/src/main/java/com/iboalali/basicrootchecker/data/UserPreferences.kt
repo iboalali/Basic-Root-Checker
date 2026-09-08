@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.iboalali.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -60,11 +61,11 @@ class UserPreferences(private val context: Context) {
     }
 
     /**
-     * Purchase tokens of tips seen in the PENDING state. A token is added when a tip is
-     * reported pending and removed once it clears, so the billing layer can tell a genuine
-     * late clear (token present) from the routine re-grant of an already-owned tip on every
-     * connect (token absent). Survives process death so a clear that happens while the app
-     * is closed is still recognized on the next launch.
+     * Purchase tokens of tips seen in the PENDING state. A token is added when a tip is reported
+     * pending and removed once it clears, so the billing layer can tell a genuine late clear (token
+     * present) from the routine re-grant of an already-owned tip on every connect (token absent).
+     * Survives process death so a clear that happens while the app is closed is still recognized on
+     * the next launch.
      */
     val pendingTipTokens: Flow<Set<String>> =
         context.userSettingsDataStore.data.map { preferences ->
@@ -73,33 +74,40 @@ class UserPreferences(private val context: Context) {
 
     suspend fun addPendingTipToken(token: String) {
         context.userSettingsDataStore.edit { preferences ->
-            preferences[PENDING_TIP_TOKENS] = (preferences[PENDING_TIP_TOKENS] ?: emptySet()) + token
+            preferences[PENDING_TIP_TOKENS] =
+                (preferences[PENDING_TIP_TOKENS] ?: emptySet()) + token
         }
     }
 
     suspend fun clearPendingTipTokens(tokens: Set<String>) {
         context.userSettingsDataStore.edit { preferences ->
-            preferences[PENDING_TIP_TOKENS] = (preferences[PENDING_TIP_TOKENS] ?: emptySet()) - tokens
+            preferences[PENDING_TIP_TOKENS] =
+                (preferences[PENDING_TIP_TOKENS] ?: emptySet()) - tokens
         }
     }
 
     /**
-     * The most recent root check, or null if none has run yet. Recorded by [RootChecker] on
-     * every check (UI or AppFunction), so AppFunctions can report the last result and its time
-     * without re-probing.
+     * The most recent root check, or null if none has run yet. Recorded by [RootChecker] on every
+     * check (UI or AppFunction), so AppFunctions can report the last result and its time without
+     * re-probing.
      */
     val lastRootCheck: Flow<LastRootCheck?> =
         context.userSettingsDataStore.data.map { preferences ->
             val checkedAt = preferences[LAST_ROOT_CHECK_AT] ?: return@map null
             LastRootCheck(
                 checkedAtEpochMs = checkedAt,
-                status = preferences[LAST_ROOT_CHECK_STATUS]
-                    ?.let { runCatching { RootCheckStatus.valueOf(it) }.getOrNull() }
-                    ?: RootCheckStatus.UNKNOWN,
-                provider = preferences[LAST_ROOT_CHECK_PROVIDER]
-                    ?.let { runCatching { RootProvider.valueOf(it) }.getOrNull() },
-                manager = preferences[LAST_ROOT_CHECK_MANAGER]
-                    ?.let { runCatching { RootManager.valueOf(it) }.getOrNull() },
+                status =
+                    preferences[LAST_ROOT_CHECK_STATUS]?.let {
+                        runCatching { RootCheckStatus.valueOf(it) }.getOrNull()
+                    } ?: RootCheckStatus.UNKNOWN,
+                provider =
+                    preferences[LAST_ROOT_CHECK_PROVIDER]?.let {
+                        runCatching { RootProvider.valueOf(it) }.getOrNull()
+                    },
+                manager =
+                    preferences[LAST_ROOT_CHECK_MANAGER]?.let {
+                        runCatching { RootManager.valueOf(it) }.getOrNull()
+                    },
                 version = preferences[LAST_ROOT_CHECK_VERSION],
             )
         }
@@ -119,6 +127,69 @@ class UserPreferences(private val context: Context) {
         }
     }
 
+    /** Running count of checks that found root, used to gate the in-app review prompt. */
+    val rootedCheckCount: Flow<Int> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[ROOTED_CHECK_COUNT] ?: 0
+        }
+
+    /** Increments [rootedCheckCount] atomically and returns the new total. */
+    suspend fun incrementRootedCheckCount(): Int {
+        var newCount = 0
+        context.userSettingsDataStore.edit { preferences ->
+            newCount = (preferences[ROOTED_CHECK_COUNT] ?: 0) + 1
+            preferences[ROOTED_CHECK_COUNT] = newCount
+        }
+        return newCount
+    }
+
+    /**
+     * Version code at which the in-app review prompt last fired (0 if never), to cap it to once per
+     * version.
+     */
+    val lastReviewPromptVersionCode: Flow<Int> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[LAST_REVIEW_PROMPT_VERSION_CODE] ?: 0
+        }
+
+    suspend fun setLastReviewPromptVersionCode(code: Int) {
+        context.userSettingsDataStore.edit { preferences ->
+            preferences[LAST_REVIEW_PROMPT_VERSION_CODE] = code
+        }
+    }
+
+    /**
+     * When the main screen's support card becomes eligible again (0 if never snoozed). Set whenever
+     * the user answers it — by dismissing *or* by opening the tip jar — so a look at the prices
+     * isn't followed by another ask on the next check. See `SupportGate`.
+     */
+    val supportPromptSnoozedUntil: Flow<Long> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[SUPPORT_PROMPT_SNOOZED_UNTIL] ?: 0L
+        }
+
+    suspend fun setSupportPromptSnoozedUntil(epochMs: Long) {
+        context.userSettingsDataStore.edit { preferences ->
+            preferences[SUPPORT_PROMPT_SNOOZED_UNTIL] = epochMs
+        }
+    }
+
+    /** How many times the support card has been dismissed; past the cap it never returns. */
+    val supportPromptDismissCount: Flow<Int> =
+        context.userSettingsDataStore.data.map { preferences ->
+            preferences[SUPPORT_PROMPT_DISMISS_COUNT] ?: 0
+        }
+
+    /** Increments [supportPromptDismissCount] atomically and returns the new total. */
+    suspend fun incrementSupportPromptDismissCount(): Int {
+        var newCount = 0
+        context.userSettingsDataStore.edit { preferences ->
+            newCount = (preferences[SUPPORT_PROMPT_DISMISS_COUNT] ?: 0) + 1
+            preferences[SUPPORT_PROMPT_DISMISS_COUNT] = newCount
+        }
+        return newCount
+    }
+
     companion object {
         private val TELEMETRY_ENABLED = booleanPreferencesKey("telemetry_enabled")
         private val HAPTICS_ENABLED = booleanPreferencesKey("haptics_enabled")
@@ -130,5 +201,11 @@ class UserPreferences(private val context: Context) {
         private val LAST_ROOT_CHECK_PROVIDER = stringPreferencesKey("last_root_check_provider")
         private val LAST_ROOT_CHECK_MANAGER = stringPreferencesKey("last_root_check_manager")
         private val LAST_ROOT_CHECK_VERSION = stringPreferencesKey("last_root_check_version")
+        private val ROOTED_CHECK_COUNT = intPreferencesKey("rooted_check_count")
+        private val LAST_REVIEW_PROMPT_VERSION_CODE =
+            intPreferencesKey("last_review_prompt_version_code")
+        private val SUPPORT_PROMPT_SNOOZED_UNTIL =
+            longPreferencesKey("support_prompt_snoozed_until")
+        private val SUPPORT_PROMPT_DISMISS_COUNT = intPreferencesKey("support_prompt_dismiss_count")
     }
 }

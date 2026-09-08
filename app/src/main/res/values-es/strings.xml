@@ -14,7 +14,7 @@
     <string name="root_provider_other">Otro</string>
     <string name="root_provider_via">vía %1$s</string>
     <string name="root_provider_via_with_version">vía %1$s v%2$s</string>
-    <string name="action_licence">Licencias</string>
+    <string name="action_license">Licencias</string>
     <string name="action_about">Acerca de</string>
     <string name="action_settings">Ajustes</string>
     <string name="action_privacy_policy">Política de privacidad</string>
@@ -47,6 +47,11 @@
     <string name="tip_jar_pending">Tu propina está pendiente: se completará cuando se apruebe tu pago.</string>
     <string name="tip_jar_cleared">Tu propina pendiente se ha completado: ¡gracias por tu apoyo!</string>
     <string name="tip_jar_error">Algo salió mal. Inténtalo de nuevo.</string>
+    <!-- Tarjeta de apoyo en la pantalla principal, tras una comprobación de root (ver SupportGate) -->
+    <string name="support_card_title">¿Te gusta la app?</string>
+    <string name="support_card_body">Es gratuita y sin anuncios. Una pequeña propina ayuda a seguir desarrollándola.</string>
+    <string name="support_card_action">Apoya el desarrollo</string>
+    <string name="support_card_dismiss">Cerrar</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Tu dispositivo</string>
     <string name="string_checking_for_root">Comprobando root…</string>
@@ -55,10 +60,11 @@
     <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
         Esta aplicación NO rootea tu teléfono.\n
         Esta aplicación requiere ROOT, úsala bajo tu propia responsabilidad.\n
-        Esta aplicación NO recopila datos ni información personal.\n\n\n
+        Esta aplicación NO recopila información personal.\n\n\n
         Contáctame en:</string>
     <string name="about_link_email">Correo</string>
     <string name="about_link_website">Sitio web</string>
+    <string name="about_link_rate_this_app">Valora la app</string>
     <string name="about_not_affiliated">Esta aplicación no está respaldada por topjohnwu ni libsu, ni afiliada a ellos</string>
 
     <!-- Style Strings -->
@@ -68,6 +74,9 @@
     <string name="content_description_android_version">Versión de Android</string>
     <string name="content_description_more_options">Más opciones</string>
     <string name="content_description_navigate_up">Desplazarse hacia arriba</string>
+    <string name="content_description_close">Cerrar</string>
+    <string name="content_description_dismiss_dialog">Cerrar diálogo</string>
+    <string name="detail_release_to_close">Suelta para cerrar</string>
     <string name="action_copy">Copiar</string>
 
     <!-- Device Info Labels -->
@@ -89,8 +98,10 @@
 
     <!-- Other Apps -->
     <string name="other_apps_title">Otras aplicaciones</string>
-    <string name="other_apps_billboard_description">Esta aplicación te ayuda a mostrar texto grande en la pantalla, ajustándolo al máximo tamaño posible sin recortarlo.\n\nÚtil en reuniones para votar sobre un tema con un número o un texto.</string>
-    <string name="other_apps_hide_notifications_description">Elige una notificación persistente que quieras ocultar, y permanecerá oculta mientras esta aplicación esté instalada.</string>
+    <string name="about_other_app_open">Abrir</string>
+    <string name="about_other_app_install">Instalar</string>
+    <string name="about_other_app_website">Sitio web</string>
+    <string name="about_other_app_highlights">Destacados</string>
 
     <!-- AppFunctions -->
     <string name="appfunctions_description">Permite que el sistema y las apps de asistente comprueben el estado de root de este dispositivo sin abrir la aplicación.</string>

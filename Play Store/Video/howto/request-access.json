@@ -1,0 +1,341 @@
+{
+  "_README": [
+    "The script for this app's 'root is available, but not granted' video. Read by the shared scripts",
+    "in the `iboalali-apps` kit; see the `store-video` skill for the full shape and what each step verb",
+    "does.",
+    "",
+    "    ./scripts/store video-record  --serial emulator-5584 --storyboard howto/request-access",
+    "    ./scripts/store video-compose --storyboard howto/request-access",
+    "",
+    "Nothing in this video is armed, mocked or captioned around. It is filmed on the BRC_api36_magisk",
+    "AVD, which has real Magisk in its ramdisk, so the refused state, the Superuser Request dialog and",
+    "the grant are all the real thing. That is the whole point: the state this video is about is the",
+    "one people write in about, and the fix is one prompt they have to be told to expect."
+  ],
+  "locales": [
+    "default"
+  ],
+  "localeTags": {
+    "default": "en-US"
+  },
+  "_locales": [
+    "English only for now. Nothing here is a framework surface, so localeScope is 'app' and every",
+    "extra language is one caption set plus one `--locale <name>` run.",
+    "",
+    "One caveat if a second language is ever added: Magisk's dialog follows the DEVICE locale, not",
+    "this app's, so it would stay English while the captions changed. The grant scene would need the",
+    "system locale set too, which on this AVD is possible because it is rootable."
+  ],
+  "brand": {
+    "_note": [
+      "The promo's, unchanged. Taken from the launcher icon, which is the app's only real brand mark:",
+      "a white '#' on Material Deep Purple 500. See the promo storyboard for why it is deliberately",
+      "NOT the app's Material theme."
+    ],
+    "plateFrom": "#2A2140",
+    "plateTo": "#0E0A16",
+    "accent": "#BFA8FF",
+    "text": "#FFFFFF",
+    "textDim": "#BDB2D6",
+    "font": "Noto Sans"
+  },
+  "orientations": {
+    "vertical": {
+      "canvas": [
+        1080,
+        1920
+      ],
+      "skin": "pixel_9_pro_xl",
+      "device": {
+        "scale": 0.78,
+        "centerX": 0.5,
+        "centerY": 0.6
+      },
+      "caption": {
+        "top": 0.055,
+        "size": 62,
+        "align": "center"
+      },
+      "zoom": 1.35
+    },
+    "horizontal": {
+      "canvas": [
+        1920,
+        1080
+      ],
+      "skin": "pixel_9_pro_xl",
+      "reuseRawFrom": "vertical",
+      "device": {
+        "scale": 0.88,
+        "centerX": 0.735,
+        "centerY": 0.5
+      },
+      "caption": {
+        "top": 0.3,
+        "size": 66,
+        "align": "start",
+        "inlineStart": 0.06,
+        "width": 0.4
+      },
+      "zoom": 2.0
+    }
+  },
+  "_zoom": [
+    "The promo has no camera moves; this does, because its subject is a sentence rather than a green",
+    "tick. 'Root is available but this app has not been granted access' has to be read, and at the",
+    "size a phone-in-a-frame gives it, it is a grey smear.",
+    "",
+    "The camera is wide for the Superuser Request dialog. It is centred and nearly full width, so at",
+    "2.0x the horizontal cut would crop its buttons off."
+  ],
+  "setup": {
+    "package": "com.iboalali.basicrootchecker",
+    "_package": [
+      "The RELEASE build, unlike the promo and unlike howto/analytics. On a genuinely rooted device",
+      "nothing needs arming, so none of the debug tooling is wanted, and two things make release the",
+      "better choice rather than merely an acceptable one:",
+      "",
+      "  * Magisk's dialog names the package asking for root. A debug build would put",
+      "    'com.iboalali.basicrootchecker.debug' on camera.",
+      "  * There is no demo picker, no 'Demo:' menu row and no 'Debug: record products' card to hide,",
+      "    because none of them is compiled in.",
+      "",
+      "It needs keystore.properties present to sign. The test tags the journey drives are Compose",
+      "semantics properties, so they survive R8."
+    ],
+    "_device": [
+      "Filmed on the BRC_api36_magisk AVD (real Magisk, google_apis, 1344x2992 at 480dpi, so the",
+      "pixel_9_pro_xl skin and all the geometry below are unchanged from the promo's).",
+      "",
+      "Three one-time steps per boot, before recording. They are not in `shell` below because they",
+      "only need doing once and the last one restarts the framework:",
+      "",
+      "    adb -s emulator-5584 root",
+      "    for p in system vendor odm product system_ext bootimage; do \\",
+      "      adb -s emulator-5584 shell \"resetprop ro.product.$p.device komodo; \\",
+      "        resetprop ro.product.$p.model 'Pixel 9 Pro XL'\"; done",
+      "    adb -s emulator-5584 shell 'stop && start'",
+      "",
+      "That is what makes the device card read 'Pixel 9 Pro XL' and 'komodo' instead of 'emulator'",
+      "and 'emu64xa', which would contradict the Pixel bezel the capture is composited into. The",
+      "framework restart is required and is the reason resetprop alone does nothing: android.os.Build",
+      "is initialised in the zygote at boot, and every app inherits those values by forking from it.",
+      "",
+      "The debug builds reach the same result with DemoDeviceOverride's launch extras. That path is",
+      "still the one for a device without root; this video does not need it."
+    ],
+    "shell": [
+      "magisk --sqlite 'DELETE FROM policies'"
+    ],
+    "_shell": [
+      "Run before every pass. The journey grants this app root for real, and a grant that outlived",
+      "the pass would leave the take opening on an already-granted app, filming a different video",
+      "from the one that was rehearsed.",
+      "",
+      "Needs a root shell, which is why `adb root` is in the per-boot steps above."
+    ],
+    "clearForeignNotifiers": true,
+    "localeScope": "app",
+    "emulatorDisplayOverride": null,
+    "pressLeadMs": 500,
+    "pressOffsetMs": -220,
+    "showTouches": false,
+    "tapDwell": {
+      "beforeMs": 750,
+      "holdMs": 220,
+      "afterMs": 300
+    },
+    "demoStatusBar": {
+      "clock": "1200",
+      "batteryLevel": 100,
+      "batteryPlugged": false,
+      "wifiLevel": 4,
+      "wifiFullyConnected": true,
+      "showMobile": false,
+      "hideNotificationIcons": true
+    },
+    "startInApp": true
+  },
+  "titleCard": {
+    "title": "Basic Root Checker",
+    "subtitle": {
+      "default": "What to do when root isn't granted"
+    },
+    "holdMs": 2600
+  },
+  "audio": {
+    "track": "Play Store/Video/audio/flipping-in.mp3",
+    "title": "Flipping In",
+    "artist": "Wax Lyricist",
+    "source": "https://freemusicarchive.org/music/wax-lyricist/the-wax-lyricist/flipping-in/",
+    "licence": "CC0 1.0 Universal (public domain dedication) - no attribution required, commercial use permitted",
+    "_note": [
+      "The promo's bed. The same track across an app's videos is what makes them read as a set."
+    ],
+    "startAt": 0,
+    "gainDb": 0,
+    "targetLufs": -16,
+    "fadeInMs": 600,
+    "fadeOutMs": 2200
+  },
+  "scenes": [
+    {
+      "id": "check",
+      "caption": {
+        "default": "Run the check."
+      },
+      "steps": [
+        {
+          "wait": 1300
+        },
+        {
+          "zoom": {
+            "tag": "check_fab",
+            "ms": 550
+          }
+        },
+        {
+          "wait": 400
+        },
+        {
+          "tap": {
+            "tag": "check_fab"
+          }
+        },
+        {
+          "wait": 2600
+        }
+      ],
+      "_note": [
+        "1300ms is a beat to read the device card before anything moves. The push goes to the",
+        "control about to be tapped, so the camera move and the press are one gesture.",
+        "",
+        "2600ms because this is a real check against a real root implementation, which is slower",
+        "than the armed path the promo films."
+      ]
+    },
+    {
+      "id": "result",
+      "caption": {
+        "default": "Root is there,\nbut not allowed yet."
+      },
+      "steps": [
+        {
+          "zoom": {
+            "focus": [
+              0.5,
+              0.33
+            ],
+            "ms": 600
+          }
+        },
+        {
+          "wait": 2000
+        }
+      ],
+      "_note": [
+        "The push onto the status area is the whole reason this video zooms. Two lines have to be",
+        "read: the message, and 'via Magisk' under it, which is what tells the viewer the app found",
+        "a manager and was refused by it rather than finding nothing.",
+        "",
+        "A fixed focus point because the status text carries no tag and its wording is localized."
+      ]
+    },
+    {
+      "id": "request",
+      "caption": {
+        "default": "Tap Request Root access."
+      },
+      "steps": [
+        {
+          "zoom": {
+            "tag": "request_root",
+            "ms": 550
+          }
+        },
+        {
+          "wait": 500
+        },
+        {
+          "tap": {
+            "tag": "request_root"
+          }
+        },
+        {
+          "wait": 1800
+        }
+      ]
+    },
+    {
+      "id": "grant",
+      "caption": {
+        "default": "Approve it in Magisk."
+      },
+      "steps": [
+        {
+          "zoom": "out",
+          "ms": 450
+        },
+        {
+          "wait": 1800
+        },
+        {
+          "tap": {
+            "point": [
+              0.659,
+              0.629
+            ]
+          }
+        },
+        {
+          "wait": 2500
+        }
+      ],
+      "_note": [
+        "Magisk's own Superuser Request dialog, filmed rather than described. It records perfectly",
+        "well and answers an accessibility dump with nothing at all, so GRANT has no tag, no text",
+        "and no bounds to resolve: the tap is a fraction of the screen, which is the one place in",
+        "any of these storyboards where that is the right answer.",
+        "",
+        "Re-measure the fraction from a screenshot if Magisk's dialog ever changes shape. Nothing",
+        "checks that the tap landed, so the failure mode is a video where nothing happens."
+      ]
+    },
+    {
+      "id": "granted",
+      "caption": {
+        "default": "Now it can see\nyour root."
+      },
+      "steps": [
+        {
+          "wait": 2400
+        }
+      ],
+      "_note": [
+        "The payoff, and the reason this is worth filming rather than captioning: the same screen",
+        "that said 'not granted' now reads 'Your Device has Root access', with the provider and its",
+        "version resolved through the grant that just happened.",
+        "",
+        "The trailing wait is the tail the end card fades in over, and the recording is frozen on",
+        "its LAST frame for the whole hold."
+      ]
+    }
+  ],
+  "endCard": {
+    "_note": [
+      "The promo's card, unchanged. Same app, same offer, same link."
+    ],
+    "title": "Basic Root Checker",
+    "subtitle": {
+      "default": "Is your device rooted? Find out instantly."
+    },
+    "cta": {
+      "action": {
+        "default": "Get the app"
+      },
+      "url": "iboalali.com/brc",
+      "qr": "Play Store/Video/qr/brc.png"
+    },
+    "holdMs": 3400
+  }
+}

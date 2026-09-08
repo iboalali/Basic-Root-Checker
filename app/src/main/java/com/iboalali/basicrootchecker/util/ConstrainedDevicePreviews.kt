@@ -2,36 +2,37 @@ package com.iboalali.basicrootchecker.util
 
 import androidx.compose.runtime.Composable
 import com.iboalali.basicrootchecker.data.RootProvider
-import com.iboalali.basicrootchecker.data.ThemeMode
+import com.iboalali.ui.theme.ThemeMode
 import com.iboalali.basicrootchecker.ui.about.AboutScreen
-import com.iboalali.basicrootchecker.ui.licence.LicenceScreen
+import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
 import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
 import com.iboalali.basicrootchecker.ui.settings.SettingsScreenContent
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.previews.matrix.PreviewConstrainedDevices
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.coroutines.flow.emptyFlow
 
 @PreviewConstrainedDevices
 @Composable
 private fun MainScreenConstrainedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_CHECKED,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.NOT_CHECKED,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -42,21 +43,22 @@ private fun MainScreenConstrainedPreview() {
 private fun MainScreenRootedConstrainedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.ROOTED,
-                rootProvider = RootProvider.MAGISK,
-                rootProviderVersion = "27.0",
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.ROOTED,
+                    rootProvider = RootProvider.MAGISK,
+                    rootProviderVersion = "27.0",
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -67,20 +69,21 @@ private fun MainScreenRootedConstrainedPreview() {
 private fun MainScreenNotGrantedConstrainedPreview() {
     BasicRootCheckerTheme {
         MainScreenContent(
-            uiState = MainUiState(
-                rootStatus = RootStatus.NOT_GRANTED,
-                rootProvider = RootProvider.MAGISK,
-                deviceMarketingName = "Pixel 8 Pro",
-                deviceModelName = "husky",
-                androidVersion = "Android 16",
-            ),
+            uiState =
+                MainUiState(
+                    rootStatus = RootStatus.NOT_GRANTED,
+                    rootProvider = RootProvider.MAGISK,
+                    deviceMarketingName = "Pixel 8 Pro",
+                    deviceModelName = "husky",
+                    androidVersion = "Android 16",
+                ),
             onCheckRoot = {},
             onRequestRoot = {},
             onUpdateRequested = {},
             onInstallRequested = {},
             onAppUpdatedSnackbarShown = {},
             onNavigateToAbout = {},
-            onNavigateToLicence = {},
+            onNavigateToLicense = {},
             onNavigateToSettings = {},
         )
     }
@@ -96,9 +99,9 @@ private fun AboutScreenConstrainedPreview() {
 
 @PreviewConstrainedDevices
 @Composable
-private fun LicenceScreenConstrainedPreview() {
+private fun LicenseScreenConstrainedPreview() {
     BasicRootCheckerTheme {
-        LicenceScreen(onNavigateBack = {})
+        LicenseScreen(onNavigateBack = {})
     }
 }
 
@@ -118,7 +121,6 @@ private fun SettingsScreenConstrainedPreview() {
             onLanguageSelected = {},
             tipJarAvailable = true,
             tipProducts = persistentListOf(),
-            tipEvents = emptyFlow(),
             supporterTiers = persistentSetOf(),
             onTipJarOpened = {},
             onTipSelected = {},

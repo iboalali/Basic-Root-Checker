@@ -2,7 +2,6 @@ package com.iboalali.basicrootchecker.ui.settings
 
 import android.content.Intent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -20,12 +18,9 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -33,13 +28,11 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,38 +42,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.BuildConfig
 import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
-import com.iboalali.basicrootchecker.billing.TipEvent
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
-import com.iboalali.basicrootchecker.data.ThemeMode
-import com.iboalali.basicrootchecker.ui.rememberHapticClick
-import com.iboalali.basicrootchecker.ui.rememberHapticToggle
+import com.iboalali.basicrootchecker.ui.main.DemoDeviceOverride
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
+import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.haptics.compose.rememberHapticClick
+import com.iboalali.haptics.compose.rememberHapticToggle
+import com.iboalali.nav3.overlay.DetailNavigationIcon
+import com.iboalali.ui.theme.ThemeMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 
 /** Outer (rounded) corner radius for the first/last item of the settings group. */
@@ -94,15 +87,16 @@ private val SettingsItemSpacing = 4.dp
 
 /**
  * Builds the corner shape for one item in the settings group so the items read as a single
- * connected list: rounded outer corners on the first/last item, near-square corners where
- * items meet.
+ * connected list: rounded outer corners on the first/last item, near-square corners where items
+ * meet.
  */
-internal fun settingsGroupShape(isFirst: Boolean, isLast: Boolean) = RoundedCornerShape(
-    topStart = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
-    topEnd = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
-    bottomStart = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
-    bottomEnd = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
-)
+internal fun settingsGroupShape(isFirst: Boolean, isLast: Boolean) =
+    RoundedCornerShape(
+        topStart = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+        topEnd = if (isFirst) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+        bottomStart = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+        bottomEnd = if (isLast) SettingsGroupCornerRadius else SettingsItemInnerRadius,
+    )
 
 @Composable
 fun SettingsScreen(
@@ -128,7 +122,6 @@ fun SettingsScreen(
         onLanguageSelected = viewModel::setLanguage,
         tipJarAvailable = viewModel.tipJarAvailable,
         tipProducts = tipProducts,
-        tipEvents = viewModel.tipEvents,
         supporterTiers = supporterTiers,
         onTipJarOpened = viewModel::onTipJarOpened,
         onTipSelected = viewModel::onTipSelected,
@@ -150,7 +143,6 @@ fun SettingsScreenContent(
     onLanguageSelected: (String?) -> Unit,
     tipJarAvailable: Boolean,
     tipProducts: ImmutableList<TipProduct>,
-    tipEvents: Flow<TipEvent>,
     supporterTiers: ImmutableSet<TipTier>,
     onTipJarOpened: () -> Unit,
     onTipSelected: (TipTier) -> Unit,
@@ -166,29 +158,9 @@ fun SettingsScreenContent(
     val scope = rememberCoroutineScope()
     val resetIdentityDoneMessage = stringResource(R.string.settings_reset_identity_done)
 
-    val tipThanksMessage = stringResource(R.string.tip_jar_thanks)
-    val tipPendingMessage = stringResource(R.string.tip_jar_pending)
-    val tipErrorMessage = stringResource(R.string.tip_jar_error)
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(tipEvents, lifecycleOwner) {
-        // One-shot events: collect only while at least STARTED, so a snackbar can't fire
-        // for an event delivered while the screen is in the background.
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            tipEvents.collect { event ->
-                when (event) {
-                    TipEvent.Thanks -> {
-                        showTipDialog = false
-                        snackbarHostState.showSnackbar(tipThanksMessage)
-                    }
-                    TipEvent.Pending -> {
-                        showTipDialog = false
-                        snackbarHostState.showSnackbar(tipPendingMessage)
-                    }
-                    TipEvent.Error -> snackbarHostState.showSnackbar(tipErrorMessage)
-                }
-            }
-        }
-    }
+    // Tip outcomes (thanks / pending / error) are announced app-wide by AppRoot, not here: the
+    // billing events flow is single-consumer, and at expanded width this screen is composed as an
+    // overlay *over* a live MainScreen, so a second collector would split the events between them.
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -196,45 +168,44 @@ fun SettingsScreenContent(
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_settings)) },
-                navigationIcon = {
-                    IconButton(onClick = rememberHapticClick(onNavigateBack)) {
-                        Icon(
-                            painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = stringResource(R.string.content_description_navigate_up),
-                        )
-                    }
-                },
+                // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over the
+                // main screen on large screens (see LocalDetailNavIcon). Glyphs and content
+                // descriptions come from LocalDetailOverlayStyle, and the haptic tap is the shared
+                // component's — onNavigateBack goes in unwrapped.
+                navigationIcon = { DetailNavigationIcon(onBack = onNavigateBack) },
                 scrollBehavior = scrollBehavior,
             )
         },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier.testTag("settings_list")
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(16.dp))
 
             if (tipJarAvailable) {
                 OutlinedCard(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxWidth(),
+                    modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                     colors = CardDefaults.cardColors(),
                     shape = settingsGroupShape(isFirst = true, isLast = false),
                     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = rememberHapticClick {
-                                onTipJarOpened()
-                                showTipDialog = true
-                            })
-                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .clickable(
+                                    onClick =
+                                        rememberHapticClick {
+                                            onTipJarOpened()
+                                            showTipDialog = true
+                                        }
+                                )
+                                .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
@@ -262,22 +233,21 @@ fun SettingsScreenContent(
             }
 
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = settingsGroupShape(isFirst = !tipJarAvailable, isLast = false),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .toggleable(
-                            value = telemetryEnabled,
-                            onValueChange = rememberHapticToggle(onTelemetryEnabledChange),
-                            role = Role.Switch,
-                        )
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .testTag("settings_telemetry")
+                            .toggleable(
+                                value = telemetryEnabled,
+                                onValueChange = rememberHapticToggle(onTelemetryEnabledChange),
+                                role = Role.Switch,
+                            )
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -293,7 +263,7 @@ fun SettingsScreenContent(
                         )
                     }
                     Spacer(Modifier.width(16.dp))
-                    // The row owns the toggle (Role.Switch) so the control is labelled by
+                    // The row owns the toggle (Role.Switch) so the control is labeled by
                     // the title for screen readers; the Switch itself is non-interactive.
                     Switch(
                         checked = telemetryEnabled,
@@ -306,18 +276,19 @@ fun SettingsScreenContent(
                 Spacer(Modifier.height(SettingsItemSpacing))
 
                 OutlinedCard(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxWidth(),
+                    modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                     colors = CardDefaults.cardColors(),
                     shape = settingsGroupShape(isFirst = false, isLast = false),
                     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = rememberHapticClick { showResetIdentityDialog = true })
-                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .testTag("settings_reset_identity")
+                                .clickable(
+                                    onClick = rememberHapticClick { showResetIdentityDialog = true }
+                                )
+                                .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
@@ -339,22 +310,20 @@ fun SettingsScreenContent(
             Spacer(Modifier.height(SettingsItemSpacing))
 
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = settingsGroupShape(isFirst = false, isLast = false),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .toggleable(
-                            value = hapticsEnabled,
-                            onValueChange = rememberHapticToggle(onHapticsEnabledChange),
-                            role = Role.Switch,
-                        )
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .toggleable(
+                                value = hapticsEnabled,
+                                onValueChange = rememberHapticToggle(onHapticsEnabledChange),
+                                role = Role.Switch,
+                            )
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -370,7 +339,7 @@ fun SettingsScreenContent(
                         )
                     }
                     Spacer(Modifier.width(16.dp))
-                    // The row owns the toggle (Role.Switch) so the control is labelled by
+                    // The row owns the toggle (Role.Switch) so the control is labeled by
                     // the title for screen readers; the Switch itself is non-interactive.
                     Switch(
                         checked = hapticsEnabled,
@@ -382,18 +351,16 @@ fun SettingsScreenContent(
             Spacer(Modifier.height(SettingsItemSpacing))
 
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
                 shape = settingsGroupShape(isFirst = false, isLast = false),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = rememberHapticClick { showThemeDialog = true })
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .clickable(onClick = rememberHapticClick { showThemeDialog = true })
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -421,18 +388,18 @@ fun SettingsScreenContent(
                 Spacer(Modifier.height(SettingsItemSpacing))
 
                 OutlinedCard(
-                    modifier = Modifier
-                        .widthIn(max = 600.dp)
-                        .fillMaxWidth(),
+                    modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                     colors = CardDefaults.cardColors(),
                     shape = settingsGroupShape(isFirst = false, isLast = false),
                     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = rememberHapticClick { showLanguageDialog = true })
-                            .padding(horizontal = 24.dp, vertical = 24.dp),
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .clickable(
+                                    onClick = rememberHapticClick { showLanguageDialog = true }
+                                )
+                                .padding(horizontal = 24.dp, vertical = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
@@ -441,8 +408,9 @@ fun SettingsScreenContent(
                                 style = MaterialTheme.typography.bodyLarge,
                             )
                             Text(
-                                text = currentLanguageTag?.let { AppLanguage.displayName(it) }
-                                    ?: stringResource(R.string.language_system_default),
+                                text =
+                                    currentLanguageTag?.let { AppLanguage.displayName(it) }
+                                        ?: stringResource(R.string.language_system_default),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(top = 4.dp),
@@ -461,26 +429,32 @@ fun SettingsScreenContent(
             Spacer(Modifier.height(SettingsItemSpacing))
 
             OutlinedCard(
-                modifier = Modifier
-                    .widthIn(max = 600.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
-                shape = settingsGroupShape(isFirst = false, isLast = !BuildConfig.DEBUG),
+                shape =
+                    settingsGroupShape(
+                        isFirst = false,
+                        isLast = !BuildConfig.DEBUG || DemoDeviceOverride.recording,
+                    ),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = rememberHapticClick {
-                            Analytics.trackPrivacyPolicyClicked()
-                            context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy".toUri(),
-                                )
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .clickable(
+                                onClick =
+                                    rememberHapticClick {
+                                        Analytics.trackPrivacyPolicyClicked()
+                                        context.startActivity(
+                                            Intent(
+                                                Intent.ACTION_VIEW,
+                                                "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy"
+                                                    .toUri(),
+                                            )
+                                        )
+                                    }
                             )
-                        })
-                        .padding(horizontal = 24.dp, vertical = 24.dp),
+                            .padding(horizontal = 24.dp, vertical = 24.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -504,7 +478,9 @@ fun SettingsScreenContent(
                 }
             }
 
-            if (BuildConfig.DEBUG) {
+            // Hidden while a video is being recorded: filming needs a debug build, and this card
+            // would otherwise sit at the bottom of the settings list the how-to is filming.
+            if (BuildConfig.DEBUG && !DemoDeviceOverride.recording) {
                 Spacer(Modifier.height(SettingsItemSpacing))
                 DebugTipJarCard(
                     supporterTiers = supporterTiers,
@@ -541,154 +517,46 @@ fun SettingsScreenContent(
     if (showTipDialog) {
         TipJarDialog(
             products = tipProducts,
-            onSelect = onTipSelected,
+            onSelect = {
+                showTipDialog = false
+                onTipSelected(it)
+            },
             onDismiss = { showTipDialog = false },
         )
     }
 
     if (showResetIdentityDialog) {
         AlertDialog(
+            // A Dialog is its own window, outside the scope that turns test tags into resource-ids,
+            // so re-enable it here or the tags below are invisible to uiautomator.
+            modifier = Modifier.semantics { testTagsAsResourceId = true },
             onDismissRequest = { showResetIdentityDialog = false },
             title = { Text(stringResource(R.string.settings_reset_identity_title)) },
             text = { Text(stringResource(R.string.settings_reset_identity_dialog_message)) },
             confirmButton = {
                 TextButton(
-                    onClick = rememberHapticClick {
-                        showResetIdentityDialog = false
-                        onResetIdentity()
-                        scope.launch { snackbarHostState.showSnackbar(resetIdentityDoneMessage) }
-                    },
+                    modifier = Modifier.testTag("reset_identity_confirm"),
+                    onClick =
+                        rememberHapticClick {
+                            showResetIdentityDialog = false
+                            onResetIdentity()
+                            scope.launch {
+                                snackbarHostState.showSnackbar(resetIdentityDoneMessage)
+                            }
+                        },
                 ) {
                     Text(stringResource(R.string.settings_reset_identity_confirm))
                 }
             },
             dismissButton = {
-                TextButton(onClick = rememberHapticClick { showResetIdentityDialog = false }) {
+                TextButton(
+                    modifier = Modifier.testTag("reset_identity_cancel"),
+                    onClick = rememberHapticClick { showResetIdentityDialog = false },
+                ) {
                     Text(stringResource(android.R.string.cancel))
                 }
             },
         )
-    }
-}
-
-@Composable
-private fun TipJarDialog(
-    products: ImmutableList<TipProduct>,
-    onSelect: (TipTier) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.tip_jar_dialog_title)) },
-        text = { TipJarTiers(products = products, onSelect = onSelect) },
-        confirmButton = {
-            TextButton(onClick = rememberHapticClick(onDismiss)) {
-                Text(stringResource(android.R.string.cancel))
-            }
-        },
-    )
-}
-
-@Composable
-private fun TipJarTiers(
-    products: ImmutableList<TipProduct>,
-    onSelect: (TipTier) -> Unit,
-) {
-    if (products.isEmpty()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            CircularProgressIndicator(modifier = Modifier.size(24.dp))
-            Spacer(Modifier.width(16.dp))
-            Text(
-                text = stringResource(R.string.tip_jar_loading),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
-    } else {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            products.forEach { product ->
-                Card(
-                    onClick = rememberHapticClick { onSelect(product.tier) },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    ),
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = stringResource(product.tier.titleRes),
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.weight(1f),
-                        )
-                        Spacer(Modifier.width(16.dp))
-                        Text(
-                            text = product.formattedPrice,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-/**
- * Mimics the [AlertDialog] surface so the tip-jar layout renders in the IDE preview.
- * A real [AlertDialog] draws inside a [androidx.compose.ui.window.Dialog] window, which the
- * Compose preview renderer shows as blank — so the preview reuses [TipJarTiers] inside a
- * plain dialog-shaped [Surface] instead.
- */
-@Composable
-private fun TipJarDialogPreviewSurface(products: ImmutableList<TipProduct>) {
-    Surface(
-        shape = RoundedCornerShape(28.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        modifier = Modifier.padding(16.dp),
-    ) {
-        Column(modifier = Modifier.padding(24.dp)) {
-            Text(
-                text = stringResource(R.string.tip_jar_dialog_title),
-                style = MaterialTheme.typography.headlineSmall,
-            )
-            Spacer(Modifier.height(16.dp))
-            TipJarTiers(products = products, onSelect = {})
-            Spacer(Modifier.height(8.dp))
-            TextButton(onClick = {}, modifier = Modifier.align(Alignment.End)) {
-                Text(stringResource(android.R.string.cancel))
-            }
-        }
-    }
-}
-
-@PreviewLightDark
-@PreviewDynamicColors
-@Composable
-private fun TipJarDialogPreview() {
-    BasicRootCheckerTheme {
-        TipJarDialogPreviewSurface(
-            products = persistentListOf(
-                TipProduct(TipTier.SMALL, "$1.99"),
-                TipProduct(TipTier.MEDIUM, "$4.99"),
-                TipProduct(TipTier.LARGE, "$9.99"),
-            ),
-        )
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun TipJarDialogLoadingPreview() {
-    BasicRootCheckerTheme {
-        TipJarDialogPreviewSurface(products = persistentListOf())
     }
 }
 
@@ -726,13 +594,14 @@ private fun LanguagePickerDialog(
 }
 
 @Composable
-private fun themeModeLabel(mode: ThemeMode): String = stringResource(
-    when (mode) {
-        ThemeMode.SYSTEM -> R.string.theme_follow_system
-        ThemeMode.LIGHT -> R.string.theme_light
-        ThemeMode.DARK -> R.string.theme_dark
-    }
-)
+private fun themeModeLabel(mode: ThemeMode): String =
+    stringResource(
+        when (mode) {
+            ThemeMode.SYSTEM -> R.string.theme_follow_system
+            ThemeMode.LIGHT -> R.string.theme_light
+            ThemeMode.DARK -> R.string.theme_dark
+        }
+    )
 
 @Composable
 private fun ThemePickerDialog(
@@ -769,10 +638,14 @@ private fun SettingOptionRow(
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .selectable(selected = selected, onClick = rememberHapticClick(onClick), role = Role.RadioButton)
-            .padding(vertical = 12.dp),
+        modifier =
+            Modifier.fillMaxWidth()
+                .selectable(
+                    selected = selected,
+                    onClick = rememberHapticClick(onClick),
+                    role = Role.RadioButton,
+                )
+                .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RadioButton(selected = selected, onClick = null)
@@ -800,12 +673,12 @@ private fun SettingsScreenPreview() {
             currentLanguageTag = "de",
             onLanguageSelected = {},
             tipJarAvailable = true,
-            tipProducts = persistentListOf(
-                TipProduct(TipTier.SMALL, "$1.99"),
-                TipProduct(TipTier.MEDIUM, "$4.99"),
-                TipProduct(TipTier.LARGE, "$9.99"),
-            ),
-            tipEvents = emptyFlow(),
+            tipProducts =
+                persistentListOf(
+                    TipProduct(TipTier.SMALL, "$1.99"),
+                    TipProduct(TipTier.MEDIUM, "$4.99"),
+                    TipProduct(TipTier.LARGE, "$9.99"),
+                ),
             supporterTiers = persistentSetOf(TipTier.SMALL),
             onTipJarOpened = {},
             onTipSelected = {},
@@ -830,7 +703,6 @@ private fun SettingsScreenTelemetryOffPreview() {
             onLanguageSelected = {},
             tipJarAvailable = false,
             tipProducts = persistentListOf(),
-            tipEvents = emptyFlow(),
             supporterTiers = persistentSetOf(),
             onTipJarOpened = {},
             onTipSelected = {},
