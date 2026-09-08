@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Dependency refresh: Android Gradle plugin 9.4.0, Gradle 9.6.0, TelemetryDeck 7.2.0 and Coil 3.6.2. No user-visible changes.
+
 ## [2.5] - 2026-08-26
 
 ### Added
