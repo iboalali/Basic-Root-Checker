@@ -52,6 +52,7 @@ App-specific additions to that list:
 | Components, data layer, monetization, build config, theming, tests | [`docs/architecture.md`](docs/architecture.md) |
 | Navigation 3, the large-screen detail overlay, its motion and gestures | [`docs/adaptive-navigation.md`](docs/adaptive-navigation.md) |
 | Signal taxonomy and query cookbook | [`docs/telemetry-optimization.md`](docs/telemetry-optimization.md) |
+| The TelemetryDeck dashboard's panels, as paste-ready TQL | [`docs/telemetry-dashboard-queries.json`](docs/telemetry-dashboard-queries.json) |
 | Known root-provider detection gaps | [`docs/root-provider-detection-gaps.md`](docs/root-provider-detection-gaps.md) |
 | Per-device haptic capability data | [`docs/haptic-capability-queries.json`](docs/haptic-capability-queries.json) |
 | Translation notes | [`docs/russian-translation-notes.md`](docs/russian-translation-notes.md), [`docs/spanish-translation-notes.md`](docs/spanish-translation-notes.md) |

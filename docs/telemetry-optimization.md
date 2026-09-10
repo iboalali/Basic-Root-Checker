@@ -176,3 +176,47 @@ a user action.
 
 Keep the `isTestMode` filter: the debug-only **Demo: support card** overflow item drives the same
 state, so it emits `supportCardShown` too — as test-flagged data, since debug builds set test mode.
+
+---
+
+## 2026-09-08: the structural-data export is a window, not an inventory
+
+### Finding
+
+`Basic-Root-Checker-StructuralData.json` lists what the dashboard has **recently ingested**, so it
+cannot be used as the app's signal vocabulary. `websiteClicked` is in the 2026-06-29 export and gone
+from the 2026-08-27 one because it was removed from the app and its data aged out. `rateLinkClicked`
+and `tipPurchased` dropped out the same way while still being live code, which is the part that
+misleads: a signal missing from the export can mean removed, or can mean nobody triggered it.
+
+Eight signals in `Analytics.kt` are absent from the latest export, and they split two ways:
+
+- **Five shipped in 2.5 on 2026-08-26, one day before the export**: `supportCardShown`,
+  `supportCardDismissed`, `rateLinkClicked`, `reviewRequested`, `reviewFlowFailed`. An empty panel
+  here means "no data yet", not "broken".
+- **Three have been live since 2.3 or earlier**, so their absence is an outcome and not a lag:
+  `tipPurchased` (nobody completed a tip in the window), `billingUnavailable` (Play Billing
+  connected for everyone) and `updateFailed` (no in-app update failed).
+
+The export also contradicts itself: it lists the `dismissCount` parameter while omitting
+`supportCardDismissed`, the only signal that carries it.
+
+**`Analytics.kt` is the source of truth for dashboard work.** Build panels from it and use the export
+only to predict which panels have data yet. The panels themselves are now in
+[`telemetry-dashboard-queries.json`](./telemetry-dashboard-queries.json), 34 queries in seven
+sections, with the two data-quality levers above kept as section 7.
+
+### Open item: the `socialLinkClicked` `platform` parameter
+
+The 2026-08-27 export is the first with a populated `parameters` array (2026-06-29 shipped
+`"parameters": []`, so it says nothing either way). Two parameters in the code are missing from it:
+`code` (`billingUnavailable`) and `platform` (`socialLinkClicked`). `code` is consistent with its
+signal never firing. `platform` is not: `socialLinkClicked` appears in **both** exports, so the
+signal is being ingested, and `platform` is its only parameter. `TelemetryDeck.Device.platform` is
+listed.
+
+Verify with panel 6.2 before trusting any social-link breakdown. If it returns a blank or missing
+row while panel 6.5 shows `socialLinkClicked` firing, the parameter is not queryable under that name
+and the fix is app-side in `Analytics.trackSocialLinkClicked`: rename it to something that cannot
+collide with the built-in dimension. Do not rename it before the query confirms the problem, since
+the rename splits the dimension and loses continuity with whatever data is already there.

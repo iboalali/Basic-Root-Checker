@@ -1,0 +1,807 @@
+{
+  "description": "TQL panels for the Basic Root Checker dashboard in TelemetryDeck. Built from the app's own signal vocabulary in app/src/main/java/com/iboalali/basicrootchecker/analytics/Analytics.kt, which is the source of truth, and cross-checked against Basic-Root-Checker-StructuralData.json (which only lists what the dashboard has recently ingested). Grouped into the sections a dashboard would use; each entry is a paste-ready query. Companion to telemetry-optimization.md (why the signal set looks the way it does) and haptic-capability-queries.json (the hapticCapabilities signal, not repeated here).",
+  "appId": "613251CD-B223-443A-9583-3A18586FAB55",
+  "appName": "Basic Root Checker",
+  "reviewed": "2026-09-08",
+  "howToUse": {
+    "dashboard": "Paste the \"query\" object into a custom insight. The dashboard supplies the app filter and the Test Mode toggle itself through baseFilters, so leave appID and baseFilters as they are and do not hardcode an isTestMode filter unless a panel says to.",
+    "api": "The same objects work against the Insights API as written: baseFilters \"thisApp\" plus an explicit appID is the API shape. Add {\"type\":\"selector\",\"dimension\":\"isTestMode\",\"value\":\"False\"} for production-only numbers, since there is no Test Mode toggle there.",
+    "timeRange": "No intervals are set, so the dashboard date picker drives the range. For the API add e.g. \"intervals\": [\"P90D/PT0S\"], or a relativeIntervals block.",
+    "isTestModeCasing": "The bundled TQL reference shows both \"False\" and \"false\" for this dimension. \"False\" is what the queries already in telemetry-optimization.md use. If a filtered panel returns nothing, try the other casing before assuming the data is missing.",
+    "signalNameDimension": "A signal's name lives in the \"type\" dimension, so every per-signal panel filters on type. Unique devices are a thetaSketch over clientUser; raw fires are eventCount.",
+    "flavorScope": "Everything in sections 3, 4 and 5 is Google Play only. The foss flavor no-ops the tip jar, in-app review and in-app updates, so those panels describe part of the audience, not all of it."
+  },
+  "inventoryNotes": {
+    "sourceOfTruth": "app/src/main/java/com/iboalali/basicrootchecker/analytics/Analytics.kt",
+    "exportIsAWindow": "Basic-Root-Checker-StructuralData.json lists signals and parameters the dashboard has seen recently, not the app's vocabulary. websiteClicked appears in the 2026-06-29 export and not in the 2026-08-27 one because it was removed from the app and its data aged out; rateLinkClicked and tipPurchased dropped out the same way while still being live code. Build panels from Analytics.kt and use the export only to predict which panels have data yet.",
+    "absentFromLatestExport": {
+      "signals": [
+        "supportCardShown",
+        "supportCardDismissed",
+        "rateLinkClicked",
+        "reviewRequested",
+        "reviewFlowFailed",
+        "tipPurchased",
+        "billingUnavailable",
+        "updateFailed"
+      ],
+      "reading": "All eight are live in Analytics.kt, and they split two ways. Five of them (the support card, the review gate, the rate link) shipped in 2.5 on 2026-08-26, one day before the export, so an empty panel means no data yet rather than broken. The other three have been live since 2.3 or earlier, so their absence is an outcome: no completed tip, no Play Billing connection failure, and no failed in-app update in the window."
+    },
+    "internalInconsistency": "The export lists the dismissCount parameter while omitting supportCardDismissed, the only signal that carries it. That is another reason to treat the export as a hint, not an inventory.",
+    "parametersInCodeButNotInExport": [
+      "platform (socialLinkClicked) - see panel 6.2, worth one verification query",
+      "code (billingUnavailable) - consistent with the signal itself being absent"
+    ]
+  },
+  "sections": [
+    {
+      "name": "1. Root checking",
+      "description": "What the app exists to do. rootCheckStarted fires on the FAB tap, rootCheckCompleted carries the outcome, and rootProviderDetected only fires when a provider was actually identified.",
+      "queries": [
+        {
+          "name": "1.1 Checks per week",
+          "description": "Volume and reach together. started and completed should track each other closely; a widening gap means checks are being abandoned or the check is failing before it reports.",
+          "query": {
+            "queryType": "timeseries",
+            "granularity": "week",
+            "aggregations": [
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "rootCheckStarted" },
+                "aggregator": { "type": "eventCount", "name": "started" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "rootCheckCompleted" },
+                "aggregator": { "type": "eventCount", "name": "completed" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "rootCheckStarted" },
+                "aggregator": { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+              }
+            ],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "1.2 Completion rate",
+          "description": "The ratio from 1.1 as a single percentage line. The two inputs are prefixed with _ so only the percentage shows in the chart.",
+          "query": {
+            "queryType": "timeseries",
+            "granularity": "week",
+            "aggregations": [
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "rootCheckStarted" },
+                "aggregator": { "type": "eventCount", "name": "_started" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "rootCheckCompleted" },
+                "aggregator": { "type": "eventCount", "name": "_completed" }
+              }
+            ],
+            "postAggregations": [
+              {
+                "type": "arithmetic",
+                "name": "Completion rate",
+                "fn": "/",
+                "fields": [
+                  { "type": "fieldAccess", "fieldName": "_completed" },
+                  { "type": "fieldAccess", "fieldName": "_started" }
+                ]
+              }
+            ],
+            "valueFormatter": { "options": { "style": "percent", "minimumFractionDigits": 1 } },
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "1.3 Outcome mix",
+          "description": "The result parameter is a RootStatus name. In practice: ROOTED, NOT_ROOTED, NOT_GRANTED (a provider is installed but refused the request, the state people write in about) and UNKNOWN. NOT_CHECKED and CHECKING are states of the UI, not outcomes, so they should not appear here.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 10,
+            "dimension": { "type": "default", "dimension": "result", "outputName": "Outcome" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [
+              { "type": "eventCount", "name": "count" },
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": { "type": "selector", "dimension": "type", "value": "rootCheckCompleted" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "1.4 Provider family",
+          "description": "Which root implementation the rooted audience runs: MAGISK, KERNELSU, APATCH, OTHER or UNKNOWN. Counted by device, since one device checking ten times is still one Magisk user.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 10,
+            "dimension": { "type": "default", "dimension": "provider", "outputName": "Provider" },
+            "metric": { "type": "numeric", "metric": "devices" },
+            "aggregations": [
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" },
+              { "type": "eventCount", "name": "count" }
+            ],
+            "filter": { "type": "selector", "dimension": "type", "value": "rootProviderDetected" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "1.5 Named managers",
+          "description": "The specific manager package, one of the 17 ids in PACKAGE_MANAGERS (Kitsune Mask, KernelSU Next, and so on). Read it next to 1.4: manager falls back to the family name when only a non-package signal fired (a mount, a path, the su binary, or magisk -v), so a row equal to a family name means detection without an identified package.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 25,
+            "dimension": { "type": "default", "dimension": "manager", "outputName": "Manager" },
+            "metric": { "type": "numeric", "metric": "devices" },
+            "aggregations": [
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": { "type": "selector", "dimension": "type", "value": "rootProviderDetected" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "1.6 Provider versions",
+          "description": "Which provider builds are in the field, useful when a detection gap turns out to be version-specific. Version-sorted rather than alphabetical, and empty values are filtered out: the signal sends an empty string when no version could be read.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 25,
+            "dimension": { "type": "default", "dimension": "version", "outputName": "Provider version" },
+            "metric": { "type": "dimension", "ordering": "version" },
+            "aggregations": [
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": {
+              "type": "and",
+              "fields": [
+                { "type": "selector", "dimension": "type", "value": "rootProviderDetected" },
+                { "type": "not", "field": { "type": "selector", "dimension": "version", "value": "" } }
+              ]
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "1.7 Root access requests",
+          "description": "Taps on Request root access. Compare the device count against the NOT_GRANTED slice of 1.3: those are the people the provider refused, and the ones the request-access how-to video was made for.",
+          "query": {
+            "queryType": "timeseries",
+            "granularity": "week",
+            "aggregations": [
+              { "type": "eventCount", "name": "requests" },
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": { "type": "selector", "dimension": "type", "value": "rootRequested" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Audience",
+      "description": "Who is running the app, which is what large-screen and minSdk decisions get made on.",
+      "queries": [
+        {
+          "name": "2.1 Form factor by window width",
+          "description": "deviceType is one-shot per process, so eventCount here is roughly cold starts and the device count is the real audience split. formFactor is phone or tablet from the stable smallest width; widthSizeClass is compact, medium or expanded at launch. The expanded row is exactly the audience that gets the large-screen detail overlay, so it is the number that justifies the tabletApi36 Baseline Profile device.",
+          "query": {
+            "queryType": "groupBy",
+            "granularity": "all",
+            "dimensions": ["formFactor", "widthSizeClass"],
+            "aggregations": [
+              { "type": "thetaSketch", "name": "Devices", "fieldName": "clientUser" },
+              { "type": "eventCount", "name": "Launches" }
+            ],
+            "filter": { "type": "selector", "dimension": "type", "value": "deviceType" },
+            "limitSpec": {
+              "type": "default",
+              "columns": [{ "dimension": "Devices", "direction": "descending" }],
+              "limit": 20
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "2.2 Android version",
+          "description": "The minSdk 23 tail, and how much of the audience is on API 30+ (crisp tap haptics) or API 36+ (envelope effects). For the haptics angle proper, use haptic-capability-queries.json, which reads the capability flags the device actually reports rather than inferring them from the API level.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 25,
+            "dimension": {
+              "type": "default",
+              "dimension": "TelemetryDeck.Device.systemMajorVersion",
+              "outputName": "Android version"
+            },
+            "metric": { "type": "dimension", "ordering": "version" },
+            "aggregations": [{ "type": "userCount", "name": "Users" }],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "2.3 Locale",
+          "description": "Which locales the app actually runs in, which is what decides whether a sixth translation is worth doing.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 25,
+            "dimension": {
+              "type": "default",
+              "dimension": "TelemetryDeck.RunContext.locale",
+              "outputName": "Locale"
+            },
+            "metric": { "type": "numeric", "metric": "Users" },
+            "aggregations": [{ "type": "userCount", "name": "Users" }],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "2.4 In-app language override",
+          "description": "Read 2.3 and this together. A locale that shows up often in 2.3 but also often here means people are switching away from what the system gave them, which usually points at a translation problem rather than a preference.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 25,
+            "dimension": { "type": "default", "dimension": "language", "outputName": "Chosen language" },
+            "metric": { "type": "numeric", "metric": "changes" },
+            "aggregations": [
+              { "type": "eventCount", "name": "changes" },
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": { "type": "selector", "dimension": "type", "value": "languageChanged" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Support card and tip jar",
+      "description": "Google Play flavor only. The conversion query that explains why supportCardShown counts offers rather than appearances is in telemetry-optimization.md and is not repeated here; these are the panels around it.",
+      "queries": [
+        {
+          "name": "3.1 Support card funnel",
+          "description": "Offer to money, matched per device and in order. The tipJarOpened step is filtered to source=support_card so an open from Settings cannot be credited to the card. Expect this to be empty or tiny until 2.5 has been out a while.",
+          "query": {
+            "queryType": "funnel",
+            "granularity": "all",
+            "steps": [
+              {
+                "name": "Card shown",
+                "filter": { "type": "selector", "dimension": "type", "value": "supportCardShown" }
+              },
+              {
+                "name": "Tip jar opened",
+                "filter": {
+                  "type": "and",
+                  "fields": [
+                    { "type": "selector", "dimension": "type", "value": "tipJarOpened" },
+                    { "type": "selector", "dimension": "source", "value": "support_card" }
+                  ]
+                }
+              },
+              {
+                "name": "Tier selected",
+                "filter": { "type": "selector", "dimension": "type", "value": "tipSelected" }
+              },
+              {
+                "name": "Tip purchased",
+                "filter": { "type": "selector", "dimension": "type", "value": "tipPurchased" }
+              }
+            ],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "3.2 Where the tip jar is opened from",
+          "description": "settings against support_card. The card is only worth its screen space if it brings opens that Settings would not have.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 10,
+            "dimension": { "type": "default", "dimension": "source", "outputName": "Source" },
+            "metric": { "type": "numeric", "metric": "opens" },
+            "aggregations": [
+              { "type": "eventCount", "name": "opens" },
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": { "type": "selector", "dimension": "type", "value": "tipJarOpened" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "3.3 Dismissals by running total",
+          "description": "dismissCount is the running total at the moment of the dismissal, capped by SupportGate. A large pile at the cap means the card is being shown to people who have already answered it three times, which is the signal to lower the cap.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 10,
+            "dimension": { "type": "default", "dimension": "dismissCount", "outputName": "Dismissal number" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": { "type": "selector", "dimension": "type", "value": "supportCardDismissed" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "3.4 Tip outcomes per week",
+          "description": "One panel for the whole flow after the jar opens. tipPending is a deferred payment that may still complete, so it is not a loss; tipCanceled is the user backing out and tipFailed is Play returning an error.",
+          "query": {
+            "queryType": "timeseries",
+            "granularity": "week",
+            "aggregations": [
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "tipJarOpened" },
+                "aggregator": { "type": "eventCount", "name": "opened" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "tipSelected" },
+                "aggregator": { "type": "eventCount", "name": "selected" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "tipPurchased" },
+                "aggregator": { "type": "eventCount", "name": "purchased" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "tipPending" },
+                "aggregator": { "type": "eventCount", "name": "pending" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "tipCanceled" },
+                "aggregator": { "type": "eventCount", "name": "canceled" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "tipFailed" },
+                "aggregator": { "type": "eventCount", "name": "failed" }
+              }
+            ],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "3.5 Tips by tier and variant",
+          "description": "tier is SMALL, MEDIUM or LARGE; variant is record for the first durable tip and repeat for a consumable one. The repeat rows are the returning tippers, which is the number worth watching.",
+          "query": {
+            "queryType": "groupBy",
+            "granularity": "all",
+            "dimensions": ["tier", "variant"],
+            "aggregations": [
+              { "type": "eventCount", "name": "Tips" },
+              { "type": "thetaSketch", "name": "Devices", "fieldName": "clientUser" }
+            ],
+            "filter": { "type": "selector", "dimension": "type", "value": "tipPurchased" },
+            "limitSpec": {
+              "type": "default",
+              "columns": [{ "dimension": "Tips", "direction": "descending" }],
+              "limit": 20
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "3.6 Billing not working",
+          "description": "Two separate faults in one section. tipProductsUnavailable reason is a Play response code or the string empty (products queried fine but none came back); billingUnavailable code is a connection failure, typically no Play services. Force isTestMode=False on this panel: a debug build's .debug applicationId means Play never returns tip products, so debug runs generate tipProductsUnavailable by design and would swamp the real cases.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 15,
+            "dimension": { "type": "default", "dimension": "reason", "outputName": "Reason" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [
+              { "type": "eventCount", "name": "count" },
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": {
+              "type": "and",
+              "fields": [
+                { "type": "selector", "dimension": "type", "value": "tipProductsUnavailable" },
+                { "type": "selector", "dimension": "isTestMode", "value": "False" }
+              ]
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          },
+          "companionQuery": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 15,
+            "dimension": { "type": "default", "dimension": "code", "outputName": "Billing response code" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": { "type": "selector", "dimension": "type", "value": "billingUnavailable" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Rating",
+      "description": "Google Play flavor only. Both asks are serialized behind the support card, review first.",
+      "queries": [
+        {
+          "name": "4.1 Review asks against explicit rate taps",
+          "description": "reviewRequested means the flow was handed to Play, never that a card appeared: Play gives no was-it-shown callback, so this line is an upper bound. rateLinkClicked is the About screen link, which is an unambiguous intent to rate and is the honest comparison.",
+          "query": {
+            "queryType": "timeseries",
+            "granularity": "week",
+            "aggregations": [
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "reviewRequested" },
+                "aggregator": { "type": "eventCount", "name": "requested" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "rateLinkClicked" },
+                "aggregator": { "type": "eventCount", "name": "rateLinkTapped" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "reviewFlowFailed" },
+                "aggregator": { "type": "eventCount", "name": "flowFailed" }
+              }
+            ],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "4.2 Review flow failures",
+          "description": "Why Play refused to launch the flow. A version code only ever gets one prompt, so a failure here costs that release's single ask.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 15,
+            "dimension": { "type": "default", "dimension": "error", "outputName": "Error" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": { "type": "selector", "dimension": "type", "value": "reviewFlowFailed" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. In-app updates",
+      "description": "Google Play flavor only.",
+      "queries": [
+        {
+          "name": "5.1 Update funnel",
+          "description": "Offered, accepted, finished. Drop-off between available and started is people declining the update card; drop-off after started is the download itself.",
+          "query": {
+            "queryType": "funnel",
+            "granularity": "all",
+            "steps": [
+              {
+                "name": "Update available",
+                "filter": { "type": "selector", "dimension": "type", "value": "updateAvailable" }
+              },
+              {
+                "name": "Update started",
+                "filter": { "type": "selector", "dimension": "type", "value": "updateStarted" }
+              },
+              {
+                "name": "Update downloaded",
+                "filter": { "type": "selector", "dimension": "type", "value": "updateDownloaded" }
+              }
+            ],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "5.2 Update failures",
+          "description": "The error string from the failed update, so a connectivity failure can be told from a Play-side one.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 15,
+            "dimension": { "type": "default", "dimension": "error", "outputName": "Error" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": { "type": "selector", "dimension": "type", "value": "updateFailed" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Navigation, links and the app catalog",
+      "description": "Which of the secondary screens earn their place, and whether the About screen's links get used.",
+      "queries": [
+        {
+          "name": "6.1 Where people go",
+          "description": "Destination paths from the navigation signal. Four screens exist, one main and three secondary, so this is short and tells you which secondary screens are worth their overflow slot.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 15,
+            "dimension": {
+              "type": "default",
+              "dimension": "TelemetryDeck.Navigation.destinationPath",
+              "outputName": "Destination"
+            },
+            "metric": { "type": "numeric", "metric": "views" },
+            "aggregations": [
+              { "type": "eventCount", "name": "views" },
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": {
+              "type": "selector",
+              "dimension": "type",
+              "value": "TelemetryDeck.Navigation.pathChanged"
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "6.2 Social links by platform (verify this one first)",
+          "description": "Expected values are email, mastodon, bluesky and website. Run this before trusting it: socialLinkClicked appears in both structural-data exports, but the platform parameter it carries appears in neither parameter list, while TelemetryDeck.Device.platform does. If this returns a single blank or missing row while 6.5 shows socialLinkClicked fires, the parameter is not queryable under that name and the fix is app-side, in Analytics.trackSocialLinkClicked, renaming it to something that cannot collide with the built-in dimension.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 15,
+            "dimension": { "type": "default", "dimension": "platform", "outputName": "Platform" },
+            "metric": { "type": "numeric", "metric": "taps" },
+            "aggregations": [{ "type": "eventCount", "name": "taps" }],
+            "filter": { "type": "selector", "dimension": "type", "value": "socialLinkClicked" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "6.3 Other apps clicked",
+          "description": "Cross-promotion, split by how the entry was opened: play_store, launch (already installed) or website (a web app with no package). packageName carries the website or name for entries without a package, so those rows are not package ids.",
+          "query": {
+            "queryType": "groupBy",
+            "granularity": "all",
+            "dimensions": ["packageName", "action"],
+            "aggregations": [{ "type": "eventCount", "name": "Taps" }],
+            "filter": { "type": "selector", "dimension": "type", "value": "otherAppClicked" },
+            "limitSpec": {
+              "type": "default",
+              "columns": [{ "dimension": "Taps", "direction": "descending" }],
+              "limit": 50
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "6.4 Catalog refresh outcome",
+          "description": "The background Other apps fetch at launch: updated, not_modified or failure. A healthy shape is mostly not_modified, which means conditional GET is working and the feed is not being re-downloaded. Swap the filter for the companion query to see what the failures actually were, which separates offline launches from real errors.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 10,
+            "dimension": { "type": "default", "dimension": "result", "outputName": "Result" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": { "type": "selector", "dimension": "type", "value": "appCatalogRefresh" },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          },
+          "companionQuery": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 15,
+            "dimension": { "type": "default", "dimension": "error", "outputName": "Failure" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": {
+              "type": "and",
+              "fields": [
+                { "type": "selector", "dimension": "type", "value": "appCatalogRefresh" },
+                { "type": "selector", "dimension": "result", "value": "failure" }
+              ]
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "6.5 About screen taps per week",
+          "description": "All of the About screen's outbound taps on one line each, which also serves as the sanity check for 6.2: socialLinkClicked can be non-zero here even if its platform breakdown comes back empty.",
+          "query": {
+            "queryType": "timeseries",
+            "granularity": "week",
+            "aggregations": [
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "socialLinkClicked" },
+                "aggregator": { "type": "eventCount", "name": "socialLinks" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "otherAppClicked" },
+                "aggregator": { "type": "eventCount", "name": "otherApps" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "privacyPolicyClicked" },
+                "aggregator": { "type": "eventCount", "name": "privacyPolicy" }
+              },
+              {
+                "type": "filtered",
+                "filter": { "type": "selector", "dimension": "type", "value": "rateLinkClicked" },
+                "aggregator": { "type": "eventCount", "name": "rateLink" }
+              }
+            ],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Data quality",
+      "description": "The two levers from telemetry-optimization.md: keep synthetic traffic out, and keep the error channel clean. Run these when the dashboard is being reworked, not as everyday panels.",
+      "queries": [
+        {
+          "name": "7.1 Signals by volume",
+          "description": "What dominates the signal budget. The app has no background or periodic work, so every signal is user-initiated and there should be no single row running away from the rest.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 40,
+            "dimension": { "type": "default", "dimension": "type", "outputName": "Signal" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "7.2 Signals by device, for fires per device",
+          "description": "The redundancy detector. Divide 7.1 by this per row: a signal that is large in 7.1 and small here is per-device churn, and is the kind of thing the one-shot guards on deviceType and supportCardShown exist to prevent.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 40,
+            "dimension": { "type": "default", "dimension": "type", "outputName": "Signal" },
+            "metric": { "type": "numeric", "metric": "devices" },
+            "aggregations": [{ "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "7.3 Errors by id",
+          "description": "Find an expected fallback masquerading as an error. The candidates are the RootHaptics catch blocks (haptic-*) and the RootChecker filesystem probes, which throw routinely on locked-down devices. Anything high-volume here should be demoted to a log rather than left in the error channel.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 25,
+            "dimension": {
+              "type": "default",
+              "dimension": "TelemetryDeck.Error.id",
+              "outputName": "Error id"
+            },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [
+              { "type": "eventCount", "name": "count" },
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": {
+              "type": "selector",
+              "dimension": "type",
+              "value": "TelemetryDeck.Error.occurred"
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "7.4 Errors by category",
+          "description": "thrown-exception against user-input against app-state. A category that is almost entirely one id is a candidate for demotion, and the split is cheaper to read than 7.3 when the id list is long.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 10,
+            "dimension": {
+              "type": "default",
+              "dimension": "TelemetryDeck.Error.category",
+              "outputName": "Category"
+            },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": {
+              "type": "selector",
+              "dimension": "type",
+              "value": "TelemetryDeck.Error.occurred"
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "7.5 Error messages for one id (template)",
+          "description": "The cardinality check. Put the id from 7.3 into the second selector. A long tail of near-unique rows means the message is carrying a per-device or device-revealing string and should be trimmed at the call site.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 25,
+            "dimension": {
+              "type": "default",
+              "dimension": "TelemetryDeck.Error.message",
+              "outputName": "Message"
+            },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [{ "type": "eventCount", "name": "count" }],
+            "filter": {
+              "type": "and",
+              "fields": [
+                { "type": "selector", "dimension": "type", "value": "TelemetryDeck.Error.occurred" },
+                { "type": "selector", "dimension": "TelemetryDeck.Error.id", "value": "REPLACE_WITH_ERROR_ID" }
+              ]
+            },
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        },
+        {
+          "name": "7.6 Test-mode share",
+          "description": "How much of the raw data is synthetic. Run it with the dashboard Test Mode toggle on, or via the API with no isTestMode filter, or both lines read the same. Historical caveat: signals ingested before 2.5 shipped the broader automated-traffic detection still contain pre-launch robot runs counted as production, so old weeks read slightly high.",
+          "query": {
+            "queryType": "topN",
+            "granularity": "all",
+            "threshold": 5,
+            "dimension": { "type": "default", "dimension": "isTestMode", "outputName": "Test mode" },
+            "metric": { "type": "numeric", "metric": "count" },
+            "aggregations": [
+              { "type": "eventCount", "name": "count" },
+              { "type": "thetaSketch", "name": "devices", "fieldName": "clientUser" }
+            ],
+            "filter": null,
+            "baseFilters": "thisApp",
+            "appID": "613251CD-B223-443A-9583-3A18586FAB55"
+          }
+        }
+      ]
+    }
+  ]
+}
