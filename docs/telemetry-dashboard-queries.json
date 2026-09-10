@@ -221,7 +221,7 @@
         },
         {
           "name": "2.2 Android version",
-          "description": "The minSdk 23 tail, and how much of the audience is on API 30+ (crisp tap haptics) or API 36+ (envelope effects). For the haptics angle proper, use haptic-capability-queries.json, which reads the capability flags the device actually reports rather than inferring them from the API level.",
+          "description": "The minSdk 24 tail, and how much of the audience is on API 30+ (crisp tap haptics) or API 36+ (envelope effects). For the haptics angle proper, use haptic-capability-queries.json, which reads the capability flags the device actually reports rather than inferring them from the API level.",
           "query": {
             "queryType": "topN",
             "granularity": "all",

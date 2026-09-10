@@ -146,7 +146,7 @@ the `BIND_APP_FUNCTION_SERVICE` permission, the `android.app.appfunctions.schema
 `res/xml/app_metadata.xml` (the app-level `android.app.appfunctions.app_metadata` `<property>`) is the
 LLM-facing app description.
 
-General mechanics — the alpha10 artifact merge, the R8 keep rule, `adb` verification — are in the
+General mechanics (the single runtime artifact, the R8 keep rule, `adb` verification) are in the
 `appfunctions-wiring` skill. The R8 rule matters here specifically: verify after a release build with
 `grep BaseRootAppFunctionService app/build/outputs/mapping/<variant>/mapping.txt`; the class and all
 three method names must map to themselves.
@@ -360,7 +360,7 @@ characters so the tool embeds it in the reference filename.
   the Compose BOM) — `currentWindowAdaptiveInfoV2` / `WindowSizeClass` (via the transitive
   `androidx.window:window-core`) for the width check described in
   [`adaptive-navigation.md`](adaptive-navigation.md).
-- **AppFunctions** (`androidx.appfunctions` 1.0.0-alpha10: `appfunctions` + `appfunctions-compiler`
+- **AppFunctions** (`androidx.appfunctions`: `appfunctions` + `appfunctions-compiler`
   (KSP)) with the `com.google.devtools.ksp` plugin, version paired to Kotlin. Generated in both
   flavors.
 - **Baseline Profiles:** a separate `:baselineprofile` module (`com.android.test`); the

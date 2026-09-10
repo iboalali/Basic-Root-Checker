@@ -112,7 +112,7 @@ regenerate a single preview; the Gradle task is variant-level and rewrites every
 
 ## Stack
 
-**Kotlin** · Java 17 · minSdk 23 · compile/target SDK 37 · **AGP** (built-in Kotlin) · Compose BOM ·
+**Kotlin** · Java 17 · minSdk 24 · compile/target SDK 37 · **AGP** (built-in Kotlin) · Compose BOM ·
 Navigation 3 · Material 3 Adaptive · `androidx.appfunctions` + KSP · Coil 3 · TelemetryDeck.
 
 `gradle/libs.versions.toml` is **the source of truth for every version**, and each entry carries its

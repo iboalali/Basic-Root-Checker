@@ -35,7 +35,7 @@ android {
 
     defaultConfig {
         applicationId = "com.iboalali.basicrootchecker"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 37
         versionCode = 82
         versionName = "v2.6.0vc$versionCode"
@@ -101,11 +101,10 @@ android {
     }
 }
 
-// AppFunctions (androidx.appfunctions alpha10): the @AppFunctionServiceEntryPoint compiler generates
-// the concrete RootAppFunctionService plus its assets/root_app_function_service.xml from the
-// @AppFunction methods on BaseRootAppFunctionService. The entry-point path needs no aggregate ksp
-// arg (alpha09's "appfunctions:aggregateAppFunctions" is gone); the generated service is declared in
-// AndroidManifest.xml.
+// AppFunctions: the @AppFunctionServiceEntryPoint compiler generates the concrete
+// RootAppFunctionService plus its assets/root_app_function_service.xml from the @AppFunction methods
+// on BaseRootAppFunctionService. The entry-point path takes no ksp arg of its own, and the generated
+// service is declared in AndroidManifest.xml.
 
 dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -132,9 +131,9 @@ dependencies {
     // DataStore
     implementation(libs.androidx.datastore.preferences)
 
-    // AppFunctions — expose root-check workflows to the system / on-device agents (both flavors)
-    // via an @AppFunctionServiceEntryPoint service. alpha10 consolidated the old -service artifact
-    // into this one; -compiler (KSP) generates the service class + its function XML.
+    // AppFunctions: expose root-check workflows to the system / on-device agents (both flavors) via
+    // an @AppFunctionServiceEntryPoint service. One runtime artifact, with no separate -service one;
+    // -compiler (KSP) generates the service class + its function XML.
     implementation(libs.androidx.appfunctions)
     ksp(libs.androidx.appfunctions.compiler)
 

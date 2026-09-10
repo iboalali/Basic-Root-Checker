@@ -6,7 +6,7 @@ import androidx.appfunctions.AppFunctionService
 import androidx.appfunctions.AppFunctionServiceEntryPoint
 
 /**
- * AppFunctions entry point (androidx.appfunctions 1.0.0-alpha10). The
+ * AppFunctions entry point (androidx.appfunctions 1.0.0-alpha11). The
  * `@AppFunctionServiceEntryPoint` compiler generates the concrete `RootAppFunctionService`
  * (declared in the manifest) and the `assets/root_app_function_service.xml` metadata from the
  * `@AppFunction` methods below.

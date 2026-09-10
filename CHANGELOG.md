@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Dependency refresh: Android Gradle plugin 9.4.0, Gradle 9.6.0, TelemetryDeck 7.2.0 and Coil 3.6.2. No user-visible changes.
+- Minimum supported version raised to Android 7.0 (API 24). Devices on Android 6.0 keep the version they already have and stop receiving updates. The AppFunctions library behind the assistant integration no longer supports Android 6.0, and nothing else in the app treated it specially.
+- Dependency refresh: Android Gradle plugin 9.4.0, Gradle 9.6.0, TelemetryDeck 7.2.0, Coil 3.6.2, Compose BOM 2026.09.00, Navigation 3 1.1.7, AppFunctions 1.0.0-alpha11, Benchmark 1.5.0 and kotlinx.collections.immutable 0.5.2. No user-visible changes beyond the raised minimum above.
 
 ## [2.5] - 2026-08-26
 

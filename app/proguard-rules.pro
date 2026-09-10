@@ -16,7 +16,7 @@
 #   public *;
 #}
 
-# AppFunctions (androidx.appfunctions alpha10). KSP generates assets/root_app_function_service.xml
+# AppFunctions. KSP generates assets/root_app_function_service.xml
 # BEFORE R8 runs, and it identifies every function by its declaring class + method name
 # (com.iboalali.basicrootchecker.appfunctions.BaseRootAppFunctionService#checkRootStatus). The
 # library's consumer rules keep the @AppFunctionSerializable models and the generated inventory, but

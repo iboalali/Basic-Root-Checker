@@ -17,7 +17,7 @@ A simple Android app that checks whether your device has root access. Displays d
 
 ## Requirements
 
-- Android 6.0+ (API 23)
+- Android 7.0+ (API 24)
 - JDK 17
 
 ## Building
