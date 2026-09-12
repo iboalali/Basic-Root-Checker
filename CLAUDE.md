@@ -120,16 +120,30 @@ upstream release-notes URL. No version number is repeated here, so there is noth
 
 ## Shared code — this repo does not build alone
 
-`settings.gradle.kts` runs a **Gradle composite build**: `includeBuild` on
-[`iboalali/Android-Shared`](https://github.com/iboalali/Android-Shared) (private), defaulting to the
-sibling path `../Android-Shared` and overridable with the `androidShared.path` Gradle property. The
-About screen's "Other apps" card comes from `com.iboalali.appcatalog:data` (feed loading, HTTP cache,
-bundled `assets/apps*.json`) and `:ui` (the shared row). Gradle substitutes those coordinates by
-`group:name`, so **the version in the coordinate is ignored** — don't bump it expecting an effect.
+The `com.iboalali.*` modules are **published AARs** from
+[`iboalali/Android-Shared`](https://github.com/iboalali/Android-Shared) (private), resolved from
+`maven-repo` — a Maven repository kept in git, checked out beside this repo and declared in
+`settings.gradle.kts`. The About screen's "Other apps" card comes from `com.iboalali.appcatalog:data`
+(feed loading, HTTP cache, bundled `assets/apps*.json`) and `:ui` (the shared row).
 
-**A fresh clone needs the sibling checkout**, and that repo needs its own gitignored `local.properties`
-with `sdk.dir`. Missing either fails at configuration time in a way that reads like a broken build
-file rather than an absent prerequisite.
+**The version is the `shared` entry in `gradle/libs.versions.toml`, and it is real.** One line covers
+all eleven modules. Bumping it is how this app adopts a shared change; leaving it alone is how it
+declines one, and the other two apps sit on whatever their own catalogs say. A version that is not in
+the `maven-repo` checkout cannot resolve — `git pull` there first.
+
+**A fresh clone needs the `maven-repo` checkout.** It does *not* need the Android-Shared checkout,
+unless a shared change is being developed here, which is what the composite switch is for:
+
+```bash
+./gradlew :app:assembleGplayDebug -PandroidShared.composite=true
+```
+
+That includes the Android-Shared build from `../Android-Shared` (override with `androidShared.path`)
+and substitutes the local projects by `group:name`, which **throws the pinned version away** — every
+edit there lands here immediately, and nothing is pinned. That repo then needs its own gitignored
+`local.properties` with `sdk.dir`, and its AGP must match this app's or configuration fails with
+"Using multiple versions of the Android Gradle plugin". **Publish a version from Android-Shared before
+committing anything here that depends on a shared change.**
 
 `com.iboalali.telemetry:core` comes from the same build and owns the **TelemetryDeck lifecycle**: the
 startup signal buffer, automated-test-traffic detection, the identity reset, and the start-before-flush

@@ -149,54 +149,55 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
-    // Shared "Other apps" catalog from the Android-Shared repo, resolved by the composite build wired
-    // up in settings.gradle.kts. The version is ignored under dependency substitution.
+    // Shared "Other apps" catalog from the Android-Shared repo. Every `libs.shared.*` coordinate
+    // below resolves from the `maven-repo` checkout at the single `shared` version in
+    // libs.versions.toml — see settings.gradle.kts for that and for the composite-build switch.
     // `:ui` already exposes `:data` as an `api` dependency; both are declared because this app uses
     // both directly — the Application owns the repository, and OtherAppsCard draws the shared row.
-    implementation("com.iboalali.appcatalog:data:1.0.0")
-    implementation("com.iboalali.appcatalog:ui:1.0.0")
+    implementation(libs.shared.appcatalog.data)
+    implementation(libs.shared.appcatalog.ui)
 
     // Shared TelemetryDeck lifecycle: the startup signal buffer, automated-test-traffic detection,
     // and the start-before-flush ordering. This app's own signal vocabulary stays in analytics/.
     // `telemetrydeck-sdk` below is still declared directly because Analytics calls TelemetryDeck
     // itself, rather than relying on this module's `api` dependency to supply it.
-    implementation("com.iboalali.telemetry:core:1.0.0")
+    implementation(libs.shared.telemetry.core)
 
     // Shared haptics — the engine this app wrote, now shared. `RootHaptics` keeps what is genuinely
     // this app's: the checking ramp and the three outcome buzzes, plus the capability signal. Both
     // modules are declared because `RootHaptics` names `:core` types (`Haptics`, `HapticWaveform`)
     // directly, not only through `:compose`.
-    implementation("com.iboalali.haptics:core:1.0.0")
-    implementation("com.iboalali.haptics:compose:1.0.0")
+    implementation(libs.shared.haptics.core)
+    implementation(libs.shared.haptics.compose)
 
     // Shared adaptive detail overlay: the ≥840dp container-transform card, its scene strategy, the
     // anchor state that bridges the overflow menu's Popup to it, and the leading nav icon. This app
     // wrote neither — Billboard did — but adopting it is what brings the two fixes this copy lacked:
     // the `isTraversalGroup` semantics on the overlay root, and a scene with value-based
     // equals/hashCode instead of a reference-equality anonymous object.
-    implementation("com.iboalali.nav3:overlay:1.0.0")
+    implementation(libs.shared.nav3.overlay)
 
     // The app-bar overflow menu and its items. The shared `AppBarDropdownMenuItem` wraps its own
     // `onClick` in `rememberHapticClick`, which this app's local copy did *not* — so its menu items
     // were the only silent tap targets of the three apps, and adopting this fixes that. The call
     // sites in `MainScreen` dropped their own `rememberHapticClick` wrappers to avoid a double tick.
-    implementation("com.iboalali.ui:menu:1.0.0")
+    implementation(libs.shared.ui.menu)
 
     // The ColorScheme cross-fade, which this app hand-wrote over 36 of Material's 48 colour roles.
     // The library's copy covers all 48 and has a test that fails when Material adds one.
-    implementation("com.iboalali.ui:theme:1.0.0")
+    implementation(libs.shared.ui.theme)
 
     // The open-source credits list and the verbatim license texts. This app keeps its collapsing
     // LargeTopAppBar and its `license_list` testTag; the list itself and — the reason it matters —
     // `AndroidSharedAttributions` come from the library. This app was crediting two libraries while
     // shipping seven, including TelemetryDeck, which is MIT and requires its notice.
-    implementation("com.iboalali.ui:licences:1.0.0")
+    implementation(libs.shared.ui.licences)
 
     // Shared Play Console screenshot matrices and the constrained-device stress specs. Declared on
     // `implementation`, not `screenshotTestImplementation`, because this app's constrained-device
     // preview *functions* live in `src/main` (util/ConstrainedDevicePreviews.kt) rather than in the
     // screenshotTest source set. Moving them would let this drop to screenshotTest only.
-    implementation("com.iboalali.previews:matrix:1.0.0")
+    implementation(libs.shared.previews.matrix)
 
     // Material (for DynamicColors)
     implementation(libs.google.material)

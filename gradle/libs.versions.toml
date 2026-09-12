@@ -35,6 +35,15 @@ topjohnwu-libsu-core = "6.0.0"                  # https://github.com/topjohnwu/l
 
 junit = "4.13.2"
 
+# Every com.iboalali.* module this app takes, from the Android-Shared repo. One number for all of
+# them: that repo publishes its eleven modules under a single version. Bumping this line is how this app
+# adopts a shared change, and leaving it alone is how it declines one — the other two apps are on
+# whatever line their own catalog says, which need not be this.
+#
+# The version must exist in the `maven-repo` checkout next to this one (`git pull` there first);
+# nothing else can supply it. See Android-Shared/README.md "Releasing".
+shared = "1.0.0"
+
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
@@ -80,6 +89,19 @@ telemetrydeck-sdk = { module = "com.telemetrydeck:kotlin-sdk", version.ref = "te
 topjohnwu-libsu-core = { module = "com.github.topjohnwu.libsu:core", version.ref = "topjohnwu-libsu-core" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
+
+# Android-Shared. What each one is and why this app takes it is in app/build.gradle.kts, next to the
+# declaration. The group is scoped per area, which is why several of these are called `core` or `ui`.
+shared-appcatalog-data = { module = "com.iboalali.appcatalog:data", version.ref = "shared" }
+shared-appcatalog-ui = { module = "com.iboalali.appcatalog:ui", version.ref = "shared" }
+shared-telemetry-core = { module = "com.iboalali.telemetry:core", version.ref = "shared" }
+shared-haptics-core = { module = "com.iboalali.haptics:core", version.ref = "shared" }
+shared-haptics-compose = { module = "com.iboalali.haptics:compose", version.ref = "shared" }
+shared-nav3-overlay = { module = "com.iboalali.nav3:overlay", version.ref = "shared" }
+shared-ui-menu = { module = "com.iboalali.ui:menu", version.ref = "shared" }
+shared-ui-theme = { module = "com.iboalali.ui:theme", version.ref = "shared" }
+shared-ui-licences = { module = "com.iboalali.ui:licences", version.ref = "shared" }
+shared-previews-matrix = { module = "com.iboalali.previews:matrix", version.ref = "shared" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
