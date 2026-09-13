@@ -11,7 +11,7 @@ class SupportGateTest {
         billingAvailable: Boolean = true,
         productsLoaded: Boolean = true,
         alreadySupporter: Boolean = false,
-        rootedCount: Int = SupportGate.MIN_ROOTED_CHECKS,
+        checkCount: Int = SupportGate.MIN_CHECKS,
         dismissCount: Int = 0,
         snoozedUntilEpochMs: Long = 0L,
         nowEpochMs: Long = 1_000_000L,
@@ -21,7 +21,7 @@ class SupportGateTest {
         billingAvailable = billingAvailable,
         productsLoaded = productsLoaded,
         alreadySupporter = alreadySupporter,
-        rootedCount = rootedCount,
+        checkCount = checkCount,
         dismissCount = dismissCount,
         snoozedUntilEpochMs = snoozedUntilEpochMs,
         nowEpochMs = nowEpochMs,
@@ -35,15 +35,15 @@ class SupportGateTest {
     }
 
     @Test
-    fun `not eligible below the rooted-check threshold`() {
-        assertFalse(shouldShow(rootedCount = 0))
-        assertFalse(shouldShow(rootedCount = SupportGate.MIN_ROOTED_CHECKS - 1))
+    fun `not eligible below the check threshold`() {
+        assertFalse(shouldShow(checkCount = 0))
+        assertFalse(shouldShow(checkCount = SupportGate.MIN_CHECKS - 1))
     }
 
     @Test
-    fun `threshold sits above the review gate so review is asked first`() {
-        assertTrue(SupportGate.MIN_ROOTED_CHECKS > ReviewGate.MIN_ROOTED_CHECKS)
-        assertFalse(shouldShow(rootedCount = ReviewGate.MIN_ROOTED_CHECKS))
+    fun `threshold sits above the review gate so review is asked first on a rooted device`() {
+        assertTrue(SupportGate.MIN_CHECKS > ReviewGate.MIN_ROOTED_CHECKS)
+        assertFalse(shouldShow(checkCount = ReviewGate.MIN_ROOTED_CHECKS))
     }
 
     @Test

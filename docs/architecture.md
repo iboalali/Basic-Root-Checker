@@ -192,15 +192,22 @@ appeared" — don't build on it.
 
 ### Post-check asks: support card (`ui/main/SupportCard.kt` + `ui/main/SupportGate.kt`)
 
-After a root-found check the main screen can offer an inline, dismissible **Support development** card
+After any root check the main screen can offer an inline, dismissible **Support development** card
 that opens the shared `TipJarDialog`. `SupportGate` is the pure, unit-tested decision logic
 (`SupportGateTest`), a sibling of `ReviewGate`.
+
+**The two asks count different things.** `SupportGate.MIN_CHECKS` (5) counts every check, whatever it
+found; `ReviewGate.MIN_ROOTED_CHECKS` (3) counts only the root-found ones. Rating the app is worth
+asking for after the app has proved useful, which means finding root; a tip is worth asking for from
+anyone who keeps coming back, rooted device or not.
 
 **The two post-check asks are deliberately serialized, review first**, because Play's review card is a
 system-modal overlay that fires roughly once per release while this one recurs:
 
-- `SupportGate.MIN_ROOTED_CHECKS` (5) sits **above** `ReviewGate.MIN_ROOTED_CHECKS` (3), so a fresh
-  install always reaches the review ask first.
+- 5 sits **above** 3, so on a device that keeps reporting root, where every check feeds both gates,
+  the review ask is always reached first. A device that never reports root can reach the support card
+  first, but it never becomes eligible for the review ask at all, so there is nothing there to yield
+  to.
 - A process-lifetime `reviewRequestedThisSession` flag (a `@Volatile` companion field on
   `MainViewModel`, so an activity recreation can't reset it) keeps them out of the *same session*. A
   frame-level check wouldn't do: a card drawn behind Play's overlay would greet the user the moment
@@ -216,8 +223,13 @@ The gate also requires:
   `SNOOZE_MILLIS` (30 days), but only a dismissal counts toward `MAX_DISMISSALS` (3), past which the
   card never returns.
 
-`MainViewModel.maybeShowSupportPrompt` consumes the rooted count that `maybeRequestReview` already
-observed, so the counter increments exactly once per check.
+`MainViewModel.maybeShowSupportPrompt` runs after `maybeRequestReview` and owns its own counter,
+`UserPreferences.checkCount`, incremented once per check from the main screen. Checks made through an
+AppFunction don't count: the card they would gate lives on a screen the caller isn't looking at.
+
+An install that predates the `check_count` key seeds it from `rooted_check_count`, so progress already
+earned toward the card doesn't restart at zero. The fallback lives in the same transaction as the
+increment, so it is consumed exactly once and the two counters diverge from there.
 
 **Two subtleties.** The gate only sets state — `MainScreen` decides to *draw* it
 (`supportPromptVisible && updateStatus is None`, so an update arriving later still wins) and reports

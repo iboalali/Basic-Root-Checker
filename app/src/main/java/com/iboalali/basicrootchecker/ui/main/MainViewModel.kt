@@ -130,7 +130,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             applyResult(result)
             if (hapticsOn) playResultHaptic(result)
             // Review first, support card second — and never both in one session (see SupportGate).
-            maybeShowSupportPrompt(maybeRequestReview(result))
+            maybeRequestReview(result)
+            maybeShowSupportPrompt()
         }
     }
 
@@ -144,7 +145,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             applyResult(result)
             if (hapticsOn) playResultHaptic(result)
             // Review first, support card second — and never both in one session (see SupportGate).
-            maybeShowSupportPrompt(maybeRequestReview(result))
+            maybeRequestReview(result)
+            maybeShowSupportPrompt()
         }
     }
 
@@ -157,16 +159,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * callback. A build without in-app review (FOSS) returns early, and a controller with no
      * attached activity reports `false`, so neither burns the slot or reports a prompt that never
      * happened.
-     *
-     * @return the rooted-check count this check produced, or `null` when the check counted toward
-     *   neither post-check ask — not a root-found result, or a build without Play review (where the
-     *   tip jar is absent too). [maybeShowSupportPrompt] consumes it instead of incrementing again.
      */
-    private suspend fun maybeRequestReview(result: RootResult): Int? {
-        if (result !is RootResult.Rooted) return null
+    private suspend fun maybeRequestReview(result: RootResult) {
+        if (result !is RootResult.Rooted) return
         // Nothing to rate on without a Play Store, so don't even count toward the gate: the slot
         // stays unspent (and the counter untouched) if this install is ever replaced by a Play build.
-        if (!reviewController.isAvailable) return null
+        if (!reviewController.isAvailable) return
         val rootedCount = userPreferences.incrementRootedCheckCount()
         val lastPromptedVersion = userPreferences.lastReviewPromptVersionCode.first()
         val currentVersion = BuildConfig.VERSION_CODE
@@ -184,26 +182,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             reviewRequestedThisSession = true
             Analytics.trackReviewRequested()
         }
-        return rootedCount
     }
 
     /**
-     * After a root-found result, offer the tip jar inline once [SupportGate] opens. Runs *after*
-     * [maybeRequestReview] and takes the count it observed, so the two asks are ordered and the
-     * rooted-check counter is incremented exactly once per check.
+     * After any root check, offer the tip jar inline once [SupportGate] opens. Runs *after*
+     * [maybeRequestReview] so the two asks stay ordered within a check.
+     *
+     * Every check counts here, whatever it found, which is what separates this counter from the
+     * review gate's: someone who keeps opening the app is worth asking even if their device never
+     * turns out to be rooted.
      *
      * Only sets the state; the card is drawn (and reports itself shown) by `MainScreen`, which also
      * yields the slot to a pending update card.
      */
-    private suspend fun maybeShowSupportPrompt(rootedCount: Int?) {
-        if (rootedCount == null) return
+    private suspend fun maybeShowSupportPrompt() {
+        val checkCount = userPreferences.incrementCheckCount()
         val dismissCount = userPreferences.supportPromptDismissCount.first()
         val snoozedUntil = userPreferences.supportPromptSnoozedUntil.first()
         val shouldShow = SupportGate.shouldShow(
             billingAvailable = billing.isAvailable,
             productsLoaded = billing.products.value.isNotEmpty(),
             alreadySupporter = billing.supporterTiers.value.isNotEmpty(),
-            rootedCount = rootedCount,
+            checkCount = checkCount,
             dismissCount = dismissCount,
             snoozedUntilEpochMs = snoozedUntil,
             nowEpochMs = System.currentTimeMillis(),
@@ -213,7 +213,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (BuildConfig.DEBUG) {
             Log.d(
                 SUPPORT_GATE_TAG,
-                "rootedCount=$rootedCount (need ${SupportGate.MIN_ROOTED_CHECKS}), " +
+                "checkCount=$checkCount (need ${SupportGate.MIN_CHECKS}), " +
                     "dismissCount=$dismissCount (max ${SupportGate.MAX_DISMISSALS}), " +
                     "snoozedUntil=$snoozedUntil, reviewThisSession=$reviewRequestedThisSession " +
                     "-> shouldShow=$shouldShow",

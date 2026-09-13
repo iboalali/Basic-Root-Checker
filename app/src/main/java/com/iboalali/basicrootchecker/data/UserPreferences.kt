@@ -1,6 +1,7 @@
 package com.iboalali.basicrootchecker.data
 
 import android.content.Context
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -127,6 +128,39 @@ class UserPreferences(private val context: Context) {
         }
     }
 
+    /**
+     * Running count of root checks run from the main screen, whatever they found, used to gate the
+     * support card. Sibling of [rootedCheckCount], which counts only the root-found ones: the two
+     * post-check asks weigh different things, so they count different things. Checks made through
+     * an AppFunction are left out, because the card they gate lives on a screen the caller isn't
+     * looking at.
+     *
+     * An install that predates this key seeds it from [rootedCheckCount], so progress already earned
+     * toward the card doesn't restart at zero. The seed undercounts real history (it knows nothing
+     * about checks that found no root), which is the safe direction: it can only delay the ask.
+     */
+    val checkCount: Flow<Int> =
+        context.userSettingsDataStore.data.map { preferences -> preferences.checkCountOrSeed() }
+
+    /** Increments [checkCount] atomically and returns the new total. */
+    suspend fun incrementCheckCount(): Int {
+        var newCount = 0
+        context.userSettingsDataStore.edit { preferences ->
+            newCount = preferences.checkCountOrSeed() + 1
+            preferences[CHECK_COUNT] = newCount
+        }
+        return newCount
+    }
+
+    /**
+     * [CHECK_COUNT], or the [ROOTED_CHECK_COUNT] it seeds from on an install that has never written
+     * it. Read inside the same transaction as the write above, so the carry-over happens exactly
+     * once: the first increment stores the key and the fallback is never reached again. The two
+     * counters diverge from that point on, which is the intent.
+     */
+    private fun Preferences.checkCountOrSeed(): Int =
+        this[CHECK_COUNT] ?: this[ROOTED_CHECK_COUNT] ?: 0
+
     /** Running count of checks that found root, used to gate the in-app review prompt. */
     val rootedCheckCount: Flow<Int> =
         context.userSettingsDataStore.data.map { preferences ->
@@ -201,6 +235,7 @@ class UserPreferences(private val context: Context) {
         private val LAST_ROOT_CHECK_PROVIDER = stringPreferencesKey("last_root_check_provider")
         private val LAST_ROOT_CHECK_MANAGER = stringPreferencesKey("last_root_check_manager")
         private val LAST_ROOT_CHECK_VERSION = stringPreferencesKey("last_root_check_version")
+        private val CHECK_COUNT = intPreferencesKey("check_count")
         private val ROOTED_CHECK_COUNT = intPreferencesKey("rooted_check_count")
         private val LAST_REVIEW_PROMPT_VERSION_CODE =
             intPreferencesKey("last_review_prompt_version_code")

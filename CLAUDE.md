@@ -106,9 +106,10 @@ regenerate a single preview; the Gradle task is variant-level and rewrites every
    **single-consumer** — two collectors *split* events rather than duplicating them. A tip can start
    from Settings or from the main screen's support card, and at expanded width both surfaces are
    composed at once. → [`docs/architecture.md`](docs/architecture.md)
-5. **The two post-check asks are serialized, review first.** `SupportGate.MIN_ROOTED_CHECKS` (5) sits
-   above `ReviewGate.MIN_ROOTED_CHECKS` (3), and a `@Volatile` session flag keeps them out of the same
-   session. Don't reorder or loosen either without reading why.
+5. **The two post-check asks are serialized, review first, and they count different things.**
+   `SupportGate.MIN_CHECKS` (5) counts every check; `ReviewGate.MIN_ROOTED_CHECKS` (3) counts only the
+   root-found ones. 5 above 3 orders them on a device that keeps reporting root, and a `@Volatile`
+   session flag keeps them out of the same session. Don't reorder or loosen either without reading why.
 
 ## Stack
 
