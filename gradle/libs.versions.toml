@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.4.10"
+kotlin = "2.4.20"                                  # https://github.com/JetBrains/kotlin/releases (the floor the shared AARs' metadata requires)
 android-gradle-plugin = "9.4.0"
 ksp = "2.3.10"                                     # https://github.com/google/ksp/releases
 
@@ -42,7 +42,7 @@ junit = "4.13.2"
 #
 # The version must exist in the `maven-repo` checkout next to this one (`git pull` there first);
 # nothing else can supply it. See Android-Shared/README.md "Releasing".
-shared = "1.0.0"
+shared = "1.4.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
