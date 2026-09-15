@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- The **Email** link on the About screen now opens your mail app with the app's name already filled in as the subject, so a message about this app arrives labeled as such.
+
 ### Changed
 - The **Support development** card on the main screen is offered after five root checks of any result, so a device that turns out not to be rooted can reach it too. Nothing else about the card moves: it never appears alongside the rating card or an available update, it is never shown to anyone who has already tipped, and dismissing it stands it down for a month (Google Play builds only).
 - Minimum supported version raised to Android 7.0 (API 24). Devices on Android 6.0 keep the version they already have and stop receiving updates. The AppFunctions library behind the assistant integration no longer supports Android 6.0, and nothing else in the app treated it specially.

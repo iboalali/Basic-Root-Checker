@@ -60,6 +60,9 @@ import com.iboalali.nav3.overlay.DetailNavigationIcon
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+/** Shown as the email row's handle and used as the `mailto:` target, so the two cannot drift. */
+private const val CONTACT_EMAIL = "contact@iboalali.com"
+
 @Composable
 fun AboutScreen(onNavigateBack: () -> Unit) {
     // Read-only: the catalog fetch is owned by MainActivity (kicked off at app start). This screen
@@ -81,6 +84,24 @@ internal fun AboutScreenContent(
     val openUri: (String, String) -> Unit = { platform, uri ->
         Analytics.trackSocialLinkClicked(platform)
         context.startActivity(Intent(Intent.ACTION_VIEW, uri.toUri()))
+    }
+
+    /**
+     * Opens a mail draft with the app's name already in the subject, so mail about three apps that
+     * share one address arrives sorted.
+     *
+     * `ACTION_SENDTO` on a `mailto:` URI is what keeps the chooser to mail apps and what carries
+     * [Intent.EXTRA_SUBJECT]; `ACTION_VIEW` reaches more handlers but drops the extra. A device with
+     * no mail app then has nothing to start, which throws rather than showing an empty chooser, so
+     * the tap does nothing there instead of crashing the screen.
+     */
+    val emailSubject = stringResource(R.string.app_name)
+    val openEmail: () -> Unit = {
+        Analytics.trackSocialLinkClicked("email")
+        val draft =
+            Intent(Intent.ACTION_SENDTO, "mailto:$CONTACT_EMAIL".toUri())
+                .putExtra(Intent.EXTRA_SUBJECT, emailSubject)
+        runCatching { context.startActivity(draft) }
     }
 
     // True on Google Play builds (false on FOSS, where there's no Play Store to rate on). Safe cast
@@ -171,8 +192,8 @@ internal fun AboutScreenContent(
                         SocialLinkRow(
                             iconRes = R.drawable.alternate_email_24px,
                             label = stringResource(R.string.about_link_email),
-                            handle = "contact@iboalali.com",
-                            onClick = { openUri("email", "mailto:contact@iboalali.com") },
+                            handle = CONTACT_EMAIL,
+                            onClick = openEmail,
                         )
                         SocialLinkDivider()
                         SocialLinkRow(
