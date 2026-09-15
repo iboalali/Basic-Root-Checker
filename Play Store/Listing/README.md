@@ -10,8 +10,15 @@ Listing/
 ├── german/     ← de-DE
 ├── arabic/     ← ar
 ├── russian/    ← ru-RU
-└── spanish/    ← es-ES (used by both es-ES and es-419 unless split later)
+├── spanish/    ← es-ES (used by both es-ES and es-419 unless split later)
+├── dutch/      ← nl-NL
+├── chinese/    ← zh-CN (Simplified; Traditional zh-TW/zh-HK is not listed)
+├── malay/      ← ms
+└── tamil/      ← ta-IN
 ```
+
+The folder-to-code mapping is not documentation: `locales` in `../store.json` is what the upload and
+export scripts read, and this table mirrors it.
 
 Each locale folder contains three files:
 

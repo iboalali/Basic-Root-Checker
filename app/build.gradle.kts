@@ -102,6 +102,15 @@ android {
     }
 }
 
+// The screenshot tasks fork their own JVM, which inherits nothing from org.gradle.jvmargs and
+// defaults to a heap far too small for this matrix. 175 previews at native store resolution — the
+// 10-inch slot alone is 2560x1600 — exhaust it and the task dies with "Java heap space" rather than
+// with anything naming the real cause. Raised on the render tasks only; the unit tests are unaffected
+// and stay on the default.
+tasks.withType<Test>().matching { it.name.endsWith("ScreenshotTest") }.configureEach {
+    maxHeapSize = "4g"
+}
+
 // AppFunctions: the @AppFunctionServiceEntryPoint compiler generates the concrete
 // RootAppFunctionService plus its assets/root_app_function_service.xml from the @AppFunction methods
 // on BaseRootAppFunctionService. The entry-point path takes no ksp arg of its own, and the generated

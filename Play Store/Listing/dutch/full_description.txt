@@ -1,0 +1,21 @@
+Twijfel je over de rootstatus van je apparaat?
+
+Basic Root Checker biedt een snelle, eenvoudige en betrouwbare manier om root-toegang (ook bekend als superuser-rechten) op je Android-apparaat te controleren. Of je nu een gevorderde gebruiker bent, een ontwikkelaar, of gewoon benieuwd of je telefoon of tablet geroot is: deze app geeft direct een duidelijk antwoord, en laat nu ook zien welke rootmanager je gebruikt.
+
+Wat Basic Root Checker doet:
+* Controleert root-toegang nauwkeurig: een helder antwoord over de rootstatus van je apparaat, met vier mogelijke uitkomsten — geroot, niet geroot, nog geen toegang verleend, of onbekend.
+* Herkent de rootprovider: detecteert Magisk, KernelSU en APatch, en laat zien welke op je apparaat staat, inclusief de Magisk-versie zodra root is verleend.
+* Ziet openstaande aanvragen: ook als root is geïnstalleerd maar de app nog geen toegang heeft gekregen, herkent Basic Root Checker dat en biedt een knop "Root-toegang aanvragen".
+* Valt terug op gewone "su"-bestanden: apparaten die zonder herkende manager zijn geroot, worden alsnog gevonden door de gebruikelijke su-paden te scannen.
+* Directe controle: bepaal in één tik of je apparaat over superuser-mogelijkheden beschikt.
+* Eenvoudig en overzichtelijk: Material 3-ontwerp met dynamische kleuren op Android 12 en nieuwer, beschikbaar in het Nederlands, Engels, Duits, Arabisch, Spaans, Russisch, Chinees, Maleis en Tamil.
+
+Belangrijk om te weten:
+* Root je apparaat NIET: Basic Root Checker is puur een diagnostisch hulpmiddel. De app past je apparaat NIET aan, installeert geen rootbestanden en helpt niet bij het rooten. De app kijkt alleen of root-toegang al aanwezig is op je systeem.
+* Begrijp je geroote omgeving: werken met een geroot apparaat betekent systeemaanpassingen en brengt eigen verantwoordelijkheden mee. Deze app geeft je accurate informatie om de rootstatus van je apparaat beter te begrijpen en te beheren.
+
+Jouw privacy telt:
+* Basic Root Checker verzamelt geen persoonlijke gegevens van je apparaat. Anonieme gebruiksstatistieken via TelemetryDeck staan standaard aan om de app te helpen verbeteren, en kunnen op elk moment worden uitgeschakeld in de instellingen van de app.
+
+Disclaimer:
+* Deze app is een onafhankelijk hulpmiddel, wordt niet ondersteund door en is niet gelieerd aan topjohnwu of libsu.

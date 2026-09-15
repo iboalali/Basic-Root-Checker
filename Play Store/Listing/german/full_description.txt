@@ -6,7 +6,7 @@ Was Basic Root Checker bietet:
 * Erkennt ausstehende Freigaben: Auch wenn Root installiert ist, der App aber noch kein Zugriff gewährt wurde, erkennt Basic Root Checker dies und bietet eine Schaltfläche „Root-Zugriff anfordern" mit nur einem Tippen an.
 * Greift auf einfache „su"-Binaries zurück: Geräte, die ohne anerkannten Root-Manager gerootet wurden, werden weiterhin durch das Durchsuchen der gängigen su-Pfade erkannt.
 * Sofortige Verifizierung: Bestimmen Sie in Sekundenschnelle, ob Ihr Gerät über Superuser-Rechte verfügt.
-* Einfach & Intuitiv: Material-3-Design mit dynamischen Farben ab Android 12, verfügbar auf Deutsch, Englisch, Arabisch, Spanisch und Russisch.
+* Einfach & Intuitiv: Material-3-Design mit dynamischen Farben ab Android 12, verfügbar auf Deutsch, Englisch, Arabisch, Spanisch, Russisch, Niederländisch, Chinesisch, Malaiisch und Tamil.
 
 Wichtige Hinweise:
 * KEIN Root-Werkzeug: Basic Root Checker ist ein reines Diagnose-Tool. Es wird Ihr Gerät NICHT modifizieren, keine Root-Dateien installieren oder den Root-Vorgang unterstützen. Es prüft lediglich, ob Root-Zugriff bereits auf Ihrem System vorhanden ist.

@@ -8,7 +8,7 @@ What Basic Root Checker Does:
 * Detects Pending Grants: Even if root is installed but the app hasn't been allowed access yet, Basic Root Checker recognizes it and offers a one-tap "Request Root access" button.
 * Falls Back to Plain "su" Binaries: Devices rooted without a recognized manager are still detected by scanning the common su binary paths.
 * Instant Verification: Quickly determine if your device has superuser capabilities.
-* Simple & Intuitive: Material 3 design with dynamic colors on Android 12+, available in English, German, Arabic, Spanish, and Russian.
+* Simple & Intuitive: Material 3 design with dynamic colors on Android 12+, available in English, German, Arabic, Spanish, Russian, Dutch, Chinese, Malay, and Tamil.
 
 Important Considerations:
 * DOES NOT Root Your Device: Basic Root Checker is purely a diagnostic tool. It will NOT modify your device, install any root files, or assist in the rooting process. It simply checks if root access is already present on your system.

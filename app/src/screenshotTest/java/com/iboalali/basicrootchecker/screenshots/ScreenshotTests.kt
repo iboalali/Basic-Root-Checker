@@ -21,8 +21,11 @@ import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
 import com.iboalali.nav3.overlay.DetailCard
 import com.iboalali.previews.matrix.PreviewPlayStorePhone
+import com.iboalali.previews.matrix.PreviewPlayStorePhoneExtraLocales
 import com.iboalali.previews.matrix.PreviewPlayStoreTablet10
+import com.iboalali.previews.matrix.PreviewPlayStoreTablet10ExtraLocales
 import com.iboalali.previews.matrix.PreviewPlayStoreTablet7
+import com.iboalali.previews.matrix.PreviewPlayStoreTablet7ExtraLocales
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -44,6 +47,13 @@ import kotlinx.collections.immutable.persistentSetOf
  *   state, since the overlay's container transform is motion the renderer can't advance. The main
  *   screen stays single-pane at every width, so its shots ([MainRootedShot] / [MainNotCheckedShot])
  *   use all three matrices.
+ *
+ * Each base matrix covers en/ar/de/es/ru, and a `*ExtraLocales` sibling adds nl/zh/ms/ta at the same
+ * device specs. Every listing shot carries both halves, so the store gets all nine languages; the
+ * update-card shots carry only the base five, because they are never uploaded and four more locales
+ * of a card nobody sees would be 32 reference images earning nothing. The split exists for the other
+ * two apps, which take the same module and have none of these translations — it keeps the extra
+ * locales opt-in rather than inherited.
  *
  * Generate / update with `./gradlew :app:updateGplayDebugScreenshotTest`; references land under
  * `app/src/screenshotTestGplayDebug/reference/.../ScreenshotTestsKt/` as
@@ -208,8 +218,11 @@ private fun DialogOverMain(content: @Composable () -> Unit) {
 
 @PreviewTest
 @PreviewPlayStorePhone
+@PreviewPlayStorePhoneExtraLocales
 @PreviewPlayStoreTablet7
+@PreviewPlayStoreTablet7ExtraLocales
 @PreviewPlayStoreTablet10
+@PreviewPlayStoreTablet10ExtraLocales
 @Composable
 fun MainNotCheckedShot() {
     BasicRootCheckerTheme { MainNotChecked() }
@@ -217,8 +230,11 @@ fun MainNotCheckedShot() {
 
 @PreviewTest
 @PreviewPlayStorePhone
+@PreviewPlayStorePhoneExtraLocales
 @PreviewPlayStoreTablet7
+@PreviewPlayStoreTablet7ExtraLocales
 @PreviewPlayStoreTablet10
+@PreviewPlayStoreTablet10ExtraLocales
 @Composable
 fun MainRootedShot() {
     BasicRootCheckerTheme { MainRooted() }
@@ -288,7 +304,9 @@ fun UpdateFailedShot() {
 
 @PreviewTest
 @PreviewPlayStorePhone
+@PreviewPlayStorePhoneExtraLocales
 @PreviewPlayStoreTablet7
+@PreviewPlayStoreTablet7ExtraLocales
 @Composable
 fun SettingsShot() {
     BasicRootCheckerTheme { Settings() }
@@ -296,7 +314,9 @@ fun SettingsShot() {
 
 @PreviewTest
 @PreviewPlayStorePhone
+@PreviewPlayStorePhoneExtraLocales
 @PreviewPlayStoreTablet7
+@PreviewPlayStoreTablet7ExtraLocales
 @Composable
 fun AboutShot() {
     BasicRootCheckerTheme { About() }
@@ -304,7 +324,9 @@ fun AboutShot() {
 
 @PreviewTest
 @PreviewPlayStorePhone
+@PreviewPlayStorePhoneExtraLocales
 @PreviewPlayStoreTablet7
+@PreviewPlayStoreTablet7ExtraLocales
 @Composable
 fun LicenseShot() {
     BasicRootCheckerTheme { License() }
@@ -315,6 +337,7 @@ fun LicenseShot() {
 
 @PreviewTest
 @PreviewPlayStoreTablet10
+@PreviewPlayStoreTablet10ExtraLocales
 @Composable
 fun SettingsDialogShot() {
     BasicRootCheckerTheme { DialogOverMain { Settings() } }
@@ -322,6 +345,7 @@ fun SettingsDialogShot() {
 
 @PreviewTest
 @PreviewPlayStoreTablet10
+@PreviewPlayStoreTablet10ExtraLocales
 @Composable
 fun AboutDialogShot() {
     BasicRootCheckerTheme { DialogOverMain { About() } }
@@ -329,6 +353,7 @@ fun AboutDialogShot() {
 
 @PreviewTest
 @PreviewPlayStoreTablet10
+@PreviewPlayStoreTablet10ExtraLocales
 @Composable
 fun LicenseDialogShot() {
     BasicRootCheckerTheme { DialogOverMain { License() } }

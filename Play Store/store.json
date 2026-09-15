@@ -13,19 +13,33 @@
 
   "package": "com.iboalali.basicrootchecker",
 
+  "_locales": [
+    "Folder name to Play Console language code. The renderer matches a screenshot's locale token to",
+    "the entry whose LANGUAGE SUBTAG it equals, so only one entry per subtag is allowed — 'zh-CN'",
+    "here pairs with the 'Phone_zh' preview name, which renders from the b+zh+Hans resource folder.",
+    "The preview name carries the Play subtag, never the resource qualifier."
+  ],
   "locales": {
     "default": "en-US",
     "german": "de-DE",
     "spanish": "es-ES",
     "russian": "ru-RU",
-    "arabic": "ar"
+    "arabic": "ar",
+    "dutch": "nl-NL",
+    "chinese": "zh-CN",
+    "malay": "ms",
+    "tamil": "ta-IN"
   },
   "localeLabels": {
     "en-US": "English (United States) — default listing",
     "de-DE": "German",
     "es-ES": "Spanish (Spain)",
     "ru-RU": "Russian",
-    "ar": "Arabic"
+    "ar": "Arabic",
+    "nl-NL": "Dutch",
+    "zh-CN": "Chinese (Simplified)",
+    "ms": "Malay",
+    "ta-IN": "Tamil"
   },
 
   "_listing": "This app names its field files with underscores and 'app_name' rather than the hyphenated 'name.txt' Billboard uses, so the 'files' map is not the default.",
@@ -42,10 +56,11 @@
     "dir": "Play Store/Generated Screenshots",
 
     "_handMaintainedLocales": [
-      "Empty: no locale's listing is maintained by hand. All five locales' app name, short and full",
-      "description are already live and byte-identical to `Play Store/Listing`, so the uploader's",
-      "listing push is a no-op for every one of them, and the export renders en-US alongside the other",
-      "four. Naming a locale here freezes its screenshots at whatever the store already holds."
+      "Empty: no locale's listing is maintained by hand, so the uploader pushes all nine. For the",
+      "five that were already live the push is a no-op, because their app name, short and full",
+      "description are byte-identical to `Play Store/Listing`. Dutch, Chinese, Malay and Tamil are new",
+      "text and new screenshots, and the same push is what creates them.",
+      "Naming a locale here would instead freeze its screenshots at whatever the store already holds."
     ],
     "handMaintainedLocales": [],
 

@@ -1,0 +1,21 @@
+Tidak pasti tentang status root peranti anda?
+
+Basic Root Checker menawarkan cara yang pantas, mudah dan boleh dipercayai untuk mengesahkan akses root (juga dikenali sebagai keistimewaan superuser) pada peranti Android anda. Sama ada anda pengguna mahir, pembangun, atau sekadar ingin tahu jika telefon atau tablet anda sudah di-root, aplikasi ini memberikan jawapan yang segera dan muktamad, dan kini turut memberitahu pengurus root yang anda gunakan.
+
+Apa yang Basic Root Checker lakukan:
+* Menyemak akses root dengan tepat: jawapan yang jelas tentang status root peranti anda, dengan empat kemungkinan hasil — di-root, tidak di-root, akses belum diberikan, atau tidak diketahui.
+* Mengenal pasti penyedia root: mengesan Magisk, KernelSU dan APatch, serta menunjukkan yang mana ada pada peranti anda, termasuk versi Magisk apabila akses root telah diberikan.
+* Mengesan kebenaran yang tertunggak: walaupun root sudah dipasang tetapi aplikasi ini belum diberikan akses, Basic Root Checker mengenalinya dan menawarkan butang "Minta akses root" dengan satu ketikan.
+* Kembali kepada fail "su" biasa: peranti yang di-root tanpa pengurus yang dikenali masih dikesan dengan mengimbas laluan su yang lazim.
+* Pengesahan segera: tentukan dengan pantas sama ada peranti anda mempunyai keupayaan superuser.
+* Ringkas dan intuitif: reka bentuk Material 3 dengan warna dinamik pada Android 12 dan lebih baharu, tersedia dalam bahasa Melayu, Inggeris, Jerman, Arab, Sepanyol, Rusia, Belanda, Cina dan Tamil.
+
+Perkara penting untuk diketahui:
+* TIDAK me-root peranti anda: Basic Root Checker ialah alat diagnostik semata-mata. Ia TIDAK akan mengubah suai peranti anda, tidak memasang sebarang fail root, dan tidak membantu proses rooting. Ia hanya menyemak sama ada akses root sudah wujud pada sistem anda.
+* Fahami persekitaran root anda: menggunakan peranti yang di-root melibatkan pengubahsuaian sistem dan membawa tanggungjawabnya sendiri. Aplikasi ini memberi anda maklumat yang tepat untuk memahami status root peranti anda dengan lebih baik dan mengurus persekitaran root anda.
+
+Privasi anda penting:
+* Basic Root Checker tidak mengumpul data peribadi daripada peranti anda. Statistik penggunaan tanpa nama melalui TelemetryDeck dihidupkan secara lalai untuk membantu menambah baik aplikasi, dan boleh dimatikan pada bila-bila masa daripada tetapan aplikasi.
+
+Penafian:
+* Aplikasi ini ialah alat bebas yang tidak disokong oleh dan tidak bergabung dengan topjohnwu atau libsu.
