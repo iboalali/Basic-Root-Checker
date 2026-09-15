@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basic Root Checker</string>
+
+    <!-- Main Strings-->
+    <string name="textView_Disclaimer"><![CDATA[Aplikasi ini <b>TIDAK</b> akan me-root peranti anda.<br>Aplikasi ini hanya menunjukkan sama ada peranti anda mempunyai akses root.]]></string>
+    <string name="textView_checkForRoot">Ketik butang \"#\" di bahagian bawah kanan untuk menyemak status root</string>
+    <string name="rootAvailable">Peranti anda mempunyai akses root</string>
+    <string name="rootUnknown">Tidak dapat memperoleh status root peranti anda</string>
+    <string name="rootNotAvailable">Peranti anda tiada akses root</string>
+    <string name="rootNotGranted">Root tersedia tetapi aplikasi ini belum diberikan akses</string>
+    <string name="root_hidden_manager_hint">Menggunakan pengurus root yang tersembunyi atau ditukar nama (seperti Kitsune Mask)? Ia mungkin tidak dikesan sehingga anda memberikan akses kepada aplikasi ini.</string>
+    <string name="action_request_root">Minta akses root</string>
+    <string name="root_provider_other">Lain-lain</string>
+    <string name="root_provider_via">melalui %1$s</string>
+    <string name="root_provider_via_with_version">melalui %1$s v%2$s</string>
+    <string name="action_license">Lesen</string>
+    <string name="action_about">Perihal</string>
+    <string name="action_settings">Tetapan</string>
+    <string name="action_privacy_policy">Dasar Privasi</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_telemetry_title">Kongsi data penggunaan tanpa nama</string>
+    <string name="settings_telemetry_description">Membantu menambah baik aplikasi melalui TelemetryDeck. Apabila dihidupkan, ia berkuat kuasa pada pelancaran aplikasi seterusnya.</string>
+    <string name="settings_reset_identity_title">Tetapkan semula identiti analitik</string>
+    <string name="settings_reset_identity_description">Mulakan ID tanpa nama yang baharu supaya data penggunaan akan datang tidak boleh dikaitkan dengan apa yang telah dikongsi sebelum ini.</string>
+    <string name="settings_reset_identity_dialog_message">Pengecam tanpa nama yang baharu akan dijana. Data penggunaan akan datang tidak akan dikaitkan dengan apa-apa yang dikongsi sebelum ini. Tindakan ini tidak boleh dibatalkan.</string>
+    <string name="settings_reset_identity_confirm">Tetapkan semula</string>
+    <string name="settings_reset_identity_done">Identiti analitik ditetapkan semula</string>
+    <string name="settings_haptics_title">Maklum balas haptik</string>
+    <string name="settings_haptics_description">Bergetar semasa ketikan, semasa menyemak root dan apabila keputusan dipaparkan.</string>
+    <string name="settings_privacy_policy_description">Lihat dasar privasi kami dalam talian</string>
+    <string name="settings_theme_title">Tema</string>
+    <string name="theme_follow_system">Ikut sistem</string>
+    <string name="theme_light">Cerah</string>
+    <string name="theme_dark">Gelap</string>
+    <string name="settings_language_title">Bahasa</string>
+    <string name="language_system_default">Lalai sistem</string>
+    <string name="settings_tip_jar_title">Sokong pembangunan</string>
+    <string name="settings_tip_jar_description">Berikan tip jika aplikasi ini membantu anda.</string>
+    <string name="tip_jar_dialog_title">Berikan tip</string>
+    <string name="tip_tier_small">Tip kecil</string>
+    <string name="tip_tier_medium">Tip sederhana</string>
+    <string name="tip_tier_large">Tip besar</string>
+    <string name="tip_jar_loading">Memuatkan pilihan tip…</string>
+    <string name="tip_jar_thanks">Terima kasih atas sokongan anda!</string>
+    <string name="tip_jar_pending">Tip anda masih menunggu. Ia akan selesai sebaik sahaja pembayaran anda diluluskan.</string>
+    <string name="tip_jar_cleared">Tip anda yang tertunggak telah selesai. Terima kasih atas sokongan anda!</string>
+    <string name="tip_jar_error">Ada sesuatu yang tidak kena. Sila cuba lagi.</string>
+    <!-- Kad sokongan pada skrin utama, ditawarkan selepas semakan root (lihat SupportGate) -->
+    <string name="support_card_title">Suka aplikasi ini?</string>
+    <string name="support_card_body">Ia percuma dan tiada iklan. Tip kecil membantu pembangunan diteruskan.</string>
+    <string name="support_card_action">Sokong pembangunan</string>
+    <string name="support_card_dismiss">Ketepikan</string>
+    <string name="textViewAndroidVersion">Android</string>
+    <string name="string_your_device">Peranti Anda</string>
+    <string name="string_checking_for_root">Menyemak root…</string>
+
+    <!-- About Strings -->
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
+        Aplikasi ini TIDAK me-root telefon anda.\n
+        Aplikasi ini memerlukan ROOT, gunakan atas risiko anda sendiri.\n
+        Aplikasi ini TIDAK mengumpul sebarang maklumat peribadi.\n\n\n
+        Hubungi saya di:</string>
+    <string name="about_link_email">E-mel</string>
+    <string name="about_link_website">Laman web</string>
+    <string name="about_link_rate_this_app">Nilai aplikasi ini</string>
+    <string name="about_not_affiliated">Aplikasi ini tidak disokong oleh dan tidak bergabung dengan topjohnwu atau libsu</string>
+
+    <!-- Style Strings -->
+    <string name="content_description_check_for_root">Semak root</string>
+    <string name="content_description_marketing_name">Nama pemasaran</string>
+    <string name="content_description_model_name">Nama model</string>
+    <string name="content_description_android_version">Versi Android</string>
+    <string name="content_description_more_options">Lagi pilihan</string>
+    <string name="content_description_navigate_up">Navigasi ke atas</string>
+    <string name="content_description_close">Tutup</string>
+    <string name="content_description_dismiss_dialog">Tutup dialog</string>
+    <string name="detail_release_to_close">Lepaskan untuk menutup</string>
+    <string name="action_copy">Salin</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">Nama peranti</string>
+    <string name="label_model">Model</string>
+    <string name="label_android_version">Versi Android</string>
+    <string name="toast_content_copied">Kandungan disalin</string>
+
+    <!-- In-app updates -->
+    <string name="update_available_title">Kemas kini tersedia</string>
+    <string name="update_available_body">Versi baharu aplikasi ini sedia untuk dimuat turun.</string>
+    <string name="update_action_update">Kemas kini</string>
+    <string name="update_downloading">Memuat turun kemas kini…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s MB</string>
+    <string name="update_downloaded_title">Kemas kini dimuat turun</string>
+    <string name="update_action_install">Pasang sekarang</string>
+    <string name="update_failed">Kemas kini gagal. Ia akan dicuba semula secara automatik.</string>
+    <string name="app_updated_snackbar">Aplikasi telah dikemas kini</string>
+
+    <!-- Other Apps -->
+    <string name="other_apps_title">Aplikasi Lain</string>
+    <string name="about_other_app_open">Buka</string>
+    <string name="about_other_app_install">Pasang</string>
+    <string name="about_other_app_website">Laman web</string>
+    <string name="about_other_app_highlights">Sorotan</string>
+
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">Membolehkan sistem dan aplikasi pembantu menyemak status root peranti ini tanpa membuka aplikasi.</string>
+
+</resources>

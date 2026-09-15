@@ -12,6 +12,10 @@ class AppLanguageTest {
         assertEquals("العربية", AppLanguage.displayName("ar"))
         assertEquals("Español", AppLanguage.displayName("es"))
         assertEquals("Русский", AppLanguage.displayName("ru"))
+        assertEquals("Nederlands", AppLanguage.displayName("nl"))
+        assertEquals("中文", AppLanguage.displayName("zh-Hans"))
+        assertEquals("Melayu", AppLanguage.displayName("ms"))
+        assertEquals("தமிழ்", AppLanguage.displayName("ta"))
     }
 
     @Test

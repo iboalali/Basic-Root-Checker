@@ -17,7 +17,8 @@ object AppLanguage {
      * Languages the app ships translations for. Keep in sync with
      * `res/xml/app_locales_config.xml` and `androidResources.localeFilters` in `app/build.gradle.kts`.
      */
-    val SUPPORTED_TAGS: List<String> = listOf("en", "de", "ar", "es", "ru")
+    val SUPPORTED_TAGS: List<String> =
+        listOf("en", "de", "ar", "es", "ru", "nl", "zh-Hans", "ms", "ta")
 
     /** Whether the in-app language picker is available on this device. */
     val isSupported: Boolean

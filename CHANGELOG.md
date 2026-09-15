@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Four new languages: **Dutch**, **Chinese (Simplified)**, **Malay** and **Tamil**. That brings the app to nine, and it covers all four of Singapore's official languages, English included. Pick one under Settings › Language, or let the app follow your system language.
 - The **Email** link on the About screen now opens your mail app with the app's name already filled in as the subject, so a message about this app arrives labeled as such.
 
 ### Changed

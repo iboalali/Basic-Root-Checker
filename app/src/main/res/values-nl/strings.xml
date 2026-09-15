@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basic Root Checker</string>
+
+    <!-- Main Strings-->
+    <string name="textView_Disclaimer"><![CDATA[Deze app zal je apparaat <b>NIET</b> rooten.<br>Deze app laat alleen zien of je apparaat root-toegang heeft.]]></string>
+    <string name="textView_checkForRoot">Tik op de \"#\"-knop rechtsonder om de rootstatus te controleren</string>
+    <string name="rootAvailable">Je apparaat heeft root-toegang</string>
+    <string name="rootUnknown">Kon de rootstatus van je apparaat niet bepalen</string>
+    <string name="rootNotAvailable">Je apparaat heeft geen root-toegang</string>
+    <string name="rootNotGranted">Root is beschikbaar, maar deze app heeft geen toegang gekregen</string>
+    <string name="root_hidden_manager_hint">Gebruik je een verborgen of hernoemde rootmanager (zoals Kitsune Mask)? Die wordt mogelijk pas herkend als je deze app toegang geeft.</string>
+    <string name="action_request_root">Root-toegang aanvragen</string>
+    <string name="root_provider_other">Overig</string>
+    <string name="root_provider_via">via %1$s</string>
+    <string name="root_provider_via_with_version">via %1$s v%2$s</string>
+    <string name="action_license">Licenties</string>
+    <string name="action_about">Over</string>
+    <string name="action_settings">Instellingen</string>
+    <string name="action_privacy_policy">Privacybeleid</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_telemetry_title">Anonieme gebruiksgegevens delen</string>
+    <string name="settings_telemetry_description">Helpt de app te verbeteren via TelemetryDeck. Als dit aanstaat, gaat het in bij de volgende start van de app.</string>
+    <string name="settings_reset_identity_title">Analyse-identiteit opnieuw instellen</string>
+    <string name="settings_reset_identity_description">Begin met een nieuwe anonieme ID, zodat toekomstige gebruiksgegevens niet te koppelen zijn aan wat eerder is gedeeld.</string>
+    <string name="settings_reset_identity_dialog_message">Er wordt een nieuwe anonieme identificatie aangemaakt. Toekomstige gebruiksgegevens worden niet gekoppeld aan eerder gedeelde gegevens. Dit kan niet ongedaan worden gemaakt.</string>
+    <string name="settings_reset_identity_confirm">Opnieuw instellen</string>
+    <string name="settings_reset_identity_done">Analyse-identiteit opnieuw ingesteld</string>
+    <string name="settings_haptics_title">Haptische feedback</string>
+    <string name="settings_haptics_description">Trilt bij tikken, tijdens het controleren op root en wanneer het resultaat verschijnt.</string>
+    <string name="settings_privacy_policy_description">Bekijk ons privacybeleid online</string>
+    <string name="settings_theme_title">Thema</string>
+    <string name="theme_follow_system">Systeemstandaard</string>
+    <string name="theme_light">Licht</string>
+    <string name="theme_dark">Donker</string>
+    <string name="settings_language_title">Taal</string>
+    <string name="language_system_default">Systeemstandaard</string>
+    <string name="settings_tip_jar_title">Ontwikkeling steunen</string>
+    <string name="settings_tip_jar_description">Geef een fooi als de app je geholpen heeft.</string>
+    <string name="tip_jar_dialog_title">Fooi geven</string>
+    <string name="tip_tier_small">Kleine fooi</string>
+    <string name="tip_tier_medium">Middelgrote fooi</string>
+    <string name="tip_tier_large">Grote fooi</string>
+    <string name="tip_jar_loading">Fooiopties laden…</string>
+    <string name="tip_jar_thanks">Bedankt voor je steun!</string>
+    <string name="tip_jar_pending">Je fooi is nog in behandeling. Hij wordt voltooid zodra je betaling is goedgekeurd.</string>
+    <string name="tip_jar_cleared">Je openstaande fooi is voltooid. Bedankt voor je steun!</string>
+    <string name="tip_jar_error">Er is iets misgegaan. Probeer het opnieuw.</string>
+    <!-- Ondersteuningskaart op het hoofdscherm, na een rootcontrole (zie SupportGate) -->
+    <string name="support_card_title">Bevalt de app?</string>
+    <string name="support_card_body">Hij is gratis en zonder advertenties. Een kleine fooi helpt de ontwikkeling door te gaan.</string>
+    <string name="support_card_action">Ontwikkeling steunen</string>
+    <string name="support_card_dismiss">Sluiten</string>
+    <string name="textViewAndroidVersion">Android</string>
+    <string name="string_your_device">Je apparaat</string>
+    <string name="string_checking_for_root">Controleren op root…</string>
+
+    <!-- About Strings -->
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
+        Deze app root je telefoon NIET.\n
+        Deze app vereist ROOT, gebruik op eigen risico.\n
+        Deze app verzamelt geen persoonlijke gegevens.\n\n\n
+        Neem contact met me op:</string>
+    <string name="about_link_email">E-mail</string>
+    <string name="about_link_website">Website</string>
+    <string name="about_link_rate_this_app">Deze app beoordelen</string>
+    <string name="about_not_affiliated">Deze app wordt niet ondersteund door en is niet gelieerd aan topjohnwu of libsu</string>
+
+    <!-- Style Strings -->
+    <string name="content_description_check_for_root">Controleren op root</string>
+    <string name="content_description_marketing_name">Marketingnaam</string>
+    <string name="content_description_model_name">Modelnaam</string>
+    <string name="content_description_android_version">Android-versie</string>
+    <string name="content_description_more_options">Meer opties</string>
+    <string name="content_description_navigate_up">Omhoog navigeren</string>
+    <string name="content_description_close">Sluiten</string>
+    <string name="content_description_dismiss_dialog">Dialoogvenster sluiten</string>
+    <string name="detail_release_to_close">Loslaten om te sluiten</string>
+    <string name="action_copy">Kopiëren</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">Apparaatnaam</string>
+    <string name="label_model">Model</string>
+    <string name="label_android_version">Android-versie</string>
+    <string name="toast_content_copied">Inhoud gekopieerd</string>
+
+    <!-- In-app updates -->
+    <string name="update_available_title">Update beschikbaar</string>
+    <string name="update_available_body">Er staat een nieuwe versie van de app klaar om te downloaden.</string>
+    <string name="update_action_update">Bijwerken</string>
+    <string name="update_downloading">Update downloaden…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s MB</string>
+    <string name="update_downloaded_title">Update gedownload</string>
+    <string name="update_action_install">Nu installeren</string>
+    <string name="update_failed">Update mislukt. Er wordt automatisch opnieuw geprobeerd.</string>
+    <string name="app_updated_snackbar">App is bijgewerkt</string>
+
+    <!-- Other Apps -->
+    <string name="other_apps_title">Andere apps</string>
+    <string name="about_other_app_open">Openen</string>
+    <string name="about_other_app_install">Installeren</string>
+    <string name="about_other_app_website">Website</string>
+    <string name="about_other_app_highlights">Hoogtepunten</string>
+
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">Laat het systeem en assistent-apps de rootstatus van dit apparaat controleren zonder de app te openen.</string>
+
+</resources>

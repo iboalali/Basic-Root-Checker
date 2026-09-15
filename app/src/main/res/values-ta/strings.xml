@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basic Root Checker</string>
+
+    <!-- Main Strings-->
+    <string name="textView_Disclaimer"><![CDATA[இந்த ஆப்ஸ் உங்கள் சாதனத்தை <b>ரூட் செய்யாது</b>.<br>உங்கள் சாதனத்தில் ரூட் அணுகல் உள்ளதா என்பதை மட்டுமே இது காட்டும்.]]></string>
+    <string name="textView_checkForRoot">ரூட் நிலையைச் சரிபார்க்க கீழ் வலதுபுறத்தில் உள்ள \"#\" பொத்தானைத் தட்டவும்</string>
+    <string name="rootAvailable">உங்கள் சாதனத்தில் ரூட் அணுகல் உள்ளது</string>
+    <string name="rootUnknown">உங்கள் சாதனத்தின் ரூட் நிலையைப் பெற முடியவில்லை</string>
+    <string name="rootNotAvailable">உங்கள் சாதனத்தில் ரூட் அணுகல் இல்லை</string>
+    <string name="rootNotGranted">ரூட் உள்ளது, ஆனால் இந்த ஆப்ஸுக்கு அணுகல் வழங்கப்படவில்லை</string>
+    <string name="root_hidden_manager_hint">மறைக்கப்பட்ட அல்லது பெயர் மாற்றப்பட்ட ரூட் மேலாளரைப் (எடுத்துக்காட்டாக Kitsune Mask) பயன்படுத்துகிறீர்களா? இந்த ஆப்ஸுக்கு நீங்கள் அணுகல் வழங்கும் வரை அது கண்டறியப்படாமல் இருக்கலாம்.</string>
+    <string name="action_request_root">ரூட் அணுகலைக் கோரு</string>
+    <string name="root_provider_other">மற்றவை</string>
+    <string name="root_provider_via">%1$s வழியாக</string>
+    <string name="root_provider_via_with_version">%1$s v%2$s வழியாக</string>
+    <string name="action_license">உரிமங்கள்</string>
+    <string name="action_about">பற்றி</string>
+    <string name="action_settings">அமைப்புகள்</string>
+    <string name="action_privacy_policy">தனியுரிமைக் கொள்கை</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_telemetry_title">அநாமதேய பயன்பாட்டுத் தரவைப் பகிர்</string>
+    <string name="settings_telemetry_description">TelemetryDeck மூலம் ஆப்ஸை மேம்படுத்த உதவுகிறது. இயக்கினால், அடுத்த முறை ஆப்ஸ் தொடங்கும்போது நடைமுறைக்கு வரும்.</string>
+    <string name="settings_reset_identity_title">பகுப்பாய்வு அடையாளத்தை மீட்டமை</string>
+    <string name="settings_reset_identity_description">புதிய அநாமதேய ID-ஐத் தொடங்குங்கள், இதனால் இனி சேகரிக்கப்படும் பயன்பாட்டுத் தரவை முன்பு பகிர்ந்ததுடன் இணைக்க முடியாது.</string>
+    <string name="settings_reset_identity_dialog_message">புதிய அநாமதேய அடையாளங்காட்டி உருவாக்கப்படும். இனி சேகரிக்கப்படும் பயன்பாட்டுத் தரவு, இதற்கு முன் பகிரப்பட்ட எதனுடனும் இணைக்கப்படாது. இதைச் செயல்தவிர்க்க முடியாது.</string>
+    <string name="settings_reset_identity_confirm">மீட்டமை</string>
+    <string name="settings_reset_identity_done">பகுப்பாய்வு அடையாளம் மீட்டமைக்கப்பட்டது</string>
+    <string name="settings_haptics_title">அதிர்வு பின்னூட்டம்</string>
+    <string name="settings_haptics_description">தட்டும்போது, ரூட் சரிபார்க்கும்போது, முடிவு தோன்றும்போது அதிரும்.</string>
+    <string name="settings_privacy_policy_description">எங்கள் தனியுரிமைக் கொள்கையை ஆன்லைனில் பார்க்கவும்</string>
+    <string name="settings_theme_title">தீம்</string>
+    <string name="theme_follow_system">சிஸ்டம் அமைப்பைப் பின்பற்று</string>
+    <string name="theme_light">வெளிர்</string>
+    <string name="theme_dark">அடர்</string>
+    <string name="settings_language_title">மொழி</string>
+    <string name="language_system_default">சிஸ்டம் இயல்புநிலை</string>
+    <string name="settings_tip_jar_title">மேம்பாட்டை ஆதரி</string>
+    <string name="settings_tip_jar_description">ஆப்ஸ் உங்களுக்கு உதவியிருந்தால் ஒரு டிப் கொடுங்கள்.</string>
+    <string name="tip_jar_dialog_title">டிப் கொடுங்கள்</string>
+    <string name="tip_tier_small">சிறிய டிப்</string>
+    <string name="tip_tier_medium">நடுத்தர டிப்</string>
+    <string name="tip_tier_large">பெரிய டிப்</string>
+    <string name="tip_jar_loading">டிப் விருப்பங்கள் ஏற்றப்படுகின்றன…</string>
+    <string name="tip_jar_thanks">உங்கள் ஆதரவுக்கு நன்றி!</string>
+    <string name="tip_jar_pending">உங்கள் டிப் நிலுவையில் உள்ளது. உங்கள் கட்டணம் அங்கீகரிக்கப்பட்டதும் அது நிறைவடையும்.</string>
+    <string name="tip_jar_cleared">நிலுவையில் இருந்த உங்கள் டிப் நிறைவடைந்தது. உங்கள் ஆதரவுக்கு நன்றி!</string>
+    <string name="tip_jar_error">ஏதோ தவறு நடந்தது. மீண்டும் முயலவும்.</string>
+    <!-- முதன்மைத் திரையில் உள்ள ஆதரவு கார்டு, ரூட் சரிபார்ப்புக்குப் பிறகு காட்டப்படுகிறது (SupportGate ஐப் பார்க்கவும்) -->
+    <string name="support_card_title">ஆப்ஸ் பிடித்திருக்கிறதா?</string>
+    <string name="support_card_body">இது இலவசம், விளம்பரங்களும் இல்லை. ஒரு சிறிய டிப் மேம்பாட்டைத் தொடர உதவும்.</string>
+    <string name="support_card_action">மேம்பாட்டை ஆதரி</string>
+    <string name="support_card_dismiss">நிராகரி</string>
+    <string name="textViewAndroidVersion">Android</string>
+    <string name="string_your_device">உங்கள் சாதனம்</string>
+    <string name="string_checking_for_root">ரூட் சரிபார்க்கப்படுகிறது…</string>
+
+    <!-- About Strings -->
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
+        இந்த ஆப்ஸ் உங்கள் ஃபோனை ரூட் செய்யாது.\n
+        இந்த ஆப்ஸுக்கு ROOT தேவை, உங்கள் சொந்தப் பொறுப்பில் பயன்படுத்தவும்.\n
+        இந்த ஆப்ஸ் எந்தத் தனிப்பட்ட தகவலையும் சேகரிக்காது.\n\n\n
+        என்னைத் தொடர்பு கொள்ள:</string>
+    <string name="about_link_email">மின்னஞ்சல்</string>
+    <string name="about_link_website">இணையதளம்</string>
+    <string name="about_link_rate_this_app">இந்த ஆப்ஸை மதிப்பிடு</string>
+    <string name="about_not_affiliated">இந்த ஆப்ஸ் topjohnwu அல்லது libsu ஆல் அங்கீகரிக்கப்படவில்லை, அவற்றுடன் தொடர்பும் இல்லை</string>
+
+    <!-- Style Strings -->
+    <string name="content_description_check_for_root">ரூட் சரிபார்</string>
+    <string name="content_description_marketing_name">சந்தைப்படுத்தல் பெயர்</string>
+    <string name="content_description_model_name">மாடல் பெயர்</string>
+    <string name="content_description_android_version">Android பதிப்பு</string>
+    <string name="content_description_more_options">மேலும் விருப்பங்கள்</string>
+    <string name="content_description_navigate_up">மேலே செல்</string>
+    <string name="content_description_close">மூடு</string>
+    <string name="content_description_dismiss_dialog">உரையாடலை மூடு</string>
+    <string name="detail_release_to_close">மூட விடுவிக்கவும்</string>
+    <string name="action_copy">நகலெடு</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">சாதனப் பெயர்</string>
+    <string name="label_model">மாடல்</string>
+    <string name="label_android_version">Android பதிப்பு</string>
+    <string name="toast_content_copied">உள்ளடக்கம் நகலெடுக்கப்பட்டது</string>
+
+    <!-- In-app updates -->
+    <string name="update_available_title">புதுப்பிப்பு கிடைக்கிறது</string>
+    <string name="update_available_body">ஆப்ஸின் புதிய பதிப்பு பதிவிறக்கத் தயாராக உள்ளது.</string>
+    <string name="update_action_update">புதுப்பி</string>
+    <string name="update_downloading">புதுப்பிப்பு பதிவிறக்கப்படுகிறது…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s MB</string>
+    <string name="update_downloaded_title">புதுப்பிப்பு பதிவிறக்கப்பட்டது</string>
+    <string name="update_action_install">இப்போது நிறுவு</string>
+    <string name="update_failed">புதுப்பிப்பு தோல்வியடைந்தது. தானாக மீண்டும் முயற்சிக்கப்படும்.</string>
+    <string name="app_updated_snackbar">ஆப்ஸ் புதுப்பிக்கப்பட்டது</string>
+
+    <!-- Other Apps -->
+    <string name="other_apps_title">மற்ற ஆப்ஸ்</string>
+    <string name="about_other_app_open">திற</string>
+    <string name="about_other_app_install">நிறுவு</string>
+    <string name="about_other_app_website">இணையதளம்</string>
+    <string name="about_other_app_highlights">சிறப்பம்சங்கள்</string>
+
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">ஆப்ஸைத் திறக்காமலேயே இந்தச் சாதனத்தின் ரூட் நிலையை சிஸ்டமும் உதவியாளர் ஆப்ஸும் சரிபார்க்க அனுமதிக்கிறது.</string>
+
+</resources>

@@ -40,7 +40,8 @@ android {
         versionCode = 82
         versionName = "v2.6.0vc$versionCode"
         @Suppress("UnstableApiUsage")
-        androidResources.localeFilters += listOf("en", "ar", "de", "es", "ru")
+        androidResources.localeFilters +=
+            listOf("en", "ar", "de", "es", "ru", "nl", "zh", "ms", "ta")
         buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")
     }
     // Set on the release build type, so it covers every flavor — bundleGplayRelease and

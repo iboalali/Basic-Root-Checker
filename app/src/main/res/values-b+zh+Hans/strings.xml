@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basic Root Checker</string>
+
+    <!-- Main Strings-->
+    <string name="textView_Disclaimer"><![CDATA[本应用<b>不会</b>为你的设备获取 Root 权限。<br>本应用只会显示你的设备是否拥有 Root 权限。]]></string>
+    <string name="textView_checkForRoot">点按右下角的“#”按钮以检测 Root 状态</string>
+    <string name="rootAvailable">你的设备拥有 Root 权限</string>
+    <string name="rootUnknown">无法获取设备的 Root 状态</string>
+    <string name="rootNotAvailable">你的设备没有 Root 权限</string>
+    <string name="rootNotGranted">设备已有 Root，但尚未授予本应用权限</string>
+    <string name="root_hidden_manager_hint">使用的是隐藏或改名的 Root 管理器（例如 Kitsune Mask）吗？在你授予本应用权限之前，可能无法检测到它。</string>
+    <string name="action_request_root">申请 Root 权限</string>
+    <string name="root_provider_other">其他</string>
+    <string name="root_provider_via">通过 %1$s</string>
+    <string name="root_provider_via_with_version">通过 %1$s v%2$s</string>
+    <string name="action_license">许可证</string>
+    <string name="action_about">关于</string>
+    <string name="action_settings">设置</string>
+    <string name="action_privacy_policy">隐私政策</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_telemetry_title">共享匿名使用数据</string>
+    <string name="settings_telemetry_description">通过 TelemetryDeck 帮助改进应用。启用后将在下次启动应用时生效。</string>
+    <string name="settings_reset_identity_title">重置分析标识</string>
+    <string name="settings_reset_identity_description">启用新的匿名 ID，使今后的使用数据无法与此前共享的数据关联。</string>
+    <string name="settings_reset_identity_dialog_message">系统将生成新的匿名标识符。今后的使用数据不会与此前共享的任何数据关联。此操作无法撤销。</string>
+    <string name="settings_reset_identity_confirm">重置</string>
+    <string name="settings_reset_identity_done">分析标识已重置</string>
+    <string name="settings_haptics_title">触感反馈</string>
+    <string name="settings_haptics_description">点按时、检测 Root 期间以及结果出现时震动。</string>
+    <string name="settings_privacy_policy_description">在线查看隐私政策</string>
+    <string name="settings_theme_title">主题</string>
+    <string name="theme_follow_system">跟随系统</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="settings_language_title">语言</string>
+    <string name="language_system_default">系统默认</string>
+    <string name="settings_tip_jar_title">支持开发</string>
+    <string name="settings_tip_jar_description">如果这款应用帮到了你，可以打赏一下。</string>
+    <string name="tip_jar_dialog_title">打赏</string>
+    <string name="tip_tier_small">小额打赏</string>
+    <string name="tip_tier_medium">中额打赏</string>
+    <string name="tip_tier_large">大额打赏</string>
+    <string name="tip_jar_loading">正在加载打赏选项…</string>
+    <string name="tip_jar_thanks">感谢你的支持！</string>
+    <string name="tip_jar_pending">你的打赏正在处理中，付款通过后即可完成。</string>
+    <string name="tip_jar_cleared">你待处理的打赏已完成，感谢你的支持！</string>
+    <string name="tip_jar_error">出了点问题，请重试。</string>
+    <!-- 主屏幕上的支持卡片，在一次 Root 检测之后显示（见 SupportGate） -->
+    <string name="support_card_title">喜欢这款应用吗？</string>
+    <string name="support_card_body">它免费且无广告。一点小小的打赏有助于持续开发。</string>
+    <string name="support_card_action">支持开发</string>
+    <string name="support_card_dismiss">关闭</string>
+    <string name="textViewAndroidVersion">Android</string>
+    <string name="string_your_device">你的设备</string>
+    <string name="string_checking_for_root">正在检测 Root…</string>
+
+    <!-- About Strings -->
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
+        本应用不会为你的手机获取 ROOT 权限。\n
+        本应用需要 ROOT 权限，使用风险自负。\n
+        本应用不会收集任何个人信息。\n\n\n
+        联系我：</string>
+    <string name="about_link_email">电子邮件</string>
+    <string name="about_link_website">网站</string>
+    <string name="about_link_rate_this_app">为这款应用评分</string>
+    <string name="about_not_affiliated">本应用未获得 topjohnwu 或 libsu 的认可，也与其无关联</string>
+
+    <!-- Style Strings -->
+    <string name="content_description_check_for_root">检测 Root</string>
+    <string name="content_description_marketing_name">市场名称</string>
+    <string name="content_description_model_name">型号名称</string>
+    <string name="content_description_android_version">Android 版本</string>
+    <string name="content_description_more_options">更多选项</string>
+    <string name="content_description_navigate_up">向上导航</string>
+    <string name="content_description_close">关闭</string>
+    <string name="content_description_dismiss_dialog">关闭对话框</string>
+    <string name="detail_release_to_close">松开以关闭</string>
+    <string name="action_copy">复制</string>
+
+    <!-- Device Info Labels -->
+    <string name="label_device_name">设备名称</string>
+    <string name="label_model">型号</string>
+    <string name="label_android_version">Android 版本</string>
+    <string name="toast_content_copied">内容已复制</string>
+
+    <!-- In-app updates -->
+    <string name="update_available_title">有可用更新</string>
+    <string name="update_available_body">新版本应用已可下载。</string>
+    <string name="update_action_update">更新</string>
+    <string name="update_downloading">正在下载更新…</string>
+    <string name="update_progress_megabytes">%1$s / %2$s MB</string>
+    <string name="update_downloaded_title">更新已下载</string>
+    <string name="update_action_install">立即安装</string>
+    <string name="update_failed">更新失败，将自动重试。</string>
+    <string name="app_updated_snackbar">应用已更新</string>
+
+    <!-- Other Apps -->
+    <string name="other_apps_title">其他应用</string>
+    <string name="about_other_app_open">打开</string>
+    <string name="about_other_app_install">安装</string>
+    <string name="about_other_app_website">网站</string>
+    <string name="about_other_app_highlights">亮点</string>
+
+    <!-- AppFunctions -->
+    <string name="appfunctions_description">让系统和助理应用无需打开本应用即可检测此设备的 Root 状态。</string>
+
+</resources>

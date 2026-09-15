@@ -55,7 +55,8 @@ App-specific additions to that list:
 | The TelemetryDeck dashboard's panels, as paste-ready TQL | [`docs/telemetry-dashboard-queries.json`](docs/telemetry-dashboard-queries.json) |
 | Known root-provider detection gaps | [`docs/root-provider-detection-gaps.md`](docs/root-provider-detection-gaps.md) |
 | Per-device haptic capability data | [`docs/haptic-capability-queries.json`](docs/haptic-capability-queries.json) |
-| Translation notes | [`docs/russian-translation-notes.md`](docs/russian-translation-notes.md), [`docs/spanish-translation-notes.md`](docs/spanish-translation-notes.md) |
+| Every place a new language has to be named | [`docs/adding-a-locale.md`](docs/adding-a-locale.md) |
+| Translation notes | [`docs/russian-translation-notes.md`](docs/russian-translation-notes.md), [`docs/spanish-translation-notes.md`](docs/spanish-translation-notes.md), [`docs/dutch-translation-notes.md`](docs/dutch-translation-notes.md), [`docs/chinese-translation-notes.md`](docs/chinese-translation-notes.md), [`docs/malay-translation-notes.md`](docs/malay-translation-notes.md), [`docs/tamil-translation-notes.md`](docs/tamil-translation-notes.md) |
 
 Shared conventions live in the kit rather than here: `definition-of-done`, `play-store-assets`,
 `telemetry-instrumentation`, `telemetry-and-tql`, `agp9-screenshot-tests`, `baseline-profiles`, `appfunctions-wiring`,
