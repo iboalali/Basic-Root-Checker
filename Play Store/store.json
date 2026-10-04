@@ -143,10 +143,17 @@
     }
   },
 
-  "_iap": "Six tip products, 171 regions each, and NO pricing snapshot committed yet — run fetch-iap-pricing.py to create one. There are no per-product copy/icon folders, so productFolders is empty and prices.md will show every product as 'not sold by the app'; add entries as folders appear.",
+  "_iap": "Six tip products, two per tier: a record id the app keeps and a repeat id it consumes. Both ids of a tier share one folder of copy and icon, so productFolders maps them onto the same name.",
   "iap": {
     "pricingDir": "Play Store/In-App Products/pricing",
     "productIdPrefix": "tip_",
-    "productFolders": {}
+    "productFolders": {
+      "tip_small": "small",
+      "tip_small_repeat": "small",
+      "tip_medium": "medium",
+      "tip_medium_repeat": "medium",
+      "tip_large": "large",
+      "tip_large_repeat": "large"
+    }
   }
 }

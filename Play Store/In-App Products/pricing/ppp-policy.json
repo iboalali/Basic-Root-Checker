@@ -1,0 +1,63 @@
+{
+  "_README": [
+    "Hand-maintained pricing policy for the purchasing-power price cut. This is the ONLY file in this",
+    "folder to edit by hand. `./scripts/store iap-ppp` reads it plus the Play snapshot and regenerates",
+    "ppp-plan.md and proposed/. See the `play-store-assets` skill for the full workflow.",
+    "",
+    "The price of an in-scope region is its reference price (ppp-reference-prices.json) multiplied by",
+    "its tier factor, then rounded to a local price point. Scaling Play's own price rather than",
+    "converting from the anchor keeps Play's exchange rate and each region's tax treatment intact."
+  ],
+
+  "anchorRegions": ["DE", "US"],
+  "_anchorRegions": "The full-price reference the tier factors are expressed against, read live from the snapshot. Both must stay out of scope; the script asserts it.",
+
+  "products": [
+    "tip_large",
+    "tip_large_repeat",
+    "tip_medium",
+    "tip_medium_repeat",
+    "tip_small",
+    "tip_small_repeat"
+  ],
+  "_products": "All six tips. Each tier is sold twice (a one-off record and a repeatable twin), and both carry the same price so the tip jar shows one figure per tier.",
+
+  "tiers": {
+    "low": {
+      "factor": 0.20,
+      "label": "Low income",
+      "note": "Aggressive. World Bank low-income economies."
+    },
+    "lower-middle": {
+      "factor": 0.55,
+      "label": "Lower-middle income",
+      "note": "Moderate. World Bank lower-middle-income economies."
+    }
+  },
+  "_tiers": [
+    "Tier keys must match the 'tier' values in ppp-classification.json. A region whose tier is absent",
+    "from this map keeps Play's price, which is how upper-middle and high-income regions stay at full",
+    "price. A country just above the low-income threshold pays 2.75x what one just below pays; add a",
+    "bridge tier and assign regions to it via regionTierOverrides if that cliff matters."
+  ],
+
+  "regionTierOverrides": {},
+  "_regionTierOverrides": "Manual region -> tier assignment on top of the World Bank band: \"VN\": \"lower-middle\" pulls a region into scope, \"LB\": null drops one. Every entry is listed in ppp-plan.md as a deviation.",
+
+  "excludedRegions": {},
+  "_excludedRegions": "Countries the app is not distributed in. The pricing API cannot tell, so this list records it, and the script refuses to build when it disagrees with the snapshot. Empty: all six tips are on sale in all 172 regions.",
+
+  "integerCurrencyOverrides": {},
+  "_integerCurrencyOverrides": "Whether Play quotes a currency in whole units is inferred from the snapshot. The script stops when a repriced region's currency is called integer off a single price; set \"XYZ\": true or false here after checking the Console.",
+
+  "floorUsd": 0.49,
+  "_floorUsd": [
+    "No region is priced below the local equivalent of this, converted with the FX snapshot in",
+    "ppp-classification.json and snapped UP to the nearest price point. USD 0.49 is the cheapest point",
+    "on the .49/.99 grid, so prices may go under one dollar or euro in the deepest tier. Play's own",
+    "minimum is far lower (USD 0.05 / EUR 0.05), so this only stops a price from rounding to nothing."
+  ],
+
+  "liftWholeRegionToFloor": true,
+  "_liftWholeRegionToFloor": "When the floor binds on one tier, raise the region's other tiers by the same proportion instead of clamping each on its own, so small / medium / large keep their spread rather than collapsing onto the same price."
+}
