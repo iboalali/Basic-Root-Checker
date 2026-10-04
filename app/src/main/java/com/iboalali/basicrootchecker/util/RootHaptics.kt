@@ -61,10 +61,10 @@ class RootHaptics(context: Context) {
     /** A short pulse then a longer one ("dot-daaat") for a rooted result. */
     fun playSuccess(): Unit = haptics.playWaveform(SUCCESS)
 
-    /** Two equal short pulses ("dot-dot") for a not-rooted / unknown result. */
+    /** Two equal short pulses ("dot-dot") for a not-rooted result. */
     fun playError(): Unit = haptics.playWaveform(ERROR)
 
-    /** A single soft pulse for the "root installed but not granted" result. */
+    /** A single soft pulse for an unknown result, or root installed but not granted. */
     fun playNeutral(): Unit = haptics.playWaveform(NEUTRAL)
 
     /** Stops any ongoing vibration. Safe to call when nothing is playing. */

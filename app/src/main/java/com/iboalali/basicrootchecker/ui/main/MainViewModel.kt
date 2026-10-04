@@ -72,6 +72,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val billing = (application as BasicRootCheckerApplication).billingController
 
     private val _uiState = MutableStateFlow(MainUiState())
+
+    /** The result whose outcome haptic is waiting for the status icon (see [onResultShown]). */
+    private var pendingResultHaptic: RootStatus? = null
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
     /** Tip offers for the support card's dialog. Empty in FOSS builds and until Play prices load. */
@@ -127,8 +130,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (hapticsOn) haptics.startCheckingRamp()
             Analytics.trackRootCheckStarted()
             val result = RootChecker.check(getApplication())
-            applyResult(result)
-            if (hapticsOn) playResultHaptic(result)
+            applyResult(result, hapticsOn)
             // Review first, support card second — and never both in one session (see SupportGate).
             maybeRequestReview(result)
             maybeShowSupportPrompt()
@@ -142,8 +144,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (hapticsOn) haptics.startCheckingRamp()
             Analytics.trackRootRequested()
             val result = RootChecker.requestRoot(getApplication())
-            applyResult(result)
-            if (hapticsOn) playResultHaptic(result)
+            applyResult(result, hapticsOn)
             // Review first, support card second — and never both in one session (see SupportGate).
             maybeRequestReview(result)
             maybeShowSupportPrompt()
@@ -279,15 +280,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update { it.copy(supportPromptVisible = true) }
     }
 
-    private fun playResultHaptic(result: RootResult) = when (result) {
-        is RootResult.Rooted -> haptics.playSuccess()
-        RootResult.NotRooted, RootResult.Unknown -> haptics.playError()
-        is RootResult.RootedNotGranted -> haptics.playNeutral()
+    /**
+     * The status icon finished drawing [status]. The outcome haptic waits for this so it lands with
+     * the visual, and plays at most once per check: a recreated screen reports its already-drawn
+     * result again, which finds nothing pending.
+     */
+    fun onResultShown(status: RootStatus) {
+        if (pendingResultHaptic != status) return
+        pendingResultHaptic = null
+        when (status) {
+            RootStatus.ROOTED -> haptics.playSuccess()
+            RootStatus.NOT_ROOTED -> haptics.playError()
+            RootStatus.UNKNOWN, RootStatus.NOT_GRANTED -> haptics.playNeutral()
+            RootStatus.NOT_CHECKED, RootStatus.CHECKING -> Unit
+        }
     }
 
     /**
      * Debug-only: forces [result] through the same flow a real check uses (CHECKING state, haptic
-     * ramp, ~1s delay, then result + outcome haptic) so the animations and haptics can be exercised
+     * ramp, ~1s delay, then the result, whose outcome haptic follows the icon) so the animations and haptics can be exercised
      * on-device without a matching root state. Only ever called from the debug-gated demo dialog.
      */
     fun checkRootDemo(result: RootResult) {
@@ -296,12 +307,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             startRootCheck()
             if (hapticsOn) haptics.startCheckingRamp()
             delay(1000)
-            applyResult(result)
-            if (hapticsOn) playResultHaptic(result)
+            applyResult(result, hapticsOn)
         }
     }
 
     private fun startRootCheck() {
+        pendingResultHaptic = null
         _uiState.update {
             it.copy(
                 rootStatus = RootStatus.CHECKING,
@@ -319,7 +330,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val version: String?,
     )
 
-    private fun applyResult(result: RootResult) {
+    private fun applyResult(result: RootResult, playHaptic: Boolean) {
         val resolved = when (result) {
             is RootResult.Rooted ->
                 ResolvedRoot(RootStatus.ROOTED, result.provider, result.manager, result.version)
@@ -328,6 +339,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             is RootResult.RootedNotGranted ->
                 ResolvedRoot(RootStatus.NOT_GRANTED, result.provider, result.manager, null)
         }
+        pendingResultHaptic = if (playHaptic) resolved.status else null
         _uiState.update {
             it.copy(
                 rootStatus = resolved.status,

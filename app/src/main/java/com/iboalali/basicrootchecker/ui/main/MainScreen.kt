@@ -6,19 +6,12 @@ import android.content.Context
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -26,14 +19,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
@@ -63,7 +54,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -125,6 +115,7 @@ fun MainScreen(
         onCheckRoot = viewModel::checkRoot,
         onRequestRoot = viewModel::requestRoot,
         onCheckRootDemo = viewModel::checkRootDemo,
+        onResultShown = viewModel::onResultShown,
         onDemoUpdateChoice = { choice ->
             when (choice) {
                 DebugUpdateChoice.AVAILABLE -> viewModel.demoUpdate(AppUpdateEvent.Available)
@@ -162,6 +153,7 @@ fun MainScreenContent(
     onNavigateToLicense: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onCheckRootDemo: (RootResult) -> Unit = {},
+    onResultShown: (RootStatus) -> Unit = {},
     onDemoUpdateChoice: (DebugUpdateChoice) -> Unit = {},
     tipProducts: ImmutableList<TipProduct> = persistentListOf(),
     onSupportPromptShown: () -> Unit = {},
@@ -394,91 +386,7 @@ fun MainScreenContent(
                     modifier = Modifier.fillMaxWidth().padding(32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    AnimatedContent(
-                        targetState = uiState.rootStatus,
-                        transitionSpec = {
-                            (fadeIn(tween(300)) +
-                                    scaleIn(
-                                        spring(
-                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                                            stiffness = Spring.StiffnessLow,
-                                        ),
-                                        initialScale = 0.6f,
-                                    ))
-                                .togetherWith(
-                                    fadeOut(tween(200)) +
-                                        scaleOut(
-                                            tween(200),
-                                            targetScale = 0.6f,
-                                        )
-                                )
-                        },
-                        label = "statusIcon",
-                    ) { status ->
-                        Box(
-                            modifier = Modifier.size(96.dp),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            when (status) {
-                                RootStatus.CHECKING -> {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(88.dp),
-                                        strokeWidth = 6.dp,
-                                    )
-                                }
-
-                                else -> {
-                                    val imageRes =
-                                        when (status) {
-                                            RootStatus.ROOTED -> R.drawable.ic_success_c
-                                            RootStatus.NOT_ROOTED,
-                                            RootStatus.UNKNOWN -> R.drawable.ic_fail_c
-                                            RootStatus.NOT_GRANTED -> R.drawable.ic_unknown_c
-                                            else -> R.drawable.ic_unknown_c
-                                        }
-                                    val isResult =
-                                        status == RootStatus.ROOTED ||
-                                            status == RootStatus.NOT_ROOTED ||
-                                            status == RootStatus.UNKNOWN ||
-                                            status == RootStatus.NOT_GRANTED
-                                    // Start at full scale when rendered by a preview/screenshot
-                                    // tool
-                                    // (LaunchedEffect-driven enter animations don't advance there,
-                                    // so
-                                    // the icon would otherwise stay scaled to 0 and be invisible).
-                                    val inInspection = LocalInspectionMode.current
-                                    val scale = remember {
-                                        Animatable(if (isResult && !inInspection) 0f else 1f)
-                                    }
-                                    LaunchedEffect(Unit) {
-                                        if (isResult) {
-                                            scale.animateTo(
-                                                targetValue = 1f,
-                                                animationSpec =
-                                                    spring(
-                                                        dampingRatio =
-                                                            Spring.DampingRatioMediumBouncy,
-                                                        stiffness = Spring.StiffnessMediumLow,
-                                                    ),
-                                            )
-                                        }
-                                    }
-                                    Image(
-                                        // Decorative: the status text below (a live region)
-                                        // already conveys the result, so a generic icon
-                                        // description would just be announced redundantly.
-                                        painter = painterResource(imageRes),
-                                        contentDescription = null,
-                                        modifier =
-                                            Modifier.size(96.dp).graphicsLayer {
-                                                scaleX = scale.value
-                                                scaleY = scale.value
-                                            },
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    RootStatusIcon(status = uiState.rootStatus, onSettled = onResultShown)
 
                     Spacer(Modifier.height(24.dp))
 

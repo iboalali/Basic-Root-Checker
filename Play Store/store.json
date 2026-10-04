@@ -118,9 +118,8 @@
       "sources: .../Tablet10/AboutShot.png'. Nothing caught it because this app has never uploaded",
       "screenshots through the script.",
       "",
-      "excludeShots holds the in-app update card's four states. They are a regression baseline for a",
-      "flow otherwise only reachable through the debug 'Demo: in-app update' item, and an update",
-      "prompt is not store copy — so they render into reference/ but never into the export."
+      "excludeShots holds the in-app update card's four states and the status icon's states. They are a",
+      "regression baseline, not store copy, so they render into reference/ but never into the export."
     ],
     "render": {
       "gradleTask": ":app:updateGplayDebugScreenshotTest",
@@ -138,7 +137,8 @@
         "UpdateAvailableShot",
         "UpdateDownloadingShot",
         "UpdateDownloadedShot",
-        "UpdateFailedShot"
+        "UpdateFailedShot",
+        "RootStatusIconsShot"
       ]
     }
   },

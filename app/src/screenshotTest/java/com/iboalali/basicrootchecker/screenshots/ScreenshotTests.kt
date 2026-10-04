@@ -1,10 +1,17 @@
 package com.iboalali.basicrootchecker.screenshots
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
 import com.android.tools.screenshot.PreviewTest
 import com.iboalali.appcatalog.ui.OtherApp
 import com.iboalali.basicrootchecker.billing.TipProduct
@@ -16,6 +23,7 @@ import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
 import com.iboalali.basicrootchecker.ui.main.MainUiState
 import com.iboalali.basicrootchecker.ui.main.RootStatus
+import com.iboalali.basicrootchecker.ui.main.RootStatusIcon
 import com.iboalali.basicrootchecker.ui.settings.SettingsScreenContent
 import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.update.AppUpdateEvent
@@ -33,8 +41,9 @@ import kotlinx.collections.immutable.persistentSetOf
  * Compose screenshots, rendered on the JVM via Layoutlib (no device). Two kinds live here:
  * - **Listing shots**, which double as the Play Store upload — everything below except the update
  *   flow. The matrices are split per Play Console slot, as described next.
- * - **Regression-only shots** for states the store should never show, currently the in-app update
- *   card. `render.excludeShots` in "Play Store/store.json" keeps these out of the export.
+ * - **Regression-only shots** for states the store should never show: the in-app update card, and
+ *   every state of the root status icon. `render.excludeShots` in "Play Store/store.json" keeps
+ *   these out of the export.
  *
  * The matrices are split per Play Console slot because the app's navigation is adaptive at the
  * 840dp width breakpoint (see `AppNavigation`):
@@ -297,6 +306,27 @@ fun UpdateDownloadedShot() {
 @Composable
 fun UpdateFailedShot() {
     BasicRootCheckerTheme { MainWithUpdate(AppUpdateEvent.Failed(errorCode = -100)) }
+}
+
+/**
+ * Every state of the status icon at rest, light and dark. The listing shots show only two of them,
+ * and the result colors are the part of the theme most likely to drift.
+ */
+@PreviewTest
+@PreviewLightDark
+@Composable
+fun RootStatusIconsShot() {
+    BasicRootCheckerTheme {
+        Surface {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                RootStatus.entries.chunked(3).forEach { row ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        row.forEach { RootStatusIcon(status = it, onSettled = {}) }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // ---- Secondary screens, single-pane (phone + 7-inch, < 840dp)
