@@ -55,8 +55,8 @@
     <string name="tip_tier_large">Large tip</string>
     <string name="tip_jar_loading">Loading tip options…</string>
     <string name="tip_jar_thanks">Thank you for your support!</string>
-    <string name="tip_jar_pending">Your tip is pending — it\'ll complete once your payment is approved.</string>
-    <string name="tip_jar_cleared">Your pending tip cleared — thank you for your support!</string>
+    <string name="tip_jar_pending">Your tip is pending. It\'ll complete once your payment is approved.</string>
+    <string name="tip_jar_cleared">Your pending tip cleared. Thank you for your support!</string>
     <string name="tip_jar_error">Something went wrong. Please try again.</string>
     <!-- Main screen support card, offered after a root check (see SupportGate) -->
     <string name="support_card_title">Enjoying the app?</string>
