@@ -34,6 +34,7 @@ App-specific additions to that list:
 | Signal taxonomy and query cookbook | [`docs/telemetry-optimization.md`](docs/telemetry-optimization.md) |
 | The TelemetryDeck dashboard's panels, as paste-ready TQL | [`docs/telemetry-dashboard-queries.json`](docs/telemetry-dashboard-queries.json) |
 | Root-provider detection coverage, gaps and emulator recipes | [`docs/root-provider-detection-gaps.md`](docs/root-provider-detection-gaps.md) |
+| Open bugs from code review, with fix directions | [`docs/known-bugs.md`](docs/known-bugs.md) |
 | Per-device haptic capability data | [`docs/haptic-capability-queries.json`](docs/haptic-capability-queries.json) |
 | Every place a new language has to be named | [`docs/adding-a-locale.md`](docs/adding-a-locale.md) |
 | Translation notes | [`docs/russian-translation-notes.md`](docs/russian-translation-notes.md), [`docs/spanish-translation-notes.md`](docs/spanish-translation-notes.md), [`docs/dutch-translation-notes.md`](docs/dutch-translation-notes.md), [`docs/chinese-translation-notes.md`](docs/chinese-translation-notes.md), [`docs/malay-translation-notes.md`](docs/malay-translation-notes.md), [`docs/tamil-translation-notes.md`](docs/tamil-translation-notes.md) |
