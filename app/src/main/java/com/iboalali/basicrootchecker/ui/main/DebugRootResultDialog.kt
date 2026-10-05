@@ -25,7 +25,7 @@ import com.iboalali.haptics.compose.rememberHapticClick
  * Debug-only picker that lets a developer force any [RootResult] through the real check flow so the
  * animations and haptics can be exercised on a device without a matching root state. The only call
  * site is gated behind `BuildConfig.DEBUG`, so this is stripped from release builds. Labels are
- * hardcoded English on purpose — it is a developer tool, not user-facing UI.
+ * hardcoded English on purpose: it is a developer tool, not user-facing UI.
  */
 @Composable
 fun DebugRootResultDialog(

@@ -218,9 +218,9 @@ fun MainScreenContent(
                         )
                     }
                     // HapticDropdownMenu, not DropdownMenu: it re-enables testTagsAsResourceId
-                    // across the popup boundary, which this call site used to do by hand. Every
-                    // onClick below is a plain lambda. AppBarDropdownMenuItem wraps it in
-                    // rememberHapticClick itself, so wrapping here too would tick twice.
+                    // across the popup boundary. Every onClick below is a plain lambda.
+                    // AppBarDropdownMenuItem wraps it in rememberHapticClick itself, so wrapping
+                    // here too would tick twice.
                     HapticDropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false },
@@ -375,7 +375,6 @@ fun MainScreenContent(
         ) {
             Spacer(Modifier.height(16.dp))
 
-            // Root Status Card
             OutlinedCard(
                 modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
@@ -531,7 +530,6 @@ fun MainScreenContent(
             Spacer(Modifier.height(24.dp))
 
             if (uiState.updateStatus !is AppUpdateEvent.None) {
-                // Update Card (hidden when updateStatus is None)
                 UpdateCard(
                     updateStatus = uiState.updateStatus,
                     onUpdateClick = onUpdateRequested,
@@ -540,8 +538,8 @@ fun MainScreenContent(
                 Spacer(Modifier.height(24.dp))
             }
 
-            // Support Card. SupportGate already kept this out of the review prompt's session; the
-            // second condition hands the slot to an update that arrived *after* the card appeared,
+            // SupportGate already keeps this out of the review prompt's session. The second
+            // condition hands the slot to an update that arrived *after* the card appeared,
             // since that card is functional and time-sensitive while the ask can wait for the next
             // check. Reporting "shown" from here (not the gate) keeps the signal honest.
             val showSupportCard =
@@ -561,7 +559,6 @@ fun MainScreenContent(
                 }
             }
 
-            // Device Info Card
             OutlinedCard(
                 modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),
@@ -613,7 +610,6 @@ fun MainScreenContent(
 
             Spacer(Modifier.height(24.dp))
 
-            // Disclaimer Card
             OutlinedCard(
                 modifier = Modifier.widthIn(max = 600.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(),

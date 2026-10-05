@@ -17,8 +17,8 @@ object ReviewGate {
      * @param currentVersion the running app's version code
      *
      * Eligible once root has been confirmed [MIN_ROOTED_CHECKS] times and the prompt hasn't already
-     * fired on this (or a later) version — capping it to roughly once per release, on top of Play's
-     * own quota.
+     * fired on this (or a later) version. That caps it at roughly once per release, on top of
+     * Play's own quota.
      */
     fun shouldRequest(rootedCount: Int, lastPromptedVersion: Int, currentVersion: Int): Boolean =
         rootedCount >= MIN_ROOTED_CHECKS && lastPromptedVersion < currentVersion

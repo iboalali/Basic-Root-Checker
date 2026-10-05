@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
  * Proves the Baseline Profile moved the numbers.
  *
  * Each metric has an A/B pair: a `*NoCompilation` test pinned to [CompilationMode.None] and a
- * `*BaselineProfile` test using `CompilationMode.Partial(BaselineProfileMode.Require)` — `Require`
+ * `*BaselineProfile` test using `CompilationMode.Partial(BaselineProfileMode.Require)`. `Require`
  * fails loudly if the profile is missing rather than silently measuring an unprofiled build.
  * Compare the **medians** the two report.
  *
@@ -53,7 +53,7 @@ class StartupBenchmarks {
         scroll(CompilationMode.Partial(BaselineProfileMode.Require))
 
     /**
-     * Scroll the License screen — the longest scrollable content in the app — so FrameTimingMetric
+     * Scroll the License screen (the longest scrollable content in the app) so FrameTimingMetric
      * has real frames to measure.
      *
      * No [StartupMode] here: with a startup mode set, the process is killed *after* `setupBlock`, so

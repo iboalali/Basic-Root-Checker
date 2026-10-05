@@ -1,34 +1,25 @@
 # Spanish Translation Notes
 
-Reference notes documenting the choices made when adding the Spanish (`es`) localization in `app/src/main/res/values-es/strings.xml`. Useful for future reviewers and for keeping subsequent string additions consistent.
+Choices behind the Spanish (`es`) localization in `app/src/main/res/values-es/strings.xml`, for reviewers and for keeping new strings consistent.
 
 ## Translation choices worth flagging for review
 
-- **Variant: neutral Spanish (`es`), not `es-rES` or `es-rMX`.** The locale resource folder is plain `values-es`, so both Spain and Latin American users fall through to it. Vocabulary was chosen to minimize regional friction.
+- **Variant: neutral Spanish (`es`), not `es-rES` or `es-rMX`.** The folder is plain `values-es`, so users in Spain and Latin America both land on it. Vocabulary is chosen to minimize regional friction.
+- **Register: informal "tú".** Imperatives use the second-person singular ("Toca", "Visita", "Consulta", "Elige"), not "usted". This matches the German and Arabic files and the convention of most Spanish Android apps.
+- **Term: "root"** stays English ("acceso root", "estado de root", "rootear"). This is the standard Spanish tech-press form and matches the other locales.
+- **"Ajustes" over "Configuración"** for `action_settings`. "Ajustes" is what Android's own Spanish system UI uses.
+- **"vía"** in `root_provider_via` / `root_provider_via_with_version`. "a través de" is too long for a status line.
+- **"Comprobar" over "verificar"** for root checks ("Comprobando root…", "Comprobar root"). Slightly less formal and more common in Spanish UI copy.
+- **`app_name` kept as "Basic Root Checker"** (Latin script), matching every other locale. It is the marketed product name.
+- **"MB"** stays as the unit abbreviation in `update_progress_megabytes`, which is standard in Spanish.
+- **License texts are not in this file.** They come from `com.iboalali.ui:licences`, and legal text stays verbatim.
 
-- **Register: informal "tú" form.** Imperatives use the second-person singular ("Toca", "Visita", "Consulta", "Elige") rather than the formal "usted" form. This matches the existing German and Arabic informal style; it is also the convention Google uses for most Spanish Android apps.
+## Preserved verbatim from the English source
 
-- **Term: "root".** Kept as the English/Latin word ("acceso root", "estado de root", "rootear") rather than translating it. This is the standard Spanish tech-press convention and matches how the app already presents the term in the other locales.
+Easy to break on a later edit:
 
-- **"Ajustes" over "Configuración"** for `action_settings`. "Ajustes" is the term Android itself uses in Spanish system UI; "Configuración" is also understood but less consistent with the platform.
-
-- **"vía"** is used in `root_provider_via` / `root_provider_via_with_version`. The alternative ("a través de") was rejected as too long for a status line.
-
-- **"Comprobar" over "verificar"** for root checks ("Comprobando root…", "Comprobar root"). Slightly less formal, more common in Spanish UI copy.
-
-- **`app_name` kept as "Basic Root Checker"** (Latin script). All other locales also keep it untranslated; it is the marketed product name.
-
-- **Brand / proper-noun preservation:** "TelemetryDeck", "topjohnwu", "libsu", "Android", "iboalali", and all URLs are kept verbatim.
-
-- **"MB"** is kept as the unit abbreviation in `update_progress_megabytes`, which is standard in Spanish.
-
-- **License texts (Apache 2.0, libsu notice, AndroidDeviceNames notice) were NOT translated** — they remain in English because the source XML marks them `translatable="false"`. This is intentional: legal text must stay verbatim, and translating them would also trigger Lint `ExtraTranslation` errors.
-
-## Things preserved verbatim from the English source
-
-These are not translation choices but are worth noting because they are easy to break in subsequent edits:
-
-- `<![CDATA[…]]>` wrapper and `<b>` / `<br>` HTML tags inside `textView_Disclaimer`.
-- `%1$s` / `%2$s` positional placeholders in `update_progress_megabytes` (consumed by the in-app update flow — order must not change).
-- The `#` glyph reference in `textView_checkForRoot`, which refers to the on-screen FAB symbol.
-- Escape sequences: `\n`, `\"`, `\'`, `&#169;`.
+- The `<![CDATA[…]]>` wrapper and the `<b>` / `<br>` tags inside `textView_Disclaimer`.
+- `%1$s` / `%2$s` in `update_progress_megabytes` (used by the in-app update flow, so the order must not change).
+- The `#` glyph in `textView_checkForRoot`, which names the symbol on the FAB.
+- Escapes: `\n`, `\"`, `\'`, `&#169;`.
+- Brand and proper nouns: "TelemetryDeck", "topjohnwu", "libsu", "Android", "iboalali", and all URLs.

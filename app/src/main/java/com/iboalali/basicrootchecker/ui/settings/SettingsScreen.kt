@@ -76,13 +76,10 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.launch
 
-/** Outer (rounded) corner radius for the first/last item of the settings group. */
 private val SettingsGroupCornerRadius = 32.dp
 
-/** Inner corner radius where items connect within the settings group. */
 private val SettingsItemInnerRadius = 2.dp
 
-/** Gap between connected items in the settings group. */
 private val SettingsItemSpacing = 4.dp
 
 /**
@@ -168,10 +165,10 @@ fun SettingsScreenContent(
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_settings)) },
-                // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over the
-                // main screen on large screens (see LocalDetailNavIcon). Glyphs and content
-                // descriptions come from LocalDetailOverlayStyle, and the haptic tap is the shared
-                // component's — onNavigateBack goes in unwrapped.
+                // Back arrow when pushed full-screen, a close (X) when shown as an overlay over the
+                // main screen on large screens. Glyphs and content descriptions come from
+                // LocalDetailOverlayStyle, and the shared component adds the haptic tap, so
+                // onNavigateBack goes in unwrapped.
                 navigationIcon = { DetailNavigationIcon(onBack = onNavigateBack) },
                 scrollBehavior = scrollBehavior,
             )

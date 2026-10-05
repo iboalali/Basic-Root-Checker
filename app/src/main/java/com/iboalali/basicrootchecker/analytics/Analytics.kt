@@ -21,12 +21,8 @@ const val ERROR_CATEGORY_APP_STATE = "app-state"
 object Analytics {
 
     /**
-     * The whole TelemetryDeck lifecycle — the startup buffer, when the SDK starts, and the
-     * start-before-flush ordering between them — lives in `com.iboalali.telemetry:core`. What stays
-     * here is this app's own signal vocabulary, below.
-     *
-     * The two things it needs from this app are the ones a library cannot derive: the `BuildConfig`
-     * app ID, and a logger (this app uses `android.util.Log`; the other two use Timber).
+     * Owns the TelemetryDeck lifecycle: the startup buffer, when the SDK starts, and the
+     * start-before-flush ordering between them. This object only adds the app's signal vocabulary.
      */
     private val controller =
         TelemetryController(
@@ -39,17 +35,14 @@ object Analytics {
 
     private const val TAG = "Analytics"
 
-    // Set once the device form factor has been reported, so config changes within a process
-    // (rotation, fold/unfold, resize) don't emit the signal again — see [trackDeviceType].
     @Volatile private var deviceTypeReported = false
 
     /**
      * Resolve the telemetry opt-out preference read asynchronously at startup: start the SDK if
      * enabled and release the buffered signals, or discard them and stay silent.
      *
-     * **Call on the main thread** — `TelemetryDeck.start` registers a process lifecycle observer.
-     * The ordering that used to be this comment's job (start before flush, or the backlog is lost
-     * into an uninitialized SDK) is now the controller's, and is covered by a test there.
+     * **Call on the main thread**, because `TelemetryDeck.start` registers a process lifecycle
+     * observer.
      */
     fun resolveStartupPreference(context: Context, enabled: Boolean) =
         controller.resolve(context, enabled)
@@ -58,16 +51,14 @@ object Analytics {
      * The Settings opt-out toggle.
      *
      * Takes a [Context] because opting in has to be able to *start* the SDK: a session that
-     * launched opted-out never started it, and until this moved to the shared controller this app
-     * only reopened its signal buffer here — so signals silently no-op'd for the rest of the
-     * session and only resumed after a restart. Call on the main thread, as with
-     * [resolveStartupPreference].
+     * launched opted-out never started it, and without a start every signal would silently no-op
+     * until the next launch. Call on the main thread, as with [resolveStartupPreference].
      */
     fun setEnabled(context: Context, enabled: Boolean) = controller.setEnabled(context, enabled)
 
     /**
      * Discard the persisted anonymous user identifier so future signals can't be linked to those
-     * sent before — a fresh random identity is generated on the next signal. Performs file I/O, so
+     * sent before. A fresh random identity is generated on the next signal. Performs file I/O, so
      * call off the main thread.
      */
     fun resetIdentity(context: Context) = controller.resetIdentity(context)
@@ -202,7 +193,7 @@ object Analytics {
     /** The explicit "Rate this app" link on the About screen was tapped. */
     fun trackRateLinkClicked() = track { TelemetryDeck.signal("rateLinkClicked") }
 
-    /** [source] is where the tip jar was opened from — "settings" or "support_card". */
+    /** [source] is where the tip jar was opened from: "settings" or "support_card". */
     fun trackTipJarOpened(source: String) = track {
         TelemetryDeck.signal(
             "tipJarOpened",
@@ -212,8 +203,8 @@ object Analytics {
 
     /**
      * The main screen's support card actually appeared (the gate opened *and* nothing outranked
-     * it). Reported from the UI rather than the gate so it can't claim a card the screen never drew
-     * — pair it with [trackTipJarOpened] to read the card's conversion.
+     * it). Reported from the UI rather than the gate so it can't claim a card the screen never
+     * drew. Pair it with [trackTipJarOpened] to read the card's conversion.
      *
      * One signal per process, so the count is distinct offers rather than appearances: a rotation,
      * or an update card handing the slot back, re-runs the reporting effect. `MainViewModel` holds
@@ -311,13 +302,13 @@ object Analytics {
     /**
      * One-shot per cold start: the device form factor, so the tablet / large-screen audience can be
      * sized (e.g. to decide whether the Baseline Profile should also cover the expanded-width
-     * dialog path). Idempotent within a process — only the first call emits, so a rotation,
+     * overlay path). Idempotent within a process: only the first call emits, so a rotation,
      * fold/unfold, or resize after launch can't inflate the count.
      *
      * - [formFactor]: "phone" or "tablet", from the device's stable smallest width (≥600dp =
      *   tablet).
-     * - [widthSizeClass]: the launch-time window width class — "compact", "medium", or "expanded".
-     *   "expanded" (≥840dp) is exactly when the secondary screens open as a dialog; a foldable
+     * - [widthSizeClass]: the launch-time window width class: "compact", "medium", or "expanded".
+     *   "expanded" (≥840dp) is exactly when the secondary screens open as an overlay; a foldable
      *   registers by its posture at launch (folded ≈ compact, unfolded ≈ expanded).
      */
     fun trackDeviceType(formFactor: String, widthSizeClass: String) {

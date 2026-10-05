@@ -142,7 +142,6 @@ class UserPreferences(private val context: Context) {
     val checkCount: Flow<Int> =
         context.userSettingsDataStore.data.map { preferences -> preferences.checkCountOrSeed() }
 
-    /** Increments [checkCount] atomically and returns the new total. */
     suspend fun incrementCheckCount(): Int {
         var newCount = 0
         context.userSettingsDataStore.edit { preferences ->
@@ -167,7 +166,6 @@ class UserPreferences(private val context: Context) {
             preferences[ROOTED_CHECK_COUNT] ?: 0
         }
 
-    /** Increments [rootedCheckCount] atomically and returns the new total. */
     suspend fun incrementRootedCheckCount(): Int {
         var newCount = 0
         context.userSettingsDataStore.edit { preferences ->
@@ -194,7 +192,7 @@ class UserPreferences(private val context: Context) {
 
     /**
      * When the main screen's support card becomes eligible again (0 if never snoozed). Set whenever
-     * the user answers it — by dismissing *or* by opening the tip jar — so a look at the prices
+     * the user answers it (by dismissing *or* by opening the tip jar), so a look at the prices
      * isn't followed by another ask on the next check. See `SupportGate`.
      */
     val supportPromptSnoozedUntil: Flow<Long> =
@@ -214,7 +212,6 @@ class UserPreferences(private val context: Context) {
             preferences[SUPPORT_PROMPT_DISMISS_COUNT] ?: 0
         }
 
-    /** Increments [supportPromptDismissCount] atomically and returns the new total. */
     suspend fun incrementSupportPromptDismissCount(): Int {
         var newCount = 0
         context.userSettingsDataStore.edit { preferences ->

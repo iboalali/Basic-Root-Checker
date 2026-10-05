@@ -20,7 +20,6 @@ object AppLanguage {
     val SUPPORTED_TAGS: List<String> =
         listOf("en", "de", "ar", "es", "ru", "nl", "zh-Hans", "ms", "ta")
 
-    /** Whether the in-app language picker is available on this device. */
     val isSupported: Boolean
         get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
@@ -42,7 +41,7 @@ object AppLanguage {
         return if (locales.isEmpty) null else locales[0].toLanguageTag()
     }
 
-    /** Sets the app language. Pass `null` to follow the system default. No-op below Android 13. */
+    /** Pass `null` to follow the system default. No-op below Android 13. */
     fun setLanguage(context: Context, tag: String?) {
         if (!isSupported) return
         val localeList = if (tag == null) {

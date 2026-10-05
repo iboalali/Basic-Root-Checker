@@ -131,7 +131,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Analytics.trackRootCheckStarted()
             val result = RootChecker.check(getApplication())
             applyResult(result, hapticsOn)
-            // Review first, support card second — and never both in one session (see SupportGate).
+            // Review first, support card second, never both in one session (see SupportGate).
             maybeRequestReview(result)
             maybeShowSupportPrompt()
         }
@@ -145,7 +145,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Analytics.trackRootRequested()
             val result = RootChecker.requestRoot(getApplication())
             applyResult(result, hapticsOn)
-            // Review first, support card second — and never both in one session (see SupportGate).
+            // Review first, support card second, never both in one session (see SupportGate).
             maybeRequestReview(result)
             maybeShowSupportPrompt()
         }
@@ -153,9 +153,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * After a root-found result, ask for an in-app rating once the gate opens (see [ReviewGate]).
-     * Only [RootResult.Rooted] counts — confirming a device is rooted is the app's "win" moment.
+     * Only [RootResult.Rooted] counts: confirming a device is rooted is the app's "win" moment.
      *
-     * The version code is recorded — spending this release's single prompt — only once the request
+     * The version code is recorded (spending this release's single prompt) only once the request
      * actually reached Play, because Play's card is quota-limited and gives no "was it shown"
      * callback. A build without in-app review (FOSS) returns early, and a controller with no
      * attached activity reports `false`, so neither burns the slot or reports a prompt that never
@@ -228,7 +228,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * once per process.
      *
      * `MainScreen` reports from a `LaunchedEffect` keyed on the card's visibility, which re-runs
-     * every time the card becomes visible again — on an activity recreation (rotation, fold/unfold,
+     * every time the card becomes visible again: on an activity recreation (rotation, fold/unfold,
      * resize), and when an update card that took the slot gives it back. Only one genuine offer can
      * happen per process, because answering the card either way snoozes it for a month, so a second
      * report would always be the same card counted twice.
@@ -241,7 +241,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * "Support development" tapped. Opening the tip jar is an answer either way, so the card steps
-     * aside for the snooze window — but unlike a dismissal it doesn't count against the cap.
+     * aside for the snooze window. Unlike a dismissal, it doesn't count against the cap.
      */
     fun onSupportPromptOpened() {
         Analytics.trackTipJarOpened(TIP_SOURCE_SUPPORT_CARD)
@@ -272,9 +272,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Debug-only: forces the support card on, bypassing [SupportGate]. Needed because a debug build
      * carries the `.debug` applicationId, so Play Billing never returns tip products for it and the
-     * real gate can't open — the card would otherwise be unreviewable on-device. Only ever called
-     * from the debug-gated overflow item. The tip dialog it opens will show its loading state, since
-     * there genuinely are no products here.
+     * real gate can't open, which would leave the card unreviewable on-device. Only ever called
+     * from the debug-gated overflow item. The tip dialog it opens shows its loading state, since
+     * there are no products here.
      */
     fun demoSupportPrompt() {
         _uiState.update { it.copy(supportPromptVisible = true) }
@@ -298,8 +298,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Debug-only: forces [result] through the same flow a real check uses (CHECKING state, haptic
-     * ramp, ~1s delay, then the result, whose outcome haptic follows the icon) so the animations and haptics can be exercised
-     * on-device without a matching root state. Only ever called from the debug-gated demo dialog.
+     * ramp, ~1s delay, then the result, whose outcome haptic follows the icon) so the animations
+     * and haptics can be exercised on-device without a matching root state. Only ever called from
+     * the debug-gated demo dialog.
      */
     fun checkRootDemo(result: RootResult) {
         viewModelScope.launch {
@@ -364,15 +365,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onInstallRequested() {
         if (demoUpdateActive) {
-            // Can't actually restart into a fake update — just hide the card.
+            // A fake update has nothing to restart into, so just hide the card.
             demoUpdate(AppUpdateEvent.None)
             return
         }
         appUpdateController.completeUpdate()
     }
 
-    // ---- Debug-only in-app-update demo ----
-    // Pushes fake AppUpdateEvents straight into updateStatus, bypassing the Play controller, so the
+    // Debug-only in-app-update demo. Pushes fake AppUpdateEvents straight into updateStatus, bypassing the Play controller, so the
     // UpdateCard's states and download animation can be exercised without a real Play update. Only
     // ever reached from the debug-gated demo dialog and the demo-aware buttons above.
     private var demoUpdateActive = false

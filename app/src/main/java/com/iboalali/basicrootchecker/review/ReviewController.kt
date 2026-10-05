@@ -22,9 +22,7 @@ interface ReviewController {
     fun attach(activity: ComponentActivity)
 
     /**
-     * Requests the Play-managed in-app review flow.
-     *
-     * @return `true` when the request was actually handed to Play, `false` when it could not be —
+     * @return `true` when the request was actually handed to Play, `false` when it could not be:
      *   [isAvailable] is false, or no activity is attached (e.g. a root check that finished while
      *   the activity was being recreated). Callers use this to avoid spending their
      *   once-per-version prompt slot on a flow that never ran; a `true` return still says nothing

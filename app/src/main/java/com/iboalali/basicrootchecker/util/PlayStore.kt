@@ -17,7 +17,7 @@ private const val TAG = "PlayStore"
  * Both attempts are guarded: the web fallback needs a browser, and a device can have neither (a
  * stripped ROM, a kiosk/managed device, a FOSS build on hardware with no Play services and no
  * browser). Rather than throw an unhandled [ActivityNotFoundException] out of a click handler, this
- * gives up quietly and reports it — the caller is always an optional "rate"/"install" affordance, so
+ * gives up quietly and reports it. The caller is always an optional "rate"/"install" affordance, so
  * there is nothing the user needs to be interrupted about.
  */
 fun Context.openPlayStoreListing(packageName: String = this.packageName) {

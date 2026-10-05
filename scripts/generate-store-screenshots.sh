@@ -3,10 +3,8 @@
 # Render upload-ready Play Store screenshots with the PRODUCTION app name.
 #
 # This is a launcher. The script itself is `render-store-screenshots.py` in the `iboalali-apps` kit,
-# so a fix reaches every app at once instead of being copied and diverging — which is exactly what
-# had happened: three repos held three versions of this file with three different restore strategies,
-# and each had a safety check the others lacked. Everything app-specific now comes from the
-# `screenshots.render` section of "Play Store/store.json".
+# so a fix reaches every app at once instead of being copied and diverging. Everything app-specific
+# comes from the `screenshots.render` section of "Play Store/store.json".
 #
 #   ./scripts/generate-store-screenshots.sh [VERSION] [--dry-run]
 #

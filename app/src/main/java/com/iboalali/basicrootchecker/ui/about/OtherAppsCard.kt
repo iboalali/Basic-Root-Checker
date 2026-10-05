@@ -29,15 +29,14 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 /**
- * The About screen's "Other apps" card. The rows themselves — layout, the Open/Install/Website
+ * The About screen's "Other apps" card. The rows themselves (layout, the Open/Install/Website
  * buttons, the highlights bullets and their shimmer, the PWA detection, the foreground
- * re-resolution — live in `com.iboalali.appcatalog:ui` and are shared with the other apps. What
- * stays here is this app's own chrome (the outlined card and its title) plus the three seams the
+ * re-resolution) live in `com.iboalali.appcatalog:ui` and are shared with the other apps. This
+ * file holds this app's own chrome (the outlined card and its title) plus the three seams the
  * library deliberately doesn't own: haptics, analytics, and the bundled icons.
  *
- * This app's rows sit inside a card that already pads horizontally, so the only visual override is
- * the row's `contentPadding` — everything else is the shared default, which is what this card
- * rendered before the move.
+ * The rows sit inside a card that already pads horizontally, so the only visual override is the
+ * row's `contentPadding`. Everything else is the shared default.
  *
  * The card hides itself when [apps] is empty (e.g. the catalog hasn't loaded yet on first run with
  * no bundled snapshot).
@@ -89,10 +88,10 @@ fun OtherAppsCard(apps: ImmutableList<OtherApp>, modifier: Modifier = Modifier) 
  * right while the remote icon loads or when offline); this app's own generic mark otherwise.
  *
  * The `else` branch is deliberately **not** null. Returning null would hand the row the shared
- * component's generic icon, and that is a *different drawable* — the library ships the Material
- * Symbols bugdroid the other two apps use, while this app has always drawn the older
- * `ic_baseline_android_24`. Leaving it null silently changed the art here; the screenshot diff
- * caught it. Keep naming the local one unless the change is a deliberate design decision.
+ * component's generic icon, and that is a *different drawable*: the library ships the Material
+ * Symbols bugdroid the other two apps use, while this app draws the older
+ * `ic_baseline_android_24`. Null silently changes the art here, and only the screenshot diff
+ * shows it. Keep naming the local one unless the change is a deliberate design decision.
  */
 @DrawableRes
 private fun localIconFor(packageName: String?): Int =

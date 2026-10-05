@@ -1,89 +1,35 @@
 # Telemetry Optimization
 
-A record of deliberate changes to **what** the app sends to TelemetryDeck and **why** — the
-signal set, its volume, and its quality. Companion to
-[`Basic-Root-Checker-StructuralData.json`](./Basic-Root-Checker-StructuralData.json) (the exported
-event/parameter inventory). For the query language itself, use the `telemetry-and-tql` skill — it
-bundles the complete TQL reference, which used to be duplicated in this folder. Append a new dated
-section here for each future review.
+**What** the app sends to TelemetryDeck and **why**: the signal set, its volume and its quality. Companion to [`Basic-Root-Checker-StructuralData.json`](./Basic-Root-Checker-StructuralData.json) (the exported event/parameter inventory) and [`telemetry-dashboard-queries.json`](./telemetry-dashboard-queries.json) (the dashboard panels). For the query language itself, use the `telemetry-and-tql` skill, which bundles the complete TQL reference.
 
-Modeled on the same review done for the *Hide Persistent Notification* app. The big difference: that
-app runs a 5-second periodic foreground service, so its volume was dominated (~75%) by a signal
-re-firing on every sweep. **Basic Root Checker has no background or periodic work** — every signal
-is user-initiated (FAB tap, navigation, tip, link), so volume is naturally bounded by real actions
-and there is no churn signal to collapse. That leaves two levers worth pulling: keeping
-**non-user / synthetic traffic** out of production, and keeping the **error channel** clean.
+**Basic Root Checker has no background or periodic work.** Every signal is user-initiated (FAB tap, navigation, tip, link), so volume is bounded by real actions and there is no churn signal to collapse. That leaves two levers: keeping **non-user, synthetic traffic** out of production, and keeping the **error channel** clean.
 
----
+`Analytics.kt` (`analytics/`) holds this app's signal vocabulary. The TelemetryDeck lifecycle, including test-traffic detection, lives in `com.iboalali.telemetry:core`.
 
-## 2026-06-29 — exclude bot & test-lab traffic (v2.5)
+## Synthetic traffic is flagged as test mode
 
-### Finding
+Release builds running under **Firebase Test Lab** and the **Play Console pre-launch report robot** (which runs on Test Lab) would otherwise count as real users. That inflates every production metric (installs, sessions, `rootCheckStarted` / `rootCheckCompleted`) and surfaces bogus devices and locales.
 
-The app flagged only `BuildConfig.DEBUG` builds as TelemetryDeck **test-mode**
-(`BasicRootCheckerApplication`). Release builds running under Google's CI — **Firebase Test Lab**
-and the **Play Console pre-launch report robot** (which runs on Test Lab) — were therefore counted
-as real users. That inflates every production metric (installs, sessions, `rootCheckStarted` /
-`rootCheckCompleted`) and surfaces bogus devices/locales, exactly the synthetic-traffic problem the
-companion app hit (its `appIconNotFound` package breakdown exposed `androidx.test.tools.crawler` and
-`com.android.google.gce.gceservice`).
+So TelemetryDeck **test mode** is on for `BuildConfig.DEBUG` builds and for any device where `com.iboalali.telemetry:core` detects Test Lab. Detection reads Google's documented `firebase.test.lab` system setting and **fails open**: any read failure means `false`, so an odd device is treated as a real user rather than misfiled. Test-mode signals are kept out of all production charts (including the premade dashboards) and stay visible through the dashboard's Test Mode toggle.
 
-### Change shipped
+Why test mode rather than the alternatives:
 
-| Change | Effect |
-|---|---|
-| New `TestEnvironment.isFirebaseTestLab(context)` (`util/`) — reads Google's documented `firebase.test.lab` system setting, **fail-open** (any read failure ⇒ `false`, so an odd device is treated as a real user, not misfiled). | Detects both Firebase Test Lab and the Play Console pre-launch robot. |
-| `BasicRootCheckerApplication` → `.testMode(BuildConfig.DEBUG \|\| TestEnvironment.isFirebaseTestLab(applicationContext))`. | Synthetic traffic is segregated out of all production charts (including the premade dashboards) and remains viewable via the dashboard's Test Mode toggle. |
+- **Per-insight `isBot` filter: rejected.** TelemetryDeck filters are **per-insight only**. There is no app-level filter, and the **premade dashboards can't be filtered at all**. `isBot` is also a server-side heuristic based largely on the user-agent string, which a native Android app doesn't send, so it may not flag this traffic at all.
+- **Dropping the signals client-side: rejected.** A false positive (an odd device that exposes the setting) would **silently and permanently destroy a real user's analytics**.
+- **Test mode: chosen.** `testMode` is a first-class TelemetryDeck flag. A false positive only misfiles a real user's data into the test bucket, which is recoverable. It also matches how debug builds are treated.
 
-No user-facing behavior changed.
+Data caveat: signals ingested before v2.5 (2026-06-29) still count Test Lab and pre-launch traffic as production, so historical charts from before then read slightly high.
 
-### Why test-mode, not drop or per-query filter
+## Open review: error channel and parameter cardinality
 
-Same reasoning as the companion app:
+This needs a live 30-day pull from the TelemetryDeck dashboard or Insights API, which isn't available from this repo: rank signals by volume and by fires per user, then prune the noisy ones. Look at two things first:
 
-- **Per-insight `isBot` filter** — rejected. TelemetryDeck filters are **per-insight only**; there
-  is no global/app-level filter and the **premade dashboards can't be filtered at all**. `isBot` is
-  also a server-side heuristic derived largely from the user-agent string, which a native Android
-  app doesn't have — so it may not even flag this traffic.
-- **Drop the signals client-side** — rejected. A detection false-positive (an odd device that
-  exposes the setting) would **silently and permanently destroy a real user's analytics**.
-- **Flag as test-mode** ✅ — chosen. `testMode` is a first-class TelemetryDeck flag; test-mode
-  signals are globally segregated out of the production view yet stay inspectable via the Test Mode
-  toggle. A false-positive merely misfiles a real user's data into the test bucket — recoverable,
-  not destroyed. It's also consistent with how the app already treats DEBUG builds, and it's the
-  smallest change.
+1. **Error channel.** Audit the `Analytics.trackError` sites for *expected fallbacks* reported as errors. The candidates are the `RootHaptics` catch blocks (`haptic-*`) and the `RootChecker` filesystem probes (`probeSuBinary` / `probeMagiskPaths` `SecurityException`s, `probeMagiskMounts`). On locked-down devices or devices with odd actuators these can throw routinely and are *expected*, not bugs. If any is high-volume, demote it to a `Log` and drop it from the error channel. Also check that `TelemetryDeck.Error.message` doesn't carry high-cardinality or device-revealing strings.
+2. **Parameter cardinality.** `rootProviderDetected.version` and `otherAppClicked.packageName` are bounded (real root-manager versions; the curated catalog). Confirm nothing new carries an unbounded per-instance key.
 
-### Residual notes
+Diagnostic queries. Set `relativeIntervals` to taste. This app's `appID` is `613251CD-B223-443A-9583-3A18586FAB55`. Add `{"type":"selector","dimension":"isTestMode","value":"False"}` to any filter for production-only numbers.
 
-- **Forward-only.** This flags *new* signals; data ingested before this build still contains Test
-  Lab / pre-launch traffic as production data, so historical charts read slightly high. New data is
-  clean.
-- **No global filter exists** in TelemetryDeck — per-insight filtering is the only query-side lever,
-  which is exactly why this is handled client-side at signal time.
-
-### Open follow-up — a real volume/quality pull (needs dashboard access)
-
-Not done here: the data-driven half of the companion review (rank signals by volume and by
-fires/user, then prune the noisy ones). It needs a live 30-day pull from the TelemetryDeck dashboard
-/ Insights API, which isn't available from this repo. When doing it, two things to look at first:
-
-1. **Error channel.** Audit the `Analytics.trackError` sites for *expected fallbacks* masquerading
-   as errors (the companion's `appIconNotFound` was 97% of its error channel). The candidates here
-   are the `RootHaptics` catch blocks (`haptic-*`) and the `RootChecker` filesystem probes
-   (`probeSuBinary` / `probeMagiskPaths` `SecurityException`s, `probeMagiskMounts`) — on locked-down
-   or quirky-actuator devices these can throw routinely and are *expected*, not bugs. If any is
-   high-volume, demote it to a `Log` and drop it from the error channel, and check that
-   `TelemetryDeck.Error.message` isn't carrying high-cardinality / device-revealing strings.
-2. **Param cardinality.** `rootProviderDetected.version` and `otherAppClicked.packageName` are
-   bounded (real root-manager versions; the curated catalog) and fine; just confirm nothing new
-   carries an unbounded per-instance key.
-
-Diagnostic queries (set `relativeIntervals` to taste; `appID` is this app's —
-`613251CD-B223-443A-9583-3A18586FAB55`). Add
-`{"type":"selector","dimension":"isTestMode","value":"False"}` to any filter for production-only
-numbers now that bots are test-flagged.
-
-**Signals ranked by volume** (the "what dominates?" query):
+**Signals ranked by volume** (what dominates?):
 
 ```json
 {
@@ -96,11 +42,9 @@ numbers now that bots are test-flagged.
 }
 ```
 
-**Same ranked by distinct users** — `eventCount ÷ userCount` per signal = fires/user, the redundancy
-detector (swap `eventCount` → `userCount` above). A signal huge on eventCount but small on userCount
-is per-user churn.
+**Same, ranked by distinct users:** swap `eventCount` for `userCount` above. `eventCount ÷ userCount` per signal is fires per user, the redundancy detector. A signal that is large on `eventCount` but small on `userCount` is per-user churn.
 
-**Error breakdown by id** — find an `appIconNotFound`-style noise offender:
+**Errors by id** (find a noisy expected-fallback error):
 
 ```json
 {
@@ -113,47 +57,30 @@ is per-user churn.
 }
 ```
 
----
+## The support-card funnel counts offers, not appearances
 
-## 2026-08-26 — the support-card funnel counts offers, not appearances (v2.5)
-
-### What the signals mean
-
-The main screen's tip-jar card emits three signals, and together they are the funnel:
+The main screen's tip-jar card emits three signals, which together are the funnel:
 
 | Signal | Params | Meaning |
 |---|---|---|
-| `supportCardShown` | — | one offer reached the screen |
+| `supportCardShown` | none | one offer reached the screen |
 | `tipJarOpened` | `source=support_card` | the offer was taken |
 | `supportCardDismissed` | `dismissCount` | the offer was declined, with the running total |
 
-`supportCardShown` is emitted **once per process**. `MainViewModel.onSupportPromptShown` holds the
-guard; `MainScreen` calls it from a `LaunchedEffect` keyed on the card's visibility.
+`supportCardShown` is emitted **once per process**. `MainViewModel.onSupportPromptShown` holds the guard, and `MainScreen` calls it from a `LaunchedEffect` keyed on the card's visibility.
 
-### Why the guard is needed
+The guard is needed because two things make the card become visible more than once for a single offer, and each re-runs the reporting effect:
 
-Two things make the card become visible more than once for a single offer, and each re-runs the
-reporting effect:
+1. **Activity recreation** (rotation, fold/unfold, resize). `MainActivity` sets no `configChanges`, so the activity is rebuilt and the composition restarts, while the `MainViewModel` holding `supportPromptVisible` survives.
+2. **An update card taking the slot.** `MainScreen` gives the slot to a pending in-app update, because that card is functional and time-sensitive while the ask can wait. When the update resolves, the support card comes back.
 
-1. **Activity recreation** — rotation, fold/unfold, resize. `MainActivity` sets no `configChanges`,
-   so the activity is rebuilt and the composition restarts, while the `MainViewModel` holding
-   `supportPromptVisible` is retained.
-2. **An update card taking the slot.** `MainScreen` yields the slot to a pending in-app update,
-   since that card is functional and time-sensitive while the ask can wait. When the update
-   resolves, the support card comes back.
+Without the guard both would inflate `supportCardShown`, while `tipJarOpened` and `supportCardDismissed` stay accurate (both are tap-driven). The conversion rate would then read low for a reason unrelated to the card.
 
-Without the guard those inflate `supportCardShown` while `tipJarOpened` and `supportCardDismissed`
-stay accurate — both are tap-driven — so the conversion rate would read low for a reason that has
-nothing to do with the card.
+One offer per process is the correct ceiling: answering the card either way snoozes it for a month (`SupportGate.snoozeUntil`), so a second real offer cannot happen in the same process.
 
-One offer per process is the correct ceiling: answering the card either way snoozes it for a month
-(`SupportGate.snoozeUntil`), so a second genuine offer cannot occur in the same process.
+This is the same one-shot shape as `deviceType` (`Analytics.trackDeviceType`) and the `reviewRequestedThisSession` flag: three places where a config change would otherwise be counted as a user action.
 
-This is the same one-shot shape as `deviceType` (`Analytics.trackDeviceType`) and the
-`reviewRequestedThisSession` flag — three places where a config change would otherwise be counted as
-a user action.
-
-### Reading the conversion
+Reading the conversion:
 
 ```json
 {
@@ -174,49 +101,23 @@ a user action.
 }
 ```
 
-Keep the `isTestMode` filter: the debug-only **Demo: support card** overflow item drives the same
-state, so it emits `supportCardShown` too — as test-flagged data, since debug builds set test mode.
+Keep the `isTestMode` filter. The debug-only **Demo: support card** overflow item drives the same state, so it emits `supportCardShown` too, as test-flagged data.
 
----
+## The structural-data export is a window, not an inventory
 
-## 2026-09-08: the structural-data export is a window, not an inventory
+`Basic-Root-Checker-StructuralData.json` lists what the dashboard has **recently ingested**, so it cannot serve as the app's signal vocabulary. A signal missing from the export can mean it was removed from the app, or that nobody triggered it in the window. Both happen: `websiteClicked` is absent because it no longer exists, while `rateLinkClicked` and `tipPurchased` have been absent while still live.
 
-### Finding
+In the 2026-08-27 export, eight signals in `Analytics.kt` were missing, for two different reasons:
 
-`Basic-Root-Checker-StructuralData.json` lists what the dashboard has **recently ingested**, so it
-cannot be used as the app's signal vocabulary. `websiteClicked` is in the 2026-06-29 export and gone
-from the 2026-08-27 one because it was removed from the app and its data aged out. `rateLinkClicked`
-and `tipPurchased` dropped out the same way while still being live code, which is the part that
-misleads: a signal missing from the export can mean removed, or can mean nobody triggered it.
+- **Too new to have data:** `supportCardShown`, `supportCardDismissed`, `rateLinkClicked`, `reviewRequested`, `reviewFlowFailed` shipped in 2.5 on 2026-08-26, one day before the export.
+- **Live since 2.3 or earlier, so the absence is an outcome:** `tipPurchased` (nobody completed a tip in the window), `billingUnavailable` (Play Billing connected for everyone) and `updateFailed` (no in-app update failed).
 
-Eight signals in `Analytics.kt` are absent from the latest export, and they split two ways:
+The export also contradicts itself: it lists the `dismissCount` parameter while omitting `supportCardDismissed`, the only signal that carries it.
 
-- **Five shipped in 2.5 on 2026-08-26, one day before the export**: `supportCardShown`,
-  `supportCardDismissed`, `rateLinkClicked`, `reviewRequested`, `reviewFlowFailed`. An empty panel
-  here means "no data yet", not "broken".
-- **Three have been live since 2.3 or earlier**, so their absence is an outcome and not a lag:
-  `tipPurchased` (nobody completed a tip in the window), `billingUnavailable` (Play Billing
-  connected for everyone) and `updateFailed` (no in-app update failed).
+**`Analytics.kt` is the source of truth for dashboard work.** Build panels from it, and use the export only to predict which panels have data yet. The panels are in [`telemetry-dashboard-queries.json`](./telemetry-dashboard-queries.json): 34 queries in seven sections, with the two data-quality levers above as section 7.
 
-The export also contradicts itself: it lists the `dismissCount` parameter while omitting
-`supportCardDismissed`, the only signal that carries it.
+## Open item: the `socialLinkClicked` `platform` parameter
 
-**`Analytics.kt` is the source of truth for dashboard work.** Build panels from it and use the export
-only to predict which panels have data yet. The panels themselves are now in
-[`telemetry-dashboard-queries.json`](./telemetry-dashboard-queries.json), 34 queries in seven
-sections, with the two data-quality levers above kept as section 7.
+The 2026-08-27 export is the first with a populated `parameters` array (the 2026-06-29 one has `"parameters": []`, so it says nothing either way). Two parameters in the code are missing from it: `code` (`billingUnavailable`) and `platform` (`socialLinkClicked`). `code` is consistent with its signal never firing. `platform` is not: `socialLinkClicked` appears in **both** exports, so the signal is being ingested, and `platform` is its only parameter. `TelemetryDeck.Device.platform` is listed, so the name may collide with the built-in dimension.
 
-### Open item: the `socialLinkClicked` `platform` parameter
-
-The 2026-08-27 export is the first with a populated `parameters` array (2026-06-29 shipped
-`"parameters": []`, so it says nothing either way). Two parameters in the code are missing from it:
-`code` (`billingUnavailable`) and `platform` (`socialLinkClicked`). `code` is consistent with its
-signal never firing. `platform` is not: `socialLinkClicked` appears in **both** exports, so the
-signal is being ingested, and `platform` is its only parameter. `TelemetryDeck.Device.platform` is
-listed.
-
-Verify with panel 6.2 before trusting any social-link breakdown. If it returns a blank or missing
-row while panel 6.5 shows `socialLinkClicked` firing, the parameter is not queryable under that name
-and the fix is app-side in `Analytics.trackSocialLinkClicked`: rename it to something that cannot
-collide with the built-in dimension. Do not rename it before the query confirms the problem, since
-the rename splits the dimension and loses continuity with whatever data is already there.
+Verify with panel 6.2 before trusting any social-link breakdown. If it returns a blank or missing row while panel 6.5 shows `socialLinkClicked` firing, the parameter is not queryable under that name. The fix is then app-side in `Analytics.trackSocialLinkClicked`: rename it to something that cannot collide with the built-in dimension. Do not rename it before the query confirms the problem, because the rename splits the dimension and loses continuity with the data already there.

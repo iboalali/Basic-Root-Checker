@@ -1,30 +1,23 @@
 # Russian Translation Notes
 
-Reference notes documenting the choices made when adding the Russian (`ru`) localization in `app/src/main/res/values-ru/strings.xml`. Useful for future reviewers and for keeping subsequent string additions consistent.
+Choices behind the Russian (`ru`) localization in `app/src/main/res/values-ru/strings.xml`, for reviewers and for keeping new strings consistent.
 
 ## Translation choices worth flagging for review
 
-- **Term: "root-доступ"** (Latin "root" + Cyrillic suffix) is used throughout. This is the standard Russian tech-press convention and matches how the app already presents the term in other locales. The alternative ("права суперпользователя") was rejected as inconsistent and overly literal.
-
-- **Register: formal / impersonal.** Russian wording uses **"Ваше устройство"**, **"Нажмите"**, **"Выберите"** rather than the informal "ты" form (which the existing German and Arabic translations use). This was an explicit choice for a more professional tone.
-
-- **Disclaimer phrasing is impersonal** ("Это приложение НЕ предоставит…") rather than addressing the user directly, which reads more professional in Russian than a literal translation of the English source.
-
-- **`toast_content_copied` → "Скопировано".** This fixes a bug-by-omission in the existing `values-de` and `values-ar` files, where this string was left as the literal English "Content Copied". Russian translates it properly; consider back-porting fixes to the de/ar files.
-
-- **`app_name` kept as "Basic Root Checker"** (Latin script). Both the German and Arabic files keep it in Latin; it is the marketed product name.
-
-- **Brand / proper-noun preservation:** "TelemetryDeck", "topjohnwu", "libsu", "Android", "iboalali", and all URLs are kept verbatim.
-
+- **Term: "root-доступ"** (Latin "root" + Cyrillic suffix) throughout. This is the standard Russian tech-press form and matches the other locales. "права суперпользователя" was rejected as overly literal.
+- **Register: formal / impersonal.** "Ваше устройство", "Нажмите", "Выберите", not the informal "ты" form the German and Arabic files use. The goal is a more professional tone.
+- **The disclaimer is impersonal** ("Это приложение НЕ предоставит…") rather than addressing the user directly, which reads more professional in Russian than a literal translation.
+- **`toast_content_copied` → "Скопировано".** Short and idiomatic, rather than a literal "content copied".
+- **`app_name` kept as "Basic Root Checker"** (Latin script), matching every other locale. It is the marketed product name.
 - **"МБ"** is the standard Russian abbreviation for megabytes, used in `update_progress_megabytes`.
+- **License texts are not in this file.** They come from `com.iboalali.ui:licences`, and legal text stays verbatim.
 
-- **License texts (Apache 2.0, libsu notice, AndroidDeviceNames notice) were NOT translated** — they remain in English because the source XML marks them `translatable="false"`. This is intentional: legal text must stay verbatim, and translating them would also trigger Lint `ExtraTranslation` errors.
+## Preserved verbatim from the English source
 
-## Things preserved verbatim from the English source
+Easy to break on a later edit:
 
-These are not translation choices but are worth noting because they are easy to break in subsequent edits:
-
-- `<![CDATA[…]]>` wrapper and `<b>` / `<br>` HTML tags inside `textView_Disclaimer`.
-- `%1$s` / `%2$s` positional placeholders in `update_progress_megabytes` (consumed by the in-app update flow — order must not change).
-- The `#` glyph reference in `textView_checkForRoot`, which refers to the on-screen FAB symbol.
-- Escape sequences: `\n`, `\"`, `\'`, `&#169;`.
+- The `<![CDATA[…]]>` wrapper and the `<b>` / `<br>` tags inside `textView_Disclaimer`.
+- `%1$s` / `%2$s` in `update_progress_megabytes` (used by the in-app update flow, so the order must not change).
+- The `#` glyph in `textView_checkForRoot`, which names the symbol on the FAB.
+- Escapes: `\n`, `\"`, `\'`, `&#169;`.
+- Brand and proper nouns: "TelemetryDeck", "topjohnwu", "libsu", "Android", "iboalali", and all URLs.

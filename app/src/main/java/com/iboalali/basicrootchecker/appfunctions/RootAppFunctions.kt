@@ -9,15 +9,15 @@ import java.time.Instant
 import kotlinx.coroutines.flow.first
 
 /**
- * The implementation behind Basic Root Checker's AppFunctions — the app's root-check workflows
+ * The implementation behind Basic Root Checker's AppFunctions: the app's root-check workflows
  * exposed to the Android system and to on-device agents, so a device's root state can be queried
  * hands-free without opening the app.
  *
  * The `@AppFunction` annotations and the agent-facing KDoc live on [BaseRootAppFunctionService],
- * which delegates here; this class stays plain (no service lifecycle, no framework annotations) so
+ * which delegates here. This class stays plain (no service lifecycle, no framework annotations) so
  * it can be exercised directly.
  *
- * Each function takes the Android [Context] as a plain parameter — the service passes its own
+ * Each function takes the Android [Context] as a plain parameter, and the service passes its own
  * `applicationContext`. Deliberately **not** an `AppFunctionContext`: declaring one of those on the
  * annotated entry point throws on every call, and taking a plain [Context] here also keeps this
  * class callable from a test. See [BaseRootAppFunctionService] for the mechanism.
@@ -39,7 +39,7 @@ class RootAppFunctions {
 
 /**
  * The one mapping from a persisted check to the agent-facing shape. All three functions above go
- * through it, so whichever one an agent calls, the same check reports the same `checkedAt` — the
+ * through it, so whichever one an agent calls, the same check reports the same `checkedAt`: the
  * instant [RootChecker] recorded, never a second reading of the clock.
  */
 private fun LastRootCheck.toRootStatus(): RootStatus =

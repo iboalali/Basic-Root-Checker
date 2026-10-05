@@ -14,7 +14,7 @@ object DeviceInfo {
             context.packageManager
                 .getPackageInfo(context.packageName, 0)
                 // Layoutlib's PackageManager returns null here (no real package), so guard against
-                // it — otherwise Compose previews/screenshot tests of this screen crash with an NPE.
+                // it, or Compose previews and screenshot tests of this screen crash with an NPE.
                 ?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e("DeviceInfo", "getAppVersionName: ", e)

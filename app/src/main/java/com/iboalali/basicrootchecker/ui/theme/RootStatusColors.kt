@@ -11,10 +11,10 @@ import com.google.android.material.color.MaterialColors
 
 /**
  * Badge colors for the root check result. Material 3 has an error role but no success or warning
- * role, so those two are fixed hues. Green is harmonized toward the current primary, so it sits inside
- * a dynamic palette instead of clashing with it. The warning orange is not: it is only a few degrees
- * from the error red, and harmonizing toward a blue primary rotates it through red, which makes "not
- * granted" read as "not rooted".
+ * role, so those two are fixed hues. Green is harmonized toward the current primary, so it sits
+ * inside a dynamic palette instead of clashing with it. The warning orange is not: it is only a few
+ * degrees from the error red, and harmonizing toward a blue primary rotates it through red, which
+ * makes "not granted" read as "not rooted".
  */
 @Immutable
 data class RootStatusColors(

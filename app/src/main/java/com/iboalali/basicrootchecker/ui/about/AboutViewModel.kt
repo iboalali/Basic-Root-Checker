@@ -16,15 +16,14 @@ import kotlinx.coroutines.flow.stateIn
 
 /**
  * Backs the About screen's "Other apps" card. **Read-only:** it only observes the app-scoped
- * [com.iboalali.appcatalog.data.AppCatalogRepository] (the shared one from
- * `com.iboalali.appcatalog:data`); the catalog fetch is owned by `MainActivity` (kicked off once at
- * app start). This VM just projects the cached/bundled list for the UI.
+ * [com.iboalali.appcatalog.data.AppCatalogRepository]. The catalog fetch is owned by
+ * `MainActivity`, which starts it once at app start.
  *
- * The row model is the shared [OtherApp] rather than one of this app's own — it is `@Immutable`, so
- * the card's rows stay skippable, and it drops the `changelog` field the About screen doesn't show.
+ * The row model is the shared [OtherApp]. It is `@Immutable`, so the card's rows stay skippable,
+ * and it drops the `changelog` field the About screen doesn't show.
  *
- * This app is already excluded from the list by the repository, which derives the running package
- * itself — that filtering used to live here, and identically in the other two apps.
+ * The repository already excludes this app from the list, because it derives the running package
+ * itself.
  */
 class AboutViewModel(application: Application) : AndroidViewModel(application) {
 

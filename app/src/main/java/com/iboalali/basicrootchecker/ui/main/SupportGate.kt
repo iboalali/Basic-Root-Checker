@@ -12,7 +12,7 @@ package com.iboalali.basicrootchecker.ui.main
  *   reports root can reach this card first, but it never becomes eligible for the review ask at
  *   all, so there is nothing there to yield to.
  * - `reviewRequestedThisSession` keeps them out of the *same session*. A frame-level check wouldn't
- *   be enough — Play's card covers the screen, so a support card rendered behind it would greet the
+ *   be enough: Play's card covers the screen, so a support card rendered behind it would greet the
  *   user the moment they dismissed the review card, reading as a double-ask.
  */
 object SupportGate {
@@ -24,7 +24,7 @@ object SupportGate {
      */
     const val MIN_CHECKS = 5
 
-    /** After this many dismissals the card never returns — a dismissal is an answer. */
+    /** After this many dismissals the card never returns. A dismissal is an answer. */
     const val MAX_DISMISSALS = 3
 
     /** How long the card steps aside after being dismissed or opened. */
@@ -34,7 +34,7 @@ object SupportGate {
      * Whether to show the support card now.
      *
      * @param billingAvailable tipping is supported in this build (Google Play only)
-     * @param productsLoaded Play has returned tip prices — without them the card would lead to a
+     * @param productsLoaded Play has returned tip prices. Without them the card would lead to a
      *   dead loading spinner
      * @param alreadySupporter the user has tipped before; never ask again
      * @param checkCount how many root checks have run so far, whatever they found
@@ -42,7 +42,7 @@ object SupportGate {
      * @param snoozedUntilEpochMs when the card becomes eligible again (0 if never snoozed)
      * @param nowEpochMs current wall-clock time
      * @param reviewRequestedThisSession the Play review flow was requested in this process
-     * @param updatePending an app update is offered/downloading — that card is functional and
+     * @param updatePending an app update is offered/downloading. That card is functional and
      *   time-sensitive, so it owns the slot and the ask waits for the next check
      */
     fun shouldShow(

@@ -50,7 +50,7 @@ private const val TABLET_SMALLEST_WIDTH_DP = 600
  * top-level `val` rather than a remembered one: [DetailOverlayStyle] holds resource ids only, so
  * building it costs nothing and it has no composition to be scoped to.
  *
- * `overflowIcon` must stay the same drawable `MainScreen`'s overflow icon button draws — the
+ * `overflowIcon` must stay the same drawable `MainScreen`'s overflow icon button draws. The
  * closing card morphs into that slot and hands off to the real glyph, so a mismatch shows as a
  * flicker at the end of every dismiss.
  */
@@ -94,7 +94,7 @@ fun AppNavigation() {
     val backStack = rememberNavBackStack(MainRoute)
 
     // At the expanded width breakpoint (≥840dp: tablets, unfolded foldables in landscape, desktop
-    // windows, XR panels) the secondary screens (Settings/About/License) open as a dialog over the
+    // windows, XR panels) the secondary screens (Settings/About/License) open as a card over the
     // dimmed main screen instead of replacing it. Below it (phones, medium widths) they push
     // full-screen with the transitions defined above.
     val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
@@ -102,11 +102,10 @@ fun AppNavigation() {
 
     // One-shot per cold start: report phone-vs-tablet and the launch-time window width class so the
     // large-screen audience can be sized. Analytics dedups within the process, so the
-    // recompositions
-    // this is read through on resize/fold/unfold don't re-send it.
+    // recompositions this is read through on resize/fold/unfold don't re-send it.
     // Read via LocalConfiguration, not LocalContext.current.resources.configuration: a
-    // Configuration
-    // change doesn't invalidate LocalContext reads, so that route can hand back a stale value.
+    // Configuration change doesn't invalidate LocalContext reads, so that route can hand back a
+    // stale value.
     val configuration = LocalConfiguration.current
     LaunchedEffect(Unit) {
         Analytics.trackDeviceType(
@@ -133,21 +132,20 @@ fun AppNavigation() {
     val detailMetadata: Map<String, Any> = if (isExpanded) detailOverlay() else emptyMap()
 
     // The secondary screens show a back-arrow when pushed full-screen, and a close (X) when shown
-    // as a dialog beside the still-visible main screen. The Dialog content inherits this local.
+    // as an overlay card above the still-visible main screen. The card's content inherits this
+    // local.
     val detailNavIcon = if (isExpanded) DetailNavIcon.CLOSE else DetailNavIcon.BACK
 
-    // NavDisplay requires a non-empty back stack. Guard every pop so a double-back — a fast
+    // NavDisplay requires a non-empty back stack. Guard every pop so a double-back (a fast
     // system back-gesture, or tapping Up again while the exit animation still has the screen
-    // composed — can never remove the root entry and crash with "backstack cannot be empty".
+    // composed) can never remove the root entry and crash with "backstack cannot be empty".
     val popBackStack: () -> Unit = {
         if (backStack.size > 1) backStack.removeLastOrNull()
     }
 
     // Open a secondary screen, keeping the stack at [Main, oneDetail] (the three are
-    // interchangeable
-    // siblings reached only from the main screen). On phones this is a no-op; it just guards
-    // against
-    // ever stacking two secondary screens.
+    // interchangeable siblings reached only from the main screen). On phones this is a no-op; it
+    // just guards against ever stacking two secondary screens.
     val navigateToDetail: (NavKey) -> Unit = { route ->
         if (backStack.lastOrNull() != MainRoute) backStack.removeLastOrNull()
         backStack.add(route)
@@ -177,9 +175,8 @@ fun AppNavigation() {
                                 navigateToDetail(AboutRoute)
                             },
                             onNavigateToLicense = {
-                                // "/licence" keeps the pre-rename British spelling on purpose: it
-                                // is
-                                // a TelemetryDeck path, and renaming it would split this screen's
+                                // "/licence" keeps the British spelling on purpose: it is a
+                                // TelemetryDeck path, and renaming it would split this screen's
                                 // history into two series. Same for the "/licence" -> "/main" pop.
                                 Analytics.trackNavigation("/main", "/licence")
                                 navigateToDetail(LicenseRoute)

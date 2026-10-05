@@ -35,10 +35,10 @@ import com.iboalali.ui.licences.OssLicenses
 /**
  * The third-party libraries **this app** pulls in directly.
  *
- * Everything arriving through the shared modules — Coil, OkHttp, kotlinx.coroutines,
- * kotlinx.serialization, the TelemetryDeck SDK — is in `AndroidSharedAttributions` and must not be
- * repeated here. Four of them were credited *nowhere* in this app before that list existed, and all
- * four are Apache 2.0, whose §4(a) obliges us to pass the license on.
+ * Everything arriving through the shared modules (Coil, OkHttp, kotlinx.coroutines,
+ * kotlinx.serialization, the TelemetryDeck SDK) is in `AndroidSharedAttributions` and must not be
+ * repeated here. Four of them are Apache 2.0, whose §4(a) obliges us to pass the license on, so
+ * that list has to stay in the credits.
  */
 private val BasicRootCheckerLibraries =
     listOf(
@@ -49,14 +49,12 @@ private val BasicRootCheckerLibraries =
             license = OssLicenses.Apache2_0,
         ),
         OssLibrary(
-            // This app previously credited "AndroidDeviceNames" by Jared Rummler. That is a
-            // *different project* — the dependency is and was `de.boehrsi:devicemarketingnames`,
-            // which is Boehrsi's, so the old credit named the wrong library and the wrong author.
+            // The dependency is `de.boehrsi:devicemarketingnames`, by Boehrsi. It is not Jared
+            // Rummler's "AndroidDeviceNames", a different project with a similar purpose.
             //
-            // Apache 2.0 verified upstream 2026-08-17: the published artifact carries no license
-            // metadata at all (no LICENSE in the AAR, no `<licenses>` in the POM, no source
-            // header),
-            // but the repository's `LICENSE.txt` is the Apache 2.0 text byte-identical to the copy
+            // Apache 2.0, verified upstream: the published artifact carries no license metadata at
+            // all (no LICENSE in the AAR, no `<licenses>` in the POM, no source header), but the
+            // repository's `LICENSE.txt` is the Apache 2.0 text byte-identical to the copy
             // `:ui:licences` ships, and there is no NOTICE file, so §4(d) adds nothing.
             name = "DeviceMarketingNames",
             author = "Boehrsi",
@@ -81,10 +79,10 @@ fun LicenseScreen(onNavigateBack: () -> Unit) {
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_license)) },
-                // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over the
-                // main screen on large screens (see LocalDetailNavIcon). Glyphs and content
-                // descriptions come from LocalDetailOverlayStyle, and the haptic tap is the shared
-                // component's — onNavigateBack goes in unwrapped.
+                // Back arrow when pushed full-screen, a close (X) when shown as an overlay over the
+                // main screen on large screens. Glyphs and content descriptions come from
+                // LocalDetailOverlayStyle, and the shared component adds the haptic tap, so
+                // onNavigateBack goes in unwrapped.
                 navigationIcon = { DetailNavigationIcon(onBack = onNavigateBack) },
                 scrollBehavior = scrollBehavior,
             )

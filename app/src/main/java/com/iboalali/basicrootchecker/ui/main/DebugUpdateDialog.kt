@@ -28,7 +28,7 @@ enum class DebugUpdateChoice {
 /**
  * Debug-only picker that jumps the in-app-update card to any state so the update flow can be
  * exercised without a real Play update. The only call site is gated behind `BuildConfig.DEBUG`, so
- * this is stripped from release builds. Labels are hardcoded English on purpose — developer tool.
+ * this is stripped from release builds. Labels are hardcoded English on purpose (developer tool).
  */
 @Composable
 fun DebugUpdateDialog(

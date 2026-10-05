@@ -22,7 +22,7 @@ import kotlinx.collections.immutable.ImmutableSet
 /**
  * Debug-only readout of which durable record products are currently owned. The only call
  * site is gated behind `BuildConfig.DEBUG`, so this is stripped from release builds.
- * Labels are hardcoded English on purpose — developer tool.
+ * Labels are hardcoded English on purpose, because this is a developer tool.
  */
 @Composable
 fun DebugTipJarCard(

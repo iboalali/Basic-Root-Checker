@@ -13,18 +13,17 @@ import androidx.appfunctions.AppFunctionServiceEntryPoint
  *
  * These methods are thin adapters: the actual probing and mapping lives in [RootAppFunctions],
  * which stays a plain class so it remains testable without the Android service lifecycle. The
- * agent-facing contract — the KDoc that becomes each function's description in the generated XML —
+ * agent-facing contract (the KDoc that becomes each function's description in the generated XML)
  * lives here on the annotated methods.
  *
  * **None of these functions declares an `AppFunctionContext` parameter, and none may.** On this
  * `@AppFunctionServiceEntryPoint` path the generated dispatch reads every argument out of the
  * parameter map that `AppFunctionExecutionDispatcher` builds from the *inventory metadata*, and the
  * context is not an agent-supplied argument, so KSP omits it from that metadata while still
- * emitting `parameters["appFunctionContext"] as AppFunctionContext` — which throws `null cannot be
- * cast to non-null type AppFunctionContext` on **every** call. Declaring it compiles, generates
+ * emitting `parameters["appFunctionContext"] as AppFunctionContext`. That cast throws `null cannot
+ * be cast to non-null type AppFunctionContext` on **every** call. Declaring it compiles, generates
  * valid-looking XML, and passes both unit tests and Play's upload validator, so only an on-device
- * `adb shell cmd app_function execute-app-function` call catches it. That is exactly how it reached
- * v2.5 unnoticed after v2.4 had worked.
+ * `adb shell cmd app_function execute-app-function` call catches it.
  *
  * Nothing here needs the caller's identity, so the parameter is simply left off and each adapter
  * passes the service's own `applicationContext` down instead.
@@ -60,7 +59,7 @@ abstract class BaseRootAppFunctionService : AppFunctionService() {
     suspend fun requestRootAccess(): RootStatus = functions.requestRootAccess(applicationContext)
 
     /**
-     * Return the most recent root check — its result and the time it ran — without re-probing the
+     * Return the most recent root check (its result and the time it ran) without re-probing the
      * device. Read the checkedAt field to report when the last check happened.
      *
      * @return The last root status, or null if no check has ever run on this device.

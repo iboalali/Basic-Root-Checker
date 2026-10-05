@@ -34,7 +34,6 @@ class BasicRootCheckerApplication : Application() {
 
     val reviewController: ReviewController by lazy { createReviewController(this) }
 
-    /** Single app-wide haptics engine, shared by the root-check flow and the UI tap feedback. */
     val rootHaptics: RootHaptics by lazy { RootHaptics(this) }
 
     /**
@@ -78,9 +77,8 @@ class BasicRootCheckerApplication : Application() {
         // the first frame rather than inside onCreate.
         //
         // Signals fired in the meantime are buffered. resolveStartupPreference() starts the SDK and
-        // then releases them, or discards them if the user opted out. Start-before-flush is the
-        // shared controller's guarantee now rather than this call site's — see
-        // com.iboalali.telemetry.TelemetryController, where a test covers it.
+        // then releases them, or discards them if the user opted out. The start-before-flush
+        // ordering is guaranteed by com.iboalali.telemetry.TelemetryController.
         applicationScope.launch {
             val enabled =
                 runCatching {

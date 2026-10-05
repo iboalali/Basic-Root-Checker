@@ -19,7 +19,7 @@ data class RootStatus(
     /** True when this app has been granted root access (the superuser prompt was allowed). */
     val accessGranted: Boolean,
     /**
-     * The detected root-solution family — "MAGISK", "KERNELSU", "APATCH", "OTHER", or "UNKNOWN" —
+     * The detected root-solution family ("MAGISK", "KERNELSU", "APATCH", "OTHER", or "UNKNOWN"),
      * or null when no root was detected.
      */
     val provider: String?,

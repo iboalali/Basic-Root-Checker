@@ -15,7 +15,7 @@
   -->
 <!-- NOTE: like star_24px, and unlike the rest of the icons here, this is the legacy Material Icons
      "favorite" (24 viewport), not a Material Symbols one (960 viewport). Replace it with the Symbols
-     export when convenient — that needs the real asset from Google's icon set, not hand-written path
+     export when convenient. That needs the real asset from Google's icon set, not hand-written path
      data. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"

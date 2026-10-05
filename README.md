@@ -7,13 +7,13 @@ A simple Android app that checks whether your device has root access. Displays d
 - Root detection powered by [libsu](https://github.com/topjohnwu/libsu)
 - Magisk detection with version (when rooted)
 - Detects Magisk, KernelSU, and APatch even when the app has not yet been granted root, with an in-app "Request Root access" action
-- AppFunctions integration (Android 16+): assistants and on-device agents can check root status, request root access, or read the last check (with its timestamp) — without opening the app
+- AppFunctions integration (Android 16+): assistants and on-device agents can check root status, request root access, or read the last check (with its timestamp), without opening the app
 - Device info display (model, marketing name, Android version)
 - In-app settings: language picker (Android 13+), telemetry toggle, and haptic feedback
 - Optional tip jar to support development (Google Play builds)
 - Material 3 theming with dynamic colors
 - Splash screen with custom exit animation
-- Localized in English, German, Arabic, Spanish, and Russian
+- Localized in English, German, Arabic, Spanish, Russian, Dutch, Simplified Chinese, Malay, and Tamil
 
 ## Requirements
 
@@ -42,6 +42,6 @@ See [CHANGELOG.md](CHANGELOG.md) for the release history.
 - **Navigation:** [Navigation 3](https://developer.android.com/guide/navigation/navigation-3) (`androidx.navigation3`) with Kotlin Serialization for type-safe routes
 - **Root detection:** [libsu](https://github.com/topjohnwu/libsu) (`Shell.isAppGrantedRoot()`) plus unprivileged heuristics (package query, `/proc/self/mounts`, `su` binary search) for Magisk, KernelSU, and APatch
 - **AppFunctions:** [androidx.appfunctions](https://developer.android.com/jetpack/androidx/releases/appfunctions) exposes root-check workflows to the system and on-device agents (both flavors; KSP-generated schema)
-- **Device names:** [DeviceMarketingNames](https://github.com/nicoaccessmedia/DeviceMarketingNames)
+- **Device names:** [DeviceMarketingNames](https://github.com/Boehrsi/DeviceMarketingNames)
 - **In-app billing:** Google Play Billing (tip jar) in the `gplay` flavor; a no-op in `foss`
 - **Build system:** Gradle with Kotlin DSL and version catalog (AGP)

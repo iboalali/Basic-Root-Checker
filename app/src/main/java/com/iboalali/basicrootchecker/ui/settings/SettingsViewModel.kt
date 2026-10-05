@@ -36,8 +36,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     fun setTelemetryEnabled(enabled: Boolean) {
         // viewModelScope is main-dispatched, and setTelemetryEnabled resumes back on it, so the
-        // Analytics call lands on the main thread — which it must, since opting in can start the
-        // SDK and TelemetryDeck.start registers a process lifecycle observer.
+        // Analytics call lands on the main thread. It must, because opting in can start the SDK
+        // and TelemetryDeck.start registers a process lifecycle observer.
         viewModelScope.launch {
             prefs.setTelemetryEnabled(enabled)
             Analytics.setEnabled(getApplication(), enabled)
@@ -78,20 +78,16 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    /** Sets the app language. Pass `null` to follow the system default. */
+    /** Pass `null` to follow the system default. */
     fun setLanguage(tag: String?) {
         AppLanguage.setLanguage(getApplication(), tag)
         Analytics.trackLanguageChanged(tag ?: "system")
     }
 
-    // ---- Tip jar ----
-
-    /** Whether the tip jar is supported in this build flavor (Google Play only). */
     val tipJarAvailable: Boolean = billing.isAvailable
 
     val tipProducts: StateFlow<ImmutableList<TipProduct>> = billing.products
 
-    /** Tiers whose durable record product is owned. Drives the debug view and future gating. */
     val supporterTiers: StateFlow<ImmutableSet<TipTier>> = billing.supporterTiers
 
     fun onTipJarOpened() {

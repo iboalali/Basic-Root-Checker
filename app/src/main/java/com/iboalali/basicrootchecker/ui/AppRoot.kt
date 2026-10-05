@@ -38,9 +38,9 @@ import kotlinx.coroutines.flow.Flow
  *
  * Both tip flows are owned here rather than by a screen:
  * - [tipCleared] fires long after the purchase, typically away from Settings.
- * - [tipEvents] is **single-consumer** (a [kotlinx.coroutines.channels.Channel]), and a tip can now
- *   be started from either Settings or the main screen's support card. Two collectors would *split*
- *   the events between them — not duplicate them — and at expanded width the secondary screens are
+ * - [tipEvents] is **single-consumer** (a [kotlinx.coroutines.channels.Channel]), and a tip can be
+ *   started from either Settings or the main screen's support card. Two collectors would *split*
+ *   the events between them (not duplicate them), and at expanded width the secondary screens are
  *   composed as an overlay over a live main screen, so both would be active at once. One consumer
  *   at the root is correct regardless of which surface opened the tip jar, and this host draws
  *   above the overlay card.
@@ -79,17 +79,14 @@ fun AppRoot(tipCleared: Flow<TipTier>, tipEvents: Flow<TipEvent>) {
         modifier =
             Modifier.fillMaxSize()
                 // Surfaces every descendant Modifier.testTag as a resource-id so the Macrobenchmark
-                // /
-                // Baseline Profile UI Automator journeys can target elements via By.res(...)
-                // regardless
-                // of the active locale.
+                // and Baseline Profile UI Automator journeys can target elements via By.res(...)
+                // regardless of the active locale.
                 .semantics { testTagsAsResourceId = true }
                 .background(MaterialTheme.colorScheme.background)
     ) {
         // Shared anchor rects let the large-screen detail overlay grow out of the tapped overflow
         // menu item and collapse back into the overflow icon (a container transform). AppRoot is
-        // the
-        // screen-space root both the main screen and the overlay live under.
+        // the screen-space root both the main screen and the overlay live under.
         CompositionLocalProvider(LocalDetailAnchors provides rememberDetailAnchorState()) {
             AppNavigation()
         }

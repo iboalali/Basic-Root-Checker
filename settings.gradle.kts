@@ -40,8 +40,8 @@ plugins {
 
 // Shared Android modules (Android-Shared repo) resolve as published AARs from the `maven-repo`
 // checkout declared above. Which version this app sits on is the `shared` entry in
-// gradle/libs.versions.toml, and it moves when this app is ready for it and not before — that
-// staggering is the whole reason the modules are published rather than included.
+// gradle/libs.versions.toml, and it moves when this app is ready for it and not before. That
+// staggering is the reason the modules are published rather than included.
 //
 // `-PandroidShared.composite=true` replaces that with a composite build of the local working tree,
 // for developing a change across this app and the library at once. Under substitution Gradle matches

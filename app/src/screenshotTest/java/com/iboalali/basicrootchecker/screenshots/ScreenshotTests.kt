@@ -39,8 +39,8 @@ import kotlinx.collections.immutable.persistentSetOf
 
 /**
  * Compose screenshots, rendered on the JVM via Layoutlib (no device). Two kinds live here:
- * - **Listing shots**, which double as the Play Store upload — everything below except the update
- *   flow. The matrices are split per Play Console slot, as described next.
+ * - **Listing shots**, which double as the Play Store upload: everything below except the update
+ *   flow and the status icons.
  * - **Regression-only shots** for states the store should never show: the in-app update card, and
  *   every state of the root status icon. `render.excludeShots` in "Play Store/store.json" keeps
  *   these out of the export.
@@ -51,18 +51,18 @@ import kotlinx.collections.immutable.persistentSetOf
  *   840dp): each secondary screen renders **single-pane / full-screen**, one `@PreviewTest` per
  *   screen with both annotations so the same shot renders at phone and 7-inch sizes.
  * - **10-inch** ([PreviewPlayStoreTablet10], landscape 1280dp ≥ 840dp): the secondary screens
- *   render as a **dialog card over the dimmed main screen** (`*DialogShot`) via the same
- *   [DetailCard] the custom `DetailOverlayScene` uses at expanded width — at its resting open
- *   state, since the overlay's container transform is motion the renderer can't advance. The main
- *   screen stays single-pane at every width, so its shots ([MainRootedShot] / [MainNotCheckedShot])
- *   use all three matrices.
+ *   render as a **card over the dimmed main screen** (`*DialogShot`) through the same
+ *   [DetailCard] the overlay scene uses at expanded width. It renders at its resting open state,
+ *   because the renderer can't advance the overlay's container transform. The main screen stays
+ *   single-pane at every width, so its shots ([MainRootedShot] / [MainNotCheckedShot]) use all
+ *   three matrices.
  *
- * Each base matrix covers en/ar/de/es/ru, and a `*ExtraLocales` sibling adds nl/zh/ms/ta at the same
- * device specs. Every listing shot carries both halves, so the store gets all nine languages; the
- * update-card shots carry only the base five, because they are never uploaded and four more locales
- * of a card nobody sees would be 32 reference images earning nothing. The split exists for the other
- * two apps, which take the same module and have none of these translations — it keeps the extra
- * locales opt-in rather than inherited.
+ * Each base matrix covers en/ar/de/es/ru, and a `*ExtraLocales` sibling adds nl/zh/ms/ta at the
+ * same device specs. Every listing shot carries both halves, so the store gets all nine languages.
+ * The update-card shots carry only the base five: they are never uploaded, and four more locales of
+ * a card nobody sees would be 32 reference images earning nothing. The split keeps the extra
+ * locales opt-in for the other two apps, which take the same module and have none of these
+ * translations.
  *
  * Generate / update with `./gradlew :app:updateGplayDebugScreenshotTest`; references land under
  * `app/src/screenshotTestGplayDebug/reference/.../ScreenshotTestsKt/` as
@@ -71,7 +71,7 @@ import kotlinx.collections.immutable.persistentSetOf
  * are `public`/`internal`) with fixed sample state, so output is deterministic.
  */
 
-// ---- Reusable screen content (shared by the single-pane shots and the tablet dialogs) -----------
+// Screen content shared by the single-pane shots and the tablet cards.
 
 @Composable
 private fun MainNotChecked() {
@@ -120,8 +120,8 @@ private fun MainRooted() {
 /**
  * The main screen with the in-app update card in [updateStatus]. Built on the not-checked state,
  * which is where an update card is actually met: the update check runs at launch, before anyone has
- * tapped the FAB. That also keeps these shots about the card — the root-result rendering is already
- * covered by [MainRootedShot].
+ * tapped the FAB. That also keeps these shots about the card, since [MainRootedShot] already
+ * covers the root-result rendering.
  */
 @Composable
 private fun MainWithUpdate(updateStatus: AppUpdateEvent) {
@@ -209,8 +209,8 @@ private fun License() {
 
 /**
  * A secondary screen as the app shows it on a large screen (≥840dp): a centered rounded card over
- * the dimmed main screen. Renders the same [DetailCard] the live `DetailOverlayScene` uses (so this
- * regression baseline stays representative), at its resting open state — full scrim, no drag
+ * the dimmed main screen. Renders the same [DetailCard] the live overlay scene uses, so this
+ * regression baseline stays representative, at its resting open state: full scrim, no drag
  * offset. [DetailCard] provides `LocalDetailNavIcon = CLOSE`, so the screen draws the close (✕)
  * icon.
  */
@@ -222,8 +222,7 @@ private fun DialogOverMain(content: @Composable () -> Unit) {
     }
 }
 
-// ---- Main screen — single-pane at every width, so it spans all three matrices
-// --------------------
+// Main screen: single-pane at every width, so it spans all three matrices.
 
 @PreviewTest
 @PreviewPlayStorePhone
@@ -249,8 +248,7 @@ fun MainRootedShot() {
     BasicRootCheckerTheme { MainRooted() }
 }
 
-// ---- In-app update flow — regression only, never uploaded
-// ----------------------------------------
+// In-app update flow: regression only, never uploaded.
 
 /*
  * Every state the update card can be in, which is otherwise reachable only through the debug
@@ -262,9 +260,9 @@ fun MainRootedShot() {
  * 800dp landscape height is the least vertical room the column ever gets. Tablet7 is capped-width
  * and tall, so it adds nothing either of those two doesn't already show.
  *
- * These are a regression baseline, not store copy — an update prompt does not sell the app. They
- * are listed in `render.excludeShots` in "Play Store/store.json", which keeps them out of the
- * export that feeds the Play Console.
+ * These are a regression baseline, not store copy, because an update prompt does not sell the
+ * app. They are listed in `render.excludeShots` in "Play Store/store.json", which keeps them out of
+ * the export that feeds the Play Console.
  */
 
 @PreviewTest
@@ -299,7 +297,7 @@ fun UpdateDownloadedShot() {
     BasicRootCheckerTheme { MainWithUpdate(AppUpdateEvent.Downloaded) }
 }
 
-/** The error code is not rendered — the card shows one generic line — so any value will do. */
+/** The card shows one generic line and never renders the error code, so any value will do. */
 @PreviewTest
 @PreviewPlayStorePhone
 @PreviewPlayStoreTablet10
@@ -329,8 +327,7 @@ fun RootStatusIconsShot() {
     }
 }
 
-// ---- Secondary screens, single-pane (phone + 7-inch, < 840dp)
-// ------------------------------------
+// Secondary screens, single-pane (phone + 7-inch, < 840dp).
 
 @PreviewTest
 @PreviewPlayStorePhone
@@ -362,8 +359,7 @@ fun LicenseShot() {
     BasicRootCheckerTheme { License() }
 }
 
-// ---- Secondary screens on the 10-inch tablet (≥840dp) — dialog over the dimmed main screen
-// --------
+// Secondary screens on the 10-inch tablet (≥840dp), as a card over the dimmed main screen.
 
 @PreviewTest
 @PreviewPlayStoreTablet10

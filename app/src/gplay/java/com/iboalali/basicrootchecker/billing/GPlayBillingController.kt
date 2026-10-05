@@ -63,7 +63,7 @@ class GPlayBillingController(context: Context) : BillingController {
     override val products: StateFlow<ImmutableList<TipProduct>> = _products.asStateFlow()
 
     // A Channel (not a SharedFlow) so an event emitted while the screen is briefly STOPPED
-    // — e.g. behind the Play purchase sheet — is queued and delivered when the collector
+    // (e.g. behind the Play purchase sheet) is queued and delivered when the collector
     // resumes, rather than dropped. Each event is delivered to exactly one collector.
     private val _events = Channel<TipEvent>(Channel.BUFFERED)
     override val events: Flow<TipEvent> = _events.receiveAsFlow()
@@ -95,7 +95,6 @@ class GPlayBillingController(context: Context) : BillingController {
      */
     private var purchaseInFlight = false
 
-    /** Raw Play product details, keyed by product id, for building the purchase flow. */
     private val detailsById = mutableMapOf<String, ProductDetails>()
 
     private val purchasesUpdatedListener =
@@ -248,7 +247,6 @@ class GPlayBillingController(context: Context) : BillingController {
         }
     }
 
-    /** Handles a purchase delivered to the listener: grant it and surface the outcome. */
     private fun handleFreshPurchase(purchase: Purchase) {
         val productId = purchase.products.firstOrNull() ?: return
         val tier = tipTierForProductId(productId) ?: return
@@ -280,7 +278,6 @@ class GPlayBillingController(context: Context) : BillingController {
         }
     }
 
-    /** Persists a tip token seen pending, so a later clear can be recognized as a late clear. */
     private fun rememberPending(purchase: Purchase) {
         val token = purchase.purchaseToken
         scope.launch { prefs.addPendingTipToken(token) }

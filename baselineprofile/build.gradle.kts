@@ -19,7 +19,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    // The app under test.
     targetProjectPath = ":app"
 
     testOptions {
@@ -27,17 +26,17 @@ android {
             localDevices {
                 // Guarantees large-screen coverage without depending on what happens to be plugged
                 // in. Pixel C is 900dp wide in portrait and 1280dp in landscape, so it clears the
-                // 840dp breakpoint either way — most tablet profiles (Pixel Tablet, Medium Tablet,
+                // 840dp breakpoint either way. Most tablet profiles (Pixel Tablet, Medium Tablet,
                 // Nexus 10) are only 800dp in portrait, just under it, and would silently profile
                 // the phone path instead.
                 create("tabletApi36") {
                     device = "Pixel C"
                     apiLevel = 36
                     // Profile capture needs `adb root`, which rules out *_playstore images but not
-                    // this one. API 36 google_apis is already on disk and matches the physical test
-                    // devices, so this costs no download; no aosp image is installed at any level.
+                    // this one. API 36 google_apis matches the physical test devices and needs no
+                    // extra download, where an aosp image would.
                     systemImageSource = "google"
-                    // Pinned so the choice can't drift with what's installed; AGP warns without it.
+                    // Pinned so the choice can't drift with what's installed. AGP warns without it.
                     testedAbi = "x86_64"
                 }
             }

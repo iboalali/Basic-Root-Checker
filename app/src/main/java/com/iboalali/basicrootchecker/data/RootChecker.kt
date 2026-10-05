@@ -111,8 +111,8 @@ internal fun parseMagiskVersionCode(code: Long): String {
 }
 
 /**
- * The version out of `magisk -v`, which answers `<version>:<channel>[:R]` — "27.0:MAGISK:R" on a
- * stable build. Only the first field names the version; the rest is Magisk's own bookkeeping and
+ * The version out of `magisk -v`, which answers `<version>:<channel>[:R]` ("27.0:MAGISK:R" on a
+ * stable build). Only the first field names the version; the rest is Magisk's own bookkeeping and
  * has no meaning to someone reading the status card. Everything the version field itself carries
  * is kept, including suffixes like "-delta" or "-alpha" that identify a fork or a canary build.
  *
@@ -141,7 +141,7 @@ object RootChecker {
         "me.bmax.apatch" to RootManager.APATCH,
         // Legacy managers. These usually ship a real su binary at standard paths (caught by
         // probeSuBinary), so a package hit mainly upgrades the result from a bare OTHER to a named
-        // manager — and catches the rare case where the binary path is not stat-able.
+        // manager. It also catches the rare case where the binary path is not stat-able.
         "eu.chainfire.supersu" to RootManager.SUPERSU,
         "com.koushikdutta.superuser" to RootManager.SUPERUSER,
         "com.noshufou.android.su" to RootManager.SUPERUSER,
@@ -237,7 +237,6 @@ object RootChecker {
         )
     }
 
-    /** First installed manager in [PACKAGE_MANAGERS] order (family priority), or null if none. */
     private fun detectInstalledManager(context: Context): RootManager? {
         val pm = context.packageManager
         return PACKAGE_MANAGERS.entries.firstOrNull { (id, _) -> isPackageInstalled(pm, id) }?.value

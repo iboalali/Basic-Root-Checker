@@ -65,8 +65,7 @@ private const val CONTACT_EMAIL = "contact@iboalali.com"
 
 @Composable
 fun AboutScreen(onNavigateBack: () -> Unit) {
-    // Read-only: the catalog fetch is owned by MainActivity (kicked off at app start). This screen
-    // just observes the already-loaded "Other apps" list.
+    // Read-only: the catalog fetch is owned by MainActivity, which starts it at app start.
     val viewModel: AboutViewModel = viewModel()
     val otherApps by viewModel.otherApps.collectAsStateWithLifecycle()
     AboutScreenContent(otherApps = otherApps, onNavigateBack = onNavigateBack)
@@ -104,8 +103,8 @@ internal fun AboutScreenContent(
         runCatching { context.startActivity(draft) }
     }
 
-    // True on Google Play builds (false on FOSS, where there's no Play Store to rate on). Safe cast
-    // so Compose previews — whose context isn't the app's Application — fall back to hidden.
+    // Safe cast so Compose previews, whose context isn't the app's Application, fall back to
+    // hidden.
     val rateAvailable = remember {
         (context.applicationContext as? BasicRootCheckerApplication)
             ?.reviewController
@@ -117,10 +116,10 @@ internal fun AboutScreenContent(
         topBar = {
             LargeTopAppBar(
                 title = { Text(stringResource(R.string.action_about)) },
-                // Back-arrow when pushed full-screen; a close (X) when shown as a dialog over the
-                // main screen on large screens (see LocalDetailNavIcon). Glyphs and content
-                // descriptions come from LocalDetailOverlayStyle, and the haptic tap is the shared
-                // component's — onNavigateBack goes in unwrapped.
+                // Back arrow when pushed full-screen, a close (X) when shown as an overlay over the
+                // main screen on large screens. Glyphs and content descriptions come from
+                // LocalDetailOverlayStyle, and the shared component adds the haptic tap, so
+                // onNavigateBack goes in unwrapped.
                 navigationIcon = { DetailNavigationIcon(onBack = onNavigateBack) },
                 scrollBehavior = scrollBehavior,
             )

@@ -10,15 +10,14 @@ import androidx.test.uiautomator.Until
  *
  * Elements are located by [By.res] against the Compose `Modifier.testTag`s, which are surfaced as
  * resource-ids by `testTagsAsResourceId = true` in `AppRoot`. This keeps the journeys independent
- * of the active locale (the app ships en/de/ar/es/ru).
+ * of the active locale.
  */
 
-/** Release applicationId — the variant the profile ships in (release has no id suffix). */
+/** Release applicationId, the variant the profile ships in (release has no id suffix). */
 const val PACKAGE_NAME = "com.iboalali.basicrootchecker"
 
 private const val TIMEOUT = 5_000L
 
-/** Wait until the main screen's content list is present. */
 fun MacrobenchmarkScope.waitForMainScreen() {
     device.wait(Until.hasObject(By.res("main_list")), TIMEOUT)
 }

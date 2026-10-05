@@ -29,7 +29,7 @@ google-play-billing = "9.1.0"                    # https://developer.android.com
 google-play-review = "2.0.2"                      # https://developer.android.com/guide/playcore/in-app-review
 kotlinx-collections-immutable = "0.5.2"
 kotlinx-serialization-core = "1.11.0"
-okhttp = "5.5.0"                                 # https://square.github.io/okhttp/changelogs/changelog_5x/ (already on the classpath via Coil; declared directly because the app catalog uses it itself — see CatalogHttpSource)
+okhttp = "5.5.0"                                 # https://square.github.io/okhttp/changelogs/changelog_5x/ (on the classpath via Coil)
 telemetrydeck = "7.2.0"                          # https://github.com/TelemetryDeck/KotlinSDK/releases
 topjohnwu-libsu-core = "6.0.0"                  # https://github.com/topjohnwu/libsu/releases
 
@@ -37,7 +37,7 @@ junit = "4.13.2"
 
 # Every com.iboalali.* module this app takes, from the Android-Shared repo. One number for all of
 # them: that repo publishes its eleven modules under a single version. Bumping this line is how this app
-# adopts a shared change, and leaving it alone is how it declines one — the other two apps are on
+# adopts a shared change, and leaving it alone is how it declines one. The other two apps are on
 # whatever line their own catalog says, which need not be this.
 #
 # The version must exist in the `maven-repo` checkout next to this one (`git pull` there first);
@@ -66,7 +66,7 @@ androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", vers
 # Baseline Profiles / Macrobenchmark
 androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidx-benchmark" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "androidx-profileinstaller" }
-# Compose Preview Screenshot Testing — provides @PreviewTest for the screenshotTest source set
+# Compose Preview Screenshot Testing: provides @PreviewTest for the screenshotTest source set
 screenshot-validation-api = { module = "com.android.tools.screenshot:screenshot-validation-api", version.ref = "screenshot" }
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }

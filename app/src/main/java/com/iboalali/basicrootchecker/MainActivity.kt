@@ -54,9 +54,7 @@ class MainActivity : ComponentActivity() {
             app.appUpdateController.attach(this)
             app.billingController.attach(this)
             app.reviewController.attach(this)
-            // Kick off the "Other apps" catalog refresh at launch; it updates in the background and
-            // the About screen shows the cached/bundled list until (and unless) a fresher one
-            // arrives.
+            // The About screen shows the cached or bundled list until a fresher one arrives.
             app.appCatalogRepository.refresh()
         }
 

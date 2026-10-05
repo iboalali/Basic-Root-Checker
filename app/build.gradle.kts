@@ -44,7 +44,7 @@ android {
             listOf("en", "ar", "de", "es", "ru", "nl", "zh", "ms", "ta")
         buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")
     }
-    // Set on the release build type, so it covers every flavor — bundleGplayRelease and
+    // Set on the release build type, so it covers every flavor: bundleGplayRelease and
     // bundleFossRelease both sign from this one config.
     signingConfigs {
         if (canSignRelease) {
@@ -59,7 +59,7 @@ android {
 
     buildTypes {
         release {
-            // null when no credentials were found — see canSignRelease above.
+            // null when no credentials were found (see canSignRelease above).
             signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
@@ -87,8 +87,7 @@ android {
         buildConfig = true
     }
 
-    // Compose Preview Screenshot Testing — renders @PreviewTest composables to PNGs on the JVM
-    // (no device). Required alongside the gradle.properties flag of the same name to apply the
+    // Required alongside the gradle.properties flag of the same name to apply the
     // com.android.compose.screenshot plugin and enable the screenshotTest source set.
     @Suppress("UnstableApiUsage")
     experimentalProperties["android.experimental.enableScreenshotTest"] = true
@@ -103,18 +102,13 @@ android {
 }
 
 // The screenshot tasks fork their own JVM, which inherits nothing from org.gradle.jvmargs and
-// defaults to a heap far too small for this matrix. 175 previews at native store resolution — the
-// 10-inch slot alone is 2560x1600 — exhaust it and the task dies with "Java heap space" rather than
-// with anything naming the real cause. Raised on the render tasks only; the unit tests are unaffected
-// and stay on the default.
+// defaults to a heap far too small for this matrix. 175 previews at native store resolution (the
+// 10-inch slot alone is 2560x1600) exhaust it, and the task dies with "Java heap space" rather than
+// with anything naming the real cause. Raised on the render tasks only, so the unit tests stay on
+// the default.
 tasks.withType<Test>().matching { it.name.endsWith("ScreenshotTest") }.configureEach {
     maxHeapSize = "4g"
 }
-
-// AppFunctions: the @AppFunctionServiceEntryPoint compiler generates the concrete
-// RootAppFunctionService plus its assets/root_app_function_service.xml from the @AppFunction methods
-// on BaseRootAppFunctionService. The entry-point path takes no ksp arg of its own, and the generated
-// service is declared in AndroidManifest.xml.
 
 dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -129,8 +123,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    // Adaptive: window size class (currentWindowAdaptiveInfoV2; brings androidx.window:window-core)
-    // used to switch the secondary screens to a dialog on large screens.
+    // Window size class (currentWindowAdaptiveInfoV2), which gates the large-screen detail overlay.
     implementation(libs.androidx.compose.material3.adaptive)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
@@ -141,9 +134,9 @@ dependencies {
     // DataStore
     implementation(libs.androidx.datastore.preferences)
 
-    // AppFunctions: expose root-check workflows to the system / on-device agents (both flavors) via
-    // an @AppFunctionServiceEntryPoint service. One runtime artifact, with no separate -service one;
-    // -compiler (KSP) generates the service class + its function XML.
+    // AppFunctions, in both flavors. The KSP compiler generates the concrete RootAppFunctionService
+    // and assets/root_app_function_service.xml from the @AppFunction methods on
+    // BaseRootAppFunctionService. The generated service is declared in AndroidManifest.xml.
     implementation(libs.androidx.appfunctions)
     ksp(libs.androidx.appfunctions.compiler)
 
@@ -153,17 +146,16 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.serialization.core)
 
-    // Coil for the remote app icons in the "Other apps" list. The catalog's own JSON parsing and its
-    // OkHttp conditional GET moved to com.iboalali.appcatalog:data below, which declares them itself —
-    // hence no direct kotlinx-serialization-json or okhttp here any more.
+    // Coil for the remote app icons in the "Other apps" list. The catalog's JSON parsing and HTTP
+    // come from com.iboalali.appcatalog:data, which declares its own dependencies.
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
     // Shared "Other apps" catalog from the Android-Shared repo. Every `libs.shared.*` coordinate
     // below resolves from the `maven-repo` checkout at the single `shared` version in
-    // libs.versions.toml — see settings.gradle.kts for that and for the composite-build switch.
-    // `:ui` already exposes `:data` as an `api` dependency; both are declared because this app uses
-    // both directly — the Application owns the repository, and OtherAppsCard draws the shared row.
+    // libs.versions.toml. See settings.gradle.kts for that and for the composite-build switch.
+    // `:ui` already exposes `:data` as an `api` dependency. Both are declared because this app uses
+    // both directly: the Application owns the repository, and OtherAppsCard draws the shared row.
     implementation(libs.shared.appcatalog.data)
     implementation(libs.shared.appcatalog.ui)
 
@@ -173,34 +165,28 @@ dependencies {
     // itself, rather than relying on this module's `api` dependency to supply it.
     implementation(libs.shared.telemetry.core)
 
-    // Shared haptics — the engine this app wrote, now shared. `RootHaptics` keeps what is genuinely
-    // this app's: the checking ramp and the three outcome buzzes, plus the capability signal. Both
-    // modules are declared because `RootHaptics` names `:core` types (`Haptics`, `HapticWaveform`)
-    // directly, not only through `:compose`.
+    // Shared haptics engine. `RootHaptics` holds this app's own patterns: the checking ramp, the
+    // three outcome buzzes and the capability signal. Both modules are declared because
+    // `RootHaptics` names `:core` types (`Haptics`, `HapticWaveform`) directly, not only through
+    // `:compose`.
     implementation(libs.shared.haptics.core)
     implementation(libs.shared.haptics.compose)
 
     // Shared adaptive detail overlay: the ≥840dp container-transform card, its scene strategy, the
-    // anchor state that bridges the overflow menu's Popup to it, and the leading nav icon. This app
-    // wrote neither — Billboard did — but adopting it is what brings the two fixes this copy lacked:
-    // the `isTraversalGroup` semantics on the overlay root, and a scene with value-based
-    // equals/hashCode instead of a reference-equality anonymous object.
+    // anchor state that bridges the overflow menu's Popup to it, and the leading nav icon.
     implementation(libs.shared.nav3.overlay)
 
     // The app-bar overflow menu and its items. The shared `AppBarDropdownMenuItem` wraps its own
-    // `onClick` in `rememberHapticClick`, which this app's local copy did *not* — so its menu items
-    // were the only silent tap targets of the three apps, and adopting this fixes that. The call
-    // sites in `MainScreen` dropped their own `rememberHapticClick` wrappers to avoid a double tick.
+    // `onClick` in `rememberHapticClick`, so call sites must not wrap it again or the tap ticks
+    // twice.
     implementation(libs.shared.ui.menu)
 
-    // The ColorScheme cross-fade, which this app hand-wrote over 36 of Material's 48 colour roles.
-    // The library's copy covers all 48 and has a test that fails when Material adds one.
+    // The ColorScheme cross-fade over every Material color role.
     implementation(libs.shared.ui.theme)
 
-    // The open-source credits list and the verbatim license texts. This app keeps its collapsing
-    // LargeTopAppBar and its `license_list` testTag; the list itself and — the reason it matters —
-    // `AndroidSharedAttributions` come from the library. This app was crediting two libraries while
-    // shipping seven, including TelemetryDeck, which is MIT and requires its notice.
+    // The open-source credits list and the verbatim license texts, including
+    // `AndroidSharedAttributions`, which credits every library this app ships. The collapsing
+    // LargeTopAppBar and the `license_list` testTag stay in this app.
     implementation(libs.shared.ui.licences)
 
     // Shared Play Console screenshot matrices and the constrained-device stress specs. Declared on
@@ -232,7 +218,7 @@ dependencies {
     // Unit tests
     testImplementation(libs.junit)
 
-    // Compose Preview Screenshot Testing — @PreviewTest marker + the tooling that renders previews
+    // Compose Preview Screenshot Testing: the @PreviewTest marker and the tooling that renders it
     screenshotTestImplementation(libs.screenshot.validation.api)
     screenshotTestImplementation(libs.androidx.compose.ui.tooling)
 

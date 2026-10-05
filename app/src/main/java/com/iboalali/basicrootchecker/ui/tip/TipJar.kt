@@ -38,7 +38,7 @@ import kotlinx.collections.immutable.persistentListOf
  * screen's support card (see `SupportCard`). One dialog means one place that handles the
  * not-yet-loaded price state.
  *
- * Callers are expected to dismiss on selection — Play's own purchase sheet takes over from there,
+ * Callers are expected to dismiss on selection. Play's own purchase sheet takes over from there,
  * and the outcome is announced app-wide by `AppRoot`, not by whichever screen opened this.
  */
 @Composable
@@ -112,7 +112,7 @@ private fun TipJarTiers(
 /**
  * Mimics the [AlertDialog] surface so the tip-jar layout renders in the IDE preview. A real
  * [AlertDialog] draws inside a [androidx.compose.ui.window.Dialog] window, which the Compose
- * preview renderer shows as blank — so the preview reuses [TipJarTiers] inside a plain
+ * preview renderer shows as blank, so the preview reuses [TipJarTiers] inside a plain
  * dialog-shaped [Surface] instead.
  */
 @Composable

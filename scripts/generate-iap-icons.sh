@@ -100,7 +100,7 @@ if not paths:
     raise SystemExit(f"{os.environ['SRC']}: no android:pathData found")
 
 # NB: the drawable's viewportWidth/Height is deliberately NOT used. The glyph is placed by measuring
-# its own bounding box and fitting that to GLYPH px, which normalises away both the viewport size and
+# its own bounding box and fitting that to GLYPH px, which normalizes away both the viewport size and
 # whatever padding the glyph carries inside it.
 size = int(os.environ["SIZE"])
 glyph = float(os.environ["GLYPH"])
@@ -117,14 +117,14 @@ pathlib.Path(os.environ["HTML"]).write_text(
   <g id="glyph" fill="#ffffff"><g id="art">{shapes}</g></g>
 </svg>
 <script>
-  /* Scale and centre by the glyph's REAL bounding box rather than the drawable's viewport: Material
+  /* Scale and center by the glyph's REAL bounding box rather than the drawable's viewport: Material
      glyphs sit inside a padded 960-unit box, and the padding differs per glyph (a bookmark is much
      taller than it is wide). Measuring getBBox() makes every icon optically the same size without any
      per-glyph nudging.
 
      #art carries NO transform of its own on purpose. getBBox() reports coordinates in the element's
      own user space, i.e. BEFORE its own transform is applied, so scaling #art here and then scaling
-     again by this measurement would apply the factor twice (it rendered the glyph at half size). All
+     again by this measurement would apply the factor twice (the glyph renders at half size). All
      the scaling therefore lives on the #glyph wrapper, and b is in raw path units. */
   var art = document.getElementById('art'), wrap = document.getElementById('glyph');
   var b = art.getBBox();

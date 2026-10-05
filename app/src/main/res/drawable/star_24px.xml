@@ -14,8 +14,8 @@
   ~ limitations under the License.
   -->
 <!-- NOTE: unlike every other icon here this is the legacy Material Icons "star" (24 viewport), not a
-     Material Symbols one (960 viewport), so it reads slightly heavier than its neighbours in the
-     About screen's link list. Replace it with the Symbols export when convenient — that needs the
+     Material Symbols one (960 viewport), so it reads slightly heavier than its neighbors in the
+     About screen's link list. Replace it with the Symbols export when convenient. That needs the
      real asset from Google's icon set, not hand-written path data. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#000000" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
 
