@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minimum supported version raised to Android 7.0 (API 24). Devices on Android 6.0 keep the version they already have and stop receiving updates. The AppFunctions library behind the assistant integration no longer supports Android 6.0, and nothing else in the app treated it specially.
 - Dependency refresh: Android Gradle plugin 9.4.0, Gradle 9.6.0, Kotlin 2.4.20, TelemetryDeck 7.2.0, Coil 3.6.2, Compose BOM 2026.09.00, Navigation 3 1.1.7, AppFunctions 1.0.0-alpha11, Benchmark 1.5.0 and kotlinx.collections.immutable 0.5.2. No user-visible changes beyond the raised minimum above.
 
+### Fixed
+- A device that had already granted this app root access was reported as **"root installed, access not granted"** on the first check after opening the app, until **Request Root access** was tapped. A check now confirms an earlier grant by itself, so it reports rooted straight away, and the assistant integration gives the same answer. A device that has never granted access is still checked without any superuser prompt. If you were affected, tap **Request Root access** once; checks after that are correct.
+
 ## [2.5] - 2026-08-26
 
 ### Added

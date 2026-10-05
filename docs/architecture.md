@@ -18,7 +18,7 @@ Navigation and the large-screen detail overlay have their own doc: [`adaptive-na
 ## Screens
 
 - **MainScreen** (`ui/main/`): device info (model, marketing name, Android version) and root status. The FAB runs the root check. Long-press on device info copies it to the clipboard. Calls `ReportDrawnWhen { … }` so `timeToFullDisplay` marks the first meaningful frame. Device info loads synchronously in the ViewModel's `init`, so it is about equal to `timeToInitialDisplay`.
-- **MainViewModel** (`ui/main/`): `AndroidViewModel` with `StateFlow<MainUiState>` for root-check state, root provider and version, device info, in-app update state, and the support-card prompt. Exposes `checkRoot()` (passive evaluation) and `requestRoot()` (forces shell construction to trigger the superuser allow dialog), both running through `RootChecker` on coroutines. Plays the root-check haptic ramp and result patterns.
+- **MainViewModel** (`ui/main/`): `AndroidViewModel` with `StateFlow<MainUiState>` for root-check state, root provider and version, device info, in-app update state, and the support-card prompt. Exposes `checkRoot()` (evaluation without a first-time prompt) and `requestRoot()` (forces shell construction to trigger the superuser allow dialog), both running through `RootChecker` on coroutines. Plays the root-check haptic ramp and result patterns.
 - **SettingsScreen / SettingsViewModel** (`ui/settings/`): telemetry and haptics toggles, the in-app language picker (Android 13+), the tip jar, and a privacy-policy link. Opens the shared `TipJarDialog` (`ui/tip/TipJar.kt`) and dismisses it on selection. The outcome snackbars are collected in AppRoot, not here.
 - **AboutScreen / AboutViewModel** (`ui/about/`): collapsing toolbar, app version, contact links, and the "Other apps" card. A **"Rate this app"** link is added to the contact links only when `ReviewController.isAvailable` (Google Play builds). It opens the Play listing directly, separate from the automatic in-app review card.
 
@@ -47,7 +47,7 @@ The card hides itself when the list is empty.
 
 **RootChecker** (`data/`) has two suspend entry points on `Dispatchers.IO`:
 
-- `check(context)` evaluates passively.
+- `check(context)` evaluates without prompting a device that never granted. libsu reports a grant only once a root shell exists, so a granted app would otherwise read as undetermined in every fresh process. `check` therefore builds the shell itself when `isAppGrantedRoot()` is undetermined (an `su` is on `PATH`) and the last recorded check was `ROOTED`. A device that has never been `ROOTED` here stays fully passive; one whose grant was revoked may see one prompt, and then records as not granted.
 - `requestRoot(context)` runs `Shell.cmd("id")` first to force libsu's main shell to construct (which triggers the Magisk/KernelSU/APatch allow dialog), then evaluates.
 
 Both return a `RootResult` sealed interface (`NotRooted` / `Unknown` / `Rooted(provider, manager, version)` / `RootedNotGranted(provider, manager)`). Providers are the `RootProvider` families (`MAGISK` / `KERNELSU` / `APATCH` / `OTHER` / `UNKNOWN`); `RootManager` names the specific installed manager app.
@@ -64,7 +64,7 @@ Exposes the root-check workflows to the Android system and on-device agents (for
 
 | Function | Behavior |
 |---|---|
-| `checkRootStatus` | fresh passive check |
+| `checkRootStatus` | fresh check, same as the FAB |
 | `requestRootAccess` | triggers the superuser dialog |
 | `getLastRootCheck` | returns the last cached check + `checkedAt` without re-probing |
 

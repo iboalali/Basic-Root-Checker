@@ -6,6 +6,7 @@ import com.iboalali.basicrootchecker.analytics.Analytics
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.time.Duration.Companion.milliseconds
@@ -185,6 +186,7 @@ object RootChecker {
     /** [check], also handing back the record persisted for it. See [RecordedCheck]. */
     suspend fun checkRecorded(context: Context, applyUiDelay: Boolean = true): RecordedCheck =
         withContext(Dispatchers.IO) {
+            confirmPriorGrant(context)
             val result = classify(collectSignals(context))
             val record = recordCheck(context, result)
             if (applyUiDelay) delay(1000.milliseconds)
@@ -205,6 +207,20 @@ object RootChecker {
             if (applyUiDelay) delay(1000.milliseconds)
             RecordedCheck(result, record)
         }
+
+    /**
+     * libsu reports a grant only once a root shell exists. Until then a granted app reads as
+     * undetermined (`null`) and classifies as [RootResult.RootedNotGranted]. A passive check must
+     * not prompt a device that never granted, so the shell is built only when the grant is
+     * undetermined (an `su` is on `PATH`) and the last recorded check was [RootCheckStatus.ROOTED].
+     * If the grant was revoked since, the manager may prompt once, and the result then records as
+     * not granted, which keeps later checks passive.
+     */
+    private suspend fun confirmPriorGrant(context: Context) {
+        if (Shell.isAppGrantedRoot() != null) return
+        val last = UserPreferences(context).lastRootCheck.first() ?: return
+        if (last.status == RootCheckStatus.ROOTED) Shell.cmd("id").exec()
+    }
 
     /** Persist [result] as the last root check so any caller (UI or AppFunction) shares it. */
     private suspend fun recordCheck(context: Context, result: RootResult): LastRootCheck {

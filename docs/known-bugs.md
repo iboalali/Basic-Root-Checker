@@ -1,22 +1,8 @@
 # Known bugs
 
-Open defects from a full code review (2026-10-05). Each entry names the code by function as well as by line, because line numbers drift. **Confirmed** means the code path was re-read and the failure follows from it. **Likely** means it rests on library internals read from bytecode or on device behavior not yet reproduced. Remove an entry when its fix lands.
+Open defects from a full code review (2026-10-05). Each entry names the code by function as well as by line, because line numbers drift. **Confirmed** means the code path was re-read and the failure follows from it. **Likely** means it rests on library internals read from bytecode or on device behavior not yet reproduced. Remove an entry when its fix lands; the numbers are stable IDs, so gaps are expected.
 
 ## High
-
-### 1. A granted device reports "not granted" on the first check of each session (confirmed)
-
-`data/RootChecker.kt`, `collectSignals()` (~line 228).
-
-The FAB path (`MainViewModel.checkRoot()` → `RootChecker.check()`) never constructs a libsu shell. libsu 6.0.0's `Shell.isAppGrantedRoot()` can only return `true` after a shell exists; before that it returns `null` (an executable `su` is on `PATH`) or `false`. So on a Magisk device where this app is already allowed, a cold start plus a FAB tap classifies as `RootedNotGranted(MAGISK, MAGISK)`, persists that as the last check, and shows "not granted". Only "Request root" (`requestRootRecorded()`, which runs `Shell.cmd("id")`) corrects it, until the process dies.
-
-Knock-on effects:
-
-- The `checkRootStatus` AppFunction runs in a fresh service process, so agents always get `accessGranted=false` on a granted device.
-- `maybeRequestReview` counts only `Rooted`, so `ReviewGate` barely fills from FAB checks.
-- The `SupportGate.MIN_CHECKS` (5) above `ReviewGate.MIN_ROOTED_CHECKS` (3) ordering assumes a rooted device reports `Rooted` every time. It doesn't, so the support card can come before the review ask.
-
-**Decision needed before fixing.** Constructing a shell in the passive check fixes the result, but on a manager set to "prompt" it shows the superuser dialog, and on others it may show a "granted" toast on every check. Options: build the shell only when `su` is present and the manager is known to have granted before (e.g. the last persisted check was `ROOTED`), or accept the prompt on the FAB. Needs a rooted device (Magisk via `rootAVD`) to verify; see `root-provider-detection-gaps.md`.
 
 ### 2. KernelSU and APatch are classified as Magisk once root is granted (confirmed)
 
