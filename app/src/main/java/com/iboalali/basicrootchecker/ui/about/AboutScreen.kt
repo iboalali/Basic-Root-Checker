@@ -55,6 +55,7 @@ import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.util.DeviceInfo
 import com.iboalali.basicrootchecker.util.PreviewLocales
 import com.iboalali.basicrootchecker.util.openPlayStoreListing
+import com.iboalali.basicrootchecker.util.startViewIntent
 import com.iboalali.haptics.compose.rememberHapticClick
 import com.iboalali.nav3.overlay.DetailNavigationIcon
 import kotlinx.collections.immutable.ImmutableList
@@ -82,7 +83,7 @@ internal fun AboutScreenContent(
 
     val openUri: (String, String) -> Unit = { platform, uri ->
         Analytics.trackSocialLinkClicked(platform)
-        context.startActivity(Intent(Intent.ACTION_VIEW, uri.toUri()))
+        context.startViewIntent(uri)
     }
 
     /**

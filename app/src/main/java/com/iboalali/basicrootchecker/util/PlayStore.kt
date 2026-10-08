@@ -32,7 +32,7 @@ fun Context.openPlayStoreListing(packageName: String = this.packageName) {
 }
 
 /** Starts an `ACTION_VIEW` for [uri], returning false when nothing on the device handles it. */
-private fun Context.startViewIntent(uri: String): Boolean =
+internal fun Context.startViewIntent(uri: String): Boolean =
     try {
         startActivity(Intent(Intent.ACTION_VIEW, uri.toUri()))
         true

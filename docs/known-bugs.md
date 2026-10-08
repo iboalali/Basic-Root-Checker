@@ -4,14 +4,9 @@ Open defects from a full code review (2026-10-05). Each entry names the code by 
 
 ## High
 
-### 4. Links crash the app on a device with no browser (confirmed)
+### 19. Licences rows crash the app on a device with no browser (confirmed, lives in Android-Shared)
 
-- `ui/settings/SettingsScreen.kt` (~line 445): the privacy policy row calls `context.startActivity(ACTION_VIEW)` unguarded.
-- `ui/about/AboutScreen.kt` (~line 85): the `openUri` lambda behind Mastodon, Bluesky and Website calls `startActivity` unguarded.
-
-On a device with no `ACTION_VIEW` handler for `https` (FOSS build on a degoogled ROM, a kiosk or managed device, a disabled browser), the tap throws an uncaught `ActivityNotFoundException`. The email row (`runCatching`) and the rate row (`openPlayStoreListing`) on the same screen are already guarded.
-
-Fix: wrap both in `runCatching`, or share one guarded "open URL" helper.
+`com.iboalali.ui.licences`, `OssCredits.kt` `LibraryRow` (~line 149) calls Compose's `AndroidUriHandler.openUri` unguarded. With no `ACTION_VIEW` handler for `https`, tapping any Licences row throws `ActivityNotFoundException` and the app crashes (reproduced on `e2e_api37` with Chrome disabled). The fix belongs in Android-Shared (catch it around `openUri`, or route through a guarded helper), then this app adopts it by bumping `shared`. The About screen's "Other apps" rows from `com.iboalali.appcatalog:ui` likely open links the same way and were not tested.
 
 ## Medium
 

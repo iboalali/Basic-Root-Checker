@@ -1,6 +1,5 @@
 package com.iboalali.basicrootchecker.ui.settings
 
-import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,7 +52,6 @@ import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.basicrootchecker.BuildConfig
@@ -66,6 +64,7 @@ import com.iboalali.basicrootchecker.ui.theme.BasicRootCheckerTheme
 import com.iboalali.basicrootchecker.ui.tip.TipJarDialog
 import com.iboalali.basicrootchecker.util.AppLanguage
 import com.iboalali.basicrootchecker.util.PreviewLocales
+import com.iboalali.basicrootchecker.util.startViewIntent
 import com.iboalali.haptics.compose.rememberHapticClick
 import com.iboalali.haptics.compose.rememberHapticToggle
 import com.iboalali.nav3.overlay.DetailNavigationIcon
@@ -442,12 +441,8 @@ fun SettingsScreenContent(
                                 onClick =
                                     rememberHapticClick {
                                         Analytics.trackPrivacyPolicyClicked()
-                                        context.startActivity(
-                                            Intent(
-                                                Intent.ACTION_VIEW,
-                                                "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy"
-                                                    .toUri(),
-                                            )
+                                        context.startViewIntent(
+                                            "https://iboalali.com/app/basic_root_checker/privacy?utm_source=android_app&utm_campaign=basic_root_checker&utm_content=privacy"
                                         )
                                     }
                             )
