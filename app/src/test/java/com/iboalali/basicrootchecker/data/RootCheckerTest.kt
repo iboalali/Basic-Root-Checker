@@ -1,6 +1,7 @@
 package com.iboalali.basicrootchecker.data
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Test
 
@@ -323,6 +324,19 @@ class RootCheckerTest {
         assertEquals("27.0", parseMagiskVersionCode(27006))
         assertEquals("28.1", parseMagiskVersionCode(28102))
         assertEquals("26.3", parseMagiskVersionCode(26301))
+    }
+
+    // --- Magisk path fingerprints -------------------------------------------
+
+    @Test
+    fun `magisk paths leave out the module directory KernelSU and APatch share`() {
+        // A hit on /data/adb/modules would make classify resolve MAGISK on a granted KernelSU or
+        // APatch device and drop its correctly detected manager.
+        assertFalse("/data/adb/modules" in RootChecker.MAGISK_PATHS)
+        assertEquals(
+            listOf("/data/adb/magisk", "/sbin/.magisk", "/debug_ramdisk/.magisk"),
+            RootChecker.MAGISK_PATHS,
+        )
     }
 
     // --- parseMagiskVersionName ---------------------------------------------

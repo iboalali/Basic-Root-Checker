@@ -4,14 +4,6 @@ Open defects from a full code review (2026-10-05). Each entry names the code by 
 
 ## High
 
-### 2. KernelSU and APatch are classified as Magisk once root is granted (confirmed)
-
-`data/RootChecker.kt`, `probeMagiskFiles()` (~line 279) and `MAGISK_PATHS` (~line 172).
-
-`/data/adb/modules` is shared by Magisk, KernelSU (and forks) and APatch. With root granted, `test -d /data/adb/modules` succeeds on all of them, so `magiskFilesHit` makes `classify` resolve `MAGISK`, and the family-mismatch guard then drops the correctly detected `KERNELSU`/`APATCH` manager. The same path in `MAGISK_PATHS` has the same effect on the ungranted path wherever `/data/adb` is stat-able.
-
-Fix: drop `/data/adb/modules` from both lists (keep `/data/adb/magisk`, `/sbin/.magisk`, `/debug_ramdisk/.magisk`). Add a `classify` test where a `KERNELSU` manager plus granted root must stay `KERNELSU`. The existing test `granted with magisk files reports Rooted with MAGISK` builds signals by hand and cannot catch this.
-
 ### 3. The in-app update card gets stuck on "Downloading" (confirmed)
 
 `gplay/.../update/GPlayAppUpdateController.kt`, `startFlexibleFlow()` and `checkForUpdate()`.

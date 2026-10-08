@@ -4,7 +4,7 @@ What the detector can see, where it is blind by design, and how to verify it on 
 
 ## The hard part: root installed but not yet granted
 
-Detection is solid once the user grants root. `requestRoot` forces the libsu superuser dialog, after which `queryMagiskVersion` (`magisk -v`), `probeMagiskFiles` (`/data/adb/*`) or a working `su` resolve the provider.
+Detection is solid once the user grants root. `requestRoot` forces the libsu superuser dialog, after which `queryMagiskVersion` (`magisk -v`), `probeMagiskFiles` (the `MAGISK_PATHS` directories, tested with root) or a working `su` resolve the provider.
 
 Before a grant (or when a whitelist/SuList mode never shows the prompt), `classify` takes its `granted == false || granted == null` branch. There, only the unprivileged probes in `collectSignals` are available: installed package ids, a `/proc/self/mounts` scan, Magisk path stats, and `su`-binary path stats. The privileged probes (`probeMagiskFiles`, `queryMagiskVersion`) only run when `granted == true`.
 
@@ -38,7 +38,8 @@ The legacy managers usually drop a real `su` at a standard path, so `probeSuBina
 Non-package signals:
 
 - `SU_PATHS`: a `su` binary at a standard path maps to `OTHER`.
-- `MAGISK_PATHS` (`/data/adb/magisk`, `/data/adb/modules`, `/sbin/.magisk`, `/debug_ramdisk/.magisk`), probed unprivileged by `probeMagiskPaths`. A hit is a Magisk fingerprint even when the manager is hidden or renamed. Whether `File.exists()` can see these is device and SELinux dependent, so it is best effort.
+- `MAGISK_PATHS` (`/data/adb/magisk`, `/sbin/.magisk`, `/debug_ramdisk/.magisk`), probed unprivileged by `probeMagiskPaths` and with root by `probeMagiskFiles`. A hit is a Magisk fingerprint even when the manager is hidden or renamed. Whether `File.exists()` can see these is device and SELinux dependent, so it is best effort.
+- `/data/adb/modules` is deliberately not a Magisk signal. KernelSU (and its forks) and APatch keep their modules there too, so with root granted it exists on all three, and treating it as Magisk would let the family-mismatch guard drop a correctly detected KernelSU or APatch manager. The three remaining paths are Magisk's own: KernelSU works under `/data/adb/ksu`, APatch under `/data/adb/ap`, and the magic-mount metamodules use `/debug_ramdisk` itself or a `workdir` / `.magic_mount` directory inside it, never `.magisk` (checked upstream 2026-10-08).
 - `/proc/self/mounts`: a Magisk mount maps to `MAGISK`.
 
 **Family-mismatch guard.** A Magisk mount or path forces `MAGISK` even when the installed manager app is, say, KernelSU. `classify` then surfaces the manager only if its family matches the resolved provider, so the KernelSU app is never shown as the Magisk that was detected.
@@ -148,7 +149,7 @@ The same caching is why a real device only needs one check per session, and why 
 | `classify` for every provider, granted and ungranted, including Magisk precedence | Unit tests over hand-built `RootSignals` (`RootCheckerTest.kt`) |
 | `detectInstalledManager` and the manifest `<queries>`, all 17 ids | Stub APKs on a stock emulator |
 | The family-mismatch guard on real probe output | Magisk path fingerprint + KernelSU stub |
-| `granted == true`, `magisk -v`, privileged `/data/adb` probe | Magisk, on the rooted emulator or a device |
+| `granted == true`, `magisk -v`, privileged `MAGISK_PATHS` probe | Magisk, on the rooted emulator or a device |
 | `granted == true` **through KernelSU's or APatch's own `su`** | Nothing yet |
 
 Only the last row is open, and it is one signal: whether `libsu` resolves a grant through a provider that is not Magisk. `libsu` only runs `su` and reads the result, and both providers ship a `su` it drives the same way, so the residual risk is low. Everything the app does *with* that answer for those two families is package-name lookup plus the branch logic above, and both are covered.

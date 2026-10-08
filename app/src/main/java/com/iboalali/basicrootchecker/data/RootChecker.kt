@@ -167,10 +167,11 @@ object RootChecker {
     )
 
     // Directories left by Magisk and its forks. Stat-ability is device/SELinux dependent, so a hit
-    // is a best-effort fingerprint, not a guarantee. Probed unprivileged (no root required).
-    private val MAGISK_PATHS = listOf(
+    // is a best-effort fingerprint, not a guarantee. Probed unprivileged by probeMagiskPaths and
+    // with root by probeMagiskFiles. /data/adb/modules is deliberately absent: KernelSU and APatch
+    // keep their modules there too, so it would turn either into MAGISK.
+    internal val MAGISK_PATHS = listOf(
         "/data/adb/magisk",
-        "/data/adb/modules",
         "/sbin/.magisk",
         "/debug_ramdisk/.magisk",
     )
@@ -291,9 +292,7 @@ object RootChecker {
     }
 
     private fun probeMagiskFiles(): Boolean {
-        val result = Shell.cmd(
-            "test -d /data/adb/magisk || test -d /debug_ramdisk/.magisk || test -d /sbin/.magisk || test -d /data/adb/modules"
-        ).exec()
+        val result = Shell.cmd(MAGISK_PATHS.joinToString(" || ") { "test -d $it" }).exec()
         return result.isSuccess
     }
 
