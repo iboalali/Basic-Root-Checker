@@ -57,6 +57,7 @@ class GPlayAppUpdateController(context: Context) : AppUpdateController {
                 _events.value = AppUpdateEvent.Failed(code)
                 Analytics.trackUpdateFailed(formatInstallError(code))
             }
+            InstallStatus.CANCELED -> returnToOffer()
             else -> Unit
         }
     }
@@ -89,6 +90,7 @@ class GPlayAppUpdateController(context: Context) : AppUpdateController {
         ) { result ->
             if (result.resultCode != Activity.RESULT_OK) {
                 Log.w(TAG, "Update flow canceled or failed: resultCode=${result.resultCode}")
+                returnToOffer()
             }
         }
         activity.lifecycle.addObserver(lifecycleObserver)
@@ -107,29 +109,41 @@ class GPlayAppUpdateController(context: Context) : AppUpdateController {
             .addOnSuccessListener { info ->
                 latestUpdateInfo = info
                 val current = _events.value
-                if (current is AppUpdateEvent.Downloading) return@addOnSuccessListener
-
-                if (info.installStatus() == InstallStatus.DOWNLOADED) {
-                    _events.value = AppUpdateEvent.Downloaded
-                    return@addOnSuccessListener
+                val next = resolveUpdateEvent(
+                    current = current,
+                    installStatus = info.installStatus(),
+                    offerable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                        info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE) &&
+                        (info.clientVersionStalenessDays() ?: -1) >= STALENESS_DAYS_THRESHOLD,
+                    bytesDownloaded = info.bytesDownloaded(),
+                    totalBytes = info.totalBytesToDownload(),
+                )
+                // A download that ended while the listener was unregistered is only seen here.
+                if (next is AppUpdateEvent.Downloaded && current is AppUpdateEvent.Downloading) {
+                    Analytics.trackUpdateDownloaded()
                 }
-
-                val available = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                val flexibleAllowed = info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
-                val stale = (info.clientVersionStalenessDays() ?: -1) >= STALENESS_DAYS_THRESHOLD
-
-                if (available && flexibleAllowed && stale) {
-                    if (current !is AppUpdateEvent.Available) {
-                        Analytics.trackUpdateAvailable()
-                    }
-                    _events.value = AppUpdateEvent.Available
-                } else if (current is AppUpdateEvent.Available) {
-                    _events.value = AppUpdateEvent.None
+                // Back from Downloading is the same offer, already counted.
+                if (next is AppUpdateEvent.Available &&
+                    current !is AppUpdateEvent.Available &&
+                    current !is AppUpdateEvent.Downloading
+                ) {
+                    Analytics.trackUpdateAvailable()
                 }
+                _events.value = next
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "requestAppUpdateInfo failed", e)
             }
+    }
+
+    /**
+     * The user declined Play's dialog or canceled the download. The update is still there, so the
+     * card offers it again; the next [checkForUpdate] drops it if Play no longer does.
+     */
+    private fun returnToOffer() {
+        if (_events.value is AppUpdateEvent.Downloading) {
+            _events.value = AppUpdateEvent.Available
+        }
     }
 
     override fun startFlexibleFlow() {

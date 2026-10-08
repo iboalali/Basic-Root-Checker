@@ -202,7 +202,7 @@ Compose Material3 with dynamic colors (API 31+), falling back to custom light/da
 
 ## Tests
 
-Unit tests in `app/src/test/` cover the app's pure decision logic: `RootChecker.classify` / `parseMagiskVersionCode`, the two post-check prompt gates (`ReviewGate`, `SupportGate`), `TipTier` and `AppLanguage`. The analytics startup buffering is tested in `com.iboalali.telemetry:core`. The device-dependent probes are **not** unit-tested; verify them on an emulator or device as described in [`root-provider-detection-gaps.md`](root-provider-detection-gaps.md).
+Unit tests in `app/src/test/` cover the app's pure decision logic: `RootChecker.classify` / `parseMagiskVersionCode`, the two post-check prompt gates (`ReviewGate`, `SupportGate`), `TipTier`, `AppLanguage`, and the in-app update card state (`resolveUpdateEvent`, in `src/testGplay`). The analytics startup buffering is tested in `com.iboalali.telemetry:core`. The device-dependent probes are **not** unit-tested; verify them on an emulator or device as described in [`root-provider-detection-gaps.md`](root-provider-detection-gaps.md).
 
 AppFunctions are verified on a connected device (API 36+):
 

@@ -4,16 +4,6 @@ Open defects from a full code review (2026-10-05). Each entry names the code by 
 
 ## High
 
-### 3. The in-app update card gets stuck on "Downloading" (confirmed)
-
-`gplay/.../update/GPlayAppUpdateController.kt`, `startFlexibleFlow()` and `checkForUpdate()`.
-
-- `startFlexibleFlow()` sets `Downloading(0, 0)` as soon as Play's dialog launches. If the user declines (`RESULT_CANCELED` / `RESULT_IN_APP_UPDATE_FAILED`), the activity-result callback only logs, and the next `checkForUpdate()` returns early on `Downloading`. The card shows an endless progress bar. `InstallStatus.CANCELED` from the install listener is also ignored.
-- `checkForUpdate()` returns early on `Downloading` before it checks `installStatus() == DOWNLOADED`. The install listener is unregistered in `onStop`, so a download that finishes in the background is never offered for install in that process.
-- While stuck, `MainViewModel` treats the update as pending (`updateStatus !is None`), so the support card is blocked for the session.
-
-Fix: move the `DOWNLOADED` check above the `Downloading` early return; on a non-OK activity result reset to `Available` (or `None`); handle `InstallStatus.CANCELED` the same way.
-
 ### 4. Links crash the app on a device with no browser (confirmed)
 
 - `ui/settings/SettingsScreen.kt` (~line 445): the privacy policy row calls `context.startActivity(ACTION_VIEW)` unguarded.
