@@ -4,7 +4,7 @@
 
     <!-- Main Strings-->
     <string name="textView_Disclaimer"><![CDATA[Это приложение <b>НЕ</b> предоставит root-доступ устройству.<br>Оно лишь показывает, имеется ли root-доступ на устройстве.]]></string>
-    <string name="textView_checkForRoot">Нажмите кнопку «#» в правом нижнем углу, чтобы проверить наличие root-доступа</string>
+    <string name="textView_checkForRoot">Нажмите кнопку «#», чтобы проверить наличие root-доступа</string>
     <string name="rootAvailable">На устройстве есть root-доступ</string>
     <string name="rootUnknown">Не удалось определить наличие root-доступа</string>
     <string name="rootNotAvailable">На устройстве нет root-доступа</string>
@@ -21,7 +21,7 @@
 
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Отправлять анонимные данные об использовании</string>
-    <string name="settings_telemetry_description">Помогает улучшать приложение через TelemetryDeck. Изменения вступают в силу при следующем запуске приложения.</string>
+    <string name="settings_telemetry_description">Помогает улучшать приложение через TelemetryDeck.</string>
     <string name="settings_reset_identity_title">Сбросить идентификатор аналитики</string>
     <string name="settings_reset_identity_description">Создаёт новый анонимный идентификатор, чтобы будущие данные об использовании нельзя было связать с отправленными ранее.</string>
     <string name="settings_reset_identity_dialog_message">Будет создан новый анонимный идентификатор. Будущие данные об использовании не будут связаны с тем, что отправлено ранее. Это действие нельзя отменить.</string>
@@ -43,6 +43,8 @@
     <string name="tip_tier_medium">Средние чаевые</string>
     <string name="tip_tier_large">Большие чаевые</string>
     <string name="tip_jar_loading">Загрузка вариантов чаевых…</string>
+    <string name="tip_jar_load_failed">Не удалось загрузить варианты чаевых. Проверьте подключение и попробуйте ещё раз.</string>
+    <string name="tip_jar_retry">Повторить</string>
     <string name="tip_jar_thanks">Спасибо за поддержку!</string>
     <string name="tip_jar_pending">Ваши чаевые ожидают подтверждения — они будут зачислены после одобрения платежа.</string>
     <string name="tip_jar_cleared">Ваши отложенные чаевые зачислены — спасибо за поддержку!</string>
@@ -57,11 +59,7 @@
     <string name="string_checking_for_root">Проверка root-доступа…</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
-        Это приложение НЕ предоставляет root-доступ.\n
-        Для работы требуется root-доступ — используйте на свой страх и риск.\n
-        Приложение не собирает никакой личной информации.\n\n\n
-        Связаться со мной:</string>
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\nЭто приложение НЕ предоставляет root-доступ.\nДля работы требуется root-доступ — используйте на свой страх и риск.\nПриложение не собирает никакой личной информации.\n\n\nСвязаться со мной:</string>
     <string name="about_link_email">Эл. почта</string>
     <string name="about_link_website">Сайт</string>
     <string name="about_link_rate_this_app">Оценить приложение</string>
@@ -93,7 +91,7 @@
     <string name="update_progress_megabytes">%1$s / %2$s МБ</string>
     <string name="update_downloaded_title">Обновление загружено</string>
     <string name="update_action_install">Установить сейчас</string>
-    <string name="update_failed">Не удалось загрузить обновление. Повторная попытка будет выполнена автоматически.</string>
+    <string name="update_failed">Не удалось загрузить обновление. Вернитесь в приложение позже, чтобы попробовать снова.</string>
     <string name="app_updated_snackbar">Приложение обновлено</string>
 
     <!-- Other Apps -->

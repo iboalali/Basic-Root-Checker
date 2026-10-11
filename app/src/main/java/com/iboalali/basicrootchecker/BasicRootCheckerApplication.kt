@@ -63,11 +63,12 @@ class BasicRootCheckerApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Register synchronously so crashes during the async init below are still captured
-        // (buffered by Analytics until the opt-out preference is resolved).
+        // Best effort. A crash before the opt-out preference resolves is only buffered in memory,
+        // and the previous handler kills the process at once, so it is lost. After that the SDK
+        // writes its cache from a background coroutine, which a dying process often never runs.
         val previous = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            Analytics.trackError(throwable)
+            Analytics.trackError(throwable, id = "uncaughtException")
             previous?.uncaughtException(thread, throwable)
         }
 

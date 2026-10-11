@@ -54,6 +54,9 @@ fi
 
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
+# Every icon renders into here first and is copied over the committed ones only once all of them
+# have succeeded, so a failure part-way leaves the working tree untouched.
+staged="$work/staged"
 
 echo "==> Rendering IAP icons on $BG"
 
@@ -70,14 +73,16 @@ while IFS=$'\t' read -r product drawable; do
     exit 1
   fi
 
+  mkdir -p "$staged/$product"
+
   # Two variants: full-bleed (square, flattened to RGB) and rounded (transparent outside).
   for variant in flat rounded; do
     if [ "$variant" = "flat" ]; then
       rx=0
-      out="$OUT_ROOT/$product/icon.png"
+      out="$staged/$product/icon.png"
     else
       rx="$RADIUS"
-      out="$OUT_ROOT/$product/icon-rounded.png"
+      out="$staged/$product/icon-rounded.png"
     fi
 
     html="$work/$product-$variant.html"
@@ -148,10 +153,15 @@ PY
       --default-background-color=00000000 \
       --window-size="$SIZE,$SIZE" \
       --screenshot="$work/$product-$variant.png" \
-      "$html" >/dev/null 2>&1
+      "$html" >"$work/chrome.log" 2>&1 || {
+      echo "error: Chrome failed to render $product/$variant. Its output:" >&2
+      cat "$work/chrome.log" >&2
+      exit 1
+    }
 
     if [ ! -f "$work/$product-$variant.png" ]; then
-      echo "error: Chrome produced no screenshot for $product/$variant." >&2
+      echo "error: Chrome produced no screenshot for $product/$variant. Its output:" >&2
+      cat "$work/chrome.log" >&2
       exit 1
     fi
 
@@ -177,8 +187,16 @@ else:
 im.save(os.environ["OUT"], "PNG", optimize=True)
 PY
 
-    echo "    $out"
+    echo "    rendered $product/$(basename "$out")"
   done
 done <<<"$PRODUCTS"
+
+for product_dir in "$staged"/*/; do
+  product="$(basename "$product_dir")"
+  for icon in "$product_dir"*.png; do
+    cp "$icon" "$OUT_ROOT/$product/"
+    echo "    $OUT_ROOT/$product/$(basename "$icon")"
+  done
+done
 
 echo "==> Done."

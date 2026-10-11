@@ -18,6 +18,12 @@ interface BillingController {
     val products: StateFlow<ImmutableList<TipProduct>>
 
     /**
+     * True when the last attempt to load [products] failed (billing unavailable, no network, or
+     * Play returned no tips). Cleared by [retryProducts] and by any later successful load.
+     */
+    val productsLoadFailed: StateFlow<Boolean>
+
+    /**
      * One-shot tip outcomes (thanks / pending / error) to surface as transient UI. A
      * deferred purchase that completes later, and any purchase restored on connect, is
      * reconciled silently and does NOT emit here, so the user never sees an out-of-context
@@ -42,4 +48,6 @@ interface BillingController {
     fun attach(activity: ComponentActivity)
 
     fun launchPurchase(tier: TipTier)
+
+    fun retryProducts()
 }

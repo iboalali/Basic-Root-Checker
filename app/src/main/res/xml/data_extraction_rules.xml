@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
+    <!-- The last root check describes this device, not the next one it is restored onto. -->
     <cloud-backup>
         <include domain="file" path="datastore/" />
+        <exclude domain="file" path="datastore/root_check.preferences_pb" />
     </cloud-backup>
     <device-transfer>
         <include domain="file" path="datastore/" />
+        <exclude domain="file" path="datastore/root_check.preferences_pb" />
     </device-transfer>
 </data-extraction-rules>

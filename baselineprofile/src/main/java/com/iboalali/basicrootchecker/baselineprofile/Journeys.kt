@@ -3,6 +3,7 @@ package com.iboalali.basicrootchecker.baselineprofile
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
+import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 
 /**
@@ -18,17 +19,32 @@ const val PACKAGE_NAME = "com.iboalali.basicrootchecker"
 
 private const val TIMEOUT = 5_000L
 
+/**
+ * Every wait in these journeys is required. A missing element must fail the run, or a renamed
+ * testTag silently drops whole screens from the generated profile while the generator passes.
+ */
+private fun MacrobenchmarkScope.requireObject(tag: String): UiObject2 =
+    checkNotNull(device.wait(Until.findObject(By.res(tag)), TIMEOUT)) {
+        "No element with testTag \"$tag\" within $TIMEOUT ms"
+    }
+
+private fun MacrobenchmarkScope.awaitObject(tag: String) {
+    check(device.wait(Until.hasObject(By.res(tag)), TIMEOUT)) {
+        "No element with testTag \"$tag\" within $TIMEOUT ms"
+    }
+}
+
 fun MacrobenchmarkScope.waitForMainScreen() {
-    device.wait(Until.hasObject(By.res("main_list")), TIMEOUT)
+    awaitObject("main_list")
 }
 
 /**
- * Fling a `verticalScroll` list (located by [tag]) down and back up. No-ops gracefully if the
- * content is shorter than the viewport. The gesture margin keeps flings clear of the system
+ * Fling a `verticalScroll` list (located by [tag]) down and back up. The flings are harmless if
+ * the content is shorter than the viewport. The gesture margin keeps flings clear of the system
  * gesture area on gesture-nav devices.
  */
 fun MacrobenchmarkScope.scrollList(tag: String) {
-    val list = device.wait(Until.findObject(By.res(tag)), TIMEOUT) ?: return
+    val list = requireObject(tag)
     list.setGestureMargin(device.displayWidth / 5)
     list.fling(Direction.DOWN)
     device.waitForIdle()
@@ -38,8 +54,8 @@ fun MacrobenchmarkScope.scrollList(tag: String) {
 
 /** Open the main screen's overflow menu and tap the item with [menuItemTag]. */
 fun MacrobenchmarkScope.openMenuItem(menuItemTag: String) {
-    device.wait(Until.findObject(By.res("overflow_menu")), TIMEOUT)?.click()
-    device.wait(Until.findObject(By.res(menuItemTag)), TIMEOUT)?.click()
+    requireObject("overflow_menu").click()
+    requireObject(menuItemTag).click()
 }
 
 /**
@@ -48,7 +64,7 @@ fun MacrobenchmarkScope.openMenuItem(menuItemTag: String) {
  */
 fun MacrobenchmarkScope.visitAndScroll(menuItemTag: String, listTag: String) {
     openMenuItem(menuItemTag)
-    device.wait(Until.hasObject(By.res(listTag)), TIMEOUT)
+    awaitObject(listTag)
     scrollList(listTag)
     device.pressBack()
     waitForMainScreen()
@@ -63,5 +79,5 @@ fun MacrobenchmarkScope.openLicenseScreen() {
     startActivityAndWait()
     waitForMainScreen()
     openMenuItem("menu_license")
-    device.wait(Until.hasObject(By.res("license_list")), TIMEOUT)
+    awaitObject("license_list")
 }

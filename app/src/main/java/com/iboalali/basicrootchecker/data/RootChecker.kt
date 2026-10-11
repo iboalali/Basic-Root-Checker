@@ -200,6 +200,10 @@ object RootChecker {
     /** [requestRoot], also handing back the record persisted for it. See [RecordedCheck]. */
     suspend fun requestRootRecorded(context: Context, applyUiDelay: Boolean = true): RecordedCheck =
         withContext(Dispatchers.IO) {
+            // After a denied or timed-out prompt, libsu keeps the plain shell it fell back to and
+            // would reuse it, so `su` is never asked again. Closing it makes the next command build
+            // a fresh shell, which runs `su` and prompts once more.
+            if (Shell.isAppGrantedRoot() == false) Shell.getCachedShell()?.close()
             // Forces libsu to construct its main shell, which prompts the Magisk/KernelSU/APatch
             // allow dialog if the user has not yet made a decision.
             Shell.cmd("id").exec()

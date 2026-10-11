@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Basic Root Checker</string>
 
-    <string name="textView_Disclaimer"><![CDATA[هذا التطبيق بظهر لك إذا كان جهازك يحتوي على خاصية الـ Root.<br>هذا التطبيق لا يعطيك خاصية الـ Root على جهازك.]]></string>
+    <string name="textView_Disclaimer"><![CDATA[هذا التطبيق يظهر لك إذا كان جهازك يحتوي على خاصية الـ Root.<br>هذا التطبيق لا يعطيك خاصية الـ Root على جهازك.]]></string>
     <string name="rootAvailable">يوجد خاصية الـ Root</string>
     <string name="rootUnknown">تعذر الحصول على وجود Root لجهازك</string>
     <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
@@ -12,14 +12,14 @@
     <string name="root_provider_other">أخرى</string>
     <string name="root_provider_via">عبر %1$s</string>
     <string name="root_provider_via_with_version">عبر %1$s v%2$s</string>
-    <string name="action_license">حقوق</string>
+    <string name="action_license">التراخيص</string>
     <string name="action_about">عنا</string>
     <string name="action_settings">الإعدادات</string>
     <string name="action_privacy_policy">سياسة الخصوصية</string>
 
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">مشاركة بيانات الاستخدام المجهولة</string>
-    <string name="settings_telemetry_description">يساعد على تحسين التطبيق عبر TelemetryDeck. عند التفعيل، يسري المفعول عند إعادة تشغيل التطبيق.</string>
+    <string name="settings_telemetry_description">يساعد على تحسين التطبيق عبر TelemetryDeck.</string>
     <string name="settings_reset_identity_title">إعادة تعيين هوية التحليلات</string>
     <string name="settings_reset_identity_description">ابدأ بمعرّف مجهول جديد كي لا تُربط بيانات الاستخدام المستقبلية بما تمت مشاركته سابقًا.</string>
     <string name="settings_reset_identity_dialog_message">سيتم إنشاء معرّف مجهول جديد. لن تُربط بيانات الاستخدام المستقبلية بأي شيء تمت مشاركته حتى الآن. لا يمكن التراجع عن هذا الإجراء.</string>
@@ -41,6 +41,8 @@
     <string name="tip_tier_medium">إكرامية متوسطة</string>
     <string name="tip_tier_large">إكرامية كبيرة</string>
     <string name="tip_jar_loading">جارٍ تحميل خيارات الإكرامية…</string>
+    <string name="tip_jar_load_failed">تعذّر تحميل خيارات الإكرامية. تحقّق من اتصالك وحاول مرة أخرى.</string>
+    <string name="tip_jar_retry">إعادة المحاولة</string>
     <string name="tip_jar_thanks">شكرًا على دعمك!</string>
     <string name="tip_jar_pending">إكراميتك قيد الانتظار — ستكتمل بمجرد الموافقة على الدفع.</string>
     <string name="tip_jar_cleared">تمت معالجة إكراميتك المعلّقة — شكرًا على دعمك!</string>
@@ -52,17 +54,13 @@
     <string name="support_card_dismiss">إغلاق</string>
 
     <!-- About Strings -->
-    <string name="about_part1">حقوق الطبع محفوظ 2026 iboalali\n\n
-هذا التطبيق لا يعطيك خاصية الRoot.\n
-هذا التطبيق يتطلب خاصية الRoot، استعملها على مسؤوليتك.\n
-هذا التطبيق لا يجمع أي معلومات شخصية\n\n\n
-اتصل بي:</string>
-    <string name="about_not_affiliated">هذا البرنامج ليست تابع ولا مأيّد من Chainfire أو SuperSU</string>
+    <string name="about_part1">حقوق الطبع محفوظ 2026 iboalali\n\nهذا التطبيق لا يعطيك خاصية الRoot.\nهذا التطبيق يتطلب خاصية الRoot، استعملها على مسؤوليتك.\nهذا التطبيق لا يجمع أي معلومات شخصية\n\n\nاتصل بي:</string>
+    <string name="about_not_affiliated">هذا التطبيق غير معتمد من topjohnwu أو libsu ولا يرتبط بهما</string>
     <string name="about_link_email">البريد الإلكتروني</string>
     <string name="about_link_website">الموقع الإلكتروني</string>
     <string name="about_link_rate_this_app">قيّم التطبيق</string>
-    <string name="textView_checkForRoot">المس على الزر المستدير في أسفل اليمين للتحقق من حالة من خاصية الـ Root</string>
-    <string name="textViewAndroidVersion">اندرود</string>
+    <string name="textView_checkForRoot">اضغط على زر \"#\" للتحقق من حالة الـ Root</string>
+    <string name="textViewAndroidVersion">أندرويد</string>
     <string name="string_your_device">جهازك</string>
     <string name="string_checking_for_root">تحقق من خاصية الـ Root</string>
     <string name="content_description_check_for_root">تحقق من خاصية الـ Root</string>
@@ -95,7 +93,7 @@
     <string name="update_progress_megabytes">%1$s / %2$s م.ب.</string>
     <string name="update_downloaded_title">تم تنزيل التحديث</string>
     <string name="update_action_install">التثبيت الآن</string>
-    <string name="update_failed">فشل التحديث. ستتم إعادة المحاولة تلقائيًا.</string>
+    <string name="update_failed">تعذّر تنزيل التحديث. عد إلى التطبيق لاحقًا لإعادة المحاولة.</string>
     <string name="app_updated_snackbar">تم تحديث التطبيق</string>
 
     <!-- AppFunctions -->

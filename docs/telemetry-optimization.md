@@ -10,7 +10,7 @@
 
 Release builds running under **Firebase Test Lab** and the **Play Console pre-launch report robot** (which runs on Test Lab) would otherwise count as real users. That inflates every production metric (installs, sessions, `rootCheckStarted` / `rootCheckCompleted`) and surfaces bogus devices and locales.
 
-So TelemetryDeck **test mode** is on for `BuildConfig.DEBUG` builds and for any device where `com.iboalali.telemetry:core` detects Test Lab. Detection reads Google's documented `firebase.test.lab` system setting and **fails open**: any read failure means `false`, so an odd device is treated as a real user rather than misfiled. Test-mode signals are kept out of all production charts (including the premade dashboards) and stay visible through the dashboard's Test Mode toggle.
+So TelemetryDeck **test mode** is on for `BuildConfig.DEBUG` builds and for any device where `com.iboalali.telemetry:core` detects Test Lab. Detection reads Google's documented `firebase.test.lab` system setting and **fails open**: any read failure means `false`, so an odd device is treated as a real user rather than misfiled. Baseline Profile and macrobenchmark runs are flagged too, on any device: the `nonMinified*` and `benchmark*` build types the Baseline Profile plugin adds set `BuildConfig.BENCHMARK_BUILD` (see `app/build.gradle.kts`), and `Analytics` treats that like a debug build. Test-mode signals are kept out of all production charts (including the premade dashboards) and stay visible through the dashboard's Test Mode toggle.
 
 Why test mode rather than the alternatives:
 

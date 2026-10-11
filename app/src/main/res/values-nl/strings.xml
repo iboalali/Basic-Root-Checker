@@ -4,7 +4,7 @@
 
     <!-- Main Strings-->
     <string name="textView_Disclaimer"><![CDATA[Deze app zal je apparaat <b>NIET</b> rooten.<br>Deze app laat alleen zien of je apparaat root-toegang heeft.]]></string>
-    <string name="textView_checkForRoot">Tik op de \"#\"-knop rechtsonder om de rootstatus te controleren</string>
+    <string name="textView_checkForRoot">Tik op de \"#\"-knop om de rootstatus te controleren</string>
     <string name="rootAvailable">Je apparaat heeft root-toegang</string>
     <string name="rootUnknown">Kon de rootstatus van je apparaat niet bepalen</string>
     <string name="rootNotAvailable">Je apparaat heeft geen root-toegang</string>
@@ -21,7 +21,7 @@
 
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Anonieme gebruiksgegevens delen</string>
-    <string name="settings_telemetry_description">Helpt de app te verbeteren via TelemetryDeck. Als dit aanstaat, gaat het in bij de volgende start van de app.</string>
+    <string name="settings_telemetry_description">Helpt de app te verbeteren via TelemetryDeck.</string>
     <string name="settings_reset_identity_title">Analyse-identiteit opnieuw instellen</string>
     <string name="settings_reset_identity_description">Begin met een nieuwe anonieme ID, zodat toekomstige gebruiksgegevens niet te koppelen zijn aan wat eerder is gedeeld.</string>
     <string name="settings_reset_identity_dialog_message">Er wordt een nieuwe anonieme identificatie aangemaakt. Toekomstige gebruiksgegevens worden niet gekoppeld aan eerder gedeelde gegevens. Dit kan niet ongedaan worden gemaakt.</string>
@@ -43,6 +43,8 @@
     <string name="tip_tier_medium">Middelgrote fooi</string>
     <string name="tip_tier_large">Grote fooi</string>
     <string name="tip_jar_loading">Fooiopties laden…</string>
+    <string name="tip_jar_load_failed">Fooiopties konden niet worden geladen. Controleer je verbinding en probeer het opnieuw.</string>
+    <string name="tip_jar_retry">Opnieuw proberen</string>
     <string name="tip_jar_thanks">Bedankt voor je steun!</string>
     <string name="tip_jar_pending">Je fooi is nog in behandeling. Hij wordt voltooid zodra je betaling is goedgekeurd.</string>
     <string name="tip_jar_cleared">Je openstaande fooi is voltooid. Bedankt voor je steun!</string>
@@ -57,11 +59,7 @@
     <string name="string_checking_for_root">Controleren op root…</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
-        Deze app root je telefoon NIET.\n
-        Deze app vereist ROOT, gebruik op eigen risico.\n
-        Deze app verzamelt geen persoonlijke gegevens.\n\n\n
-        Neem contact met me op:</string>
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\nDeze app root je telefoon NIET.\nDeze app vereist ROOT, gebruik op eigen risico.\nDeze app verzamelt geen persoonlijke gegevens.\n\n\nNeem contact met me op:</string>
     <string name="about_link_email">E-mail</string>
     <string name="about_link_website">Website</string>
     <string name="about_link_rate_this_app">Deze app beoordelen</string>
@@ -93,7 +91,7 @@
     <string name="update_progress_megabytes">%1$s / %2$s MB</string>
     <string name="update_downloaded_title">Update gedownload</string>
     <string name="update_action_install">Nu installeren</string>
-    <string name="update_failed">Update mislukt. Er wordt automatisch opnieuw geprobeerd.</string>
+    <string name="update_failed">De update kon niet worden gedownload. Open de app later opnieuw om het nog eens te proberen.</string>
     <string name="app_updated_snackbar">App is bijgewerkt</string>
 
     <!-- Other Apps -->

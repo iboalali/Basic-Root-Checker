@@ -35,7 +35,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -61,6 +60,9 @@ class GPlayBillingController(context: Context) : BillingController {
 
     private val _products = MutableStateFlow<ImmutableList<TipProduct>>(persistentListOf())
     override val products: StateFlow<ImmutableList<TipProduct>> = _products.asStateFlow()
+
+    private val _productsLoadFailed = MutableStateFlow(false)
+    override val productsLoadFailed: StateFlow<Boolean> = _productsLoadFailed.asStateFlow()
 
     // A Channel (not a SharedFlow) so an event emitted while the screen is briefly STOPPED
     // (e.g. behind the Play purchase sheet) is queued and delivered when the collector
@@ -107,6 +109,12 @@ class GPlayBillingController(context: Context) : BillingController {
                     purchaseInFlight = false
                     Analytics.trackTipCanceled(lastLaunchedTier?.name ?: "unknown")
                 }
+                BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
+                    // Our owned set was stale (record already bought). Recover and let the
+                    // user retry against the repeat variant.
+                    purchaseInFlight = false
+                    reconcilePurchases()
+                }
                 else -> {
                     Log.w(TAG, "Purchase update failed: ${result.responseCode} ${result.debugMessage}")
                     purchaseInFlight = false
@@ -148,18 +156,29 @@ class GPlayBillingController(context: Context) : BillingController {
         activity = null
     }
 
+    /**
+     * True while a [BillingClient.startConnection] is outstanding. A second call during that
+     * window is answered with an error rather than joining the first, which would mark the
+     * products as failed while the real connection is still on its way.
+     */
+    private var connecting = false
+
     private fun connect() {
         if (billingClient.isReady) {
             onConnected()
             return
         }
+        if (connecting) return
+        connecting = true
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(result: BillingResult) {
+                connecting = false
                 if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                     onConnected()
                 } else {
                     Log.w(TAG, "Billing setup failed: ${result.responseCode} ${result.debugMessage}")
                     Analytics.trackBillingUnavailable(result.responseCode.toString())
+                    _productsLoadFailed.value = true
                 }
             }
 
@@ -189,13 +208,21 @@ class GPlayBillingController(context: Context) : BillingController {
             if (result.responseCode != BillingClient.BillingResponseCode.OK) {
                 Log.w(TAG, "queryProductDetails failed: ${result.responseCode} ${result.debugMessage}")
                 Analytics.trackTipProductsUnavailable(result.responseCode.toString())
+                _productsLoadFailed.value = true
                 return@queryProductDetailsAsync
             }
             detailsById.clear()
             queryResult.productDetailsList.forEach { detailsById[it.productId] = it }
             if (detailsById.isEmpty()) Analytics.trackTipProductsUnavailable("empty")
             rebuildProducts()
+            _productsLoadFailed.value = _products.value.isEmpty()
         }
+    }
+
+    override fun retryProducts() {
+        if (!isAvailable) return
+        _productsLoadFailed.value = false
+        connect()
     }
 
     /**
@@ -229,21 +256,11 @@ class GPlayBillingController(context: Context) : BillingController {
             .setProductDetailsParamsList(listOf(productParams))
             .build()
 
+        // Play Billing also posts every non-OK launch result to purchasesUpdatedListener (with
+        // null purchases), so failures are handled there only, or they would be reported twice.
         val result = billingClient.launchBillingFlow(activity, flowParams)
-        when (result.responseCode) {
-            BillingClient.BillingResponseCode.OK -> {
-                purchaseInFlight = true
-            }
-            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
-                // Our owned set was stale (record already bought). Recover and let the
-                // user retry against the repeat variant.
-                reconcilePurchases()
-            }
-            else -> {
-                Log.w(TAG, "launchBillingFlow failed: ${result.responseCode} ${result.debugMessage}")
-                _events.trySend(TipEvent.Error)
-                Analytics.trackTipFailed(formatBillingResult(result))
-            }
+        if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+            purchaseInFlight = true
         }
     }
 
@@ -285,14 +302,15 @@ class GPlayBillingController(context: Context) : BillingController {
 
     /**
      * If [purchase] is one we previously recorded as pending, announce the late clear
-     * app-wide and forget the token, so repeated reconciles don't re-announce it.
+     * app-wide and forget the token, so repeated reconciles don't re-announce it. The fresh
+     * purchase and a reconcile can both reach here for the same token at nearly the same
+     * time; only the call that removes the token announces.
      */
     private fun announceIfLateClear(purchase: Purchase, tier: TipTier) {
         val token = purchase.purchaseToken
         scope.launch {
-            if (token in prefs.pendingTipTokens.first()) {
+            if (prefs.removePendingTipToken(token)) {
                 _tipCleared.trySend(tier)
-                prefs.clearPendingTipTokens(setOf(token))
             }
         }
     }

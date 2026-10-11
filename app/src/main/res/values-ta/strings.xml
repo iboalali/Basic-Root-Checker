@@ -4,7 +4,7 @@
 
     <!-- Main Strings-->
     <string name="textView_Disclaimer"><![CDATA[இந்த ஆப்ஸ் உங்கள் சாதனத்தை <b>ரூட் செய்யாது</b>.<br>உங்கள் சாதனத்தில் ரூட் அணுகல் உள்ளதா என்பதை மட்டுமே இது காட்டும்.]]></string>
-    <string name="textView_checkForRoot">ரூட் நிலையைச் சரிபார்க்க கீழ் வலதுபுறத்தில் உள்ள \"#\" பொத்தானைத் தட்டவும்</string>
+    <string name="textView_checkForRoot">ரூட் நிலையைச் சரிபார்க்க \"#\" பொத்தானைத் தட்டவும்</string>
     <string name="rootAvailable">உங்கள் சாதனத்தில் ரூட் அணுகல் உள்ளது</string>
     <string name="rootUnknown">உங்கள் சாதனத்தின் ரூட் நிலையைப் பெற முடியவில்லை</string>
     <string name="rootNotAvailable">உங்கள் சாதனத்தில் ரூட் அணுகல் இல்லை</string>
@@ -21,7 +21,7 @@
 
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">அநாமதேய பயன்பாட்டுத் தரவைப் பகிர்</string>
-    <string name="settings_telemetry_description">TelemetryDeck மூலம் ஆப்ஸை மேம்படுத்த உதவுகிறது. இயக்கினால், அடுத்த முறை ஆப்ஸ் தொடங்கும்போது நடைமுறைக்கு வரும்.</string>
+    <string name="settings_telemetry_description">TelemetryDeck மூலம் ஆப்ஸை மேம்படுத்த உதவுகிறது.</string>
     <string name="settings_reset_identity_title">பகுப்பாய்வு அடையாளத்தை மீட்டமை</string>
     <string name="settings_reset_identity_description">புதிய அநாமதேய ID-ஐத் தொடங்குங்கள், இதனால் இனி சேகரிக்கப்படும் பயன்பாட்டுத் தரவை முன்பு பகிர்ந்ததுடன் இணைக்க முடியாது.</string>
     <string name="settings_reset_identity_dialog_message">புதிய அநாமதேய அடையாளங்காட்டி உருவாக்கப்படும். இனி சேகரிக்கப்படும் பயன்பாட்டுத் தரவு, இதற்கு முன் பகிரப்பட்ட எதனுடனும் இணைக்கப்படாது. இதைச் செயல்தவிர்க்க முடியாது.</string>
@@ -43,6 +43,8 @@
     <string name="tip_tier_medium">நடுத்தர டிப்</string>
     <string name="tip_tier_large">பெரிய டிப்</string>
     <string name="tip_jar_loading">டிப் விருப்பங்கள் ஏற்றப்படுகின்றன…</string>
+    <string name="tip_jar_load_failed">டிப் விருப்பங்களை ஏற்ற முடியவில்லை. உங்கள் இணைப்பைச் சரிபார்த்து மீண்டும் முயலவும்.</string>
+    <string name="tip_jar_retry">மீண்டும் முயல்</string>
     <string name="tip_jar_thanks">உங்கள் ஆதரவுக்கு நன்றி!</string>
     <string name="tip_jar_pending">உங்கள் டிப் நிலுவையில் உள்ளது. உங்கள் கட்டணம் அங்கீகரிக்கப்பட்டதும் அது நிறைவடையும்.</string>
     <string name="tip_jar_cleared">நிலுவையில் இருந்த உங்கள் டிப் நிறைவடைந்தது. உங்கள் ஆதரவுக்கு நன்றி!</string>
@@ -57,11 +59,7 @@
     <string name="string_checking_for_root">ரூட் சரிபார்க்கப்படுகிறது…</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
-        இந்த ஆப்ஸ் உங்கள் ஃபோனை ரூட் செய்யாது.\n
-        இந்த ஆப்ஸுக்கு ROOT தேவை, உங்கள் சொந்தப் பொறுப்பில் பயன்படுத்தவும்.\n
-        இந்த ஆப்ஸ் எந்தத் தனிப்பட்ட தகவலையும் சேகரிக்காது.\n\n\n
-        என்னைத் தொடர்பு கொள்ள:</string>
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\nஇந்த ஆப்ஸ் உங்கள் ஃபோனை ரூட் செய்யாது.\nஇந்த ஆப்ஸுக்கு ROOT தேவை, உங்கள் சொந்தப் பொறுப்பில் பயன்படுத்தவும்.\nஇந்த ஆப்ஸ் எந்தத் தனிப்பட்ட தகவலையும் சேகரிக்காது.\n\n\nஎன்னைத் தொடர்பு கொள்ள:</string>
     <string name="about_link_email">மின்னஞ்சல்</string>
     <string name="about_link_website">இணையதளம்</string>
     <string name="about_link_rate_this_app">இந்த ஆப்ஸை மதிப்பிடு</string>
@@ -93,7 +91,7 @@
     <string name="update_progress_megabytes">%1$s / %2$s MB</string>
     <string name="update_downloaded_title">புதுப்பிப்பு பதிவிறக்கப்பட்டது</string>
     <string name="update_action_install">இப்போது நிறுவு</string>
-    <string name="update_failed">புதுப்பிப்பு தோல்வியடைந்தது. தானாக மீண்டும் முயற்சிக்கப்படும்.</string>
+    <string name="update_failed">புதுப்பிப்பைப் பதிவிறக்க முடியவில்லை. மீண்டும் முயல, பிறகு ஆப்ஸுக்குத் திரும்பவும்.</string>
     <string name="app_updated_snackbar">ஆப்ஸ் புதுப்பிக்கப்பட்டது</string>
 
     <!-- Other Apps -->

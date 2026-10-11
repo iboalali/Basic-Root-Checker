@@ -36,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,6 +105,7 @@ fun SettingsScreen(
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
     val currentLanguageTag = AppLanguage.currentTag(LocalContext.current)
     val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
+    val tipProductsLoadFailed by viewModel.tipProductsLoadFailed.collectAsStateWithLifecycle()
     val supporterTiers by viewModel.supporterTiers.collectAsStateWithLifecycle()
 
     SettingsScreenContent(
@@ -118,6 +120,8 @@ fun SettingsScreen(
         onLanguageSelected = viewModel::setLanguage,
         tipJarAvailable = viewModel.tipJarAvailable,
         tipProducts = tipProducts,
+        tipProductsLoadFailed = tipProductsLoadFailed,
+        onRetryTipProducts = viewModel::onRetryTipProducts,
         supporterTiers = supporterTiers,
         onTipJarOpened = viewModel::onTipJarOpened,
         onTipSelected = viewModel::onTipSelected,
@@ -139,6 +143,8 @@ fun SettingsScreenContent(
     onLanguageSelected: (String?) -> Unit,
     tipJarAvailable: Boolean,
     tipProducts: ImmutableList<TipProduct>,
+    tipProductsLoadFailed: Boolean = false,
+    onRetryTipProducts: () -> Unit = {},
     supporterTiers: ImmutableSet<TipTier>,
     onTipJarOpened: () -> Unit,
     onTipSelected: (TipTier) -> Unit,
@@ -146,10 +152,10 @@ fun SettingsScreenContent(
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
-    var showThemeDialog by remember { mutableStateOf(false) }
-    var showLanguageDialog by remember { mutableStateOf(false) }
-    var showTipDialog by remember { mutableStateOf(false) }
-    var showResetIdentityDialog by remember { mutableStateOf(false) }
+    var showThemeDialog by rememberSaveable { mutableStateOf(false) }
+    var showLanguageDialog by rememberSaveable { mutableStateOf(false) }
+    var showTipDialog by rememberSaveable { mutableStateOf(false) }
+    var showResetIdentityDialog by rememberSaveable { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val resetIdentityDoneMessage = stringResource(R.string.settings_reset_identity_done)
@@ -509,6 +515,8 @@ fun SettingsScreenContent(
     if (showTipDialog) {
         TipJarDialog(
             products = tipProducts,
+            loadFailed = tipProductsLoadFailed,
+            onRetry = onRetryTipProducts,
             onSelect = {
                 showTipDialog = false
                 onTipSelected(it)
@@ -558,11 +566,14 @@ private fun LanguagePickerDialog(
     onSelect: (String?) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val selectedTag = AppLanguage.bestSupportedTag(currentTag)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.settings_language_title)) },
         text = {
-            Column(modifier = Modifier.selectableGroup()) {
+            Column(
+                modifier = Modifier.selectableGroup().verticalScroll(rememberScrollState())
+            ) {
                 SettingOptionRow(
                     label = stringResource(R.string.language_system_default),
                     selected = currentTag == null,
@@ -571,7 +582,7 @@ private fun LanguagePickerDialog(
                 AppLanguage.SUPPORTED_TAGS.forEach { tag ->
                     SettingOptionRow(
                         label = AppLanguage.displayName(tag),
-                        selected = currentTag == tag,
+                        selected = selectedTag == tag,
                         onClick = { onSelect(tag) },
                     )
                 }
@@ -605,7 +616,9 @@ private fun ThemePickerDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.settings_theme_title)) },
         text = {
-            Column(modifier = Modifier.selectableGroup()) {
+            Column(
+                modifier = Modifier.selectableGroup().verticalScroll(rememberScrollState())
+            ) {
                 ThemeMode.entries.forEach { mode ->
                     SettingOptionRow(
                         label = themeModeLabel(mode),

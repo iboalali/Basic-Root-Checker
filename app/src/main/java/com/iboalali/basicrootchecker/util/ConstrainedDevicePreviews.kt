@@ -3,7 +3,7 @@ package com.iboalali.basicrootchecker.util
 import androidx.compose.runtime.Composable
 import com.iboalali.basicrootchecker.data.RootProvider
 import com.iboalali.ui.theme.ThemeMode
-import com.iboalali.basicrootchecker.ui.about.AboutScreen
+import com.iboalali.basicrootchecker.ui.about.AboutScreenContent
 import com.iboalali.basicrootchecker.ui.license.LicenseScreen
 import com.iboalali.basicrootchecker.ui.main.MainScreenContent
 import com.iboalali.basicrootchecker.ui.main.MainUiState
@@ -24,7 +24,7 @@ private fun MainScreenConstrainedPreview() {
                     rootStatus = RootStatus.NOT_CHECKED,
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},
@@ -50,7 +50,7 @@ private fun MainScreenRootedConstrainedPreview() {
                     rootProviderVersion = "27.0",
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},
@@ -75,7 +75,7 @@ private fun MainScreenNotGrantedConstrainedPreview() {
                     rootProvider = RootProvider.MAGISK,
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},
@@ -93,7 +93,7 @@ private fun MainScreenNotGrantedConstrainedPreview() {
 @Composable
 private fun AboutScreenConstrainedPreview() {
     BasicRootCheckerTheme {
-        AboutScreen(onNavigateBack = {})
+        AboutScreenContent(otherApps = persistentListOf(), onNavigateBack = {})
     }
 }
 

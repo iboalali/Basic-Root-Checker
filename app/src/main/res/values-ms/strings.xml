@@ -4,7 +4,7 @@
 
     <!-- Main Strings-->
     <string name="textView_Disclaimer"><![CDATA[Aplikasi ini <b>TIDAK</b> akan me-root peranti anda.<br>Aplikasi ini hanya menunjukkan sama ada peranti anda mempunyai akses root.]]></string>
-    <string name="textView_checkForRoot">Ketik butang \"#\" di bahagian bawah kanan untuk menyemak status root</string>
+    <string name="textView_checkForRoot">Ketik butang \"#\" untuk menyemak status root</string>
     <string name="rootAvailable">Peranti anda mempunyai akses root</string>
     <string name="rootUnknown">Tidak dapat memperoleh status root peranti anda</string>
     <string name="rootNotAvailable">Peranti anda tiada akses root</string>
@@ -21,7 +21,7 @@
 
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Kongsi data penggunaan tanpa nama</string>
-    <string name="settings_telemetry_description">Membantu menambah baik aplikasi melalui TelemetryDeck. Apabila dihidupkan, ia berkuat kuasa pada pelancaran aplikasi seterusnya.</string>
+    <string name="settings_telemetry_description">Membantu menambah baik aplikasi melalui TelemetryDeck.</string>
     <string name="settings_reset_identity_title">Tetapkan semula identiti analitik</string>
     <string name="settings_reset_identity_description">Mulakan ID tanpa nama yang baharu supaya data penggunaan akan datang tidak boleh dikaitkan dengan apa yang telah dikongsi sebelum ini.</string>
     <string name="settings_reset_identity_dialog_message">Pengecam tanpa nama yang baharu akan dijana. Data penggunaan akan datang tidak akan dikaitkan dengan apa-apa yang dikongsi sebelum ini. Tindakan ini tidak boleh dibatalkan.</string>
@@ -43,6 +43,8 @@
     <string name="tip_tier_medium">Tip sederhana</string>
     <string name="tip_tier_large">Tip besar</string>
     <string name="tip_jar_loading">Memuatkan pilihan tip…</string>
+    <string name="tip_jar_load_failed">Pilihan tip tidak dapat dimuatkan. Semak sambungan anda dan cuba lagi.</string>
+    <string name="tip_jar_retry">Cuba lagi</string>
     <string name="tip_jar_thanks">Terima kasih atas sokongan anda!</string>
     <string name="tip_jar_pending">Tip anda masih menunggu. Ia akan selesai sebaik sahaja pembayaran anda diluluskan.</string>
     <string name="tip_jar_cleared">Tip anda yang tertunggak telah selesai. Terima kasih atas sokongan anda!</string>
@@ -57,11 +59,7 @@
     <string name="string_checking_for_root">Menyemak root…</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
-        Aplikasi ini TIDAK me-root telefon anda.\n
-        Aplikasi ini memerlukan ROOT, gunakan atas risiko anda sendiri.\n
-        Aplikasi ini TIDAK mengumpul sebarang maklumat peribadi.\n\n\n
-        Hubungi saya di:</string>
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\nAplikasi ini TIDAK me-root telefon anda.\nAplikasi ini memerlukan ROOT, gunakan atas risiko anda sendiri.\nAplikasi ini TIDAK mengumpul sebarang maklumat peribadi.\n\n\nHubungi saya di:</string>
     <string name="about_link_email">E-mel</string>
     <string name="about_link_website">Laman web</string>
     <string name="about_link_rate_this_app">Nilai aplikasi ini</string>
@@ -93,7 +91,7 @@
     <string name="update_progress_megabytes">%1$s / %2$s MB</string>
     <string name="update_downloaded_title">Kemas kini dimuat turun</string>
     <string name="update_action_install">Pasang sekarang</string>
-    <string name="update_failed">Kemas kini gagal. Ia akan dicuba semula secara automatik.</string>
+    <string name="update_failed">Kemas kini tidak dapat dimuat turun. Kembali ke aplikasi kemudian untuk mencuba lagi.</string>
     <string name="app_updated_snackbar">Aplikasi telah dikemas kini</string>
 
     <!-- Other Apps -->

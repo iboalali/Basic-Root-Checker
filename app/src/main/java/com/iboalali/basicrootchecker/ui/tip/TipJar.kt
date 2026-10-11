@@ -19,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,7 +37,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * The tip-jar picker, shared by every surface that can start a tip: the Settings entry and the main
  * screen's support card (see `SupportCard`). One dialog means one place that handles the
- * not-yet-loaded price state.
+ * not-yet-loaded and failed-to-load price states. Opening it after a failed load retries at once.
  *
  * Callers are expected to dismiss on selection. Play's own purchase sheet takes over from there,
  * and the outcome is announced app-wide by `AppRoot`, not by whichever screen opened this.
@@ -44,13 +45,23 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun TipJarDialog(
     products: ImmutableList<TipProduct>,
+    loadFailed: Boolean,
+    onRetry: () -> Unit,
     onSelect: (TipTier) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    LaunchedEffect(Unit) { if (products.isEmpty() && loadFailed) onRetry() }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.tip_jar_dialog_title)) },
-        text = { TipJarTiers(products = products, onSelect = onSelect) },
+        text = {
+            TipJarTiers(
+                products = products,
+                loadFailed = loadFailed,
+                onRetry = onRetry,
+                onSelect = onSelect,
+            )
+        },
         confirmButton = {
             TextButton(onClick = rememberHapticClick(onDismiss)) {
                 Text(stringResource(android.R.string.cancel))
@@ -62,9 +73,22 @@ internal fun TipJarDialog(
 @Composable
 private fun TipJarTiers(
     products: ImmutableList<TipProduct>,
+    loadFailed: Boolean,
+    onRetry: () -> Unit,
     onSelect: (TipTier) -> Unit,
 ) {
-    if (products.isEmpty()) {
+    if (products.isEmpty() && loadFailed) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = stringResource(R.string.tip_jar_load_failed),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Spacer(Modifier.height(8.dp))
+            TextButton(onClick = rememberHapticClick(onRetry)) {
+                Text(stringResource(R.string.tip_jar_retry))
+            }
+        }
+    } else if (products.isEmpty()) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -116,7 +140,10 @@ private fun TipJarTiers(
  * dialog-shaped [Surface] instead.
  */
 @Composable
-private fun TipJarDialogPreviewSurface(products: ImmutableList<TipProduct>) {
+private fun TipJarDialogPreviewSurface(
+    products: ImmutableList<TipProduct>,
+    loadFailed: Boolean = false,
+) {
     Surface(
         shape = RoundedCornerShape(28.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -128,7 +155,7 @@ private fun TipJarDialogPreviewSurface(products: ImmutableList<TipProduct>) {
                 style = MaterialTheme.typography.headlineSmall,
             )
             Spacer(Modifier.height(16.dp))
-            TipJarTiers(products = products, onSelect = {})
+            TipJarTiers(products = products, loadFailed = loadFailed, onRetry = {}, onSelect = {})
             Spacer(Modifier.height(8.dp))
             TextButton(onClick = {}, modifier = Modifier.align(Alignment.End)) {
                 Text(stringResource(android.R.string.cancel))
@@ -158,5 +185,13 @@ private fun TipJarDialogPreview() {
 private fun TipJarDialogLoadingPreview() {
     BasicRootCheckerTheme {
         TipJarDialogPreviewSurface(products = persistentListOf())
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun TipJarDialogLoadFailedPreview() {
+    BasicRootCheckerTheme {
+        TipJarDialogPreviewSurface(products = persistentListOf(), loadFailed = true)
     }
 }

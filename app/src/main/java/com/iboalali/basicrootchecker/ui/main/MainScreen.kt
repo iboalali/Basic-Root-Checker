@@ -44,6 +44,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -104,6 +105,7 @@ fun MainScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val tipProducts by viewModel.tipProducts.collectAsStateWithLifecycle()
+    val tipProductsLoadFailed by viewModel.tipProductsLoadFailed.collectAsStateWithLifecycle()
 
     // Report the meaningful first frame for accurate time-to-fully-drawn (TTFD): the device-info
     // is populated synchronously in the ViewModel's init, so this fires as soon as the main screen
@@ -132,6 +134,8 @@ fun MainScreen(
         onNavigateToLicense = onNavigateToLicense,
         onNavigateToSettings = onNavigateToSettings,
         tipProducts = tipProducts,
+        tipProductsLoadFailed = tipProductsLoadFailed,
+        onRetryTipProducts = viewModel::onRetryTipProducts,
         onSupportPromptShown = viewModel::onSupportPromptShown,
         onSupportPromptOpened = viewModel::onSupportPromptOpened,
         onSupportPromptDismissed = viewModel::onSupportPromptDismissed,
@@ -156,6 +160,8 @@ fun MainScreenContent(
     onResultShown: (RootStatus) -> Unit = {},
     onDemoUpdateChoice: (DebugUpdateChoice) -> Unit = {},
     tipProducts: ImmutableList<TipProduct> = persistentListOf(),
+    tipProductsLoadFailed: Boolean = false,
+    onRetryTipProducts: () -> Unit = {},
     onSupportPromptShown: () -> Unit = {},
     onSupportPromptOpened: () -> Unit = {},
     onSupportPromptDismissed: () -> Unit = {},
@@ -171,12 +177,11 @@ fun MainScreenContent(
     var licenseItemRect by remember { mutableStateOf<Rect?>(null) }
     var settingsItemRect by remember { mutableStateOf<Rect?>(null) }
     var aboutItemRect by remember { mutableStateOf<Rect?>(null) }
-    var showDemoDialog by remember { mutableStateOf(false) }
-    var showUpdateDemoDialog by remember { mutableStateOf(false) }
-    var showTipDialog by remember { mutableStateOf(false) }
+    var showDemoDialog by rememberSaveable { mutableStateOf(false) }
+    var showUpdateDemoDialog by rememberSaveable { mutableStateOf(false) }
+    var showTipDialog by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    val checkingText = stringResource(R.string.string_checking_for_root)
     val copiedText = stringResource(R.string.toast_content_copied)
     val appUpdatedText = stringResource(R.string.app_updated_snackbar)
 
@@ -312,9 +317,9 @@ fun MainScreenContent(
             FloatingActionButton(
                 onClick =
                     rememberHapticClick {
-                        // An armed result takes the RELEASE path (snackbar, spinner, result
-                        // animation, outcome haptic) with only the answer decided in advance, so
-                        // a recording shows what a real user sees. The picker is the interactive
+                        // An armed result takes the RELEASE path (spinner, result animation,
+                        // outcome haptic) with only the answer decided in advance, so a recording
+                        // shows what a real user sees. The picker is the interactive
                         // fallback when nothing was armed.
                         //
                         // Except while recording. On a genuinely rooted emulator the answer does
@@ -322,18 +327,12 @@ fun MainScreenContent(
                         // one thing the armed path exists to avoid.
                         val armed = if (BuildConfig.DEBUG) DemoRootOverride.armed else null
                         when {
-                            armed != null -> {
-                                onCheckRootDemo(armed)
-                                scope.launch { snackbarHostState.showSnackbar(checkingText) }
-                            }
+                            armed != null -> onCheckRootDemo(armed)
 
                             BuildConfig.DEBUG && !DemoDeviceOverride.recording ->
                                 showDemoDialog = true
 
-                            else -> {
-                                onCheckRoot()
-                                scope.launch { snackbarHostState.showSnackbar(checkingText) }
-                            }
+                            else -> onCheckRoot()
                         }
                     },
                 modifier = Modifier.testTag("check_fab"),
@@ -512,9 +511,6 @@ fun MainScreenContent(
                                         if (BuildConfig.DEBUG) DemoRootOverride.armed else null
                                     if (armed != null) {
                                         onCheckRootDemo(armed)
-                                        scope.launch {
-                                            snackbarHostState.showSnackbar(checkingText)
-                                        }
                                     } else {
                                         onRequestRoot()
                                     }
@@ -600,7 +596,9 @@ fun MainScreenContent(
                     }
                     DeviceInfoText(
                         label = stringResource(R.string.label_android_version),
-                        text = uiState.androidVersion,
+                        text =
+                            "${stringResource(R.string.textViewAndroidVersion)} " +
+                                uiState.androidVersionName,
                         contentDescription =
                             stringResource(R.string.content_description_android_version),
                         onCopied = { scope.launch { snackbarHostState.showSnackbar(copiedText) } },
@@ -635,6 +633,8 @@ fun MainScreenContent(
         // app-wide by AppRoot rather than by this screen.
         TipJarDialog(
             products = tipProducts,
+            loadFailed = tipProductsLoadFailed,
+            onRetry = onRetryTipProducts,
             onSelect = {
                 showTipDialog = false
                 onTipSelected(it)
@@ -648,12 +648,10 @@ fun MainScreenContent(
             onSelectResult = { result ->
                 showDemoDialog = false
                 onCheckRootDemo(result)
-                scope.launch { snackbarHostState.showSnackbar(checkingText) }
             },
             onRealCheck = {
                 showDemoDialog = false
                 onCheckRoot()
-                scope.launch { snackbarHostState.showSnackbar(checkingText) }
             },
             onDismiss = { showDemoDialog = false },
         )
@@ -728,7 +726,7 @@ private fun MainScreenNotCheckedPreview() {
                     rootStatus = RootStatus.NOT_CHECKED,
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},
@@ -752,7 +750,7 @@ private fun MainScreenCheckingPreview() {
                     rootStatus = RootStatus.CHECKING,
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},
@@ -778,7 +776,7 @@ private fun MainScreenRootedPreview() {
                     rootProviderVersion = "27.0",
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},
@@ -802,7 +800,7 @@ private fun MainScreenLocalesPreview() {
                     rootStatus = RootStatus.NOT_CHECKED,
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},
@@ -828,7 +826,7 @@ private fun MainScreenNotGrantedPreview() {
                     rootManager = RootManager.SUKISU_ULTRA,
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},
@@ -855,7 +853,7 @@ private fun MainScreenNotRootedPreview() {
                     rootStatus = RootStatus.NOT_ROOTED,
                     deviceMarketingName = "Pixel 8 Pro",
                     deviceModelName = "husky",
-                    androidVersion = "Android 16",
+                    androidVersionName = "16",
                 ),
             onCheckRoot = {},
             onRequestRoot = {},

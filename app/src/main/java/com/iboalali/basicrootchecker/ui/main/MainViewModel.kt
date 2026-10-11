@@ -4,10 +4,10 @@ import android.app.Application
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.iboalali.basicrootchecker.BasicRootCheckerApplication
 import com.iboalali.basicrootchecker.BuildConfig
-import com.iboalali.basicrootchecker.R
 import com.iboalali.basicrootchecker.analytics.Analytics
 import com.iboalali.basicrootchecker.billing.TipProduct
 import com.iboalali.basicrootchecker.billing.TipTier
@@ -51,14 +51,18 @@ data class MainUiState(
     val rootProviderVersion: String? = null,
     val deviceMarketingName: String = "",
     val deviceModelName: String = "",
-    val androidVersion: String = "",
+    /** The version number alone; the UI prefixes the localized "Android". */
+    val androidVersionName: String = "",
     val updateStatus: AppUpdateEvent = AppUpdateEvent.None,
     val appUpdatedShown: Boolean = false,
     /** Whether the tip-jar support card is offered (see [SupportGate]). */
     val supportPromptVisible: Boolean = false,
 )
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(
+    application: Application,
+    private val savedStateHandle: SavedStateHandle,
+) : AndroidViewModel(application) {
 
     private val appUpdateController =
         (application as BasicRootCheckerApplication).appUpdateController
@@ -71,14 +75,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val billing = (application as BasicRootCheckerApplication).billingController
 
-    private val _uiState = MutableStateFlow(MainUiState())
+    private val _uiState = MutableStateFlow(SavedRootResult.restore(savedStateHandle, MainUiState()))
 
     /** The result whose outcome haptic is waiting for the status icon (see [onResultShown]). */
     private var pendingResultHaptic: RootStatus? = null
+
+    private var rootCheckJob: Job? = null
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
     /** Tip offers for the support card's dialog. Empty in FOSS builds and until Play prices load. */
     val tipProducts: StateFlow<ImmutableList<TipProduct>> = billing.products
+    val tipProductsLoadFailed: StateFlow<Boolean> = billing.productsLoadFailed
 
     init {
         loadDeviceInfo()
@@ -106,9 +113,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun loadDeviceInfo() {
-        val app = getApplication<Application>()
-        val resources = app.resources
-
         // A debug build may have been launched with a device armed for a recording; see
         // DemoDeviceOverride for why the emulator's own name is the wrong thing to film.
         val demoName = if (BuildConfig.DEBUG) DemoDeviceOverride.name else null
@@ -118,13 +122,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             it.copy(
                 deviceMarketingName = demoName ?: DeviceMarketingNames.getSingleName(),
                 deviceModelName = demoModel ?: Build.DEVICE,
-                androidVersion = "${resources.getString(R.string.textViewAndroidVersion)} ${DeviceInfo.getAndroidVersionName()}",
+                androidVersionName = DeviceInfo.getAndroidVersionName(),
             )
         }
     }
 
     fun checkRoot() {
-        viewModelScope.launch {
+        launchRootCheck {
             val hapticsOn = userPreferences.hapticsEnabled.first()
             startRootCheck()
             if (hapticsOn) haptics.startCheckingRamp()
@@ -138,7 +142,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun requestRoot() {
-        viewModelScope.launch {
+        launchRootCheck {
             val hapticsOn = userPreferences.hapticsEnabled.first()
             startRootCheck()
             if (hapticsOn) haptics.startCheckingRamp()
@@ -264,6 +268,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
+    fun onRetryTipProducts() = billing.retryProducts()
+
     fun onTipSelected(tier: TipTier) {
         Analytics.trackTipSelected(tier.name)
         billing.launchPurchase(tier)
@@ -303,13 +309,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * the debug-gated demo dialog.
      */
     fun checkRootDemo(result: RootResult) {
-        viewModelScope.launch {
+        launchRootCheck {
             val hapticsOn = userPreferences.hapticsEnabled.first()
             startRootCheck()
             if (hapticsOn) haptics.startCheckingRamp()
             delay(1000)
             applyResult(result, hapticsOn)
         }
+    }
+
+    /** One check at a time: a tap while a check runs would count, prompt and buzz twice. */
+    private fun launchRootCheck(block: suspend () -> Unit) {
+        if (rootCheckJob?.isActive == true) return
+        rootCheckJob = viewModelScope.launch { block() }
     }
 
     private fun startRootCheck() {
@@ -349,6 +361,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 rootProviderVersion = resolved.version,
             )
         }
+        SavedRootResult.save(savedStateHandle, _uiState.value)
         Analytics.trackRootCheckResult(resolved.status.name)
         if (resolved.status == RootStatus.ROOTED) {
             Analytics.trackRootProvider(resolved.provider.name, resolved.manager?.name, resolved.version)

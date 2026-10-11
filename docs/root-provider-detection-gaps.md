@@ -79,7 +79,7 @@ Read the answer from the persisted record rather than off the screen. It is exac
 
 ```bash
 adb shell run-as com.iboalali.basicrootchecker.debug \
-  cat files/datastore/user_settings.preferences_pb | strings
+  cat files/datastore/root_check.preferences_pb | strings
 ```
 
 **All 17 ids in `PACKAGE_MANAGERS` were confirmed visible and correctly mapped this way on API 36 (2026-08-27).** This is the check that matters most: a package missing from the manifest's `<queries>`, or misspelled in either list, fails *silently* on API 30+ and looks exactly like a device with no root manager.
@@ -135,6 +135,8 @@ adb shell am force-stop com.iboalali.basicrootchecker    # between every flip, s
 ```
 
 This drives the real `suBinaryHit` signal and the `suBinaryHit -> OTHER` branch in [`classify`](../app/src/main/java/com/iboalali/basicrootchecker/data/RootChecker.kt), so it is worth more than a unit test with a hand-built `RootSignals`. Reading the result through the `checkRootStatus` AppFunction returns `status`, `provider` and `manager` in one call, and exercises the AppFunctions surface at the same time.
+
+A stock API 24 image starts in the first state with no setup: its `/system/xbin` is `drwxr-xr-x`, so `/system/xbin/su` is stat-able and a check reports `RootedNotGranted(OTHER)` by default. That is expected, not a false positive in the detector. To see `NotRooted` there, boot it the same way and apply the `chmod 750` line above.
 
 ### Force-stop between checks, or the rig lies
 

@@ -43,6 +43,8 @@ android {
         androidResources.localeFilters +=
             listOf("en", "ar", "de", "es", "ru", "nl", "zh", "ms", "ta")
         buildConfigField("String", "TELEMETRY_DECK_APP_ID", "\"613251CD-B223-443A-9583-3A18586FAB55\"")
+        // True only on the build types the Baseline Profile plugin adds; see androidComponents below.
+        buildConfigField("boolean", "BENCHMARK_BUILD", "false")
     }
     // Set on the release build type, so it covers every flavor: bundleGplayRelease and
     // bundleFossRelease both sign from this one config.
@@ -98,6 +100,21 @@ android {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+// The Baseline Profile plugin adds `nonMinified*` and `benchmark*` build types for profile capture
+// and macrobenchmarks. They are release builds (DEBUG is false) that run on physical devices too,
+// where the shared test-traffic detection sees a real user, so their telemetry is flagged here.
+androidComponents {
+    onVariants { variant ->
+        val buildType = variant.buildType.orEmpty()
+        if (buildType.startsWith("nonMinified") || buildType.startsWith("benchmark")) {
+            variant.buildConfigFields?.put(
+                "BENCHMARK_BUILD",
+                com.android.build.api.variant.BuildConfigField("boolean", "true", null),
+            )
+        }
     }
 }
 

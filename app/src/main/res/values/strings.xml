@@ -3,7 +3,7 @@
 
     <!-- Main Strings-->
     <string name="textView_Disclaimer"><![CDATA[This app will <b>NOT</b> root your device.<br>This app only shows you if your device has root access.]]></string>
-    <string name="textView_checkForRoot">Touch the \"#\" button on the bottom right to verify Root status</string>
+    <string name="textView_checkForRoot">Touch the \"#\" button to verify Root status</string>
     <string name="rootAvailable">Your Device has Root access</string>
     <string name="rootUnknown">Couldn\'t get Root status of your device</string>
     <string name="rootNotAvailable">Your Device doesn\'t have Root access</string>
@@ -32,7 +32,7 @@
 
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Share anonymous usage data</string>
-    <string name="settings_telemetry_description">Helps improve the app via TelemetryDeck. When enabled, takes effect on next app launch.</string>
+    <string name="settings_telemetry_description">Helps improve the app via TelemetryDeck.</string>
     <string name="settings_reset_identity_title">Reset analytics identity</string>
     <string name="settings_reset_identity_description">Start a fresh anonymous ID so future usage data can\'t be linked to what was shared before.</string>
     <string name="settings_reset_identity_dialog_message">A new anonymous identifier will be generated. Future usage data won\'t be linked to anything shared before now. This can\'t be undone.</string>
@@ -54,6 +54,8 @@
     <string name="tip_tier_medium">Medium tip</string>
     <string name="tip_tier_large">Large tip</string>
     <string name="tip_jar_loading">Loading tip options…</string>
+    <string name="tip_jar_load_failed">Couldn\'t load tip options. Check your connection and try again.</string>
+    <string name="tip_jar_retry">Retry</string>
     <string name="tip_jar_thanks">Thank you for your support!</string>
     <string name="tip_jar_pending">Your tip is pending. It\'ll complete once your payment is approved.</string>
     <string name="tip_jar_cleared">Your pending tip cleared. Thank you for your support!</string>
@@ -68,11 +70,7 @@
     <string name="string_checking_for_root">Checking for Root…</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
-        This app does NOT root your phone.\n
-        This app requires ROOT, use it at your own risk.\n
-        This app does NOT collect any personal information.\n\n\n
-        Contact me at:</string>
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\nThis app does NOT root your phone.\nThis app requires ROOT, use it at your own risk.\nThis app does NOT collect any personal information.\n\n\nContact me at:</string>
     <string name="about_link_email">Email</string>
     <string name="about_link_mastodon" translatable="false">Mastodon</string>
     <string name="about_link_bluesky" translatable="false">Bluesky</string>
@@ -108,7 +106,7 @@
     <string name="update_progress_megabytes">%1$s / %2$s MB</string>
     <string name="update_downloaded_title">Update downloaded</string>
     <string name="update_action_install">Install now</string>
-    <string name="update_failed">Update failed. It will retry automatically.</string>
+    <string name="update_failed">The update couldn\'t be downloaded. Come back to the app later to try again.</string>
     <string name="app_updated_snackbar">App was updated</string>
 
     <!-- Other Apps -->

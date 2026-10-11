@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Basic Root Checker</string>
-    <string name="about_not_affiliated">Diese app wird nichts von chainfire oder SuperSU unterstützt.</string>
+    <string name="about_not_affiliated">Diese App steht in keiner Verbindung zu topjohnwu oder libsu und wird von ihnen nicht befürwortet.</string>
     <string name="about_link_email">E-Mail</string>
     <string name="about_link_website">Website</string>
     <string name="about_link_rate_this_app">App bewerten</string>
-    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
-Diese app wird NICHT dein Gerät rooten.\n
-Diese app erfordert ROOT zugriff, benutzen auf eigener gefahr.\n
-Diese app sammelt keine persönlichen informationen.\n\n\n
-Kontaktiere mich:</string>
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\nDiese App rootet dein Gerät NICHT.\nDiese App erfordert ROOT-Zugriff. Die Nutzung erfolgt auf eigene Gefahr.\nDiese App sammelt keine persönlichen Informationen.\n\n\nKontaktiere mich:</string>
     <string name="action_about">Über</string>
     <string name="action_privacy_policy">Datenschutzerklärung</string>
     <string name="action_license">Lizenzen</string>
@@ -17,7 +13,7 @@ Kontaktiere mich:</string>
 
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Anonyme Nutzungsdaten teilen</string>
-    <string name="settings_telemetry_description">Hilft dabei, die App über TelemetryDeck zu verbessern. Wenn aktiviert, wird die Änderung beim nächsten App-Start wirksam.</string>
+    <string name="settings_telemetry_description">Hilft dabei, die App über TelemetryDeck zu verbessern.</string>
     <string name="settings_reset_identity_title">Analyse-Identität zurücksetzen</string>
     <string name="settings_reset_identity_description">Beginnt mit einer neuen anonymen ID, damit künftige Nutzungsdaten nicht mit den zuvor geteilten verknüpft werden können.</string>
     <string name="settings_reset_identity_dialog_message">Es wird eine neue anonyme Kennung erzeugt. Künftige Nutzungsdaten werden nicht mit zuvor geteilten Daten verknüpft. Dies kann nicht rückgängig gemacht werden.</string>
@@ -39,6 +35,8 @@ Kontaktiere mich:</string>
     <string name="tip_tier_medium">Mittleres Trinkgeld</string>
     <string name="tip_tier_large">Großes Trinkgeld</string>
     <string name="tip_jar_loading">Trinkgeld-Optionen werden geladen…</string>
+    <string name="tip_jar_load_failed">Trinkgeld-Optionen konnten nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.</string>
+    <string name="tip_jar_retry">Erneut versuchen</string>
     <string name="tip_jar_thanks">Danke für deine Unterstützung!</string>
     <string name="tip_jar_pending">Dein Trinkgeld steht noch aus – es wird abgeschlossen, sobald deine Zahlung bestätigt ist.</string>
     <string name="tip_jar_cleared">Dein ausstehendes Trinkgeld wurde abgeschlossen – danke für deine Unterstützung!</string>
@@ -48,21 +46,21 @@ Kontaktiere mich:</string>
     <string name="support_card_body">Sie ist kostenlos und werbefrei. Ein kleines Trinkgeld hilft bei der Weiterentwicklung.</string>
     <string name="support_card_action">Entwicklung unterstützen</string>
     <string name="support_card_dismiss">Schließen</string>
-    <string name="rootAvailable">Root zugriff vorhanden</string>
-    <string name="rootUnknown">Root zugriff konnte nicht ermittelt werden</string>
-    <string name="rootNotAvailable">Root zugriff nicht vorhanden</string>
+    <string name="rootAvailable">Root-Zugriff vorhanden</string>
+    <string name="rootUnknown">Root-Zugriff konnte nicht ermittelt werden</string>
+    <string name="rootNotAvailable">Kein Root-Zugriff vorhanden</string>
     <string name="rootNotGranted">Root ist verfügbar, aber diese App hat keinen Zugriff darauf</string>
     <string name="root_hidden_manager_hint">Verwendest du einen versteckten oder umbenannten Root-Manager (z. B. Kitsune Mask)? Er wird möglicherweise erst erkannt, wenn du dieser App Zugriff gewährst.</string>
     <string name="action_request_root">Root-Zugriff anfordern</string>
     <string name="root_provider_other">Andere</string>
     <string name="root_provider_via">über %1$s</string>
     <string name="root_provider_via_with_version">über %1$s v%2$s</string>
-    <string name="textView_Disclaimer"><![CDATA[Diese app wird <b>NICHT</b> dein Gerät rooten.<br>Diese app zeigt nur an ob dein Gerät root zugriff hat.]]></string>
-    <string name="textView_checkForRoot">Drücke die <b>#</b> Taste unten rechts um den Root-Status überprüfen</string>
+    <string name="textView_Disclaimer"><![CDATA[Diese App wird dein Gerät <b>NICHT</b> rooten.<br>Diese App zeigt nur an, ob dein Gerät Root-Zugriff hat.]]></string>
+    <string name="textView_checkForRoot">Tippe auf die „#“-Taste, um den Root-Status zu überprüfen</string>
     <string name="textViewAndroidVersion">Android</string>
     <string name="string_your_device">Dein Gerät</string>
-    <string name="string_checking_for_root">Auf Root zugriff überprüfen</string>
-    <string name="content_description_check_for_root">Auf Root zugriff überprüfen</string>
+    <string name="string_checking_for_root">Root-Zugriff wird überprüft…</string>
+    <string name="content_description_check_for_root">Auf Root-Zugriff überprüfen</string>
     <string name="content_description_marketing_name">Marketingname</string>
     <string name="content_description_model_name">Modellname</string>
     <string name="content_description_android_version">Android-Version</string>
@@ -77,7 +75,7 @@ Kontaktiere mich:</string>
     <!-- Device Info Labels -->
     <string name="label_device_name">Gerätename</string>
     <string name="label_model">Modell</string>
-    <string name="label_android_version">Android Version</string>
+    <string name="label_android_version">Android-Version</string>
     <string name="other_apps_title">Weitere Apps</string>
     <string name="about_other_app_open">Öffnen</string>
     <string name="about_other_app_install">Installieren</string>
@@ -92,7 +90,7 @@ Kontaktiere mich:</string>
     <string name="update_progress_megabytes">%1$s / %2$s MB</string>
     <string name="update_downloaded_title">Update heruntergeladen</string>
     <string name="update_action_install">Jetzt installieren</string>
-    <string name="update_failed">Update fehlgeschlagen. Es wird automatisch erneut versucht.</string>
+    <string name="update_failed">Das Update konnte nicht heruntergeladen werden. Öffne die App später erneut, um es noch einmal zu versuchen.</string>
     <string name="app_updated_snackbar">App wurde aktualisiert</string>
     <!-- AppFunctions -->
     <string name="appfunctions_description">Ermöglicht dem System und Assistenz-Apps, den Root-Status dieses Geräts zu prüfen, ohne die App zu öffnen.</string>

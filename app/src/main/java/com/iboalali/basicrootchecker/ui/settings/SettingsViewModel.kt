@@ -87,12 +87,15 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val tipJarAvailable: Boolean = billing.isAvailable
 
     val tipProducts: StateFlow<ImmutableList<TipProduct>> = billing.products
+    val tipProductsLoadFailed: StateFlow<Boolean> = billing.productsLoadFailed
 
     val supporterTiers: StateFlow<ImmutableSet<TipTier>> = billing.supporterTiers
 
     fun onTipJarOpened() {
         Analytics.trackTipJarOpened(TIP_SOURCE_SETTINGS)
     }
+
+    fun onRetryTipProducts() = billing.retryProducts()
 
     fun onTipSelected(tier: TipTier) {
         Analytics.trackTipSelected(tier.name)

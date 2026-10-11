@@ -69,9 +69,25 @@ class UpdateEventResolverTest {
     }
 
     @Test
-    fun `failure stays visible when nothing is offered`() {
+    fun `failure turns back into the offer while Play still offers the update`() {
         val failed = AppUpdateEvent.Failed(-100)
-        assertSame(failed, resolve(failed, InstallStatus.UNKNOWN, offerable = false))
         assertEquals(AppUpdateEvent.Available, resolve(failed, InstallStatus.UNKNOWN))
+        assertEquals(AppUpdateEvent.Available, resolve(failed, InstallStatus.FAILED))
+    }
+
+    @Test
+    fun `failure clears once Play no longer offers the update`() {
+        val failed = AppUpdateEvent.Failed(-100)
+        for (status in listOf(InstallStatus.UNKNOWN, InstallStatus.FAILED)) {
+            assertEquals(AppUpdateEvent.None, resolve(failed, status, offerable = false))
+        }
+    }
+
+    @Test
+    fun `finished download stays offered for install when nothing else is reported`() {
+        assertSame(
+            AppUpdateEvent.Downloaded,
+            resolve(AppUpdateEvent.Downloaded, InstallStatus.UNKNOWN, offerable = false),
+        )
     }
 }

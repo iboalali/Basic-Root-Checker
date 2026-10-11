@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
     <include domain="file" path="datastore/" />
+    <!-- The last root check describes this device, not the next one it is restored onto. -->
+    <exclude domain="file" path="datastore/root_check.preferences_pb" />
 </full-backup-content>

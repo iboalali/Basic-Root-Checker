@@ -41,6 +41,22 @@ object AppLanguage {
         return if (locales.isEmpty) null else locales[0].toLanguageTag()
     }
 
+    /**
+     * The entry of [SUPPORTED_TAGS] that [tag] falls under, matched by the longest subtag prefix,
+     * or `null` if none does. The system's per-app language page sets regional tags such as
+     * `de-AT` or `zh-Hans-CN`, which must still select `de` and `zh-Hans` in the picker.
+     */
+    fun bestSupportedTag(tag: String?): String? {
+        if (tag.isNullOrEmpty()) return null
+        var subtags = tag.split('-')
+        while (subtags.isNotEmpty()) {
+            val prefix = subtags.joinToString("-")
+            SUPPORTED_TAGS.firstOrNull { it.equals(prefix, ignoreCase = true) }?.let { return it }
+            subtags = subtags.dropLast(1)
+        }
+        return null
+    }
+
     /** Pass `null` to follow the system default. No-op below Android 13. */
     fun setLanguage(context: Context, tag: String?) {
         if (!isSupported) return

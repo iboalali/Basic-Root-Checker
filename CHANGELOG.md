@@ -22,6 +22,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - On a device rooted with **KernelSU** (or a fork such as KernelSU Next or SukiSU Ultra) or **APatch**, a check with root access granted could report **"via Magisk"** instead of the root manager actually installed. Both keep their modules in the same folder Magisk uses, and the app took that folder as a sign of Magisk. It now relies only on folders that belong to Magisk alone, so these devices are reported with their own root manager.
 - The **update card** could stay on an endless "Downloading" bar: after declining Google Play's update dialog, after canceling the download, or when the download finished while the app was in the background. Declining or canceling now brings back the **Update** button, and a download that finished in the background offers **Install** when you return (Google Play builds only).
 - On a device without a web browser, tapping **Privacy policy** in Settings, or **Mastodon**, **Bluesky** or **Website** on the About screen, closed the app. Those links now do nothing there instead.
+- After denying or ignoring the superuser prompt, **Request Root access** did nothing until the app was restarted. It now asks again.
+- Tapping the check button twice quickly ran two checks at once. A second tap while a check is running is now ignored.
+- The main screen kept its result only through a rotation. It now also keeps it when Android closes the app in the background.
+- The **"Checking for root…"** message stayed on screen over the result. It no longer appears; the status card already says the check is running.
+- The **Android version** row kept the previous language after switching the app's language. It now follows the switch right away.
+- The **language picker** in Settings could not scroll, so in landscape or with large text most languages could not be chosen. It now scrolls.
+- If the app's language was set to a regional variant in system settings, such as Deutsch (Österreich), the language picker showed nothing selected. It now marks the matching language.
+- Dialogs in Settings, and the tip dialog opened from the support card, closed when the device was rotated, folded or resized. They now stay open.
+- The tip jar could show "Loading…" forever when tip options could not be loaded. It now says so and offers **Retry** (Google Play builds only).
+- A failed tip purchase showed its error twice, and a tip that finished clearing could be announced twice. Each now shows once (Google Play builds only).
+- A failed update download left a card with no way forward. Returning to the app now offers the update again, or removes the card if the update is no longer available (Google Play builds only).
+- Restoring a backup or moving to a new phone brought the old phone's last root result along. It now stays on the device that produced it.
+- Crash reports no longer include the error's message text, only its type, so they can't carry details about the device.
+- The usage data setting said a change takes effect on the next launch, which wasn't true. The description no longer says it.
+- The main screen's hint said the check button is at the bottom right, which is wrong in right-to-left languages. The hint no longer names a position.
+- Stray spaces at the start of lines on the About screen are gone, and several Arabic and German texts are corrected. In Arabic, the Mastodon and Bluesky handles show their "@" in the right place.
 
 ## [2.5] - 2026-08-26
 

@@ -28,7 +28,10 @@ object Analytics {
         TelemetryController(
             TelemetryConfig(
                 appId = BuildConfig.TELEMETRY_DECK_APP_ID,
-                debug = BuildConfig.DEBUG,
+                // Benchmark and profile runs drive the app like a user would, so they are test
+                // traffic too, on any device.
+                debug = BuildConfig.DEBUG || BuildConfig.BENCHMARK_BUILD,
+                showDebugLogs = BuildConfig.DEBUG,
                 onLookupFailure = { throwable, message -> Log.w(TAG, message, throwable) },
             )
         )
@@ -82,13 +85,20 @@ object Analytics {
         TelemetryDeck.signal("TelemetryDeck.Error.occurred", params)
     }
 
+    /**
+     * Reports [throwable] by its exception types only, never its message. A message carries
+     * indices, paths and component names, so it is near-unique per event and can reveal the device.
+     * The message field gets the class names along the cause chain instead (outermost first),
+     * which stays low-cardinality. App classes in a release build appear under their R8 names, so
+     * retrace them with that release's `mapping.txt`.
+     */
     fun trackError(
         throwable: Throwable,
         id: String? = null,
         category: String = ERROR_CATEGORY_THROWN_EXCEPTION,
     ) {
         val errorId = id ?: throwable::class.simpleName ?: "UnknownThrowable"
-        trackError(errorId, throwable.message, category)
+        trackError(errorId, exceptionTypes(throwable), category)
     }
 
     fun trackNavigation(sourcePath: String, destinationPath: String) = track {
@@ -325,3 +335,11 @@ object Analytics {
         }
     }
 }
+
+private const val MAX_CAUSE_DEPTH = 4
+
+/** The class names along [throwable]'s cause chain, outermost first, joined by " < ". */
+internal fun exceptionTypes(throwable: Throwable): String =
+    generateSequence(throwable) { it.cause?.takeIf { cause -> cause !== it } }
+        .take(MAX_CAUSE_DEPTH)
+        .joinToString(" < ") { it.javaClass.name }

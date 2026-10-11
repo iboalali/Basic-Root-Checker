@@ -15,6 +15,7 @@ object NoOpBillingController : BillingController {
     override val isAvailable: Boolean = false
     override val products: StateFlow<ImmutableList<TipProduct>> =
         MutableStateFlow<ImmutableList<TipProduct>>(persistentListOf()).asStateFlow()
+    override val productsLoadFailed: StateFlow<Boolean> = MutableStateFlow(false).asStateFlow()
     override val events: Flow<TipEvent> = emptyFlow()
     override val tipCleared: Flow<TipTier> = emptyFlow()
     override val supporterTiers: StateFlow<ImmutableSet<TipTier>> =
@@ -22,4 +23,5 @@ object NoOpBillingController : BillingController {
 
     override fun attach(activity: ComponentActivity) = Unit
     override fun launchPurchase(tier: TipTier) = Unit
+    override fun retryProducts() = Unit
 }

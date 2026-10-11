@@ -4,7 +4,7 @@
 
     <!-- Main Strings-->
     <string name="textView_Disclaimer"><![CDATA[Esta aplicación <b>NO</b> rooteará tu dispositivo.<br>Solo muestra si tu dispositivo tiene acceso root.]]></string>
-    <string name="textView_checkForRoot">Toca el botón «#» en la esquina inferior derecha para comprobar el estado de root</string>
+    <string name="textView_checkForRoot">Toca el botón «#» para comprobar el estado de root</string>
     <string name="rootAvailable">Tu dispositivo tiene acceso root</string>
     <string name="rootUnknown">No se pudo obtener el estado de root del dispositivo</string>
     <string name="rootNotAvailable">Tu dispositivo no tiene acceso root</string>
@@ -21,7 +21,7 @@
 
     <!-- Settings Strings -->
     <string name="settings_telemetry_title">Compartir datos de uso anónimos</string>
-    <string name="settings_telemetry_description">Ayuda a mejorar la aplicación mediante TelemetryDeck. Si se activa, surtirá efecto en el próximo inicio.</string>
+    <string name="settings_telemetry_description">Ayuda a mejorar la aplicación mediante TelemetryDeck.</string>
     <string name="settings_reset_identity_title">Restablecer identidad de analítica</string>
     <string name="settings_reset_identity_description">Genera un nuevo identificador anónimo para que los datos de uso futuros no puedan vincularse con los compartidos antes.</string>
     <string name="settings_reset_identity_dialog_message">Se generará un nuevo identificador anónimo. Los datos de uso futuros no se vincularán con nada compartido hasta ahora. Esta acción no se puede deshacer.</string>
@@ -43,6 +43,8 @@
     <string name="tip_tier_medium">Propina mediana</string>
     <string name="tip_tier_large">Propina grande</string>
     <string name="tip_jar_loading">Cargando opciones de propina…</string>
+    <string name="tip_jar_load_failed">No se pudieron cargar las opciones de propina. Comprueba tu conexión e inténtalo de nuevo.</string>
+    <string name="tip_jar_retry">Reintentar</string>
     <string name="tip_jar_thanks">¡Gracias por tu apoyo!</string>
     <string name="tip_jar_pending">Tu propina está pendiente: se completará cuando se apruebe tu pago.</string>
     <string name="tip_jar_cleared">Tu propina pendiente se ha completado: ¡gracias por tu apoyo!</string>
@@ -57,11 +59,7 @@
     <string name="string_checking_for_root">Comprobando root…</string>
 
     <!-- About Strings -->
-    <string name="about_part1">Copyright 2026 &#169; iboalali\n\n
-        Esta aplicación NO rootea tu teléfono.\n
-        Esta aplicación requiere ROOT, úsala bajo tu propia responsabilidad.\n
-        Esta aplicación NO recopila información personal.\n\n\n
-        Contáctame en:</string>
+    <string name="about_part1">Copyright 2026 &#169; iboalali\n\nEsta aplicación NO rootea tu teléfono.\nEsta aplicación requiere ROOT, úsala bajo tu propia responsabilidad.\nEsta aplicación NO recopila información personal.\n\n\nContáctame en:</string>
     <string name="about_link_email">Correo</string>
     <string name="about_link_website">Sitio web</string>
     <string name="about_link_rate_this_app">Valora la app</string>
@@ -93,7 +91,7 @@
     <string name="update_progress_megabytes">%1$s / %2$s MB</string>
     <string name="update_downloaded_title">Actualización descargada</string>
     <string name="update_action_install">Instalar ahora</string>
-    <string name="update_failed">La actualización falló. Se reintentará automáticamente.</string>
+    <string name="update_failed">No se pudo descargar la actualización. Vuelve a la aplicación más tarde para intentarlo de nuevo.</string>
     <string name="app_updated_snackbar">Aplicación actualizada</string>
 
     <!-- Other Apps -->

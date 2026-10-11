@@ -40,6 +40,9 @@ find_scripts_dir() {
 }
 
 dir="$(find_scripts_dir)"
+# Absolute before the cd below, so a relative AI_KIT_SCRIPTS still points at the same place.
+[ -d "$dir" ] || { echo "error: scripts dir not found: $dir" >&2; exit 1; }
+dir="$(cd "$dir" && pwd)"
 script="$dir/render-store-screenshots.py"
 [ -f "$script" ] || { echo "error: $script not found" >&2; exit 1; }
 

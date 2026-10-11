@@ -1,6 +1,8 @@
 package com.iboalali.basicrootchecker.data
 
 import android.content.Context
+import androidx.datastore.core.DataMigration
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -11,9 +13,45 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.iboalali.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 private val Context.userSettingsDataStore by preferencesDataStore(name = "user_settings")
+
+/**
+ * The last root check, in its own file so backup can leave it out (see `backup_rules.xml` and
+ * `data_extraction_rules.xml`). It describes one device, and restored onto another it would report
+ * the old device's result until the first check. Installs that kept it in [userSettingsDataStore]
+ * move it here on first read.
+ */
+private val Context.rootCheckDataStore by
+    preferencesDataStore(
+        name = "root_check",
+        produceMigrations = { context -> listOf(LastRootCheckMigration(context)) },
+    )
+
+private class LastRootCheckMigration(private val context: Context) : DataMigration<Preferences> {
+
+    override suspend fun shouldMigrate(currentData: Preferences): Boolean =
+        UserPreferences.LAST_ROOT_CHECK_KEYS.any { it in context.userSettingsDataStore.data.first() }
+
+    override suspend fun migrate(currentData: Preferences): Preferences {
+        val legacy = context.userSettingsDataStore.data.first()
+        val migrated = currentData.toMutablePreferences()
+        UserPreferences.LAST_ROOT_CHECK_KEYS.forEach { key -> migrated.copyFrom(legacy, key) }
+        return migrated.toPreferences()
+    }
+
+    override suspend fun cleanUp() {
+        context.userSettingsDataStore.edit { preferences ->
+            UserPreferences.LAST_ROOT_CHECK_KEYS.forEach { preferences.remove(it) }
+        }
+    }
+
+    private fun <T> MutablePreferences.copyFrom(source: Preferences, key: Preferences.Key<T>) {
+        source[key]?.let { this[key] = it }
+    }
+}
 
 class UserPreferences(private val context: Context) {
 
@@ -68,11 +106,6 @@ class UserPreferences(private val context: Context) {
      * Survives process death so a clear that happens while the app is closed is still recognized on
      * the next launch.
      */
-    val pendingTipTokens: Flow<Set<String>> =
-        context.userSettingsDataStore.data.map { preferences ->
-            preferences[PENDING_TIP_TOKENS] ?: emptySet()
-        }
-
     suspend fun addPendingTipToken(token: String) {
         context.userSettingsDataStore.edit { preferences ->
             preferences[PENDING_TIP_TOKENS] =
@@ -80,11 +113,18 @@ class UserPreferences(private val context: Context) {
         }
     }
 
-    suspend fun clearPendingTipTokens(tokens: Set<String>) {
+    /**
+     * Removes [token] in a single DataStore transaction and returns whether this call removed it.
+     * Concurrent callers for the same token are serialized, so exactly one of them gets `true`.
+     */
+    suspend fun removePendingTipToken(token: String): Boolean {
+        var removed = false
         context.userSettingsDataStore.edit { preferences ->
-            preferences[PENDING_TIP_TOKENS] =
-                (preferences[PENDING_TIP_TOKENS] ?: emptySet()) - tokens
+            val tokens = preferences[PENDING_TIP_TOKENS] ?: emptySet()
+            removed = token in tokens
+            if (removed) preferences[PENDING_TIP_TOKENS] = tokens - token
         }
+        return removed
     }
 
     /**
@@ -93,7 +133,7 @@ class UserPreferences(private val context: Context) {
      * re-probing.
      */
     val lastRootCheck: Flow<LastRootCheck?> =
-        context.userSettingsDataStore.data.map { preferences ->
+        context.rootCheckDataStore.data.map { preferences ->
             val checkedAt = preferences[LAST_ROOT_CHECK_AT] ?: return@map null
             LastRootCheck(
                 checkedAtEpochMs = checkedAt,
@@ -114,7 +154,7 @@ class UserPreferences(private val context: Context) {
         }
 
     suspend fun recordRootCheck(check: LastRootCheck) {
-        context.userSettingsDataStore.edit { preferences ->
+        context.rootCheckDataStore.edit { preferences ->
             preferences[LAST_ROOT_CHECK_AT] = check.checkedAtEpochMs
             preferences[LAST_ROOT_CHECK_STATUS] = check.status.name
             // Remove rather than leave stale values when a field is absent (e.g. a later
@@ -232,6 +272,14 @@ class UserPreferences(private val context: Context) {
         private val LAST_ROOT_CHECK_PROVIDER = stringPreferencesKey("last_root_check_provider")
         private val LAST_ROOT_CHECK_MANAGER = stringPreferencesKey("last_root_check_manager")
         private val LAST_ROOT_CHECK_VERSION = stringPreferencesKey("last_root_check_version")
+        internal val LAST_ROOT_CHECK_KEYS: List<Preferences.Key<*>> =
+            listOf(
+                LAST_ROOT_CHECK_AT,
+                LAST_ROOT_CHECK_STATUS,
+                LAST_ROOT_CHECK_PROVIDER,
+                LAST_ROOT_CHECK_MANAGER,
+                LAST_ROOT_CHECK_VERSION,
+            )
         private val CHECK_COUNT = intPreferencesKey("check_count")
         private val ROOTED_CHECK_COUNT = intPreferencesKey("rooted_check_count")
         private val LAST_REVIEW_PROMPT_VERSION_CODE =

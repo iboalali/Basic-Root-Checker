@@ -133,7 +133,7 @@ This app's side: `BasicRootCheckerApplication` owns the repository as a lazy app
 
 ### UserPreferences (`data/`)
 
-DataStore Preferences store: telemetry, haptics, theme mode, last-seen version code, pending tip tokens, the rooted-check count and last review-prompt version code behind `ReviewGate`, the check count, snooze deadline and dismissal count behind `SupportGate`, and the last root check (result + timestamp, exposed as `lastRootCheck` / `recordRootCheck` and shared by the UI and AppFunctions).
+DataStore Preferences store: telemetry, haptics, theme mode, last-seen version code, pending tip tokens, the rooted-check count and last review-prompt version code behind `ReviewGate`, the check count, snooze deadline and dismissal count behind `SupportGate`, and the last root check (result + timestamp, exposed as `lastRootCheck` / `recordRootCheck` and shared by the UI and AppFunctions). The last root check lives in its own file, `root_check`, which backup and device transfer exclude, so a restore never reports another device's result.
 
 ## Cross-cutting
 

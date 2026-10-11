@@ -43,8 +43,11 @@ import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.core.text.BidiFormatter
+import androidx.core.text.TextDirectionHeuristicsCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iboalali.appcatalog.ui.OtherApp
@@ -284,8 +287,12 @@ private fun SocialLinkRow(
                 text = label,
                 style = MaterialTheme.typography.bodyLarge,
             )
+            // Handles are Latin. Unwrapped, an RTL layout moves a leading "@" to the far end.
+            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             Text(
-                text = handle,
+                text =
+                    BidiFormatter.getInstance(isRtl)
+                        .unicodeWrap(handle, TextDirectionHeuristicsCompat.LTR),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
