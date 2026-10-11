@@ -4,12 +4,6 @@ Open defects from a full code review (2026-10-05) and a full emulator test pass 
 
 ## High
 
-### 19. Licences rows crash the app on a device with no browser (confirmed, lives in Android-Shared)
-
-`com.iboalali.ui.licences`, `OssCredits.kt` `LibraryRow` (~line 149) calls Compose's `AndroidUriHandler.openUri` unguarded. With no `ACTION_VIEW` handler for `https`, tapping any Licences row throws `ActivityNotFoundException` and the app crashes (reproduced on `e2e_api37` with Chrome disabled). The fix belongs in Android-Shared (catch it around `openUri`, or route through a guarded helper), then this app adopts it by bumping `shared`. The About screen's "Other apps" rows from `com.iboalali.appcatalog:ui` likely open links the same way and were not tested.
-
-Tracked in [Android-Shared#7](https://github.com/iboalali/Android-Shared/issues/7).
-
 ### 21. Nothing on iboalali.com loads on Android 7.0 (confirmed)
 
 The site's certificate chain ends at ISRG Root X1 (Let's Encrypt), which Android 7.0's trust store lacks; it only has the expired DST Root CA X3. On API 24:
@@ -21,23 +15,9 @@ Fix: a `network_security_config` that adds ISRG Root X1 as a trust anchor fixes 
 
 ## Medium
 
-### 9. Turning telemetry off mid-session does not stop the SDK (likely, lives in Android-Shared)
-
-`analytics/Analytics.kt` `setEnabled()` → Android-Shared `telemetry/core` `TelemetryController.setEnabled()`.
-
-Opting out closes the app's signal gate but never calls `TelemetryDeck.stop()`. The SDK keeps its lifecycle observer and broadcast timer, uploads signals already cached, and emits its own `TelemetryDeck.Session.started` when the app returns after more than 5 minutes in the background, until the process dies. Fix belongs in `TelemetryController`; this app then adopts it by bumping `shared`.
-
-Tracked in [Android-Shared#8](https://github.com/iboalali/Android-Shared/issues/8).
-
 ### 23. After process death the main screen is drawn over a restored detail (confirmed on API 37, cause unknown)
 
 Repro on `e2e_api37` (phone width): open About or Settings, press Home, `am kill com.iboalali.basicrootchecker.debug`, relaunch. The main screen shows; Back then reveals About, and Back again shows main. The back stack is restored as `[Main, About]` but Main is drawn, and it stays that way after a few seconds and a tap. Rotation while on About is fine, and the same test on API 24 restored Settings correctly. `AppNavigation.kt` looks right; suspect Navigation 3 restoration together with `DetailOverlaySceneStrategy` (the overlay library in Android-Shared). Screenshots: `api37/67_after_process_death_amstart.png`, `api37/69_settings_process_death_8s.png`.
-
-### 24. In RTL the overflow glyph fades in on the wrong side when a detail closes (confirmed, lives in Android-Shared)
-
-`com.iboalali.nav3:overlay`, `DetailOverlayScene.kt` (~line 480): the morph icon is placed with `Modifier.offset { IntOffset(r.left, r.top) }`. Compose mirrors `offset` in RTL, but `overflowLocalRect` holds absolute coordinates, so in Arabic at 840dp and up the card collapses toward the real overflow icon on the left while the handoff glyph fades in at the top right, then the real icon pops in. Fix: `Modifier.absoluteOffset { }`. Billboard shares the library. Screenshots: `large/40_rtl_collapse_filmstrip_top.png`, `large/39_rtl_close_collapse_1..4.png`.
-
-Tracked in [Android-Shared#9](https://github.com/iboalali/Android-Shared/issues/9).
 
 ### 25. Swipe-down does not dismiss the overlay when the drag starts on the card's header (confirmed)
 
@@ -48,14 +28,6 @@ On all three detail screens at 840dp and up, a downward drag from the title or c
 `util/AppLanguage.kt`: `isSupported` requires API 33, so the Settings language row is hidden below it. The manifest still declares AppCompat's `AppLocalesMetadataHolderService` with `autoStoreLocales`, which only works with `AppCompatDelegate.setApplicationLocales`, and nothing calls that. Either support older versions through AppCompat (and keep the service) or drop the service entry.
 
 ## Low
-
-### 33. Shared-library layout nits at large font and in license text (confirmed, lives in Android-Shared)
-
-- `com.iboalali.appcatalog:ui`: at font scale 2.0 the "Website" button breaks mid-word ("Webs / ite") and its globe icon disappears (`api24/57_fs20_about_3.png`).
-- `com.iboalali.ui:licences`: the expanded license text is hard-wrapped at about 80 characters, so it shows ragged lines on a phone (`api24/23_licences_mit_text.png`).
-- `com.iboalali.appcatalog` feed: the German Hide Persistent Notification text mixes "Sie" and "du".
-
-Tracked in [Android-Shared#10](https://github.com/iboalali/Android-Shared/issues/10) (Website button), [#11](https://github.com/iboalali/Android-Shared/issues/11) (license text) and [#12](https://github.com/iboalali/Android-Shared/issues/12) (German copy).
 
 ### 34. A back press right after opening a detail is ignored (confirmed, minor)
 

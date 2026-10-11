@@ -73,7 +73,7 @@ Screenshot tests run on **`gplayDebug`**. These screens are flavor-independent, 
 
 ## Stack
 
-**Kotlin** · Java 17 · minSdk 24 · compile/target SDK 37 · **AGP** (built-in Kotlin) · Compose BOM · Navigation 3 · Material 3 Adaptive · `androidx.appfunctions` + KSP · Coil 3 · TelemetryDeck.
+**Kotlin** · Java 17 · minSdk 24 · compile SDK 37.2 (the shared AARs require the minor level) · target SDK 37 · **AGP** (built-in Kotlin) · Compose BOM · Navigation 3 · Material 3 Adaptive · `androidx.appfunctions` + KSP · Coil 3 · TelemetryDeck.
 
 `gradle/libs.versions.toml` is **the source of truth for every version**, and each entry carries its upstream release-notes URL. No version number is repeated here, so there is nothing to drift.
 

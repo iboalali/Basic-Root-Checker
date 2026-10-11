@@ -31,7 +31,7 @@ val canSignRelease = listOf(
 
 android {
     namespace = "com.iboalali.basicrootchecker"
-    compileSdk = 37
+    compileSdk { version = release(37) { minorApiLevel = 2 } }
 
     defaultConfig {
         applicationId = "com.iboalali.basicrootchecker"
