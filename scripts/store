@@ -12,8 +12,11 @@
 #   ./scripts/store iap-ppp [--check]              plan purchasing-power prices (no Play writes)
 #   ./scripts/store video-record --serial SERIAL [--orientation vertical] [--locale default]
 #   ./scripts/store video-compose [--orientation vertical] [--locale default]
+#   ./scripts/store video-check                    validate every storyboard, no device needed
+#   ./scripts/store video-sweep [--record --serial SERIAL]   every storyboard, locale, orientation
+#   ./scripts/store video-qr URL "Play Store/Video/qr/NAME.png"   the end card's QR and its sidecar
 #
-# The two video commands read "Play Store/Video/storyboard.json"; see the `store-video` skill.
+# The video commands read the storyboards under "Play Store/Video"; see the `store-video` skill.
 #
 # Set AI_KIT_SCRIPTS to point at a checkout when iterating on the kit itself.
 set -euo pipefail
@@ -47,12 +50,15 @@ case "${1:-}" in
   iap-ppp)      script=plan-iap-ppp.py ;;
   video-record)  script=record-store-video.py ;;
   video-compose) script=compose-store-video.py ;;
+  video-check)   script=sweep-store-video.py; set -- "$1" --check "${@:2}" ;;
+  video-sweep)   script=sweep-store-video.py ;;
+  video-qr)      script=make-qr.py ;;
   ""|-h|--help)
-    sed -n '3,18p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '3,21p' "$0" | sed 's/^# \{0,1\}//'
     exit 0
     ;;
   *)
-    echo "error: unknown script '${1}'. Try: listing, screenshots, iap-pricing, iap-ppp, video-record, video-compose" >&2
+    echo "error: unknown script '${1}'. Try: listing, screenshots, iap-pricing, iap-ppp, video-record, video-compose, video-check, video-sweep, video-qr" >&2
     exit 1
     ;;
 esac
