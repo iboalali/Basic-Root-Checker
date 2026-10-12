@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Basic Root Checker</string>
 
-    <string name="textView_Disclaimer"><![CDATA[هذا التطبيق يظهر لك إذا كان جهازك يحتوي على خاصية الـ Root.<br>هذا التطبيق لا يعطيك خاصية الـ Root على جهازك.]]></string>
-    <string name="rootAvailable">يوجد خاصية الـ Root</string>
-    <string name="rootUnknown">تعذر الحصول على وجود Root لجهازك</string>
-    <string name="rootNotAvailable">لا يوجد خاصية الـ Root</string>
+    <string name="textView_Disclaimer"><![CDATA[هذا التطبيق <b>لن يمنح</b> جهازك صلاحية الـ Root.<br>هذا التطبيق يعرض لك فقط ما إذا كان جهازك يمتلك صلاحية الـ Root.]]></string>
+    <string name="rootAvailable">جهازك يمتلك صلاحية الـ Root</string>
+    <string name="rootUnknown">تعذر تحديد حالة الـ Root لجهازك</string>
+    <string name="rootNotAvailable">جهازك لا يمتلك صلاحية الـ Root</string>
     <string name="rootNotGranted">صلاحية الـ Root متوفرة ولكن لم يتم منحها لهذا التطبيق</string>
     <string name="root_hidden_manager_hint">هل تستخدم مدير روت مخفيًا أو معاد تسميته (مثل Kitsune Mask)؟ قد لا يتم اكتشافه حتى تمنح هذا التطبيق صلاحية الوصول.</string>
     <string name="action_request_root">طلب صلاحية الـ Root</string>
@@ -13,7 +13,7 @@
     <string name="root_provider_via">عبر %1$s</string>
     <string name="root_provider_via_with_version">عبر %1$s v%2$s</string>
     <string name="action_license">التراخيص</string>
-    <string name="action_about">عنا</string>
+    <string name="action_about">حول</string>
     <string name="action_settings">الإعدادات</string>
     <string name="action_privacy_policy">سياسة الخصوصية</string>
 
@@ -54,7 +54,7 @@
     <string name="support_card_dismiss">إغلاق</string>
 
     <!-- About Strings -->
-    <string name="about_part1">حقوق الطبع محفوظ 2026 iboalali\n\nهذا التطبيق لا يعطيك خاصية الRoot.\nهذا التطبيق يتطلب خاصية الRoot، استعملها على مسؤوليتك.\nهذا التطبيق لا يجمع أي معلومات شخصية\n\n\nاتصل بي:</string>
+    <string name="about_part1">حقوق الطبع والنشر 2026 © iboalali\n\nهذا التطبيق لا يمنح جهازك صلاحيات Root.\nهذا التطبيق يتطلب Root، واستخدامه على مسؤوليتك الخاصة.\nهذا التطبيق لا يجمع أي معلومات شخصية.\n\n\nتواصل معي عبر:</string>
     <string name="about_not_affiliated">هذا التطبيق غير معتمد من topjohnwu أو libsu ولا يرتبط بهما</string>
     <string name="about_link_email">البريد الإلكتروني</string>
     <string name="about_link_website">الموقع الإلكتروني</string>
@@ -62,13 +62,13 @@
     <string name="textView_checkForRoot">اضغط على زر \"#\" للتحقق من حالة الـ Root</string>
     <string name="textViewAndroidVersion">أندرويد</string>
     <string name="string_your_device">جهازك</string>
-    <string name="string_checking_for_root">تحقق من خاصية الـ Root</string>
-    <string name="content_description_check_for_root">تحقق من خاصية الـ Root</string>
+    <string name="string_checking_for_root">جارٍ التحقق من صلاحية الـ Root…</string>
+    <string name="content_description_check_for_root">التحقق من صلاحية الـ Root</string>
     <string name="content_description_marketing_name">الاسم التسويقي</string>
     <string name="content_description_model_name">اسم الطراز</string>
     <string name="content_description_android_version">إصدار أندرويد</string>
     <string name="content_description_more_options">خيارات إضافية</string>
-    <string name="content_description_navigate_up">التنقل إلى أعلى</string>
+    <string name="content_description_navigate_up">التنقل إلى الأعلى</string>
     <string name="content_description_close">إغلاق</string>
     <string name="content_description_dismiss_dialog">إغلاق مربع الحوار</string>
     <string name="detail_release_to_close">حرّر للإغلاق</string>
@@ -83,13 +83,13 @@
     <string name="about_other_app_open">فتح</string>
     <string name="about_other_app_install">تثبيت</string>
     <string name="about_other_app_website">الموقع الإلكتروني</string>
-    <string name="about_other_app_highlights">أبرز التحديثات</string>
+    <string name="about_other_app_highlights">أبرز الميزات</string>
 
     <!-- In-app updates -->
     <string name="update_available_title">تحديث متاح</string>
     <string name="update_available_body">إصدار جديد من التطبيق جاهز للتنزيل.</string>
     <string name="update_action_update">تحديث</string>
-    <string name="update_downloading">جاري تنزيل التحديث…</string>
+    <string name="update_downloading">جارٍ تنزيل التحديث…</string>
     <string name="update_progress_megabytes">%1$s / %2$s م.ب.</string>
     <string name="update_downloaded_title">تم تنزيل التحديث</string>
     <string name="update_action_install">التثبيت الآن</string>
