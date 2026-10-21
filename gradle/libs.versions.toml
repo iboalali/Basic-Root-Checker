@@ -42,7 +42,7 @@ junit = "4.13.2"
 #
 # The version must exist in the `maven-repo` checkout next to this one (`git pull` there first);
 # nothing else can supply it. See Android-Shared/README.md "Releasing".
-shared = "1.6.2"
+shared = "1.7.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
