@@ -1,0 +1,8 @@
+Versi 2.6:
+➕ Empat bahasa baharu: Belanda, Cina, Melayu dan Tamil (sembilan semuanya)
+🛠️ Ikon keputusan beranimasi, dengan ikon berbeza bagi setiap keputusan
+🛠️ Android 7.0 kini diperlukan sebagai minimum
+🔨 Root dikesan dengan betul pada semakan pertama selepas kebenaran terdahulu
+🔨 KernelSU dan APatch tidak lagi dilaporkan sebagai Magisk
+🔨 Kad kemas kini tidak lagi tersekat pada muat turun (Google Play)
+🔨 Banyak pembetulan kecil

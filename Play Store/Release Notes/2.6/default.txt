@@ -1,0 +1,8 @@
+Version 2.6:
+➕ Four new languages: Dutch, Chinese, Malay and Tamil (nine in total)
+🛠️ Animated result icon, with a distinct icon for each result
+🛠️ Minimum Android version is now 7.0
+🔨 Root is detected correctly on the first check after an earlier grant
+🔨 KernelSU and APatch are no longer reported as Magisk
+🔨 Update card no longer stuck on downloading (Google Play)
+🔨 Many smaller fixes

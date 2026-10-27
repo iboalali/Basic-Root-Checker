@@ -1,0 +1,8 @@
+Versión 2.6:
+➕ Cuatro idiomas nuevos: neerlandés, chino, malayo y tamil (nueve en total)
+🛠️ Icono de resultado animado, con un icono distinto para cada resultado
+🛠️ Ahora se requiere Android 7.0 o superior
+🔨 Root se detecta bien en la primera comprobación tras un permiso anterior
+🔨 KernelSU y APatch ya no se muestran como Magisk
+🔨 La tarjeta de actualización ya no se queda en la descarga (Google Play)
+🔨 Muchas correcciones menores

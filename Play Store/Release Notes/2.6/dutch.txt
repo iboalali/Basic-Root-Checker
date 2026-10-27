@@ -1,0 +1,8 @@
+Versie 2.6:
+➕ Vier nieuwe talen: Nederlands, Chinees, Maleis en Tamil (negen in totaal)
+🛠️ Geanimeerd resultaatpictogram, met een eigen pictogram per resultaat
+🛠️ Minimaal Android 7.0 vereist
+🔨 Root wordt goed herkend bij de eerste controle na eerder verleende toegang
+🔨 KernelSU en APatch worden niet meer als Magisk gemeld
+🔨 Updatekaart blijft niet meer hangen op downloaden (Google Play)
+🔨 Veel kleinere reparaties

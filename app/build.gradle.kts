@@ -37,8 +37,8 @@ android {
         applicationId = "com.iboalali.basicrootchecker"
         minSdk = 24
         targetSdk = 37
-        versionCode = 84
-        versionName = "v2.6.0-alpha3vc$versionCode"
+        versionCode = 85
+        versionName = "v2.6.0vc$versionCode"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters +=
             listOf("en", "ar", "de", "es", "ru", "nl", "zh", "ms", "ta")
