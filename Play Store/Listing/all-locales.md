@@ -24,7 +24,7 @@ Basic Root Checker
 Is your device rooted? Find out instantly!
 ```
 
-### Full description — 2173 / 4000 characters
+### Full description — 2203 / 4000 characters
 
 ```text
 Uncertain about your device's Root status?
@@ -37,7 +37,7 @@ What Basic Root Checker Does:
 * Detects Pending Grants: Even if root is installed but the app hasn't been allowed access yet, Basic Root Checker recognizes it and offers a one-tap "Request Root access" button.
 * Falls Back to Plain "su" Binaries: Devices rooted without a recognized manager are still detected by scanning the common su binary paths.
 * Instant Verification: Quickly determine if your device has superuser capabilities.
-* Simple & Intuitive: Material 3 design with dynamic colors on Android 12+, available in English, German, Arabic, Spanish, and Russian.
+* Simple & Intuitive: Material 3 design with dynamic colors on Android 12+, available in English, German, Arabic, Spanish, Russian, Dutch, Chinese, Malay, and Tamil.
 
 Important Considerations:
 * DOES NOT Root Your Device: Basic Root Checker is purely a diagnostic tool. It will NOT modify your device, install any root files, or assist in the rooting process. It simply checks if root access is already present on your system.
@@ -64,7 +64,7 @@ Basic Root Checker
 Ist Ihr Gerät gerootet? Finden Sie es sofort heraus!
 ```
 
-### Full description — 2516 / 4000 characters
+### Full description — 2562 / 4000 characters
 
 ```text
 Basic Root Checker bietet eine schnelle, einfache und zuverlässige Möglichkeit, den Root-Zugriff (auch bekannt als Superuser-Berechtigungen) auf Ihrem Android-Gerät zu überprüfen. Egal, ob Sie ein fortgeschrittener Benutzer, ein Entwickler oder einfach nur neugierig sind, ob Ihr Smartphone oder Tablet gerootet ist – diese App liefert Ihnen eine sofortige und definitive Antwort und zeigt Ihnen jetzt auch, welcher Root-Manager auf Ihrem Gerät verwendet wird.
@@ -75,7 +75,7 @@ Was Basic Root Checker bietet:
 * Erkennt ausstehende Freigaben: Auch wenn Root installiert ist, der App aber noch kein Zugriff gewährt wurde, erkennt Basic Root Checker dies und bietet eine Schaltfläche „Root-Zugriff anfordern" mit nur einem Tippen an.
 * Greift auf einfache „su"-Binaries zurück: Geräte, die ohne anerkannten Root-Manager gerootet wurden, werden weiterhin durch das Durchsuchen der gängigen su-Pfade erkannt.
 * Sofortige Verifizierung: Bestimmen Sie in Sekundenschnelle, ob Ihr Gerät über Superuser-Rechte verfügt.
-* Einfach & Intuitiv: Material-3-Design mit dynamischen Farben ab Android 12, verfügbar auf Deutsch, Englisch, Arabisch, Spanisch und Russisch.
+* Einfach & Intuitiv: Material-3-Design mit dynamischen Farben ab Android 12, verfügbar auf Deutsch, Englisch, Arabisch, Spanisch, Russisch, Niederländisch, Chinesisch, Malaiisch und Tamil.
 
 Wichtige Hinweise:
 * KEIN Root-Werkzeug: Basic Root Checker ist ein reines Diagnose-Tool. Es wird Ihr Gerät NICHT modifizieren, keine Root-Dateien installieren oder den Root-Vorgang unterstützen. Es prüft lediglich, ob Root-Zugriff bereits auf Ihrem System vorhanden ist.
@@ -102,7 +102,7 @@ Basic Root Checker
 ¿Su dispositivo tiene acceso root? ¡Descúbralo al instante!
 ```
 
-### Full description — 2483 / 4000 characters
+### Full description — 2517 / 4000 characters
 
 ```text
 ¿No está seguro del estado de root en su dispositivo?
@@ -115,7 +115,7 @@ Qué hace Basic Root Checker:
 * Detecta concesiones pendientes: aunque root esté instalado pero la aplicación aún no tenga acceso, Basic Root Checker lo reconoce y ofrece un botón «Solicitar acceso root» con un solo toque.
 * También detecta binarios «su» simples: los dispositivos rooteados sin un gestor reconocido se detectan igualmente escaneando las rutas habituales de «su».
 * Verificación instantánea: determine rápidamente si su dispositivo dispone de capacidades de superusuario.
-* Sencilla e intuitiva: diseño Material 3 con colores dinámicos en Android 12+, disponible en español, inglés, alemán, árabe y ruso.
+* Sencilla e intuitiva: diseño Material 3 con colores dinámicos en Android 12+, disponible en español, inglés, alemán, árabe, ruso, neerlandés, chino, malayo y tamil.
 
 Consideraciones importantes:
 * NO rootea su dispositivo: Basic Root Checker es una herramienta puramente diagnóstica. NO modificará su dispositivo, NO instalará archivos de root ni le ayudará en el proceso de rooteo. Solo comprueba si el acceso root ya está presente en su sistema.
@@ -142,7 +142,7 @@ Basic Root Checker
 Есть ли root на вашем устройстве? Узнайте мгновенно!
 ```
 
-### Full description — 2504 / 4000 characters
+### Full description — 2553 / 4000 characters
 
 ```text
 Сомневаетесь в наличии root-доступа на вашем устройстве?
@@ -155,7 +155,7 @@ Basic Root Checker предлагает быстрый, простой и над
 * Обнаружение неполученных разрешений: даже если root установлен, но приложению ещё не предоставлен доступ, Basic Root Checker распознаёт это и предлагает кнопку «Запросить root-доступ» в одно касание.
 * Поиск обычных бинарников «su»: устройства, на которых root установлен без распознаваемого менеджера, всё равно обнаруживаются по стандартным путям su.
 * Мгновенная проверка: быстро определите, есть ли у вашего устройства привилегии суперпользователя.
-* Просто и понятно: дизайн Material 3 с динамическими цветами на Android 12 и новее, доступно на русском, английском, немецком, арабском и испанском языках.
+* Просто и понятно: дизайн Material 3 с динамическими цветами на Android 12 и новее, доступно на русском, английском, немецком, арабском, испанском, нидерландском, китайском, малайском и тамильском языках.
 
 Важные замечания:
 * НЕ предоставляет root-доступ: Basic Root Checker — это исключительно диагностический инструмент. Он НЕ модифицирует ваше устройство, не устанавливает root-файлы и не помогает в процессе получения root-доступа. Он лишь проверяет, имеется ли root-доступ в вашей системе.
@@ -182,7 +182,7 @@ Basic Root Checker предлагает быстрый, простой и над
 هل جهازك حاصل على صلاحيات الروت؟ اكتشف ذلك فوراً!
 ```
 
-### Full description — 1947 / 4000 characters
+### Full description — 1989 / 4000 characters
 
 ```text
 هل أنت غير متأكد من حالة الروت (Root) في جهازك؟
@@ -195,7 +195,7 @@ Basic Root Checker предлагает быстрый, простой и над
 * اكتشاف الموافقات المعلّقة: حتى لو كان الروت مثبَّتاً ولم يُمنح للتطبيق الوصول بعد، يكتشف Basic Root Checker ذلك ويتيح زر «طلب صلاحية الروت» بنقرة واحدة.
 * اكتشاف ملفات «su» التنفيذية البسيطة: الأجهزة التي تم تجذيرها بدون مدير معروف يتم اكتشافها أيضاً عبر فحص مسارات su الشائعة.
 * تحقق فوري: حدد بسرعة ما إذا كان جهازك يتمتع بقدرات المستخدم الخارق.
-* بسيط وبديهي: تصميم Material 3 مع الألوان الديناميكية على Android 12 فأحدث، ومتوفر بالعربية والإنجليزية والألمانية والإسبانية والروسية.
+* بسيط وبديهي: تصميم Material 3 مع الألوان الديناميكية على Android 12 فأحدث، ومتوفر بالعربية والإنجليزية والألمانية والإسبانية والروسية والهولندية والصينية والملايوية والتاميلية.
 
 ملاحظات هامة:
 * لا يقوم بعمل روت لجهازك: تطبيق Basic Root Checker هو أداة تشخيصية بحتة. لن يقوم بتعديل جهازك، أو تثبيت أي ملفات روت، أو المساعدة في عملية التجذير (Rooting). مهمته فقط هي التحقق مما إذا كان وصول الروت موجوداً بالفعل في نظامك.
@@ -206,4 +206,164 @@ Basic Root Checker предлагает быстрый, простой и над
 
 إخلاء مسؤولية:
 * هذا التطبيق أداة مستقلة ولا ينتمي إلى topjohnwu أو libsu ولا يتم اعتماده من قبلهما.
+```
+
+## nl-NL — Dutch
+
+### App name — 18 / 30 characters
+
+```text
+Basic Root Checker
+```
+
+### Short description — 47 / 80 characters
+
+```text
+Is je apparaat geroot? Kom het meteen te weten!
+```
+
+### Full description — 2326 / 4000 characters
+
+```text
+Twijfel je over de rootstatus van je apparaat?
+
+Basic Root Checker biedt een snelle, eenvoudige en betrouwbare manier om root-toegang (ook bekend als superuser-rechten) op je Android-apparaat te controleren. Of je nu een gevorderde gebruiker bent, een ontwikkelaar, of gewoon benieuwd of je telefoon of tablet geroot is: deze app geeft direct een duidelijk antwoord, en laat nu ook zien welke rootmanager je gebruikt.
+
+Wat Basic Root Checker doet:
+* Controleert root-toegang nauwkeurig: een helder antwoord over de rootstatus van je apparaat, met vier mogelijke uitkomsten — geroot, niet geroot, nog geen toegang verleend, of onbekend.
+* Herkent de rootprovider: detecteert Magisk, KernelSU en APatch, en laat zien welke op je apparaat staat, inclusief de Magisk-versie zodra root is verleend.
+* Ziet openstaande aanvragen: ook als root is geïnstalleerd maar de app nog geen toegang heeft gekregen, herkent Basic Root Checker dat en biedt een knop "Root-toegang aanvragen".
+* Valt terug op gewone "su"-bestanden: apparaten die zonder herkende manager zijn geroot, worden alsnog gevonden door de gebruikelijke su-paden te scannen.
+* Directe controle: bepaal in één tik of je apparaat over superuser-mogelijkheden beschikt.
+* Eenvoudig en overzichtelijk: Material 3-ontwerp met dynamische kleuren op Android 12 en nieuwer, beschikbaar in het Nederlands, Engels, Duits, Arabisch, Spaans, Russisch, Chinees, Maleis en Tamil.
+
+Belangrijk om te weten:
+* Root je apparaat NIET: Basic Root Checker is puur een diagnostisch hulpmiddel. De app past je apparaat NIET aan, installeert geen rootbestanden en helpt niet bij het rooten. De app kijkt alleen of root-toegang al aanwezig is op je systeem.
+* Begrijp je geroote omgeving: werken met een geroot apparaat betekent systeemaanpassingen en brengt eigen verantwoordelijkheden mee. Deze app geeft je accurate informatie om de rootstatus van je apparaat beter te begrijpen en te beheren.
+
+Jouw privacy telt:
+* Basic Root Checker verzamelt geen persoonlijke gegevens van je apparaat. Anonieme gebruiksstatistieken via TelemetryDeck staan standaard aan om de app te helpen verbeteren, en kunnen op elk moment worden uitgeschakeld in de instellingen van de app.
+
+Disclaimer:
+* Deze app is een onafhankelijk hulpmiddel, wordt niet ondersteund door en is niet gelieerd aan topjohnwu of libsu.
+```
+
+## zh-CN — Chinese (Simplified)
+
+### App name — 18 / 30 characters
+
+```text
+Basic Root Checker
+```
+
+### Short description — 20 / 80 characters
+
+```text
+你的设备有 Root 权限吗？立即查明！
+```
+
+### Full description — 961 / 4000 characters
+
+```text
+不确定自己的设备有没有 Root 权限？
+
+Basic Root Checker 提供一种快速、简单而可靠的方式，检测你的 Android 设备是否拥有 Root 权限（也称超级用户权限）。无论你是资深用户、开发者，还是只想知道手机或平板有没有被 Root，这款应用都能立刻给出明确答案，现在还会告诉你正在使用哪一个 Root 管理器。
+
+Basic Root Checker 能做什么：
+* 准确检测 Root 权限：给出关于设备 Root 状态的明确答案，共有四种结果——已 Root、未 Root、尚未授权、状态未知。
+* 识别 Root 提供方：检测 Magisk、KernelSU 和 APatch，并显示设备上装的是哪一个；在已授予 Root 权限时，还会显示 Magisk 的版本。
+* 发现待授权状态：即使设备已安装 Root 但尚未授权本应用，Basic Root Checker 也能识别出来，并提供一键“申请 Root 权限”按钮。
+* 回退到普通 su 文件：没有使用已知管理器而被 Root 的设备，仍可通过扫描常见的 su 路径检测出来。
+* 即时验证：快速确定你的设备是否具备超级用户能力。
+* 简洁直观：Material 3 设计，在 Android 12 及更高版本上支持动态取色，提供中文、英语、德语、阿拉伯语、西班牙语、俄语、荷兰语、马来语和泰米尔语。
+
+重要提示：
+* 不会为你的设备获取 Root 权限：Basic Root Checker 纯粹是一款检测工具。它不会修改你的设备，不会安装任何 Root 文件，也不会协助完成 Root 过程。它只检查系统中是否已经存在 Root 权限。
+* 了解你的 Root 环境：使用已 Root 的设备涉及系统层面的改动，也伴随相应的责任。本应用为你提供准确的信息，帮助你更好地了解设备的 Root 状态并管理自己的 Root 环境。
+
+你的隐私很重要：
+* Basic Root Checker 不会从你的设备收集个人数据。通过 TelemetryDeck 收集的匿名使用统计默认开启，用于帮助改进应用，你可以随时在应用设置中关闭。
+
+免责声明：
+* 本应用是独立工具，未获得 topjohnwu 或 libsu 的认可，也与其无关联。
+```
+
+## ms — Malay
+
+### App name — 18 / 30 characters
+
+```text
+Basic Root Checker
+```
+
+### Short description — 49 / 80 characters
+
+```text
+Adakah peranti anda di-root? Ketahui serta-merta!
+```
+
+### Full description — 2470 / 4000 characters
+
+```text
+Tidak pasti tentang status root peranti anda?
+
+Basic Root Checker menawarkan cara yang pantas, mudah dan boleh dipercayai untuk mengesahkan akses root (juga dikenali sebagai keistimewaan superuser) pada peranti Android anda. Sama ada anda pengguna mahir, pembangun, atau sekadar ingin tahu jika telefon atau tablet anda sudah di-root, aplikasi ini memberikan jawapan yang segera dan muktamad, dan kini turut memberitahu pengurus root yang anda gunakan.
+
+Apa yang Basic Root Checker lakukan:
+* Menyemak akses root dengan tepat: jawapan yang jelas tentang status root peranti anda, dengan empat kemungkinan hasil — di-root, tidak di-root, akses belum diberikan, atau tidak diketahui.
+* Mengenal pasti penyedia root: mengesan Magisk, KernelSU dan APatch, serta menunjukkan yang mana ada pada peranti anda, termasuk versi Magisk apabila akses root telah diberikan.
+* Mengesan kebenaran yang tertunggak: walaupun root sudah dipasang tetapi aplikasi ini belum diberikan akses, Basic Root Checker mengenalinya dan menawarkan butang "Minta akses root" dengan satu ketikan.
+* Kembali kepada fail "su" biasa: peranti yang di-root tanpa pengurus yang dikenali masih dikesan dengan mengimbas laluan su yang lazim.
+* Pengesahan segera: tentukan dengan pantas sama ada peranti anda mempunyai keupayaan superuser.
+* Ringkas dan intuitif: reka bentuk Material 3 dengan warna dinamik pada Android 12 dan lebih baharu, tersedia dalam bahasa Melayu, Inggeris, Jerman, Arab, Sepanyol, Rusia, Belanda, Cina dan Tamil.
+
+Perkara penting untuk diketahui:
+* TIDAK me-root peranti anda: Basic Root Checker ialah alat diagnostik semata-mata. Ia TIDAK akan mengubah suai peranti anda, tidak memasang sebarang fail root, dan tidak membantu proses rooting. Ia hanya menyemak sama ada akses root sudah wujud pada sistem anda.
+* Fahami persekitaran root anda: menggunakan peranti yang di-root melibatkan pengubahsuaian sistem dan membawa tanggungjawabnya sendiri. Aplikasi ini memberi anda maklumat yang tepat untuk memahami status root peranti anda dengan lebih baik dan mengurus persekitaran root anda.
+
+Privasi anda penting:
+* Basic Root Checker tidak mengumpul data peribadi daripada peranti anda. Statistik penggunaan tanpa nama melalui TelemetryDeck dihidupkan secara lalai untuk membantu menambah baik aplikasi, dan boleh dimatikan pada bila-bila masa daripada tetapan aplikasi.
+
+Penafian:
+* Aplikasi ini ialah alat bebas yang tidak disokong oleh dan tidak bergabung dengan topjohnwu atau libsu.
+```
+
+## ta-IN — Tamil
+
+### App name — 18 / 30 characters
+
+```text
+Basic Root Checker
+```
+
+### Short description — 54 / 80 characters
+
+```text
+உங்கள் சாதனம் ரூட் செய்யப்பட்டுள்ளதா? உடனே அறியுங்கள்!
+```
+
+### Full description — 2633 / 4000 characters
+
+```text
+உங்கள் சாதனத்தின் ரூட் நிலை குறித்து உறுதியாகத் தெரியவில்லையா?
+
+உங்கள் Android சாதனத்தில் ரூட் அணுகல் (சூப்பர்யூசர் உரிமை என்றும் அழைக்கப்படுகிறது) உள்ளதா என்பதை விரைவாகவும், எளிமையாகவும், நம்பகமாகவும் சரிபார்க்க Basic Root Checker உதவுகிறது. நீங்கள் அனுபவமிக்க பயனராக இருந்தாலும், டெவலப்பராக இருந்தாலும், அல்லது உங்கள் ஃபோன் அல்லது டேப்லெட் ரூட் செய்யப்பட்டுள்ளதா என்று அறிய விரும்பினாலும், இந்த ஆப்ஸ் உடனடியான தெளிவான பதிலைத் தருகிறது. இப்போது எந்த ரூட் மேலாளரைப் பயன்படுத்துகிறீர்கள் என்பதையும் காட்டுகிறது.
+
+Basic Root Checker செய்வது:
+* ரூட் அணுகலைத் துல்லியமாகச் சரிபார்க்கிறது: உங்கள் சாதனத்தின் ரூட் நிலை குறித்து தெளிவான பதில், நான்கு சாத்தியமான முடிவுகளுடன் — ரூட் உள்ளது, ரூட் இல்லை, அணுகல் இன்னும் வழங்கப்படவில்லை, அல்லது தெரியவில்லை.
+* ரூட் வழங்குநரை அடையாளம் காண்கிறது: Magisk, KernelSU மற்றும் APatch ஆகியவற்றைக் கண்டறிந்து, உங்கள் சாதனத்தில் எது உள்ளது என்பதைக் காட்டுகிறது. ரூட் அணுகல் வழங்கப்பட்டிருந்தால் Magisk பதிப்பையும் காட்டுகிறது.
+* நிலுவையில் உள்ள அனுமதியைக் கண்டறிகிறது: ரூட் நிறுவப்பட்டிருந்தும் இந்த ஆப்ஸுக்கு அணுகல் வழங்கப்படாத நிலையிலும், Basic Root Checker அதை அடையாளம் கண்டு "ரூட் அணுகலைக் கோரு" பொத்தானை வழங்குகிறது.
+* வழக்கமான "su" கோப்புகளையும் பார்க்கிறது: அறியப்பட்ட மேலாளர் இல்லாமல் ரூட் செய்யப்பட்ட சாதனங்களும், வழக்கமான su பாதைகளைத் தேடுவதன் மூலம் கண்டறியப்படுகின்றன.
+* உடனடி சரிபார்ப்பு: உங்கள் சாதனத்திற்கு சூப்பர்யூசர் திறன் உள்ளதா என்பதை விரைவாகத் தீர்மானிக்கலாம்.
+* எளிமையானது, புரிந்துகொள்ள எளிதானது: Material 3 வடிவமைப்பு, Android 12 மற்றும் அதற்குப் பிந்தையவற்றில் டைனமிக் வண்ணங்களுடன். தமிழ், ஆங்கிலம், ஜெர்மன், அரபு, ஸ்பானிஷ், ரஷ்யன், டச்சு, சீனம் மற்றும் மலாய் மொழிகளில் கிடைக்கிறது.
+
+கவனத்தில் கொள்ள வேண்டியவை:
+* உங்கள் சாதனத்தை ரூட் செய்யாது: Basic Root Checker முற்றிலும் ஒரு பரிசோதனைக் கருவி மட்டுமே. இது உங்கள் சாதனத்தை மாற்றாது, எந்த ரூட் கோப்பையும் நிறுவாது, ரூட் செய்யும் செயல்முறைக்கு உதவாது. உங்கள் அமைப்பில் ரூட் அணுகல் ஏற்கெனவே உள்ளதா என்பதை மட்டுமே சரிபார்க்கிறது.
+* உங்கள் ரூட் சூழலைப் புரிந்துகொள்ளுங்கள்: ரூட் செய்யப்பட்ட சாதனத்தைப் பயன்படுத்துவது அமைப்பு அளவிலான மாற்றங்களை உள்ளடக்கியது, அதற்கான பொறுப்புகளையும் கொண்டுவருகிறது. உங்கள் சாதனத்தின் ரூட் நிலையை நன்கு புரிந்துகொண்டு உங்கள் ரூட் சூழலை நிர்வகிக்க, இந்த ஆப்ஸ் துல்லியமான தகவலை வழங்குகிறது.
+
+உங்கள் தனியுரிமை முக்கியம்:
+* Basic Root Checker உங்கள் சாதனத்திலிருந்து தனிப்பட்ட தரவை சேகரிக்காது. ஆப்ஸை மேம்படுத்த உதவும் வகையில் TelemetryDeck மூலம் அநாமதேய பயன்பாட்டுப் புள்ளிவிவரங்கள் இயல்பாக இயக்கப்பட்டுள்ளன. அவற்றை ஆப்ஸ் அமைப்புகளில் எப்போது வேண்டுமானாலும் நிறுத்தலாம்.
+
+பொறுப்புத் துறப்பு:
+* இந்த ஆப்ஸ் ஒரு சுயாதீனக் கருவி. இது topjohnwu அல்லது libsu ஆல் அங்கீகரிக்கப்படவில்லை, அவற்றுடன் தொடர்பும் இல்லை.
 ```
