@@ -1,0 +1,23 @@
+Basic Root Checker 2.6 is out: four new languages, more accurate root manager detection, and animated result icons.
+
+Basic Root Checker shows whether an Android device has root access, and which root manager grants it: Magisk, KernelSU or APatch.
+
+New in 2.6:
+
+• Four new languages: Dutch, Chinese (Simplified), Malay and Tamil. Nine in total.
+• KernelSU (including KernelSU Next and SukiSU Ultra) and APatch are reported as themselves, not as Magisk.
+• A device that already granted root access is reported as rooted on the first check after launch, still without a superuser prompt.
+• Each result has its own animated icon: check, cross, question mark, or exclamation mark when root is installed but access wasn't granted.
+• The update card no longer hangs on "Downloading" after a decline, a cancel, or a download that finished in the background.
+• Request Root access asks again after a denied prompt, without restarting the app.
+• Dialogs stay open through rotation, folding and resizing.
+• The language picker scrolls, so every language can be chosen in landscape or with large text.
+• Links no longer close the app on a device without a web browser.
+
+Minimum version is now Android 7.0.
+
+No ads. Collects no personal information.
+
+https://play.google.com/store/apps/details?id=com.iboalali.basicrootchecker
+
+#Android #androiddev #Kotlin #JetpackCompose

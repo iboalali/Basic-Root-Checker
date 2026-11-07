@@ -1,0 +1,13 @@
+Basic Root Checker 2.6 is out.
+
+➕ Now in Dutch, Chinese, Malay and Tamil (nine total).
+🔨 KernelSU and APatch are no longer reported as Magisk.
+🔨 A device that already granted root shows as rooted on first check.
+🛠️ Each result has its own animated icon, so "couldn't tell" no longer looks like "not rooted".
+🛠️ Needs Android 7.0+.
+
+No ads. Collects no personal information.
+
+https://play.google.com/store/apps/details?id=com.iboalali.basicrootchecker
+
+#Android #Magisk #KernelSU #APatch #androiddev
