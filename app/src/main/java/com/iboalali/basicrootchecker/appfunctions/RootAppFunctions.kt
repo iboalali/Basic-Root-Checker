@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.first
  * exposed to the Android system and to on-device agents, so a device's root state can be queried
  * hands-free without opening the app.
  *
- * The `@AppFunction` annotations and the agent-facing KDoc live on [BaseRootAppFunctionService],
+ * The `@AppFunctionDeclaration` annotations and the agent-facing KDoc live on [BaseRootAppFunctionService],
  * which delegates here. This class stays plain (no service lifecycle, no framework annotations) so
  * it can be exercised directly.
  *

@@ -1,36 +1,36 @@
 [versions]
-kotlin = "2.4.20"                                  # https://github.com/JetBrains/kotlin/releases (the floor the shared AARs' metadata requires)
-android-gradle-plugin = "9.4.0"
-ksp = "2.3.10"                                     # https://github.com/google/ksp/releases
+kotlin = "2.4.21"                                  # https://github.com/JetBrains/kotlin/releases (the floor the shared AARs' metadata requires)
+android-gradle-plugin = "9.5.1"
+ksp = "2.3.13"                                     # https://github.com/google/ksp/releases
 
 androidx-activity = "1.13.0"
-androidx-annotation = "1.10.0"
-androidx-appfunctions = "1.0.0-alpha11"          # https://developer.android.com/jetpack/androidx/releases/appfunctions (one artifact: the service classes live in androidx.appfunctions.*, there is no separate appfunctions-service dependency; declares minSdk 24, which sets the app's floor)
+androidx-annotation = "1.11.0"
+androidx-appfunctions = "1.0.0-rc01"          # https://developer.android.com/jetpack/androidx/releases/appfunctions (one artifact: the service classes live in androidx.appfunctions.*, there is no separate appfunctions-service dependency; declares minSdk 24, which sets the app's floor)
 androidx-compose-bom = "2026.09.00"
 androidx-compose-material3-adaptive = "1.3.0"   # https://developer.android.com/jetpack/androidx/releases/compose-material3-adaptive (separate from the Compose BOM)
-androidx-core = "1.19.0"
+androidx-core = "1.19.1"
 androidx-core-splashscreen = "1.2.0"
-androidx-datastore = "1.2.1"
+androidx-datastore = "1.3.0"
 androidx-lifecycle = "2.11.0"
-androidx-navigation3 = "1.2.0"
+androidx-navigation3 = "1.2.1"
 androidx-benchmark = "1.5.0"                     # https://developer.android.com/jetpack/androidx/releases/benchmark (one version ref for benchmark-macro-junit4 and the androidx.baselineprofile plugin; they release together)
 androidx-profileinstaller = "1.4.1"              # installs the shipped baseline profile at runtime
 screenshot = "0.0.1-alpha16"                     # https://developer.android.com/studio/preview/compose-screenshot-testing (com.android.compose.screenshot; alpha12+ targets AGP 9)
 androidx-test-espresso = "3.7.0"
 androidx-test-ext-junit = "1.3.0"
-androidx-test-uiautomator = "2.4.0"
+androidx-test-uiautomator = "2.4.1"
 
-boehrsi-devicemarketingnames = "1.0.9"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
-coil = "3.6.2"                                   # https://github.com/coil-kt/coil/releases (image loading for the remote "Other apps" icons)
+boehrsi-devicemarketingnames = "1.0.11"          # https://github.com/Boehrsi/DeviceMarketingNames/releases
+coil = "3.6.3"                                   # https://github.com/coil-kt/coil/releases (image loading for the remote "Other apps" icons)
 desugar-jdk-libs = "2.1.5"                       # https://github.com/google/desugar_jdk_libs/blob/master/CHANGELOG.md
 google-material = "1.14.0"
 google-play-app-update = "2.1.0"                 # https://developer.android.com/reference/com/google/android/play/core/release-notes-in_app_updates
 google-play-billing = "9.1.0"                    # https://developer.android.com/google/play/billing/release-notes
 google-play-review = "2.0.2"                      # https://developer.android.com/guide/playcore/in-app-review
 kotlinx-collections-immutable = "0.5.2"
-kotlinx-serialization-core = "1.11.0"
-okhttp = "5.5.0"                                 # https://square.github.io/okhttp/changelogs/changelog_5x/ (on the classpath via Coil)
-telemetrydeck = "7.2.0"                          # https://github.com/TelemetryDeck/KotlinSDK/releases
+kotlinx-serialization-core = "1.12.0"
+okhttp = "5.5.1"                                 # https://square.github.io/okhttp/changelogs/changelog_5x/ (on the classpath via Coil)
+telemetrydeck = "7.3.1"                          # https://github.com/TelemetryDeck/KotlinSDK/releases
 topjohnwu-libsu-core = "6.0.0"                  # https://github.com/topjohnwu/libsu/releases
 
 junit = "4.13.2"
@@ -42,7 +42,7 @@ junit = "4.13.2"
 #
 # The version must exist in the `maven-repo` checkout next to this one (`git pull` there first);
 # nothing else can supply it. See Android-Shared/README.md "Releasing".
-shared = "1.7.1"
+shared = "1.7.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }

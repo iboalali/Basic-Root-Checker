@@ -6,7 +6,7 @@
 # BaseRootAppFunctionService into the generated RootAppFunctionService subclass, so the class named
 # in the XML is absent from the release DEX. Play rejects an AAB whose function XML doesn't resolve against the binary ("The
 # Android App Functions XML could not be parsed from the binary"). Keep the host class name and its
-# @AppFunction method names so the XML matches.
+# @AppFunctionDeclaration method names so the XML matches.
 -keepclasseswithmembers class * {
-    @androidx.appfunctions.AppFunction <methods>;
+    @androidx.appfunctions.AppFunctionDeclaration <methods>;
 }

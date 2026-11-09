@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Dependency refresh: Android Gradle plugin 9.5.1, Gradle 9.9.0, Kotlin 2.4.21, KSP 2.3.13, AppFunctions 1.0.0-rc01, Android-Shared 1.7.3, TelemetryDeck 7.3.1, kotlinx.serialization 1.12.0, DataStore 1.3.0, AndroidX Annotation 1.11.0, Core 1.19.1, Navigation 3 1.2.1, UI Automator 2.4.1, Coil 3.6.3, OkHttp 5.5.1 and DeviceMarketingNames 1.0.11. No user-visible changes.
+
 ## [2.6] - 2026-10-27
 
 ### Added

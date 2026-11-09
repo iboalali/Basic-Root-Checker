@@ -1,15 +1,15 @@
 package com.iboalali.basicrootchecker.appfunctions
 
 import androidx.annotation.RequiresApi
-import androidx.appfunctions.AppFunction
+import androidx.appfunctions.AppFunctionDeclaration
 import androidx.appfunctions.AppFunctionService
 import androidx.appfunctions.AppFunctionServiceEntryPoint
 
 /**
- * AppFunctions entry point (androidx.appfunctions 1.0.0-alpha11). The
+ * AppFunctions entry point (androidx.appfunctions 1.0.0-rc01). The
  * `@AppFunctionServiceEntryPoint` compiler generates the concrete `RootAppFunctionService`
  * (declared in the manifest) and the `assets/root_app_function_service.xml` metadata from the
- * `@AppFunction` methods below.
+ * `@AppFunctionDeclaration` methods below.
  *
  * These methods are thin adapters: the actual probing and mapping lives in [RootAppFunctions],
  * which stays a plain class so it remains testable without the Android service lifecycle. The
@@ -44,7 +44,7 @@ abstract class BaseRootAppFunctionService : AppFunctionService() {
      *
      * @return The current root status of the device.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun checkRootStatus(): RootStatus = functions.checkRootStatus(applicationContext)
 
     /**
@@ -55,7 +55,7 @@ abstract class BaseRootAppFunctionService : AppFunctionService() {
      *
      * @return The root status after the access request.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun requestRootAccess(): RootStatus = functions.requestRootAccess(applicationContext)
 
     /**
@@ -64,6 +64,6 @@ abstract class BaseRootAppFunctionService : AppFunctionService() {
      *
      * @return The last root status, or null if no check has ever run on this device.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun getLastRootCheck(): RootStatus? = functions.getLastRootCheck(applicationContext)
 }
